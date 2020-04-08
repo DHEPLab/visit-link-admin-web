@@ -1,39 +1,43 @@
 import React from 'react';
-
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 import './App.css';
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 
 function App() {
   return (
-    <div className="App">
+    <AppContainer className="App">
       <BrowserRouter>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-            </ul>
-          </nav>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          </ul>
+        </nav>
 
-          <Switch>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </div>
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
       </BrowserRouter>
-    </div>
+    </AppContainer>
   );
 }
+
+const AppContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 export default App;
