@@ -1,23 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Form, Input, Button } from 'antd';
 
 function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => console.log('mounted'), []);
+
+  function handleLogin() {
+    console.log(username);
+    console.log(password);
+  }
+
   return (
     <Container>
       <h1>Healthy Future Admin Portal</h1>
-      <p>
-        <h3>Please sign in</h3>
-      </p>
+      <p>Please sign in</p>
       <Form>
         <Form.Item>
-          <Input placeholder="Username" />
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+          />
         </Form.Item>
         <Form.Item>
-          <Input.Password placeholder="Password" />
+          <Input.Password
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
         </Form.Item>
         <Form.Item>
-          <Button type="primary">Login</Button>
+          <Button type="primary" onClick={handleLogin}>
+            Login
+          </Button>
         </Form.Item>
       </Form>
     </Container>
