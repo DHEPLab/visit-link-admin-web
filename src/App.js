@@ -9,6 +9,7 @@ import {
   Button,
   Typography,
 } from 'antd';
+import styled from 'styled-components';
 import './App.css';
 
 const { Option } = Select;
@@ -36,7 +37,7 @@ function App() {
         <Form.Item label="数字输入框">
           <InputNumber min={1} max={10} defaultValue={3} />
           <span className="ant-form-text"> 台机器</span>
-          <a href="https://ant.design">链接文字</a>
+          <a href="https://ant.design">learn ant design</a>
         </Form.Item>
         <Form.Item label="开关">
           <Switch defaultChecked />
@@ -65,8 +66,11 @@ function App() {
           <Button style={{ marginLeft: 8 }}>Cancel</Button>
         </Form.Item>
       </Form>
+      <StyledComponent>Styled Component</StyledComponent>
     </div>
   );
 }
+
+const StyledComponent = styled.h1``;
 
 export default App;
