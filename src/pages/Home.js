@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form,
   Select,
@@ -10,11 +10,26 @@ import {
   Typography,
 } from 'antd';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const { Option } = Select;
 const { Title } = Typography;
 
 function Home() {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    axios
+      .get('/api/user', {
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOIiwiZXhwIjoxNTg2NzQ1ODc0fQ.DqHmchjcJ-huXrX86Ua7YMyhLt_w2_Jknj5_EPZrE3mLOb8EtkCKkL9oRS0hNEwYqAb_IbxJ4_p-s1twY_0GQA',
+        },
+      })
+      .then((response) => {
+        setUsers(response.data.content);
+      });
+  }, []);
+
   return (
     <div>
       <section style={{ textAlign: 'center', marginTop: 48, marginBottom: 60 }}>
@@ -32,6 +47,7 @@ function Home() {
           Ant Design
         </Title>
       </section>
+      <div>{JSON.stringify(users)}</div>
       <Form labelCol={{ span: 8 }} wrapperCol={{ span: 8 }}>
         <Form.Item label="数字输入框">
           <InputNumber min={1} max={10} defaultValue={3} />
