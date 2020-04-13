@@ -18,16 +18,9 @@ const { Title } = Typography;
 function Home() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    axios
-      .get('/api/user', {
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOIiwiZXhwIjoxNTg2NzQ1ODc0fQ.DqHmchjcJ-huXrX86Ua7YMyhLt_w2_Jknj5_EPZrE3mLOb8EtkCKkL9oRS0hNEwYqAb_IbxJ4_p-s1twY_0GQA',
-        },
-      })
-      .then((response) => {
-        setUsers(response.data.content);
-      });
+    axios.get('/api/user').then((response) => {
+      setUsers(response.data.content);
+    });
   }, []);
 
   return (

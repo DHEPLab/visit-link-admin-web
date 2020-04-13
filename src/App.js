@@ -1,9 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { applyToken, getToken } from './utils/token';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
+
+applyToken(getToken());
 
 function App() {
   return (

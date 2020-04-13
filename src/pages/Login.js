@@ -1,16 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { applyToken } from '../utils/token';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  useEffect(() => console.log('mounted'), []);
+  let history = useHistory();
 
   function handleLogin() {
-    console.log(username);
-    console.log(password);
+    axios
+      .post('/api/authenticate', { username, password })
+      .then((response) => {
+        applyToken(response.data.idToken);
+        history.push('/');
+      })
+      .catch((error) => {
+        message.error(error.response.data.detail);
+      });
   }
 
   return (
