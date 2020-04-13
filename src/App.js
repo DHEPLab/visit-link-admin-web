@@ -1,29 +1,38 @@
 import React from 'react';
 import axios from 'axios';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { applyToken, getToken } from './utils/token';
 import { message } from 'antd';
 import Router from './router';
+
+import Menu from './components/Menu';
+import styled from 'styled-components';
 
 export default function () {
   return (
     <div className="App">
       <BrowserRouter>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
-        <Router />
+        <FlexLayout>
+          <Menu />
+          <RouteView>
+            <Router />
+          </RouteView>
+        </FlexLayout>
       </BrowserRouter>
     </div>
   );
 }
+
+const FlexLayout = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 1200px;
+  margin: 0 auto;
+`;
+
+const RouteView = styled.div`
+  flex: 1;
+`;
 
 applyToken(getToken());
 
