@@ -24,12 +24,13 @@ const columns = [
 
 export default function () {
   const [user, setUser] = useState({});
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
-    axios.get('/api/user').then((response) => {
+    axios.get('/api/user', { params: { page, size: 1 } }).then((response) => {
       setUser(response.data);
     });
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -41,7 +42,12 @@ export default function () {
         rowKey="id"
         dataSource={user.content}
         columns={columns}
-        pagination={{ current: 1, total: user.totalElements }}
+        pagination={{
+          current: page + 1,
+          pageSize: 1,
+          total: user.totalElements,
+        }}
+        onChange={(page) => setPage(page.current - 1)}
       />
     </div>
   );
