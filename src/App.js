@@ -1,16 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
-import styled from 'styled-components';
+import axios from 'axios';
+import { BrowserRouter, Link } from 'react-router-dom';
 import { applyToken, getToken } from './utils/token';
+import { message } from 'antd';
+import Router from './router';
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-
-applyToken(getToken());
-
-function App() {
+export default function () {
   return (
-    <AppContainer className="App">
+    <div className="App">
       <BrowserRouter>
         <nav>
           <ul>
@@ -22,23 +19,23 @@ function App() {
             </li>
           </ul>
         </nav>
-
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Router />
       </BrowserRouter>
-    </AppContainer>
+    </div>
   );
 }
 
-const AppContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
+applyToken(getToken());
 
-export default App;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const { response } = error;
+    if (!response) {
+      message.error('Network error, please try again later!');
+      return Promise.reject(error);
+    }
+    response.data.detail && message.error(response.data.detail);
+    return Promise.reject(error);
+  }
+);
