@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Table } from 'antd';
+import { Button, Table, Modal } from 'antd';
 import styled from 'styled-components';
+import UserForm from '../components/UserForm';
 
 const columns = [
   {
@@ -24,6 +25,7 @@ const columns = [
 
 export default function () {
   const [user, setUser] = useState({});
+  const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -32,11 +34,17 @@ export default function () {
     });
   }, [page]);
 
+  function handleSubmitUser() {
+    setVisible(false)
+  }
+
   return (
     <div>
       <h1>Account Management</h1>
       <ButtonGroup>
-        <Button type="primary">Add a new account</Button>
+        <Button type="primary" onClick={() => setVisible(true)}>
+          Add a new account
+        </Button>
       </ButtonGroup>
       <Table
         rowKey="id"
@@ -49,6 +57,15 @@ export default function () {
         }}
         onChange={(page) => setPage(page.current - 1)}
       />
+
+      <Modal
+        title="Add new account"
+        visible={visible}
+        onOk={handleSubmitUser}
+        onCancel={() => setVisible(false)}
+      >
+        <UserForm />
+      </Modal>
     </div>
   );
 }
