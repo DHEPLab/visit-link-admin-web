@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { clearToken } from '../utils/token';
+import { Button } from 'antd';
 
 export default function () {
   const history = useHistory();
@@ -27,7 +28,9 @@ export default function () {
         </li>
       </ul>
 
-      <a onClick={handleLogout}>Logout</a>
+      <Button onClick={handleLogout} type="link">
+        Logout
+      </Button>
     </Menu>
   );
 }

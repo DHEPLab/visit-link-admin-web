@@ -28,6 +28,7 @@ export default function () {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
+              autoFocus
             />
           </Form.Item>
           <Form.Item>
