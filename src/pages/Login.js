@@ -35,6 +35,7 @@ export default function () {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
+              onPressEnter={handleLogin}
             />
           </Form.Item>
           <Form.Item>
