@@ -1,8 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { clearToken } from '../utils/token';
 
 export default function () {
+  const history = useHistory();
+  function handleLogout() {
+    clearToken();
+    history.push('/login');
+  }
+
   return (
     <Menu>
       <ul>
@@ -19,6 +26,8 @@ export default function () {
           <Link to="/accounts">Account Mgt</Link>
         </li>
       </ul>
+
+      <a onClick={handleLogout}>Logout</a>
     </Menu>
   );
 }
