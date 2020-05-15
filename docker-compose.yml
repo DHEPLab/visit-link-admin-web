@@ -12,7 +12,7 @@ services:
     volumes:
       - ./build:/data/www
       - ./etc/nginx:/etc/nginx
-      # - ./certs:/certs
+      - ./certs:/certs
       - /var/log/healthy-future-admin-frontend:/var/log/nginx
     networks:
       - internal_network
