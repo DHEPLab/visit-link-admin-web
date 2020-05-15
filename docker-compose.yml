@@ -1,0 +1,22 @@
+version: "3.6"
+
+services:
+  frontend:
+    image: "nginx:1.16"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - ./build:/data/www
+      - ./etc/nginx:/etc/nginx
+      # - ./certs:/certs
+      - /var/log/healthy-future-admin-frontend:/var/log/nginx
+    networks:
+      - internal_network
+
+networks:
+  internal_network:
+    name: internal_network
