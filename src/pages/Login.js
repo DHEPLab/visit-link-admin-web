@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Form, Input, Button } from 'antd';
-import axios from 'axios';
+import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { applyToken } from '../utils/token';
 
@@ -11,10 +11,12 @@ export default function () {
   let history = useHistory();
 
   function handleLogin() {
-    axios.post('/api/authenticate', { username, password }).then((response) => {
-      applyToken(response.data.idToken);
-      history.push('/');
-    });
+    Axios.post('/adminapi/authenticate', { username, password }).then(
+      (response) => {
+        applyToken(response.data.idToken);
+        history.push('/');
+      }
+    );
   }
 
   return (

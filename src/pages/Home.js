@@ -4,7 +4,7 @@ import axios from 'axios';
 function Home() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    axios.get('/api/user').then((response) => {
+    axios.get('/adminapi/user').then((response) => {
       setUsers(response.data.content);
     });
   }, []);

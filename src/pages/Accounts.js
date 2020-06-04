@@ -29,13 +29,15 @@ export default function () {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    axios.get('/api/user', { params: { page, size: 1 } }).then((response) => {
-      setUser(response.data);
-    });
+    axios
+      .get('/adminapi/user', { params: { page, size: 1 } })
+      .then((response) => {
+        setUser(response.data);
+      });
   }, [page]);
 
   function handleSubmitUser() {
-    setVisible(false)
+    setVisible(false);
   }
 
   return (
