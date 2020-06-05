@@ -1,40 +1,49 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
 import styled from 'styled-components';
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Curriculumns from './pages/Curriculums';
-import Accounts from './pages/Accounts';
-import Modules from './pages/Modules';
-import { Profiles } from './pages/*';
+import {
+  Home,
+  Login,
+  Profiles,
+  Curriculums,
+  Accounts,
+  Modules,
+} from './pages/*';
+
+const routes = [
+  {
+    path: '/profiles',
+    component: Profiles,
+  },
+  {
+    path: '/curriculums',
+    component: Curriculums,
+  },
+  {
+    path: '/accounts',
+    component: Accounts,
+  },
+  {
+    path: '/modules',
+    component: Modules,
+  },
+  {
+    path: '*',
+    component: NoMatch,
+  },
+];
 
 export default function () {
   return (
     <RouteView>
       <Switch>
-        <PrivateRoute exact path="/">
-          <Home />
-        </PrivateRoute>
-        <Route path="/profiles">
-          <Profiles />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <PrivateRoute path="/curriculums">
-          <Curriculumns />
-        </PrivateRoute>
-        <PrivateRoute path="/modules">
-          <Modules />
-        </PrivateRoute>
-        <PrivateRoute path="/accounts">
-          <Accounts />
-        </PrivateRoute>
-        <Route path="*">
-          <NoMatch />
-        </Route>
+        <PrivateRoute exact path="/" children={<Home />} />
+        <Route path="/login" children={<Login />} />
+        {routes.map((route) => (
+          <RouteWithSubRoutes key={route.path} {...route} />
+        ))}
       </Switch>
     </RouteView>
   );
@@ -47,17 +56,28 @@ const RouteView = styled.div`
   max-height: calc(100vh - 80px);
 `;
 
-function NoMatch() {
-  return <div>Page not found</div>;
+// A special wrapper for <Route> that knows how to
+// handle "sub"-routes by passing them in a `routes`
+// prop to the component it renders.
+function RouteWithSubRoutes(route) {
+  return (
+    <PrivateRoute
+      path={route.path}
+      render={(props) => (
+        // pass the sub-routes down to keep nesting
+        <route.component {...props} routes={route.routes} />
+      )}
+    />
+  );
 }
 
-function PrivateRoute({ children, ...rest }) {
+function PrivateRoute({ render, ...rest }) {
   return (
     <Route
       {...rest}
       render={({ location }) =>
         getToken() ? (
-          children
+          render()
         ) : (
           <Redirect
             to={{
@@ -68,5 +88,14 @@ function PrivateRoute({ children, ...rest }) {
         )
       }
     />
+  );
+}
+
+function NoMatch() {
+  const location = useLocation();
+  return (
+    <h3>
+      No match for <code>{location.pathname}</code>
+    </h3>
   );
 }

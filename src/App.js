@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ConfigProvider } from 'antd';
 
 import zhCN from 'antd/es/locale/zh_CN';
-import { BrowserRouter, useLocation, useHistory } from 'react-router-dom';
+import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
 import { message } from 'antd';
 import RouteView from './router';

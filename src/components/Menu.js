@@ -27,7 +27,7 @@ function ActivableLink({ to, icon, activeIcon, children }) {
   const location = useLocation();
   const active = location.pathname.includes(to);
   const className = active && 'active';
-  const type = active ? activeIcon : icon;
+  // const type = active ? activeIcon : icon;
 
   return (
     <StyledLink to={to} className={className}>
