@@ -36,7 +36,13 @@ export default function () {
 }
 
 const Menu = styled.div`
-  width: 200px;
+  width: 248px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 148, 114, 1) 0%,
+    rgba(242, 112, 156, 1) 100%
+  );
   padding-top: 50px;
   height: 100%;
+  color: #fff;
 `;

@@ -1,40 +1,42 @@
 import React from 'react';
 import axios from 'axios';
 import { ConfigProvider } from 'antd';
+
 import zhCN from 'antd/es/locale/zh_CN';
 import { BrowserRouter } from 'react-router-dom';
 import { applyToken, getToken } from './utils/token';
 import { message } from 'antd';
-import Router from './router';
+import RouteView from './router';
 
-import Menu from './components/Menu';
+import { Header, Menu } from './components/*';
 import styled from 'styled-components';
 
 export default function () {
   return (
-    <div className="App">
-      <ConfigProvider locale={zhCN}>
+    <ConfigProvider locale={zhCN}>
+      <AppContainer>
         <BrowserRouter>
-          <FlexLayout>
+          <Header username="张三李四李四张三名字" />
+          <RouteContainer>
             <Menu />
-            <RouteView>
-              <Router />
-            </RouteView>
-          </FlexLayout>
+            <RouteView></RouteView>
+          </RouteContainer>
         </BrowserRouter>
-      </ConfigProvider>
-    </div>
+      </AppContainer>
+    </ConfigProvider>
   );
 }
 
-const FlexLayout = styled.div`
+const AppContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  min-width: 1300px;
+  height: 100vh;
+  flex-direction: column;
 `;
 
-const RouteView = styled.div`
+const RouteContainer = styled.div`
+  display: flex;
   flex: 1;
 `;
 
