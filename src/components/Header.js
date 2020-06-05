@@ -2,33 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-export default function ({
-  username,
-  onNavigate,
-  onLogout,
-  authorized,
-  hideContent,
-}) {
+export default function ({ username, onNavigate, onLogout }) {
   return (
     <Header>
       <Logo>
         <img src={require('../assets/logo.png')} alt="Logo" />
       </Logo>
-      {!hideContent && (
-        <Content>
-          <Welcome>
-            <b>{username}</b>
-          </Welcome>
-          <SplitLine />
-          <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
-            个人中心
-          </StyledButton>
-          <SplitLine />
-          <StyledButton type="link" onClick={() => onLogout()}>
-            退出
-          </StyledButton>
-        </Content>
-      )}
+      <Content>
+        <Welcome>
+          <b>{username}</b>
+        </Welcome>
+        <SplitLine />
+        <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
+          个人中心
+        </StyledButton>
+        <SplitLine />
+        <StyledButton type="link" onClick={() => onLogout()}>
+          退出
+        </StyledButton>
+      </Content>
     </Header>
   );
 }

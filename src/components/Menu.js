@@ -1,37 +1,39 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { clearToken } from '../utils/token';
-import { Button } from 'antd';
 
 export default function () {
-  const history = useHistory();
-  function handleLogout() {
-    clearToken();
-    history.push('/login');
-  }
-
   return (
     <Menu>
-      <ul>
+      <MenuItemGroup>
         <li>
-          <Link to="/">Home</Link>
+          <ActivableLink to="/curriculums">课程管理</ActivableLink>
         </li>
         <li>
-          <Link to="/curriculums">Curriculum</Link>
+          <ActivableLink to="/modules">模块管理</ActivableLink>
         </li>
         <li>
-          <Link to="/modules">Module</Link>
+          <ActivableLink to="/accounts">账户管理</ActivableLink>
         </li>
         <li>
-          <Link to="/accounts">Account Mgt</Link>
+          <ActivableLink to="/babies">宝宝管理</ActivableLink>
         </li>
-      </ul>
-
-      <Button onClick={handleLogout} type="link">
-        Logout
-      </Button>
+      </MenuItemGroup>
     </Menu>
+  );
+}
+
+function ActivableLink({ to, icon, activeIcon, children }) {
+  const location = useLocation();
+  const active = location.pathname.includes(to);
+  const className = active && 'active';
+  const type = active ? activeIcon : icon;
+
+  return (
+    <StyledLink to={to} className={className}>
+      {/* {type && <Iconfont type={type} />} */}
+      {children}
+    </StyledLink>
   );
 }
 
@@ -45,4 +47,37 @@ const Menu = styled.div`
   padding-top: 50px;
   height: 100%;
   color: #fff;
+`;
+
+const MenuItemGroup = styled.ul`
+  list-style: none;
+  padding-inline-start: 0;
+`;
+
+const StyledLink = styled(Link)`
+  display: block;
+  color: white;
+  font-size: 16px;
+  opacity: 0.5;
+  height: 80px;
+  line-height: 80px;
+  width: 100%;
+  padding-left: 18px;
+  &.active,
+  &.active:hover {
+    opacity: 1;
+    color: #fff;
+    font-weight: bold;
+    border-left: 8px solid #fff;
+    background: rgba(247, 247, 247, 0.3);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  svg {
+    margin-right: 14px;
+  }
+
+  &:hover {
+    color: white;
+  }
 `;
