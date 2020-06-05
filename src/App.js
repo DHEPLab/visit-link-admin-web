@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
 import { BrowserRouter } from 'react-router-dom';
 import { applyToken, getToken } from './utils/token';
 import { message } from 'antd';
@@ -11,14 +13,16 @@ import styled from 'styled-components';
 export default function () {
   return (
     <div className="App">
-      <BrowserRouter>
-        <FlexLayout>
-          <Menu />
-          <RouteView>
-            <Router />
-          </RouteView>
-        </FlexLayout>
-      </BrowserRouter>
+      <ConfigProvider locale={zhCN}>
+        <BrowserRouter>
+          <FlexLayout>
+            <Menu />
+            <RouteView>
+              <Router />
+            </RouteView>
+          </FlexLayout>
+        </BrowserRouter>
+      </ConfigProvider>
     </div>
   );
 }
