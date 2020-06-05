@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Curriculumns from './pages/Curriculums';
 import Accounts from './pages/Accounts';
 import Modules from './pages/Modules';
+import { Profiles } from './pages/*';
 
 export default function () {
   return (
@@ -16,6 +17,9 @@ export default function () {
         <PrivateRoute exact path="/">
           <Home />
         </PrivateRoute>
+        <Route path="/profiles">
+          <Profiles />
+        </Route>
         <Route path="/login">
           <Login />
         </Route>

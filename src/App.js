@@ -3,8 +3,8 @@ import axios from 'axios';
 import { ConfigProvider } from 'antd';
 
 import zhCN from 'antd/es/locale/zh_CN';
-import { BrowserRouter } from 'react-router-dom';
-import { applyToken, getToken } from './utils/token';
+import { BrowserRouter, useLocation, useHistory } from 'react-router-dom';
+import { applyToken, getToken, clearToken } from './utils/token';
 import { message } from 'antd';
 import RouteView from './router';
 
@@ -16,14 +16,32 @@ export default function () {
     <ConfigProvider locale={zhCN}>
       <AppContainer>
         <BrowserRouter>
-          <Header username="张三李四李四张三名字" />
-          <RouteContainer>
-            <Menu />
-            <RouteView></RouteView>
-          </RouteContainer>
+          <App />
         </BrowserRouter>
       </AppContainer>
     </ConfigProvider>
+  );
+}
+
+function App() {
+  const history = useHistory();
+  function handleLogout() {
+    clearToken();
+    history.push('/login');
+  }
+
+  return (
+    <>
+      <Header
+        username="张三李四李四张三名字"
+        onNavigate={(path) => history.push(path)}
+        onLogout={handleLogout}
+      />
+      <RouteContainer>
+        <Menu />
+        <RouteView></RouteView>
+      </RouteContainer>
+    </>
   );
 }
 
