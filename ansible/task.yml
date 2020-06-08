@@ -7,7 +7,7 @@
   become_method: su
   vars:
     app_name: healthy-future-admin-frontend
-    app_path: /opt/aidootech/healthy-future-admin-frontend
+    app_path: /opt/healthy-future-admin-frontend
   tasks:
     - name: clean app path
       file:
