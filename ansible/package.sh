@@ -9,6 +9,6 @@ envsubst < "${root_dir}/etc/nginx/conf.d/service.conf.template" > "${root_dir}/e
 
 echo 'Package files into zip file'
 cd "${root_dir}"
-tar --exclude "etc/nginx/conf.d/service.conf.template" -cvzf app.tar.gz "build" "etc" "certs" "docker-compose.yml" "startDocker.sh"
+tar --exclude "etc/nginx/conf.d/service.conf.template" -cvzf app.tar.gz "build" "etc" "docker-compose.yml" "startDocker.sh"
 
 echo 'Package done.'
