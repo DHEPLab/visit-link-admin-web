@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Tabs } from 'antd';
+import { Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
-import { UserForm, WithPage } from '../components/*';
+import { WithPage } from '../components/*';
+import Axios from 'axios';
 
 const { TabPane } = Tabs;
-export default function () {
+export default function Users() {
   const [tab, setTab] = useState('chw');
+  const [visible, setVisible] = useState(true);
 
   return (
     <>
-      <h1>Account Management</h1>
+      <h1>账户管理</h1>
       <ButtonGroup>
-        <Button type="primary">Add a new account</Button>
+        <Button type="primary" onClick={() => setVisible(true)}>
+          创建新用户
+        </Button>
       </ButtonGroup>
       <Tabs onChange={setTab}>
         <TabPane tab="工作人员" key="chw">
@@ -24,16 +28,88 @@ export default function () {
           <PageAdmin tab={tab} />
         </TabPane>
       </Tabs>
-      {/* 
-      <Modal
-        title="Add new account"
+
+      <ModalUserForm
         visible={visible}
-        onOk={handleSubmitUser}
         onCancel={() => setVisible(false)}
-      >
-        <UserForm />
-      </Modal> */}
+        onSuccess={() => {
+          setVisible(false);
+        }}
+      />
     </>
+  );
+}
+
+function ModalUserForm({ ...props }) {
+  const [roles] = useState([
+    {
+      label: '工作人员',
+      value: 'ROLE_CHW',
+    },
+    {
+      label: '督导',
+      value: 'ROLE_SUPERVISOR',
+    },
+    {
+      label: '管理员',
+      value: 'ROLE_ADMIN',
+    },
+  ]);
+
+  function handleSubmit(value) {
+    Axios.post('/adminapi/user', value).then(props.onSuccess);
+  }
+
+  return (
+    <Modal
+      title="添加新用户"
+      onOk={handleSubmit}
+      footer={null}
+      destroyOnClose
+      {...props}
+    >
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ offset: 1 }}
+        onFinish={handleSubmit}
+        initialValues={{ role: 'ROLE_CHW' }}
+      >
+        <h3>用户信息</h3>
+        <Form.Item label="权限" name="role">
+          <Radio.Group>
+            {roles.map((role) => (
+              <Radio key={role.value} value={role.value}>
+                {role.label}
+              </Radio>
+            ))}
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label="真实姓名" name="realName">
+          <Input />
+        </Form.Item>
+        <Form.Item label="ID" name="identity">
+          <Input />
+        </Form.Item>
+        <Form.Item label="联系电话" name="phone">
+          <Input />
+        </Form.Item>
+        <h3>用户信息</h3>
+        <Form.Item label="账户名称" name="username">
+          <Input />
+        </Form.Item>
+        <Form.Item label="账户密码" name="password">
+          <Input.Password />
+        </Form.Item>
+        <Space size="large">
+          <Button ghost type="primary">
+            放弃
+          </Button>
+          <Button type="primary" htmlType="submit">
+            提交
+          </Button>
+        </Space>
+      </Form>
+    </Modal>
   );
 }
 
