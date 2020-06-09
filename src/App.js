@@ -6,7 +6,7 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
 import { message } from 'antd';
-import RouteView from './router';
+import RouteView from './Router';
 
 import { Header, Menu } from './components/*';
 import styled from 'styled-components';
