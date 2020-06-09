@@ -3,14 +3,7 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
 import styled from 'styled-components';
 
-import {
-  Home,
-  Login,
-  Profiles,
-  Curriculums,
-  Accounts,
-  Modules,
-} from './pages/*';
+import { Home, Login, Profiles, Curriculums, Users, Modules } from './pages/*';
 
 const routes = [
   {
@@ -22,8 +15,8 @@ const routes = [
     component: Curriculums,
   },
   {
-    path: '/accounts',
-    component: Accounts,
+    path: '/users',
+    component: Users,
   },
   {
     path: '/modules',

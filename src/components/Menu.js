@@ -13,7 +13,7 @@ export default function () {
           <ActivableLink to="/modules">模块管理</ActivableLink>
         </li>
         <li>
-          <ActivableLink to="/accounts">账户管理</ActivableLink>
+          <ActivableLink to="/users">账户管理</ActivableLink>
         </li>
         <li>
           <ActivableLink to="/babies">宝宝管理</ActivableLink>

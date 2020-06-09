@@ -34,7 +34,7 @@ export default function (
         setTotalElements(data.totalElements);
         setContent(data.content);
       });
-    });
+    }, [search]);
 
     useEffect(() => {
       if (loadOnMount) {
@@ -69,7 +69,7 @@ export default function (
 
     return (
       <WrapperComponent
-        pagination={pagination}
+        pagination={pagination()}
         dataSource={content}
         loadData={loadData}
         onChangeSearch={debounceChangeSearch}
