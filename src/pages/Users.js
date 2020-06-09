@@ -3,11 +3,13 @@ import { Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
 import { WithPage } from '../components/*';
 import Axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 export default function Users() {
   const [tab, setTab] = useState('chw');
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const history = useHistory();
 
   return (
     <>
@@ -19,13 +21,13 @@ export default function Users() {
       </ButtonGroup>
       <Tabs onChange={setTab}>
         <TabPane tab="工作人员" key="chw">
-          <PageCHW tab={tab} />
+          <PageCHW tab={tab} history={history} />
         </TabPane>
         <TabPane tab="督导" key="supervisor">
-          <PageSupervisor tab={tab} />
+          <PageSupervisor tab={tab} history={history} />
         </TabPane>
         <TabPane tab="管理员" key="admin">
-          <PageAdmin tab={tab} />
+          <PageAdmin tab={tab} history={history} />
         </TabPane>
       </Tabs>
 
@@ -61,13 +63,7 @@ function ModalUserForm({ ...props }) {
   }
 
   return (
-    <Modal
-      title="添加新用户"
-      onOk={handleSubmit}
-      footer={null}
-      destroyOnClose
-      {...props}
-    >
+    <Modal title="添加新用户" onOk={handleSubmit} footer={null} destroyOnClose {...props}>
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ offset: 1 }}
@@ -113,32 +109,11 @@ function ModalUserForm({ ...props }) {
   );
 }
 
-const PageCHW = WithPage(
-  CHW,
-  '/adminapi/user',
-  {
-    role: 'ROLE_CHW',
-  },
-  false
-);
-const PageSupervisor = WithPage(
-  Supervisor,
-  '/adminapi/user',
-  {
-    role: 'ROLE_SUPERVISOR',
-  },
-  false
-);
-const PageAdmin = WithPage(
-  Admin,
-  '/adminapi/user',
-  {
-    role: 'ROLE_ADMIN',
-  },
-  false
-);
+const PageCHW = WithPage(CHW, '/adminapi/user?role=ROLE_CHW', {}, false);
+const PageSupervisor = WithPage(Supervisor, '/adminapi/user?role=ROLE_SUPERVISOR', {}, false);
+const PageAdmin = WithPage(Admin, '/adminapi/user?role=ROLE_ADMIN', {}, false);
 
-function CHW({ tab, dataSource, pagination, loadData, onChangePage }) {
+function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   useEffect(() => {
     tab === 'chw' && loadData();
   }, [tab, loadData]);
@@ -158,17 +133,14 @@ function CHW({ tab, dataSource, pagination, loadData, onChangePage }) {
           },
           phone,
           username,
-          {
-            title: '操作',
-            dataIndex: 'id',
-          },
+          operation(history),
         ]}
       />
     </div>
   );
 }
 
-function Supervisor({ tab, dataSource, pagination, loadData, onChangePage }) {
+function Supervisor({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   useEffect(() => {
     tab === 'supervisor' && loadData();
   }, [tab, loadData]);
@@ -180,21 +152,13 @@ function Supervisor({ tab, dataSource, pagination, loadData, onChangePage }) {
         dataSource={dataSource}
         pagination={pagination}
         onChange={onChangePage}
-        columns={[
-          realName,
-          phone,
-          username,
-          {
-            title: '操作',
-            dataIndex: 'id',
-          },
-        ]}
+        columns={[realName, phone, username, operation(history)]}
       />
     </div>
   );
 }
 
-function Admin({ tab, dataSource, pagination, loadData, onChangePage }) {
+function Admin({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   useEffect(() => {
     tab === 'admin' && loadData();
   }, [tab, loadData]);
@@ -206,15 +170,7 @@ function Admin({ tab, dataSource, pagination, loadData, onChangePage }) {
         dataSource={dataSource}
         pagination={pagination}
         onChange={onChangePage}
-        columns={[
-          realName,
-          phone,
-          username,
-          {
-            title: '操作',
-            dataIndex: 'id',
-          },
-        ]}
+        columns={[realName, phone, username, operation(history)]}
       />
     </div>
   );
@@ -234,6 +190,19 @@ const username = {
   title: '账户名称',
   dataIndex: 'username',
 };
+
+const operation = (history) => ({
+  title: '操作',
+  dataIndex: 'id',
+  align: 'center',
+  render(id) {
+    return (
+      <Button type="link" onClick={() => history.push(`/users/${id}`)}>
+        查看
+      </Button>
+    );
+  },
+});
 
 const ButtonGroup = styled.div`
   padding: 10px 0;
