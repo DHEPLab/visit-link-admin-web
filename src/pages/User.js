@@ -9,7 +9,7 @@ export default function User() {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    Axios.get(`/adminapi/user/${id}`).then(({ data }) => setUser(data));
+    Axios.get(`/admin/user/${id}`).then(({ data }) => setUser(data));
   }, [id]);
 
   return (
@@ -26,10 +26,7 @@ export default function User() {
         <StaticFormItem label="账户密码">******</StaticFormItem>
       </Card>
       <br />
-      <Card
-        title="管理工作人员列表"
-        extra={<Button type="link">分配新工作人员</Button>}
-      ></Card>
+      <Card title="管理工作人员列表" extra={<Button type="link">分配新工作人员</Button>}></Card>
     </>
   );
 }

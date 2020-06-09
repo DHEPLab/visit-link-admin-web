@@ -11,12 +11,10 @@ export default function () {
   let history = useHistory();
 
   function handleLogin() {
-    Axios.post('/adminapi/authenticate', { username, password }).then(
-      (response) => {
-        applyToken(response.data.idToken);
-        history.push('/');
-      }
-    );
+    Axios.post('/admin/authenticate', { username, password }).then((response) => {
+      applyToken(response.data.idToken);
+      history.push('/');
+    });
   }
 
   return (

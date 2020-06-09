@@ -59,7 +59,7 @@ function ModalUserForm({ ...props }) {
   ]);
 
   function handleSubmit(value) {
-    Axios.post('/adminapi/user', value).then(props.onSuccess);
+    Axios.post('/admin/user', value).then(props.onSuccess);
   }
 
   return (
@@ -109,9 +109,9 @@ function ModalUserForm({ ...props }) {
   );
 }
 
-const PageCHW = WithPage(CHW, '/adminapi/user?role=ROLE_CHW', {}, false);
-const PageSupervisor = WithPage(Supervisor, '/adminapi/user?role=ROLE_SUPERVISOR', {}, false);
-const PageAdmin = WithPage(Admin, '/adminapi/user?role=ROLE_ADMIN', {}, false);
+const PageCHW = WithPage(CHW, '/admin/user?role=ROLE_CHW', {}, false);
+const PageSupervisor = WithPage(Supervisor, '/admin/user?role=ROLE_SUPERVISOR', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/user?role=ROLE_ADMIN', {}, false);
 
 function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   useEffect(() => {
