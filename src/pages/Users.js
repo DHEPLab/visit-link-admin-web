@@ -132,6 +132,13 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
             dataIndex: 'identity',
           },
           phone,
+          {
+            title: '督导',
+            dataIndex: 'supervisor',
+            render(supervisor) {
+              return <>{supervisor && supervisor.realName}</>;
+            },
+          },
           username,
           operation(history),
         ]}
