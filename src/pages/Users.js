@@ -11,6 +11,13 @@ export default function Users() {
   const [visible, setVisible] = useState(false);
   const history = useHistory();
 
+  // change tab to refresh table
+  function refresh() {
+    const origin = tab;
+    setTab('Not Exist');
+    setTab(origin);
+  }
+
   return (
     <>
       <h1>账户管理</h1>
@@ -35,6 +42,7 @@ export default function Users() {
         visible={visible}
         onCancel={() => setVisible(false)}
         onSuccess={() => {
+          refresh();
           setVisible(false);
         }}
       />
@@ -42,7 +50,7 @@ export default function Users() {
   );
 }
 
-function ModalUserForm({ ...props }) {
+function ModalUserForm({ onSuccess, ...props }) {
   const [roles] = useState([
     {
       label: '工作人员',
@@ -59,7 +67,7 @@ function ModalUserForm({ ...props }) {
   ]);
 
   function handleSubmit(value) {
-    Axios.post('/admin/user', value).then(props.onSuccess);
+    Axios.post('/admin/user', value).then(onSuccess);
   }
 
   return (
@@ -83,8 +91,16 @@ function ModalUserForm({ ...props }) {
         <Form.Item label="真实姓名" name="realName">
           <Input />
         </Form.Item>
-        <Form.Item label="ID" name="identity">
-          <Input />
+        <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
+          {({ getFieldValue }) => (
+            <>
+              {getFieldValue('role') === 'ROLE_CHW' && (
+                <Form.Item label="ID" name={['chw', 'identity']}>
+                  <Input />
+                </Form.Item>
+              )}
+            </>
+          )}
         </Form.Item>
         <Form.Item label="联系电话" name="phone">
           <Input />
@@ -109,9 +125,9 @@ function ModalUserForm({ ...props }) {
   );
 }
 
-const PageCHW = WithPage(CHW, '/admin/user?role=ROLE_CHW', {}, false);
-const PageSupervisor = WithPage(Supervisor, '/admin/user?role=ROLE_SUPERVISOR', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/user?role=ROLE_ADMIN', {}, false);
+const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
+const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/user/admin', {}, false);
 
 function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   useEffect(() => {
@@ -129,7 +145,7 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
           realName,
           {
             title: 'ID',
-            dataIndex: 'identity',
+            dataIndex: ['chw', 'identity'],
           },
           phone,
           {
