@@ -36,6 +36,10 @@ export default function User() {
 function AssignChw({ id }) {
   const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
 
+  function handleRelease(chwId) {
+    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
+  }
+
   return (
     <Card title="管理工作人员列表" extra={<Button type="link">分配新工作人员</Button>}>
       <Table
@@ -52,8 +56,12 @@ function AssignChw({ id }) {
             dataIndex: 'id',
             width: 200,
             align: 'center',
-            render() {
-              return <Button type="link">删除</Button>;
+            render(chwId) {
+              return (
+                <Button type="link" onClick={() => handleRelease(chwId)}>
+                  删除
+                </Button>
+              );
             },
           },
         ]}
