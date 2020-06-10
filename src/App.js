@@ -11,14 +11,25 @@ import RouteView from './Router';
 import { Header, Menu } from './components/*';
 import styled from 'styled-components';
 
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from './reducers';
+
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
 export default function () {
   return (
     <ConfigProvider locale={zhCN}>
-      <AppContainer>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AppContainer>
+      <Provider store={store}>
+        <AppContainer>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AppContainer>
+      </Provider>
     </ConfigProvider>
   );
 }
