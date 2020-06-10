@@ -1,8 +1,10 @@
+import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Table } from 'antd';
 import { useParams } from 'react-router-dom';
+
 import { Card, StaticFormItem } from '../components/*';
-import Axios from 'axios';
+import { useFetch } from '../utils';
 
 export default function User() {
   const { id } = useParams();
@@ -32,17 +34,14 @@ export default function User() {
 }
 
 function AssignChw({ id }) {
-  const [dataSource, setDataSource] = useState([]);
-
-  useEffect(() => {
-    Axios.get(`/admin/user/supervisor/${id}/chw`).then(({ data }) => setDataSource(data));
-  }, []);
+  const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
 
   return (
     <Card title="管理工作人员列表" extra={<Button type="link">分配新工作人员</Button>}>
       <Table
         rowKey="id"
         dataSource={dataSource}
+        pagination={false}
         columns={[
           {
             title: '工作人员姓名',
@@ -59,24 +58,25 @@ function AssignChw({ id }) {
           },
         ]}
       />
-      <NotAssignedChw id={id} />
+      <NotAssignedChw id={id} onChange={load} />
     </Card>
   );
 }
 
-function NotAssignedChw({ id }) {
-  const [dataSource, setDataSource] = useState([]);
-
-  useEffect(() => {
-    Axios.get(`/admin/user/chw/not_assigned`).then(({ data }) => setDataSource(data));
-  }, []);
+function NotAssignedChw({ id, onChange }) {
+  const [dataSource, load] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
 
   function handleAssign(chwId) {
-    Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]);
+    Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]).then(() => {
+      load();
+      onChange();
+    });
   }
 
   return (
     <Table
+      rowKey="id"
+      pagination={false}
       dataSource={dataSource}
       columns={[
         {
