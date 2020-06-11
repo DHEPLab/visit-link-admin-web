@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Table, Input, Space } from 'antd';
+import { Form, Modal, Button, Table, Input, Space } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { Card, StaticFormItem } from '../components/*';
@@ -9,17 +9,21 @@ import { Role } from '../constants/enums';
 
 export default function User() {
   const { id } = useParams();
-  const [user, setUser] = useState({});
+  const [user, load] = useFetch(`/admin/user/${id}`);
   const [changePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
-
-  useEffect(() => {
-    Axios.get(`/admin/user/${id}`).then(({ data }) => setUser(data));
-  }, [id]);
+  const [changeProfileModalVisible, setChangeProfileModalVisible] = useState(false);
 
   return (
     <>
       <h2>账户管理详情</h2>
-      <Card title="用户信息" extra={<Button type="link">编辑资料</Button>}>
+      <Card
+        title="用户信息"
+        extra={
+          <Button type="link" onClick={() => setChangeProfileModalVisible(true)}>
+            编辑资料
+          </Button>
+        }
+      >
         <StaticFormItem label="真实姓名">{user.realName}</StaticFormItem>
         <StaticFormItem label="联系电话">{user.phone}</StaticFormItem>
         <StaticFormItem label="权限">{Role[user.role]}</StaticFormItem>
@@ -43,7 +47,59 @@ export default function User() {
         visible={changePasswordModalVisible}
         onCancel={() => setChangePasswordModalVisible(false)}
       />
+      <ChangeProfileModal
+        user={user}
+        visible={changeProfileModalVisible}
+        onSuccess={() => {
+          load();
+          setChangeProfileModalVisible(false);
+        }}
+        onCancel={() => setChangeProfileModalVisible(false)}
+      />
     </>
+  );
+}
+
+function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (props.visible) {
+      form.setFieldsValue(user);
+    }
+  }, [props.visible, user]);
+
+  function onFinish(values) {
+    Axios.put(`/admin/user/${user.id}`, values).then(() => {
+      onSuccess();
+    });
+  }
+
+  return (
+    <Modal
+      destroyOnClose
+      title="修改用户信息"
+      footer={
+        <Space>
+          <Button ghost type="primary" onClick={onCancel}>
+            放弃
+          </Button>
+          <Button type="primary" onClick={form.submit}>
+            确定
+          </Button>
+        </Space>
+      }
+      {...props}
+    >
+      <Form form={form} wrapperCol={{ offset: 1 }} onFinish={onFinish}>
+        <Form.Item label="真实姓名" name="realName" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="联系电话" name="phone" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 }
 
@@ -125,7 +181,7 @@ function AssignChw({ id }) {
           },
         ]}
       />
-      <NotAssignedChw
+      <NotAssignedChwModal
         id={id}
         onChange={load}
         visible={visible}
@@ -136,13 +192,13 @@ function AssignChw({ id }) {
 }
 
 // open a new modal, assign chw to supervisor
-function NotAssignedChw({ id, onChange, ...props }) {
+function NotAssignedChwModal({ id, onChange, ...props }) {
   const [dataSource, load] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
 
   // on modal visble, reload data
   useEffect(() => {
     props.visible && load();
-  }, [props.visible]);
+  }, [props.visible, load]);
 
   function handleAssign(chwId) {
     Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]).then(() => {
