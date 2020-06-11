@@ -61,7 +61,7 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
 
   useEffect(() => {
     props.visible && form.setFieldsValue(user);
-  }, [props.visible, user]);
+  }, [props.visible, user, form]);
 
   function onFinish(values) {
     Axios.put(`/admin/user/${user.id}`, values).then(onSuccess);
