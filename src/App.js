@@ -1,42 +1,59 @@
-import React from 'react';
-import axios from 'axios';
-import { ConfigProvider } from 'antd';
-
+import React, { useEffect, useCallback } from 'react';
+import Axios from 'axios';
+import styled from 'styled-components';
+import { message, ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
+
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
-import { message } from 'antd';
-import RouteView from './router';
+import RouteView from './Router';
 
 import { Header, Menu } from './components/*';
-import styled from 'styled-components';
+
+import { createStore } from 'redux';
+import { Provider, useSelector } from 'react-redux';
+import rootReducer from './reducers';
+import { loadProfileSuccess, httpRequestStart, httpRequestEnd } from './actions';
+
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 export default function () {
   return (
     <ConfigProvider locale={zhCN}>
-      <AppContainer>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AppContainer>
+      <Provider store={store}>
+        <AppContainer>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AppContainer>
+      </Provider>
     </ConfigProvider>
   );
 }
 
 function App() {
   const history = useHistory();
+  const { user } = useSelector((state) => state.users);
+
+  const loadProfile = useCallback(() => {
+    Axios.get('/api/account/profile')
+      .then((r) => store.dispatch(loadProfileSuccess(r)))
+      .catch((_) => history.push('/sign_in'));
+  }, [history]);
+
+  useEffect(loadProfile, [loadProfile]);
+
   function handleLogout() {
     clearToken();
-    history.push('/login');
+    history.push('/sign_in');
   }
 
   return (
     <>
-      <Header
-        username="张三李四李四张三名字"
-        onNavigate={(path) => history.push(path)}
-        onLogout={handleLogout}
-      />
+      <Header username={user.realName} onNavigate={history.push} onLogout={handleLogout} />
       <RouteContainer>
         <Menu />
         <RouteView></RouteView>
@@ -60,15 +77,39 @@ const RouteContainer = styled.div`
 
 applyToken(getToken());
 
-axios.interceptors.response.use(
-  (response) => response,
+Axios.interceptors.request.use((config) => {
+  store.dispatch(httpRequestStart(config));
+  return config;
+});
+
+Axios.interceptors.response.use(
+  (response) => {
+    store.dispatch(httpRequestEnd(response.config));
+    return response;
+  },
   (error) => {
     const { response } = error;
-    if (!response) {
-      message.error('Network error, please try again later!');
-      return Promise.reject(error);
+    if (!response) return Promise.reject(error);
+    store.dispatch(httpRequestEnd(response.config));
+
+    let msg = '服务异常，请稍后重试';
+    switch (response.status) {
+      case 502:
+        msg = '网络异常，请稍后重试';
+        break;
+      case 500:
+        break;
+      case 401:
+        return Promise.reject(error);
+      default:
+        const { data } = response;
+        if (data.violations) {
+          msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
+        } else if (data.message) {
+          msg = data.message;
+        }
     }
-    response.data.detail && message.error(response.data.detail);
+    message.error(msg);
     return Promise.reject(error);
   }
 );
