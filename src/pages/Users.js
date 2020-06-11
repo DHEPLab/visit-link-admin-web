@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
 import { Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
-import { WithPage } from '../components/*';
-import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
+
+import { WithPage } from '../components/*';
+import { Role } from '../constants/enums';
 
 const { TabPane } = Tabs;
 export default function Users() {
@@ -14,7 +16,7 @@ export default function Users() {
   // change tab to refresh table
   function refresh() {
     const origin = tab;
-    setTab('Not Exist');
+    setTab(Math.random());
     setTab(origin);
   }
 
@@ -52,20 +54,6 @@ export default function Users() {
 
 function ModalUserForm({ onSuccess, ...props }) {
   const [form] = Form.useForm();
-  const [roles] = useState([
-    {
-      label: '工作人员',
-      value: 'ROLE_CHW',
-    },
-    {
-      label: '督导',
-      value: 'ROLE_SUPERVISOR',
-    },
-    {
-      label: '管理员',
-      value: 'ROLE_ADMIN',
-    },
-  ]);
 
   function handleSubmit(value) {
     Axios.post('/admin/user', value).then(onSuccess);
@@ -98,9 +86,9 @@ function ModalUserForm({ onSuccess, ...props }) {
         <h3>用户信息</h3>
         <Form.Item label="权限" name="role" rules={[{ required: true }]}>
           <Radio.Group>
-            {roles.map((role) => (
-              <Radio key={role.value} value={role.value}>
-                {role.label}
+            {Object.keys(Role).map((key) => (
+              <Radio key={key} value={key}>
+                {Role[key]}
               </Radio>
             ))}
           </Radio.Group>
