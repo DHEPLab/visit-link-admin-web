@@ -1,10 +1,11 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Table } from 'antd';
+import { Modal, Button, Table } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { Card, StaticFormItem } from '../components/*';
 import { useFetch } from '../utils';
+import { Role } from '../constants/enums';
 
 export default function User() {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export default function User() {
       <Card title="用户信息" extra={<Button type="link">编辑资料</Button>}>
         <StaticFormItem label="真实姓名">{user.realName}</StaticFormItem>
         <StaticFormItem label="联系电话">{user.phone}</StaticFormItem>
-        <StaticFormItem label="权限">{user.role}</StaticFormItem>
+        <StaticFormItem label="权限">{Role[user.role]}</StaticFormItem>
       </Card>
       <br />
       <Card title="账户信息" extra={<Button type="link">修改密码</Button>}>
@@ -35,13 +36,22 @@ export default function User() {
 
 function AssignChw({ id }) {
   const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
+  const [visible, setVisible] = useState(false);
 
+  // release chw, the supervisor of chw is null
   function handleRelease(chwId) {
     Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
   }
 
   return (
-    <Card title="管理工作人员列表" extra={<Button type="link">分配新工作人员</Button>}>
+    <Card
+      title="管理工作人员列表"
+      extra={
+        <Button type="link" onClick={() => setVisible(true)}>
+          分配新工作人员
+        </Button>
+      }
+    >
       <Table
         rowKey="id"
         dataSource={dataSource}
@@ -66,13 +76,24 @@ function AssignChw({ id }) {
           },
         ]}
       />
-      <NotAssignedChw id={id} onChange={load} />
+      <NotAssignedChw
+        id={id}
+        onChange={load}
+        visible={visible}
+        onCancel={() => setVisible(false)}
+      />
     </Card>
   );
 }
 
-function NotAssignedChw({ id, onChange }) {
+// open a new modal, assign chw to supervisor
+function NotAssignedChw({ id, onChange, ...props }) {
   const [dataSource, load] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
+
+  // on modal visble, reload data
+  useEffect(() => {
+    props.visible && load();
+  }, [props.visible]);
 
   function handleAssign(chwId) {
     Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]).then(() => {
@@ -82,29 +103,31 @@ function NotAssignedChw({ id, onChange }) {
   }
 
   return (
-    <Table
-      rowKey="id"
-      pagination={false}
-      dataSource={dataSource}
-      columns={[
-        {
-          title: '工作人员姓名',
-          dataIndex: 'realName',
-        },
-        {
-          title: '操作',
-          dataIndex: 'id',
-          width: 200,
-          align: 'center',
-          render(chwId) {
-            return (
-              <Button type="link" onClick={() => handleAssign(chwId)}>
-                分配
-              </Button>
-            );
+    <Modal {...props} footer={null}>
+      <Table
+        rowKey="id"
+        pagination={false}
+        dataSource={dataSource}
+        columns={[
+          {
+            title: '工作人员姓名',
+            dataIndex: 'realName',
           },
-        },
-      ]}
-    />
+          {
+            title: '操作',
+            dataIndex: 'id',
+            width: 200,
+            align: 'center',
+            render(chwId) {
+              return (
+                <Button type="link" onClick={() => handleAssign(chwId)}>
+                  分配
+                </Button>
+              );
+            },
+          },
+        ]}
+      />
+    </Modal>
   );
 }
