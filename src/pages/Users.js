@@ -51,6 +51,7 @@ export default function Users() {
 }
 
 function ModalUserForm({ onSuccess, ...props }) {
+  const [form] = Form.useForm();
   const [roles] = useState([
     {
       label: '工作人员',
@@ -71,15 +72,31 @@ function ModalUserForm({ onSuccess, ...props }) {
   }
 
   return (
-    <Modal title="添加新用户" onOk={handleSubmit} footer={null} destroyOnClose {...props}>
+    <Modal
+      title="添加新用户"
+      onOk={handleSubmit}
+      footer={
+        <Space>
+          <Button ghost type="primary" onClick={props.onCancel}>
+            放弃
+          </Button>
+          <Button type="primary" onClick={form.submit}>
+            提交
+          </Button>
+        </Space>
+      }
+      destroyOnClose
+      {...props}
+    >
       <Form
+        form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ offset: 1 }}
         onFinish={handleSubmit}
         initialValues={{ role: 'ROLE_CHW' }}
       >
         <h3>用户信息</h3>
-        <Form.Item label="权限" name="role">
+        <Form.Item label="权限" name="role" rules={[{ required: true }]}>
           <Radio.Group>
             {roles.map((role) => (
               <Radio key={role.value} value={role.value}>
@@ -88,38 +105,30 @@ function ModalUserForm({ onSuccess, ...props }) {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="realName">
+        <Form.Item label="真实姓名" name="realName" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
           {({ getFieldValue }) => (
             <>
               {getFieldValue('role') === 'ROLE_CHW' && (
-                <Form.Item label="ID" name={['chw', 'identity']}>
+                <Form.Item label="ID" name={['chw', 'identity']} rules={[{ required: true }]}>
                   <Input />
                 </Form.Item>
               )}
             </>
           )}
         </Form.Item>
-        <Form.Item label="联系电话" name="phone">
+        <Form.Item label="联系电话" name="phone" rules={[{ required: true, min: 11, max: 11 }]}>
           <Input />
         </Form.Item>
-        <h3>用户信息</h3>
-        <Form.Item label="账户名称" name="username">
+        <h3>账户信息</h3>
+        <Form.Item label="账户名称" name="username" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
-        <Form.Item label="账户密码" name="password">
+        <Form.Item label="账户密码" name="password" rules={[{ required: true, min: 6 }]}>
           <Input.Password />
         </Form.Item>
-        <Space size="large">
-          <Button ghost type="primary">
-            放弃
-          </Button>
-          <Button type="primary" htmlType="submit">
-            提交
-          </Button>
-        </Space>
       </Form>
     </Modal>
   );
@@ -145,15 +154,14 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
           realName,
           {
             title: 'ID',
+            align: 'center',
             dataIndex: ['chw', 'identity'],
           },
           phone,
           {
             title: '督导',
-            dataIndex: 'supervisor',
-            render(supervisor) {
-              return <>{supervisor && supervisor.realName}</>;
-            },
+            align: 'center',
+            dataIndex: ['chw', 'supervisor', 'realName'],
           },
           username,
           operation(history),
@@ -201,16 +209,19 @@ function Admin({ tab, history, dataSource, pagination, loadData, onChangePage })
 
 const realName = {
   title: '工作人员姓名',
+  align: 'center',
   dataIndex: 'realName',
 };
 
 const phone = {
   title: '联系电话',
+  align: 'center',
   dataIndex: 'phone',
 };
 
 const username = {
   title: '账户名称',
+  align: 'center',
   dataIndex: 'username',
 };
 
