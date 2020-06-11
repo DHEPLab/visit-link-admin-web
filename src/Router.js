@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
 import styled from 'styled-components';
 
-import { Login, Profiles, Curriculums, User, Users, Modules } from './pages/*';
+import { SignIn, Profiles, Curriculums, User, Users, Modules } from './pages/*';
 
 const routes = [
   {
@@ -36,8 +36,8 @@ export default function () {
   return (
     <RouteView>
       <Switch>
-        <PrivateRoute exact path="/" children={<Redirect to="/users" />} />
-        <Route path="/login" children={<Login />} />
+        <PrivateRoute exact path="/" render={() => <Redirect to="/users" />} />
+        <Route path="/sign_in" render={() => <SignIn />} />
         {routes.map((route) => (
           <RouteWithSubRoutes key={route.path} {...route} />
         ))}
@@ -78,7 +78,7 @@ function PrivateRoute({ render, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: '/login',
+              pathname: '/sign_in',
               state: { from: location },
             }}
           />

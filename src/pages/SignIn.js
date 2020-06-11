@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Alert } from 'antd';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { applyToken } from '../utils/token';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadProfileSuccess } from '../actions';
 
 export default function () {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const networks = useSelector((state) => state.networks);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  let history = useHistory();
+  const [error, setError] = useState(false);
 
-  function handleLogin() {
-    Axios.post('/admin/authenticate', { username, password }).then((response) => {
-      applyToken(response.data.idToken);
+  async function handleSignIn() {
+    setError(false);
+    try {
+      const auth = await Axios.post('/admin/authenticate', { username, password });
+      applyToken(auth.data.idToken);
+      const profile = await Axios.get('/api/account/profile');
+      dispatch(loadProfileSuccess(profile));
       history.push('/');
-    });
+    } catch {
+      setError(true);
+    }
   }
 
   return (
@@ -22,6 +34,12 @@ export default function () {
       <Login>
         <h1>Healthy Future Admin Portal</h1>
         <p>Please sign in</p>
+        {error && (
+          <>
+            <Alert message="您输入的账号名称/账户密码可能有误" type="error" showIcon />
+            <br />
+          </>
+        )}
         <Form>
           <Form.Item>
             <Input
@@ -36,15 +54,17 @@ export default function () {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              onPressEnter={handleLogin}
+              onPressEnter={handleSignIn}
             />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" onClick={handleLogin}>
-              Login
-            </Button>
-          </Form.Item>
         </Form>
+        <Button
+          type="primary"
+          onClick={handleSignIn}
+          loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
+        >
+          Login
+        </Button>
       </Login>
     </AbsoluteContainer>
   );

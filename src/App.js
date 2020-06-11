@@ -41,14 +41,14 @@ function App() {
   const loadProfile = useCallback(() => {
     Axios.get('/api/account/profile')
       .then((r) => store.dispatch(loadProfileSuccess(r)))
-      .catch((_) => history.push('/login'));
+      .catch((_) => history.push('/sign_in'));
   }, [history]);
 
   useEffect(loadProfile, [loadProfile]);
 
   function handleLogout() {
     clearToken();
-    history.push('/login');
+    history.push('/sign_in');
   }
 
   return (
@@ -100,11 +100,11 @@ Axios.interceptors.response.use(
       case 500:
         break;
       case 401:
-        return;
+        return Promise.reject(error);
       default:
         const { data } = response;
-        if (data.errors) {
-          msg = data.errors.map((e) => e.defaultMessage).join(', ');
+        if (data.violations) {
+          msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
         } else if (data.message) {
           msg = data.message;
         }
