@@ -4,14 +4,14 @@ import { Form, Modal, Button, Table, Input, Space } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { Card, StaticFormItem } from '../components/*';
-import { useFetch } from '../utils';
+import { useFetch, useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 
 export default function User() {
   const { id } = useParams();
   const [user, load] = useFetch(`/admin/user/${id}`);
-  const [changePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
-  const [changeProfileModalVisible, setChangeProfileModalVisible] = useState(false);
+  const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
+  const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
 
   return (
     <>
@@ -19,7 +19,7 @@ export default function User() {
       <Card
         title="用户信息"
         extra={
-          <Button type="link" onClick={() => setChangeProfileModalVisible(true)}>
+          <Button type="link" onClick={openChangeProfile}>
             编辑资料
           </Button>
         }
@@ -32,7 +32,7 @@ export default function User() {
       <Card
         title="账户信息"
         extra={
-          <Button type="link" onClick={() => setChangePasswordModalVisible(true)}>
+          <Button type="link" onClick={openChangePassword}>
             修改密码
           </Button>
         }
@@ -42,19 +42,15 @@ export default function User() {
       </Card>
       <br />
       {user.role === 'ROLE_SUPERVISOR' && <AssignChw id={id} />}
-      <ChangePasswordModal
-        id={id}
-        visible={changePasswordModalVisible}
-        onCancel={() => setChangePasswordModalVisible(false)}
-      />
+      <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
       <ChangeProfileModal
         user={user}
-        visible={changeProfileModalVisible}
+        visible={changeProfileVisible}
         onSuccess={() => {
           load();
-          setChangeProfileModalVisible(false);
+          closeChangeProfile();
         }}
-        onCancel={() => setChangeProfileModalVisible(false)}
+        onCancel={closeChangeProfile}
       />
     </>
   );
@@ -64,15 +60,11 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (props.visible) {
-      form.setFieldsValue(user);
-    }
+    props.visible && form.setFieldsValue(user);
   }, [props.visible, user]);
 
   function onFinish(values) {
-    Axios.put(`/admin/user/${user.id}`, values).then(() => {
-      onSuccess();
-    });
+    Axios.put(`/admin/user/${user.id}`, values).then(onSuccess);
   }
 
   return (
@@ -141,9 +133,9 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 
 function AssignChw({ id }) {
   const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
-  const [visible, setVisible] = useState(false);
+  const [visible, openAssign, closeAssign] = useBoolState();
 
-  // release chw, the supervisor of chw is null
+  // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
     Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
   }
@@ -152,7 +144,7 @@ function AssignChw({ id }) {
     <Card
       title="管理工作人员列表"
       extra={
-        <Button type="link" onClick={() => setVisible(true)}>
+        <Button type="link" onClick={openAssign}>
           分配新工作人员
         </Button>
       }
@@ -181,12 +173,7 @@ function AssignChw({ id }) {
           },
         ]}
       />
-      <NotAssignedChwModal
-        id={id}
-        onChange={load}
-        visible={visible}
-        onCancel={() => setVisible(false)}
-      />
+      <NotAssignedChwModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
     </Card>
   );
 }
@@ -208,7 +195,7 @@ function NotAssignedChwModal({ id, onChange, ...props }) {
   }
 
   return (
-    <Modal {...props} footer={null}>
+    <Modal title="分配新工作人员" {...props} footer={null}>
       <Table
         rowKey="id"
         pagination={false}

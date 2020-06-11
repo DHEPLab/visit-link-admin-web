@@ -14,6 +14,17 @@ export function useFetch(url, params, initialState = {}) {
   return [data, load];
 }
 
+export function useBoolState(initialState = false) {
+  const [bool, setBool] = useState(initialState);
+  const setBoolTrue = () => {
+    setBool(true);
+  };
+  const setBoolFalse = () => {
+    setBool(false);
+  };
+  return [bool, setBoolTrue, setBoolFalse];
+}
+
 // return file path without query params
 export function cleanQueryParams(path) {
   return path.split('?')[0];
