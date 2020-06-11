@@ -63,7 +63,7 @@ export default function () {
           onClick={handleSignIn}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
         >
-          Login
+          Sign In
         </Button>
       </Login>
     </AbsoluteContainer>
