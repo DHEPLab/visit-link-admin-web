@@ -13,3 +13,8 @@ export function useFetch(url, params, initialState = {}) {
   useEffect(load, []);
   return [data, load];
 }
+
+// return file path without query params
+export function cleanQueryParams(path) {
+  return path.split('?')[0];
+}
