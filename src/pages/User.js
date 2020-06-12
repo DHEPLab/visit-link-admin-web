@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Form, Modal, Button, Table, Input, Space } from 'antd';
 import { useParams } from 'react-router-dom';
 
@@ -96,12 +96,10 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
 }
 
 function ChangePasswordModal({ id, onCancel, ...props }) {
-  const [password, setPassword] = useState();
+  const [form] = Form.useForm();
 
-  function handleSubmit() {
-    Axios.put(`/admin/user/${id}/password`, {
-      password,
-    }).then(onCancel);
+  function onFinish(values) {
+    Axios.put(`/admin/user/${id}/password`, values).then(onCancel);
   }
 
   return (
@@ -114,7 +112,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
           <Button ghost type="primary" onClick={onCancel}>
             放弃
           </Button>
-          <Button type="primary" onClick={handleSubmit}>
+          <Button type="primary" onClick={form.submit}>
             确定
           </Button>
         </Space>
@@ -122,11 +120,11 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
       {...props}
     >
       <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
-      <Input.Password
-        placeholder="请输入新的账户密码"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
+      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
+        <Form.Item label="新的账户密码" name="password" rules={[{ required: true, min: 6 }]}>
+          <Input.Password placeholder="请输入新的账户密码" />
+        </Form.Item>
+      </Form>
     </Modal>
   );
 }
