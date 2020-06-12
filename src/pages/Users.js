@@ -4,13 +4,14 @@ import { Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
+import { useBoolState } from '../utils';
 import { WithPage } from '../components/*';
 import { Role } from '../constants/enums';
 
 const { TabPane } = Tabs;
 export default function Users() {
   const [tab, setTab] = useState('chw');
-  const [visible, setVisible] = useState(false);
+  const [visible, openUser, closeUser] = useBoolState();
   const history = useHistory();
 
   // change tab to refresh table
@@ -24,7 +25,7 @@ export default function Users() {
     <>
       <h1>账户管理</h1>
       <ButtonGroup>
-        <Button type="primary" onClick={() => setVisible(true)}>
+        <Button type="primary" onClick={openUser}>
           创建新用户
         </Button>
       </ButtonGroup>
@@ -40,20 +41,24 @@ export default function Users() {
         </TabPane>
       </Tabs>
 
-      <ModalUserForm
+      <UserFormModal
         visible={visible}
-        onCancel={() => setVisible(false)}
+        onCancel={closeUser}
         onSuccess={() => {
           refresh();
-          setVisible(false);
+          closeUser();
         }}
       />
     </>
   );
 }
 
-function ModalUserForm({ onSuccess, ...props }) {
+function UserFormModal({ onSuccess, ...props }) {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    props.visible && form.resetFields();
+  }, [props, form]);
 
   function handleSubmit(value) {
     Axios.post('/admin/user', value).then(onSuccess);
@@ -61,8 +66,8 @@ function ModalUserForm({ onSuccess, ...props }) {
 
   return (
     <Modal
+      destroyOnClose
       title="添加新用户"
-      onOk={handleSubmit}
       footer={
         <Space>
           <Button ghost type="primary" onClick={props.onCancel}>
@@ -73,7 +78,6 @@ function ModalUserForm({ onSuccess, ...props }) {
           </Button>
         </Space>
       }
-      destroyOnClose
       {...props}
     >
       <Form

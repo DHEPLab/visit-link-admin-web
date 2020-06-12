@@ -97,6 +97,9 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
 
 function ChangePasswordModal({ id, onCancel, ...props }) {
   const [form] = Form.useForm();
+  useEffect(() => {
+    props.visible && form.resetFields();
+  }, [props, form]);
 
   function onFinish(values) {
     Axios.put(`/admin/user/${id}/password`, values).then(onCancel);
