@@ -19,3 +19,11 @@ export const FeedingPattern = {
   BREAST_MILK: '纯母乳喂养',
   MILK_POWDER: '纯奶粉喂养',
 };
+
+export const FamilyTies = {
+  MOTHER: '母亲',
+  FATHER: '父亲',
+  GRANDMOTHER: '(外)祖母',
+  GRANDFATHER: '(外)祖父',
+  OTHER: '其他',
+};

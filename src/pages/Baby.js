@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Modal, Button, Table, Space, Input, Radio } from 'antd';
+import { Form, Modal, Button, Table, Space, Input, Radio, Select } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Card, StaticFormItem } from '../components/*';
-import { Gender, BabyStage } from '../constants/enums';
+import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
   const { id } = useParams();
@@ -88,6 +88,7 @@ function Carers({ babyId }) {
             title: '亲属关系',
             dataIndex: 'familyTies',
             align: 'center',
+            render: (h) => FamilyTies[h],
           },
           {
             title: '联系电话',
@@ -124,7 +125,6 @@ function CarerFormModal({ babyId, onSuccess, ...props }) {
   }, [props.visible, form]);
 
   function onFinish(values) {
-    console.log(values);
     Axios.post('/admin/carer', {
       baby: {
         id: babyId,
@@ -166,7 +166,13 @@ function CarerFormModal({ babyId, onSuccess, ...props }) {
           <Input />
         </Form.Item>
         <Form.Item label="亲属关系" name="familyTies" rules={Required}>
-          <Input />
+          <Select>
+            {Object.keys(FamilyTies).map((key) => (
+              <Select.Option key={key} value={key}>
+                {FamilyTies[key]}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item label="联系电话" name="phone" rules={Required}>
           <Input />
