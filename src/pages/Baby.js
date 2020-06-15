@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -43,7 +43,18 @@ export default function Baby() {
 
 function Carers({ babyId }) {
   const [dataSource, refresh] = useFetch(`/admin/baby/${babyId}/carer`, {}, []);
+  const [carer, setCarer] = useState({});
   const [visible, openCarer, closeCarer] = useBoolState(false);
+
+  const openCarerEdit = (record) => {
+    setCarer(record);
+    openCarer();
+  };
+
+  const safeCloseCarer = () => {
+    setCarer({});
+    closeCarer();
+  };
 
   function handleDelete(id) {
     Axios.delete(`/admin/carer/${id}`).then(refresh);
@@ -59,15 +70,17 @@ function Carers({ babyId }) {
       }
     >
       <CarerFormModal
+        carer={carer}
         babyId={babyId}
         visible={visible}
-        onCancel={closeCarer}
+        onCancel={safeCloseCarer}
         onSuccess={() => {
           refresh();
-          closeCarer();
+          safeCloseCarer();
         }}
       />
       <Table
+        rowKey="id"
         dataSource={dataSource}
         pagination={false}
         columns={[
@@ -100,13 +113,15 @@ function Carers({ babyId }) {
             dataIndex: 'id',
             align: 'center',
             width: 200,
-            render(id) {
+            render(id, record) {
               return (
                 <Space>
                   <Button type="link" onClick={() => handleDelete(id)}>
                     移除
                   </Button>
-                  <Button type="link">编辑</Button>
+                  <Button type="link" onClick={() => openCarerEdit(record)}>
+                    编辑
+                  </Button>
                 </Space>
               );
             },
@@ -117,15 +132,18 @@ function Carers({ babyId }) {
   );
 }
 
-function CarerFormModal({ babyId, onSuccess, ...props }) {
+function CarerFormModal({ carer, babyId, onSuccess, ...props }) {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    props.visible && form.resetFields();
-  }, [props.visible, form]);
+    if (!props.visible) return;
+    carer.id ? form.setFieldsValue(carer) : form.resetFields();
+  }, [props.visible, carer, form]);
 
   function onFinish(values) {
-    Axios.post('/admin/carer', {
+    const { id } = carer;
+    const method = id ? 'put' : 'post';
+    Axios[method](`/admin/carer${id && `/${id}`}`, {
       baby: {
         id: babyId,
       },
@@ -136,7 +154,7 @@ function CarerFormModal({ babyId, onSuccess, ...props }) {
   return (
     <Modal
       destroyOnClose
-      title="新增照看人"
+      title={`${carer.id ? '编辑' : '新增'}照看人`}
       footer={
         <Space>
           <Button ghost type="primary" onClick={props.onCancel}>
