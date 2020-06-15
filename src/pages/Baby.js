@@ -109,6 +109,11 @@ function Carers({ babyId }) {
             align: 'center',
           },
           {
+            title: '微信号',
+            dataIndex: 'wechat',
+            align: 'center',
+          },
+          {
             title: '操作',
             dataIndex: 'id',
             align: 'center',
@@ -143,7 +148,7 @@ function CarerFormModal({ carer, babyId, onSuccess, ...props }) {
   function onFinish(values) {
     const { id } = carer;
     const method = id ? 'put' : 'post';
-    Axios[method](`/admin/carer${id && `/${id}`}`, {
+    Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
       baby: {
         id: babyId,
       },
@@ -195,7 +200,7 @@ function CarerFormModal({ carer, babyId, onSuccess, ...props }) {
         <Form.Item label="联系电话" name="phone" rules={Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="微信号" name="wechatId">
+        <Form.Item label="微信号" name="wechat">
           <Input />
         </Form.Item>
       </Form>
