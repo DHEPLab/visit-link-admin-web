@@ -73,7 +73,7 @@ function Carers({ babyId }) {
         columns={[
           {
             title: '主照看人',
-            dataIndex: 'primary',
+            dataIndex: 'master',
             align: 'center',
             render(h) {
               return h ? '是' : '否';
@@ -151,12 +151,12 @@ function CarerFormModal({ babyId, onSuccess, ...props }) {
     >
       <Form
         form={form}
-        initialValues={{ primary: true }}
+        initialValues={{ master: true }}
         labelCol={{ span: 4 }}
         wrapperCol={{ offset: 1 }}
         onFinish={onFinish}
       >
-        <Form.Item label="看护状态" name="primary" rules={Required}>
+        <Form.Item label="看护状态" name="master" rules={Required}>
           <Radio.Group>
             <Radio value={true}>主看护人</Radio>
             <Radio value={false}>次看护人</Radio>
@@ -175,6 +175,9 @@ function CarerFormModal({ babyId, onSuccess, ...props }) {
           </Select>
         </Form.Item>
         <Form.Item label="联系电话" name="phone" rules={Required}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="微信号" name="wechatId">
           <Input />
         </Form.Item>
       </Form>
