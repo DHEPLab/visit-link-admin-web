@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
 import styled from 'styled-components';
 
-import { SignIn, Profiles, Curriculums, User, Users, Babies, Modules } from './pages/*';
+import { SignIn, Profiles, Curriculums, User, Users, Babies, Baby, Modules } from './pages/*';
 
 const routes = [
   {
@@ -21,6 +21,10 @@ const routes = [
   {
     path: '/users',
     component: Users,
+  },
+  {
+    path: '/babies/:id',
+    component: Baby,
   },
   {
     path: '/babies',
