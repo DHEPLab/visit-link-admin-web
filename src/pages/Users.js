@@ -30,7 +30,7 @@ export default function Users() {
         </Button>
       </ButtonGroup>
       <Tabs onChange={setTab}>
-        <TabPane tab="工作人员" key="chw">
+        <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
         </TabPane>
         <TabPane tab="督导" key="supervisor">
@@ -138,7 +138,7 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   return (
     <div>
       <Table
-        rowKey="id"
+        rowKey={(record) => record.user.id}
         dataSource={dataSource}
         pagination={pagination}
         onChange={onChangePage}
@@ -147,13 +147,19 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
           {
             title: 'ID',
             align: 'center',
-            dataIndex: ['chw', 'identity'],
+            dataIndex: ['user', 'chw', 'identity'],
           },
           phone,
           {
             title: '督导',
             align: 'center',
-            dataIndex: ['chw', 'supervisor', 'realName'],
+            dataIndex: ['user', 'chw', 'supervisor', 'realName'],
+          },
+          {
+            title: '负责宝宝',
+            align: 'center',
+            dataIndex: 'babyCount',
+            render: (h) => `${h} 位`,
           },
           username,
           operation(history),
@@ -171,11 +177,22 @@ function Supervisor({ tab, history, dataSource, pagination, loadData, onChangePa
   return (
     <div>
       <Table
-        rowKey="id"
+        rowKey={(record) => record.user.id}
         dataSource={dataSource}
         pagination={pagination}
         onChange={onChangePage}
-        columns={[realName, phone, username, operation(history)]}
+        columns={[
+          realName,
+          phone,
+          {
+            title: '负责社区工作者',
+            dataIndex: 'chwCount',
+            align: 'center',
+            render: (h) => `${h} 位`,
+          },
+          username,
+          operation(history),
+        ]}
       />
     </div>
   );
@@ -193,33 +210,38 @@ function Admin({ tab, history, dataSource, pagination, loadData, onChangePage })
         dataSource={dataSource}
         pagination={pagination}
         onChange={onChangePage}
-        columns={[realName, phone, username, operation(history)]}
+        columns={[
+          { ...realName, dataIndex: 'realName' },
+          { ...phone, dataIndex: 'phone' },
+          { ...username, dataIndex: 'username' },
+          operation(history, 'id'),
+        ]}
       />
     </div>
   );
 }
 
 const realName = {
-  title: '工作人员姓名',
+  title: '姓名',
   align: 'center',
-  dataIndex: 'realName',
+  dataIndex: ['user', 'realName'],
 };
 
 const phone = {
   title: '联系电话',
   align: 'center',
-  dataIndex: 'phone',
+  dataIndex: ['user', 'phone'],
 };
 
 const username = {
   title: '账户名称',
   align: 'center',
-  dataIndex: 'username',
+  dataIndex: ['user', 'username'],
 };
 
-const operation = (history) => ({
+const operation = (history, dataIndex = ['user', 'id']) => ({
   title: '操作',
-  dataIndex: 'id',
+  dataIndex,
   align: 'center',
   render(id) {
     return (
