@@ -42,6 +42,7 @@ export default function User() {
       </Card>
       <br />
       {user.role === 'ROLE_SUPERVISOR' && <AssignChw id={id} />}
+      {user.role === 'ROLE_CHW' && <AssignBaby id={id} />}
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
       <ChangeProfileModal
         user={user}
@@ -128,6 +129,99 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
           <Input.Password placeholder="请输入新的账户密码" />
         </Form.Item>
       </Form>
+    </Modal>
+  );
+}
+
+function AssignBaby({ id }) {
+  const [dataSource, load] = useFetch(`/admin/chw/${id}/baby`, {}, []);
+  const [visible, openAssign, closeAssign] = useBoolState();
+
+  // release chw, set chw's supervisor to null
+  function handleRelease(chwId) {
+    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
+  }
+
+  return (
+    <Card
+      title="负责宝宝列表"
+      extra={
+        <Button type="link" onClick={openAssign}>
+          添加新宝宝
+        </Button>
+      }
+    >
+      <Table
+        rowKey="id"
+        dataSource={dataSource}
+        pagination={false}
+        columns={[
+          {
+            title: '宝宝姓名',
+            dataIndex: 'name',
+          },
+          {
+            title: '操作',
+            dataIndex: 'id',
+            width: 200,
+            align: 'center',
+            render(chwId) {
+              return (
+                <Button type="link" onClick={() => handleRelease(chwId)}>
+                  删除
+                </Button>
+              );
+            },
+          },
+        ]}
+      />
+      <NotAssignedBabyModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
+    </Card>
+  );
+}
+
+// open a new modal, assign chw to supervisor
+function NotAssignedBabyModal({ id, onChange, ...props }) {
+  const [dataSource, load] = useFetch(`/admin/baby/not_assigned`, {}, []);
+
+  // on modal visble, reload data
+  useEffect(() => {
+    props.visible && load();
+  }, [props.visible, load]);
+
+  function handleAssign(babyId) {
+    Axios.post(`/admin/chw/${id}/baby`, [babyId]).then(() => {
+      load();
+      onChange();
+    });
+  }
+
+  return (
+    <Modal title="分配新宝宝" {...props} footer={null}>
+      <Table
+        rowKey="id"
+        pagination={false}
+        dataSource={dataSource}
+        columns={[
+          {
+            title: '宝宝姓名',
+            dataIndex: 'name',
+          },
+          {
+            title: '操作',
+            dataIndex: 'id',
+            width: 200,
+            align: 'center',
+            render(chwId) {
+              return (
+                <Button type="link" onClick={() => handleAssign(chwId)}>
+                  分配
+                </Button>
+              );
+            },
+          },
+        ]}
+      />
     </Modal>
   );
 }
