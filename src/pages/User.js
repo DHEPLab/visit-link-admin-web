@@ -150,8 +150,8 @@ function AssignBaby({ id }) {
   const [visible, openAssign, closeAssign] = useBoolState();
 
   // release chw, set chw's supervisor to null
-  function handleRelease(chwId) {
-    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
+  function handleRelease(babyId) {
+    Axios.delete(`/admin/baby/${babyId}/chw`).then(load);
   }
 
   return (
@@ -177,9 +177,9 @@ function AssignBaby({ id }) {
             dataIndex: 'id',
             width: 200,
             align: 'center',
-            render(chwId) {
+            render(babyId) {
               return (
-                <Button type="link" onClick={() => handleRelease(chwId)}>
+                <Button type="link" onClick={() => handleRelease(babyId)}>
                   删除
                 </Button>
               );
