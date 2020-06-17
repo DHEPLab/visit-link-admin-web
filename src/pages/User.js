@@ -99,7 +99,7 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
           <Input />
         </Form.Item>
         {user.role === 'ROLE_CHW' && (
-          <Form.Item label="所在区域" name="tags" rules={[{ required: true }]}>
+          <Form.Item label="所在区域" name={['chw', 'tags']} rules={[{ required: true }]}>
             <Select mode="tags" />
           </Form.Item>
         )}
