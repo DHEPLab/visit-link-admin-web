@@ -6,7 +6,7 @@ import { Form, Modal, Button, Table, Space, Input, Radio, Select } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card, StaticFormItem } from '../components/*';
+import { Card, StaticField } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
@@ -18,24 +18,22 @@ export default function Baby() {
   return (
     <>
       <Card title="宝宝信息">
-        <StaticFormItem label="真实姓名">{baby.name}</StaticFormItem>
-        <StaticFormItem label="ID">{baby.identity}</StaticFormItem>
-        <StaticFormItem label="性别">{Gender[baby.gender]}</StaticFormItem>
-        <StaticFormItem label="成长阶段">{BabyStage[baby.stage]}</StaticFormItem>
+        <StaticField label="真实姓名">{baby.name}</StaticField>
+        <StaticField label="ID">{baby.identity}</StaticField>
+        <StaticField label="性别">{Gender[baby.gender]}</StaticField>
+        <StaticField label="成长阶段">{BabyStage[baby.stage]}</StaticField>
         {baby.stage === 'EDC' ? (
-          <StaticFormItem label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticFormItem>
+          <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
         ) : (
-          <StaticFormItem label="出生日期">
-            {moment(baby.birthday).format('YYYY-MM-DD')}
-          </StaticFormItem>
+          <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
         )}
-        <StaticFormItem label="详细地址">{baby.location}</StaticFormItem>
-        <StaticFormItem label="备注信息">{baby.remark}</StaticFormItem>
+        <StaticField label="详细地址">{baby.location}</StaticField>
+        <StaticField label="备注信息">{baby.remark}</StaticField>
       </Card>
       <Carers babyId={id} />
       <Card title="负责社区工作者">
-        <StaticFormItem label="真实姓名">{chw().realName}</StaticFormItem>
-        <StaticFormItem label="联系电话">{chw().phone}</StaticFormItem>
+        <StaticField label="真实姓名">{chw().realName}</StaticField>
+        <StaticField label="联系电话">{chw().phone}</StaticField>
       </Card>
     </>
   );

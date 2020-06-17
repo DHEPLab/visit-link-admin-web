@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Form, Modal, Button, Table, Input, Space } from 'antd';
 import { useParams } from 'react-router-dom';
 
-import { Card, StaticFormItem } from '../components/*';
+import { Card, StaticField } from '../components/*';
 import { useFetch, useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 
@@ -24,9 +24,9 @@ export default function User() {
           </Button>
         }
       >
-        <StaticFormItem label="真实姓名">{user.realName}</StaticFormItem>
-        <StaticFormItem label="联系电话">{user.phone}</StaticFormItem>
-        <StaticFormItem label="权限">{Role[user.role]}</StaticFormItem>
+        <StaticField label="真实姓名">{user.realName}</StaticField>
+        <StaticField label="联系电话">{user.phone}</StaticField>
+        <StaticField label="权限">{Role[user.role]}</StaticField>
       </Card>
       <br />
       <Card
@@ -37,8 +37,8 @@ export default function User() {
           </Button>
         }
       >
-        <StaticFormItem label="账户名称">{user.username}</StaticFormItem>
-        <StaticFormItem label="账户密码">******</StaticFormItem>
+        <StaticField label="账户名称">{user.username}</StaticField>
+        <StaticField label="账户密码">******</StaticField>
       </Card>
       <br />
       {user.role === 'ROLE_SUPERVISOR' && <AssignChw id={id} />}

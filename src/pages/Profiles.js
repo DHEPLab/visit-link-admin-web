@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import { Role } from '../constants/enums';
-import { Card, StaticFormItem } from '../components/*';
+import { Card, StaticField } from '../components/*';
 
 export default function Profiles() {
   const { user } = useSelector((state) => state.users);
@@ -12,13 +12,13 @@ export default function Profiles() {
     <>
       <ContentHeader title="个人中心" />
       <Card title="基本信息">
-        <StaticFormItem label="真实姓名">{user.realName}</StaticFormItem>
-        <StaticFormItem label="联系电话">{user.phone}</StaticFormItem>
-        <StaticFormItem label="权限">{Role[user.role]}</StaticFormItem>
+        <StaticField label="真实姓名">{user.realName}</StaticField>
+        <StaticField label="联系电话">{user.phone}</StaticField>
+        <StaticField label="权限">{Role[user.role]}</StaticField>
       </Card>
       <Card title="账户信息">
-        <StaticFormItem label="账户名称">{user.username}</StaticFormItem>
-        <StaticFormItem label="账户密码">******</StaticFormItem>
+        <StaticField label="账户名称">{user.username}</StaticField>
+        <StaticField label="账户密码">******</StaticField>
       </Card>
     </>
   );
