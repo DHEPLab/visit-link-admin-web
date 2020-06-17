@@ -1,7 +1,8 @@
 import Axios from 'axios';
 import React, { useEffect } from 'react';
-import { Form, Modal, Button, Table, Input, Space } from 'antd';
+import { Form, Modal, Button, Table, Input, Space, Select } from 'antd';
 import { useParams } from 'react-router-dom';
+
 import StaticField from '../components/StaticField';
 import { Card } from '../components/*';
 import { useFetch, useBoolState } from '../utils';
@@ -25,6 +26,12 @@ export default function User() {
         }
       >
         <StaticField label="真实姓名">{user.realName}</StaticField>
+        {user.role === 'ROLE_CHW' && (
+          <>
+            <StaticField label="ID">{user.chw.identity}</StaticField>
+            <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
+          </>
+        )}
         <StaticField label="联系电话">{user.phone}</StaticField>
         <StaticField label="权限">{Role[user.role]}</StaticField>
       </Card>
@@ -91,6 +98,11 @@ function ChangeProfileModal({ user, onSuccess, onCancel, ...props }) {
         <Form.Item label="联系电话" name="phone" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
+        {user.role === 'ROLE_CHW' && (
+          <Form.Item label="所在区域" name="tags" rules={[{ required: true }]}>
+            <Select mode="tags" />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );

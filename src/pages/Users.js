@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import { Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
+import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 
@@ -104,9 +104,14 @@ function UserFormModal({ onSuccess, ...props }) {
           {({ getFieldValue }) => (
             <>
               {getFieldValue('role') === 'ROLE_CHW' && (
-                <Form.Item label="ID" name={['chw', 'identity']} rules={[{ required: true }]}>
-                  <Input />
-                </Form.Item>
+                <>
+                  <Form.Item label="ID" name={['chw', 'identity']} rules={[{ required: true }]}>
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={[{ required: true }]}>
+                    <Select mode="tags" />
+                  </Form.Item>
+                </>
               )}
             </>
           )}
@@ -148,6 +153,12 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
             title: 'ID',
             align: 'center',
             dataIndex: ['user', 'chw', 'identity'],
+          },
+          {
+            title: '所在区域',
+            align: 'center',
+            dataIndex: ['user', 'chw', 'tags'],
+            render: (tags) => tags && tags.join(', '),
           },
           phone,
           {
