@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-
+import StaticField from '../components/StaticField';
 import { Role } from '../constants/enums';
-import { Card, StaticField } from '../components/*';
+import { Card } from '../components/*';
 
 export default function Profiles() {
   const { user } = useSelector((state) => state.users);

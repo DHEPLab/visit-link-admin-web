@@ -2,8 +2,8 @@ import Axios from 'axios';
 import React, { useEffect } from 'react';
 import { Form, Modal, Button, Table, Input, Space } from 'antd';
 import { useParams } from 'react-router-dom';
-
-import { Card, StaticField } from '../components/*';
+import StaticField from '../components/StaticField';
+import { Card } from '../components/*';
 import { useFetch, useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 

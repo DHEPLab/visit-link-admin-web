@@ -4,9 +4,10 @@ import Axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Form, Modal, Button, Table, Space, Input, Radio, Select } from 'antd';
 
+import StaticField from '../components/StaticField';
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card, StaticField } from '../components/*';
+import { Card } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
