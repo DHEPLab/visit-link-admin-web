@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 
 import { useBoolState } from '../utils';
-import { WithPage } from '../components/*';
+import { WithPage, ContentHeader } from '../components/*';
 import { Role } from '../constants/enums';
 
 const { TabPane } = Tabs;
@@ -23,12 +23,11 @@ export default function Users() {
 
   return (
     <>
-      <h1>账户管理</h1>
-      <ButtonGroup>
+      <ContentHeader title="账户管理">
         <Button type="primary" onClick={openUser}>
           创建新用户
         </Button>
-      </ButtonGroup>
+      </ContentHeader>
       <Tabs onChange={setTab}>
         <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
@@ -265,8 +264,3 @@ const operation = (history, dataIndex = ['user', 'id']) => ({
     );
   },
 });
-
-const ButtonGroup = styled.div`
-  padding: 10px 0;
-  text-align: right;
-`;
