@@ -4,7 +4,7 @@ import { Form, Modal, Button, Table, Input, Space, Select } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import StaticField from '../components/StaticField';
-import { Card } from '../components/*';
+import { Card, ZebraTable } from '../components/*';
 import { useFetch, useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 
@@ -157,13 +157,14 @@ function AssignBaby({ id }) {
   return (
     <Card
       title="负责宝宝列表"
+      noPadding
       extra={
         <Button type="link" onClick={openAssign}>
           添加新宝宝
         </Button>
       }
     >
-      <Table
+      <ZebraTable
         rowKey="id"
         dataSource={dataSource}
         pagination={false}
@@ -173,13 +174,21 @@ function AssignBaby({ id }) {
             dataIndex: 'name',
           },
           {
+            title: 'ID',
+            dataIndex: 'identity',
+          },
+          {
+            title: '性别',
+            dataIndex: 'gender',
+          },
+          {
             title: '操作',
             dataIndex: 'id',
             width: 200,
             align: 'center',
             render(babyId) {
               return (
-                <Button type="link" onClick={() => handleRelease(babyId)}>
+                <Button size="small" type="link" onClick={() => handleRelease(babyId)}>
                   删除
                 </Button>
               );
@@ -249,21 +258,30 @@ function AssignChw({ id }) {
 
   return (
     <Card
-      title="管理工作人员列表"
+      title="负责社区工作者列表"
+      noPadding
       extra={
         <Button type="link" onClick={openAssign}>
-          分配新工作人员
+          分配新人员
         </Button>
       }
     >
-      <Table
+      <ZebraTable
         rowKey="id"
         dataSource={dataSource}
         pagination={false}
         columns={[
           {
-            title: '工作人员姓名',
+            title: '社区工作者姓名',
             dataIndex: 'realName',
+          },
+          {
+            title: 'ID',
+            dataIndex: ['chw', 'identity'],
+          },
+          {
+            title: '联系电话',
+            dataIndex: 'phone',
           },
           {
             title: '操作',
@@ -272,7 +290,7 @@ function AssignChw({ id }) {
             align: 'center',
             render(chwId) {
               return (
-                <Button type="link" onClick={() => handleRelease(chwId)}>
+                <Button size="small" type="link" onClick={() => handleRelease(chwId)}>
                   删除
                 </Button>
               );
