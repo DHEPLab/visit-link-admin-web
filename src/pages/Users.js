@@ -145,7 +145,7 @@ function CHW({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ChwBar>
-        <Input placeholder="请输入社区工作者姓名、ID或所在区域搜索" />
+        <Input className="master" placeholder="请输入社区工作者姓名、ID或所在区域搜索" />
         <Button ghost type="primary">
           批量创建社区工作者
         </Button>
