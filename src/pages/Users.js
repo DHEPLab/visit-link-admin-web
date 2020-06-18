@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
+import { Select, Form, Button, Modal, Tabs, Radio, Input, Space } from 'antd';
 
 import { useBoolState } from '../utils';
-import { WithPage, ContentHeader, CardTabs } from '../components/*';
+import { WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
 import { Role } from '../constants/enums';
 
 const { TabPane } = Tabs;
@@ -150,7 +150,7 @@ function CHW({ tab, history, loadData, ...props }) {
           批量创建社区工作者
         </Button>
       </ChwBar>
-      <Table
+      <ZebraTable
         rowKey={(record) => record.user.id}
         {...props}
         columns={[
@@ -204,7 +204,7 @@ function Supervisor({ tab, history, loadData, ...props }) {
 
   return (
     <div>
-      <Table
+      <ZebraTable
         rowKey={(record) => record.user.id}
         {...props}
         columns={[
@@ -231,7 +231,7 @@ function Admin({ tab, history, loadData, ...props }) {
 
   return (
     <div>
-      <Table
+      <ZebraTable
         rowKey="id"
         {...props}
         columns={[
