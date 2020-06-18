@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 
@@ -143,6 +144,12 @@ function CHW({ tab, history, loadData, ...props }) {
 
   return (
     <div>
+      <ChwBar>
+        <Input placeholder="请输入社区工作者姓名、ID或所在区域搜索" />
+        <Button ghost type="primary">
+          批量创建社区工作者
+        </Button>
+      </ChwBar>
       <Table
         rowKey={(record) => record.user.id}
         {...props}
@@ -178,6 +185,17 @@ function CHW({ tab, history, loadData, ...props }) {
     </div>
   );
 }
+
+const ChwBar = styled.div`
+  height: 76px;
+  padding-left: 30px;
+  padding-right: 20px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ffc3a0;
+`;
 
 function Supervisor({ tab, history, loadData, ...props }) {
   useEffect(() => {
