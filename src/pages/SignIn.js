@@ -38,6 +38,7 @@ export default function () {
         <Form>
           <Form.Item>
             <Input
+              size="large"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="请输入账户名"
@@ -46,6 +47,7 @@ export default function () {
           </Form.Item>
           <Form.Item>
             <Input.Password
+              size="large"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入账户密码"
@@ -55,6 +57,7 @@ export default function () {
         </Form>
         {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <Button
+          size="large"
           type="primary"
           onClick={handleSignIn}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
