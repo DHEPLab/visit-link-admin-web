@@ -1,9 +1,13 @@
+// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+
 @primary-color: #ff794f; // 全局主色
 @font-size-base: 16px; // 主字号
 
 @heading-color: #8E8E93; // 标题色
 @border-radius-base: 8px; // 组件/浮层圆角
 
+// Input, Select
+// --
 @input-height-base: 40px;
 @input-height-lg: 50px;
 @input-padding-horizontal: 30px;
@@ -19,6 +23,8 @@
   border-radius: 0;
 }
 
+// Modal
+// --
 @modal-header-bg: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
 @modal-heading-color: #fff;
 
@@ -26,11 +32,51 @@
   text-align: center;
 }
 
+// Button
+// --
 @btn-height-base: 40px;
 @btn-height-lg: 50px;
 @btn-padding-horizontal-base: 30px;
 @btn-padding-horizontal-lg: 60px;
+@btn-font-size-sm: 14px;
 
 .ant-btn {
   border-radius: 26px;
+}
+
+// Table
+// --
+@table-header-bg: #fff;
+@table-header-color: #8E8E93;
+@table-font-size: 14px;
+@table-padding-vertical: 24px;
+@table-padding-horizontal: 24px;
+
+.ant-table.ant-table {
+  font-size: @table-font-size;
+}
+
+.ant-table-row {
+  color: #4a4a4a;
+}
+
+// zebra crossing
+.ant-table-row.even-row {
+  background: #FFF9F5;
+}
+
+.ant-table-row.odd-row {
+  background: #fff;
+}
+
+.ant-table-thead>tr>th {
+  padding-top: 30px;
+  padding-bottom: 12px;
+  font-weight: 400;
+}
+
+// Pagination
+// ---
+.ant-pagination {
+  font-size: 14px;
 }

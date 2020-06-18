@@ -72,8 +72,10 @@ export default function (
         pagination={pagination()}
         dataSource={content}
         loadData={loadData}
+        rowClassName={(_, index) => (index % 2 === 0 ? 'even-row' : 'odd-row')}
         onChangeSearch={debounceChangeSearch}
         onChangePage={onChangePage}
+        onChange={onChangePage}
         {...props}
       />
     );

@@ -37,4 +37,8 @@ const CardTabs = styled(Tabs)`
     color: #ff9472;
     background: #fff;
   }
+
+  > .ant-tabs-nav {
+    margin: 0;
+  }
 `;

@@ -136,7 +136,7 @@ const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
 const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
 const PageAdmin = WithPage(Admin, '/admin/user/admin', {}, false);
 
-function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
+function CHW({ tab, history, loadData, ...props }) {
   useEffect(() => {
     tab === 'chw' && loadData();
   }, [tab, loadData]);
@@ -145,9 +145,7 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
     <div>
       <Table
         rowKey={(record) => record.user.id}
-        dataSource={dataSource}
-        pagination={pagination}
-        onChange={onChangePage}
+        {...props}
         columns={[
           realName,
           {
@@ -181,7 +179,7 @@ function CHW({ tab, history, dataSource, pagination, loadData, onChangePage }) {
   );
 }
 
-function Supervisor({ tab, history, dataSource, pagination, loadData, onChangePage }) {
+function Supervisor({ tab, history, loadData, ...props }) {
   useEffect(() => {
     tab === 'supervisor' && loadData();
   }, [tab, loadData]);
@@ -190,9 +188,7 @@ function Supervisor({ tab, history, dataSource, pagination, loadData, onChangePa
     <div>
       <Table
         rowKey={(record) => record.user.id}
-        dataSource={dataSource}
-        pagination={pagination}
-        onChange={onChangePage}
+        {...props}
         columns={[
           realName,
           phone,
@@ -210,7 +206,7 @@ function Supervisor({ tab, history, dataSource, pagination, loadData, onChangePa
   );
 }
 
-function Admin({ tab, history, dataSource, pagination, loadData, onChangePage }) {
+function Admin({ tab, history, loadData, ...props }) {
   useEffect(() => {
     tab === 'admin' && loadData();
   }, [tab, loadData]);
@@ -219,9 +215,7 @@ function Admin({ tab, history, dataSource, pagination, loadData, onChangePage })
     <div>
       <Table
         rowKey="id"
-        dataSource={dataSource}
-        pagination={pagination}
-        onChange={onChangePage}
+        {...props}
         columns={[
           { ...realName, dataIndex: 'realName' },
           { ...phone, dataIndex: 'phone' },
@@ -257,7 +251,7 @@ const operation = (history, dataIndex = ['user', 'id']) => ({
   align: 'center',
   render(id) {
     return (
-      <Button type="link" onClick={() => history.push(`/users/${id}`)}>
+      <Button size="small" type="link" onClick={() => history.push(`/users/${id}`)}>
         查看
       </Button>
     );
