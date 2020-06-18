@@ -66,14 +66,17 @@ function UserFormModal({ onSuccess, ...props }) {
 
   return (
     <Modal
+      width={600}
+      closable={false}
+      maskClosable={false}
       destroyOnClose
       title="添加新用户"
       footer={
-        <Space>
-          <Button ghost type="primary" onClick={props.onCancel}>
+        <Space size="large">
+          <Button ghost type="primary" size="large" onClick={props.onCancel}>
             放弃
           </Button>
-          <Button type="primary" onClick={form.submit}>
+          <Button type="primary" size="large" onClick={form.submit}>
             提交
           </Button>
         </Space>

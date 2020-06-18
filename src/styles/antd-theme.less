@@ -1,1 +1,36 @@
-@primary-color: #ff794f;
+@primary-color: #ff794f; // 全局主色
+@font-size-base: 16px; // 主字号
+
+@heading-color: #8E8E93; // 标题色
+@border-radius-base: 8px; // 组件/浮层圆角
+
+@input-height-base: 40px;
+@input-height-lg: 50px;
+@input-padding-horizontal: 30px;
+
+.ant-input,
+.ant-input-password,
+.ant-select-selector.ant-select-selector {
+  border-radius: 26px;
+  width: 400px;
+}
+
+.ant-input-password .ant-input {
+  border-radius: 0;
+}
+
+@modal-header-bg: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
+@modal-heading-color: #fff;
+
+.ant-modal-footer {
+  text-align: center;
+}
+
+@btn-height-base: 40px;
+@btn-height-lg: 50px;
+@btn-padding-horizontal-base: 30px;
+@btn-padding-horizontal-lg: 60px;
+
+.ant-btn {
+  border-radius: 26px;
+}
