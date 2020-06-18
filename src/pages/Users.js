@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { Select, Form, Button, Table, Modal, Tabs, Radio, Input, Space } from 'antd';
 
 import { useBoolState } from '../utils';
-import { WithPage, ContentHeader } from '../components/*';
+import { WithPage, ContentHeader, CardTabs } from '../components/*';
 import { Role } from '../constants/enums';
 
 const { TabPane } = Tabs;
@@ -28,7 +27,7 @@ export default function Users() {
           创建新用户
         </Button>
       </ContentHeader>
-      <Tabs onChange={setTab}>
+      <CardTabs onChange={setTab}>
         <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
         </TabPane>
@@ -38,7 +37,7 @@ export default function Users() {
         <TabPane tab="管理员" key="admin">
           <PageAdmin tab={tab} history={history} />
         </TabPane>
-      </Tabs>
+      </CardTabs>
 
       <UserFormModal
         visible={visible}
