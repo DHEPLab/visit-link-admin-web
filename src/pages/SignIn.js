@@ -57,12 +57,12 @@ export default function () {
             />
           </Form.Item>
         </Form>
-        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <ForgetPassword>
           <Button size="small" type="link">
             忘记密码？
           </Button>
         </ForgetPassword>
+        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <Button
           size="large"
           type="primary"
