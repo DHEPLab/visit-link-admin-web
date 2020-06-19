@@ -104,7 +104,7 @@ const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
 const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
 const PageAdmin = WithPage(Admin, '/admin/user/admin', {}, false);
 
-function CHW({ tab, history, loadData, ...props }) {
+function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
     tab === 'chw' && loadData();
   }, [tab, loadData]);
@@ -112,7 +112,11 @@ function CHW({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ChwBar>
-        <Input className="master" placeholder="请输入社区工作者姓名、ID或所在区域搜索" />
+        <Input
+          className="master"
+          onChange={(e) => onChangeSearch('search', e.target.value)}
+          placeholder="请输入社区工作者姓名、ID或所在区域搜索"
+        />
         <Button ghost type="primary">
           批量创建社区工作者
         </Button>
