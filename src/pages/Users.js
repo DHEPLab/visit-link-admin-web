@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { Select, Form, Button, Modal, Tabs, Radio, Input, Space } from 'antd';
+import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
 
 import { useBoolState } from '../utils';
-import { WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
 import { Role } from '../constants/enums';
+import { Required } from '../constants';
+import { ModalForm, WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
 
 const { TabPane } = Tabs;
 export default function Users() {
+  const history = useHistory();
   const [tab, setTab] = useState('chw');
   const [visible, openUser, closeUser] = useBoolState();
-  const history = useHistory();
 
   // change tab to refresh table
   function refresh() {
     const origin = tab;
     setTab(Math.random());
     setTab(origin);
+  }
+
+  function handleCreateUser(value) {
+    Axios.post('/admin/user', value).then(() => {
+      refresh();
+      closeUser();
+    });
   }
 
   return (
@@ -28,6 +36,7 @@ export default function Users() {
           创建新用户
         </Button>
       </ContentHeader>
+
       <CardTabs onChange={setTab}>
         <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
@@ -40,57 +49,15 @@ export default function Users() {
         </TabPane>
       </CardTabs>
 
-      <UserFormModal
+      <ModalForm
+        title="创建新用户"
         visible={visible}
         onCancel={closeUser}
-        onSuccess={() => {
-          refresh();
-          closeUser();
-        }}
-      />
-    </>
-  );
-}
-
-function UserFormModal({ onSuccess, ...props }) {
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    props.visible && form.resetFields();
-  }, [props, form]);
-
-  function handleSubmit(value) {
-    Axios.post('/admin/user', value).then(onSuccess);
-  }
-
-  return (
-    <Modal
-      width={600}
-      closable={false}
-      maskClosable={false}
-      destroyOnClose
-      title="创建新用户"
-      footer={
-        <Space size="large">
-          <Button ghost type="primary" size="large" onClick={props.onCancel}>
-            放弃
-          </Button>
-          <Button type="primary" size="large" onClick={form.submit}>
-            提交
-          </Button>
-        </Space>
-      }
-      {...props}
-    >
-      <Form
-        form={form}
-        labelCol={{ span: 4, offset: 1 }}
-        wrapperCol={{ offset: 1 }}
-        onFinish={handleSubmit}
+        onFinish={handleCreateUser}
         initialValues={{ role: 'ROLE_CHW' }}
       >
         <h3>用户信息</h3>
-        <Form.Item label="权限" name="role" rules={[{ required: true }]}>
+        <Form.Item label="权限" name="role" rules={Required}>
           <Radio.Group>
             {Object.keys(Role).map((key) => (
               <Radio key={key} value={key}>
@@ -99,18 +66,18 @@ function UserFormModal({ onSuccess, ...props }) {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="realName" rules={[{ required: true }]}>
-          <Input />
+        <Form.Item label="真实姓名" name="realName" rules={Required}>
+          <Input autoFocus />
         </Form.Item>
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
           {({ getFieldValue }) => (
             <>
               {getFieldValue('role') === 'ROLE_CHW' && (
                 <>
-                  <Form.Item label="ID" name={['chw', 'identity']} rules={[{ required: true }]}>
+                  <Form.Item label="ID" name={['chw', 'identity']} rules={Required}>
                     <Input />
                   </Form.Item>
-                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={[{ required: true }]}>
+                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Required}>
                     <Select mode="tags" />
                   </Form.Item>
                 </>
@@ -122,14 +89,14 @@ function UserFormModal({ onSuccess, ...props }) {
           <Input />
         </Form.Item>
         <h3>账户信息</h3>
-        <Form.Item label="账户名称" name="username" rules={[{ required: true }]}>
+        <Form.Item label="账户名称" name="username" rules={Required}>
           <Input />
         </Form.Item>
         <Form.Item label="账户密码" name="password" rules={[{ required: true, min: 6 }]}>
           <Input.Password />
         </Form.Item>
-      </Form>
-    </Modal>
+      </ModalForm>
+    </>
   );
 }
 

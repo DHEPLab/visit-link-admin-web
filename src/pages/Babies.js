@@ -1,17 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Axios from 'axios';
-import { Modal, Form, Button, Input, Space, Radio, DatePicker, Select, Tabs } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { Form, Button, Input, Space, Radio, DatePicker, Select, Tabs } from 'antd';
 
-import { useBoolState } from '../utils';
-import { WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
-import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
 import { Required } from '../constants';
+import { useBoolState } from '../utils';
+import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
+import { WithPage, ContentHeader, CardTabs, ZebraTable, ModalForm } from '../components/*';
 
 const { TabPane } = Tabs;
-function Babies({ dataSource, loadData, pagination, onChangePage }) {
+
+function Babies({ loadData, ...props }) {
   const history = useHistory();
   const [visible, openBaby, closeBaby] = useBoolState(false);
+
+  function handleCreateBaby(values) {
+    Axios.post('/admin/baby', values).then(() => {
+      loadData();
+      closeBaby();
+    });
+  }
 
   return (
     <>
@@ -26,13 +34,12 @@ function Babies({ dataSource, loadData, pagination, onChangePage }) {
           </Button>
         </Space>
       </ContentHeader>
+
       <CardTabs>
         <TabPane tab="已审核">
           <ZebraTable
             rowKey="id"
-            dataSource={dataSource}
-            pagination={pagination}
-            onChange={onChangePage}
+            {...props}
             columns={[
               {
                 title: '宝宝姓名',
@@ -72,54 +79,16 @@ function Babies({ dataSource, loadData, pagination, onChangePage }) {
           />
         </TabPane>
       </CardTabs>
-      <BabyFormModal
+
+      <ModalForm
+        title="创建新宝宝"
         visible={visible}
+        onFinish={handleCreateBaby}
         onCancel={closeBaby}
-        onSuccess={() => {
-          loadData();
-          closeBaby();
-        }}
-      />
-    </>
-  );
-}
-
-function BabyFormModal({ onSuccess, ...props }) {
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    props.visible && form.resetFields();
-  }, [props.visible, form]);
-
-  function onFinish(values) {
-    Axios.post('/admin/baby', values).then(onSuccess);
-  }
-
-  return (
-    <Modal
-      title="创建新宝宝"
-      destroyOnClose
-      {...props}
-      footer={
-        <Space>
-          <Button ghost type="primary" onClick={props.onCancel}>
-            放弃
-          </Button>
-          <Button type="primary" onClick={form.submit}>
-            提交
-          </Button>
-        </Space>
-      }
-    >
-      <Form
-        form={form}
-        initialValues={{ stage: 'EDC' }}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ offset: 1 }}
-        onFinish={onFinish}
+        initialValues={{ stage: 'EDC', gender: 'UNKNOWN' }}
       >
         <Form.Item label="真实姓名" name="name" rules={Required}>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label="ID" name="identity" rules={Required}>
           <Input />
@@ -177,8 +146,8 @@ function BabyFormModal({ onSuccess, ...props }) {
         <Form.Item label="备注信息" name="remark">
           <Input />
         </Form.Item>
-      </Form>
-    </Modal>
+      </ModalForm>
+    </>
   );
 }
 
