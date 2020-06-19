@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-export default function ({ username, onNavigate, onLogout }) {
+export default function ({ username, role, onNavigate, onLogout }) {
   return (
     <Header>
       <Logo>
@@ -11,6 +11,7 @@ export default function ({ username, onNavigate, onLogout }) {
       <Content>
         <Welcome>
           <b>{username}</b>
+          <Role>{role}</Role>
         </Welcome>
         <SplitLine />
         <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
@@ -30,6 +31,11 @@ const SplitLine = styled.div`
   height: 20px;
   background: #d0d0d0;
   margin: 0 20px;
+`;
+
+const Role = styled.span`
+  margin-left: 14px;
+  color: #8e8e93;
 `;
 
 const Welcome = styled.div`
