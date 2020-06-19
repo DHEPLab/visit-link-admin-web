@@ -1,116 +1,94 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
-import { Modal, Form, Table, Button, Input, Space, Radio, DatePicker, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { Form, Button, Input, Space, Radio, DatePicker, Select, Tabs } from 'antd';
 
-import { useBoolState } from '../utils';
-import { WithPage } from '../components/*';
-import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
 import { Required } from '../constants';
+import { useBoolState } from '../utils';
+import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
+import { WithPage, ContentHeader, CardTabs, ZebraTable, ModalForm } from '../components/*';
 
-function Babies({ dataSource, loadData, pagination, onChangePage }) {
+const { TabPane } = Tabs;
+
+function Babies({ loadData, ...props }) {
   const history = useHistory();
   const [visible, openBaby, closeBaby] = useBoolState(false);
 
-  return (
-    <>
-      <h1>宝宝管理</h1>
-      <ButtonGroup>
-        <Button type="primary" onClick={openBaby}>
-          创建新宝宝
-        </Button>
-      </ButtonGroup>
-      <Table
-        rowKey="id"
-        dataSource={dataSource}
-        pagination={pagination}
-        onChange={onChangePage}
-        columns={[
-          {
-            title: '宝宝姓名',
-            dataIndex: 'name',
-            align: 'center',
-          },
-          {
-            title: 'ID',
-            dataIndex: 'identity',
-            align: 'center',
-          },
-          {
-            title: '性别',
-            dataIndex: 'gender',
-            align: 'center',
-            render: (h) => Gender[h],
-          },
-          {
-            title: '负责社区工作者',
-            dataIndex: ['chw', 'realName'],
-            align: 'center',
-          },
-          {
-            title: '操作',
-            dataIndex: 'id',
-            width: 200,
-            align: 'center',
-            render(id) {
-              return (
-                <Button type="link" onClick={() => history.push(`/babies/${id}`)}>
-                  查看
-                </Button>
-              );
-            },
-          },
-        ]}
-      />
-      <BabyFormModal
-        visible={visible}
-        onCancel={closeBaby}
-        onSuccess={() => {
-          loadData();
-          closeBaby();
-        }}
-      />
-    </>
-  );
-}
-
-function BabyFormModal({ onSuccess, ...props }) {
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    props.visible && form.resetFields();
-  }, [props.visible, form]);
-
-  function onFinish(values) {
-    Axios.post('/admin/baby', values).then(onSuccess);
+  function handleCreateBaby(values) {
+    Axios.post('/admin/baby', values).then(() => {
+      loadData();
+      closeBaby();
+    });
   }
 
   return (
-    <Modal
-      title="创建新宝宝"
-      destroyOnClose
-      {...props}
-      footer={
-        <Space>
-          <Button ghost type="primary" onClick={props.onCancel}>
-            放弃
+    <>
+      <ContentHeader title="宝宝管理">
+        <Space size="large">
+          <Input className="master" placeholder="请输入宝宝姓名、ID或所在区域搜索" />
+          <Button ghost type="primary">
+            批量创建宝宝
           </Button>
-          <Button type="primary" onClick={form.submit}>
-            提交
+          <Button type="primary" onClick={openBaby}>
+            创建新宝宝
           </Button>
         </Space>
-      }
-    >
-      <Form
-        form={form}
-        initialValues={{ stage: 'EDC' }}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ offset: 1 }}
-        onFinish={onFinish}
+      </ContentHeader>
+
+      <CardTabs>
+        <TabPane tab="已审核">
+          <ZebraTable
+            rowKey="id"
+            {...props}
+            columns={[
+              {
+                title: '宝宝姓名',
+                dataIndex: 'name',
+                align: 'center',
+              },
+              {
+                title: 'ID',
+                dataIndex: 'identity',
+                align: 'center',
+              },
+              {
+                title: '性别',
+                dataIndex: 'gender',
+                align: 'center',
+                render: (h) => Gender[h],
+              },
+              {
+                title: '负责社区工作者',
+                dataIndex: ['chw', 'realName'],
+                align: 'center',
+              },
+              {
+                title: '操作',
+                dataIndex: 'id',
+                width: 200,
+                align: 'center',
+                render(id) {
+                  return (
+                    <Button size="small" type="link" onClick={() => history.push(`/babies/${id}`)}>
+                      查看
+                    </Button>
+                  );
+                },
+              },
+            ]}
+          />
+        </TabPane>
+      </CardTabs>
+
+      <ModalForm
+        title="创建新宝宝"
+        visible={visible}
+        onFinish={handleCreateBaby}
+        onCancel={closeBaby}
+        initialValues={{ stage: 'EDC', gender: 'UNKNOWN' }}
       >
         <Form.Item label="真实姓名" name="name" rules={Required}>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label="ID" name="identity" rules={Required}>
           <Input />
@@ -168,14 +146,9 @@ function BabyFormModal({ onSuccess, ...props }) {
         <Form.Item label="备注信息" name="remark">
           <Input />
         </Form.Item>
-      </Form>
-    </Modal>
+      </ModalForm>
+    </>
   );
 }
-
-const ButtonGroup = styled.div`
-  padding: 10px 0;
-  text-align: right;
-`;
 
 export default WithPage(Babies, '/admin/baby');

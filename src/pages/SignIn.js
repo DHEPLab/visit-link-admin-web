@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Form, Input, Button, Alert } from 'antd';
 import Axios from 'axios';
+import styled from 'styled-components';
+import { Form, Input, Button } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { applyToken } from '../utils/token';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { applyToken } from '../utils/token';
 import { loadProfileSuccess } from '../actions';
+import SignInBg from '../assets/signin-bg.png';
 
 export default function () {
   const history = useHistory();
@@ -31,61 +33,83 @@ export default function () {
 
   return (
     <AbsoluteContainer>
-      <Login>
-        <h1>Healthy Future Admin Portal</h1>
-        <p>Please sign in</p>
-        {error && (
-          <>
-            <Alert message="您输入的账号名称/账户密码可能有误" type="error" showIcon />
-            <br />
-          </>
-        )}
+      <SignIn>
+        <Logo src={require('../assets/logo.png')} />
         <Form>
           <Form.Item>
             <Input
+              className="master"
+              size="large"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
+              placeholder="请输入账户名"
               autoFocus
             />
           </Form.Item>
           <Form.Item>
             <Input.Password
+              className="master"
+              size="large"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="请输入账户密码"
               onPressEnter={handleSignIn}
             />
           </Form.Item>
         </Form>
+        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
+        <ForgetPassword>
+          <Button size="small" type="link">
+            忘记密码？
+          </Button>
+        </ForgetPassword>
         <Button
+          size="large"
           type="primary"
           onClick={handleSignIn}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
         >
-          Sign In
+          登录
         </Button>
-      </Login>
+      </SignIn>
     </AbsoluteContainer>
   );
 }
 
+const ForgetPassword = styled.div`
+  width: 400px;
+  text-align: right;
+  margin-top: -12px;
+  margin-bottom: 26px;
+`;
+
 const AbsoluteContainer = styled.div`
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   top: 0;
   left: 0;
   z-index: 100;
-  background-color: white;
+  background: url(${SignInBg}) no-repeat left bottom;
+  background-color: #fff;
 `;
 
-const Login = styled.div`
+const ErrorMessage = styled.div`
+  font-size: 14px;
+  color: #ff2e2e;
+  margin-bottom: 24px;
+`;
+
+const Logo = styled.img`
+  width: 260px;
+  margin-bottom: 60px;
+`;
+
+const SignIn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding-bottom: 10%;
+  margin-top: 23vh;
+  margin-left: auto;
+  width: 760px;
 `;

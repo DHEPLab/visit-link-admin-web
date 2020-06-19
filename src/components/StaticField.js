@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 export default function ({ label, children }) {
   return (
-    <StaticField>
+    <Container>
       <Label>{label}</Label>
       <Value>{children}</Value>
-    </StaticField>
+    </Container>
   );
 }
 
-const StaticField = styled.div`
+const Container = styled.div`
   display: flex;
   margin-bottom: 24px;
 `;

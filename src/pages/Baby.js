@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Modal, Button, Table, Space, Input, Radio, Select } from 'antd';
+import { Form, Modal, Button, Space, Input, Radio, Select } from 'antd';
 
 import StaticField from '../components/StaticField';
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card } from '../components/*';
+import { Card, ZebraTable } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
@@ -62,6 +62,7 @@ function Carers({ babyId }) {
   return (
     <Card
       title="照料人列表"
+      noPadding
       extra={
         <Button onClick={openCarer} type="link">
           新增照看人
@@ -78,7 +79,7 @@ function Carers({ babyId }) {
           safeCloseCarer();
         }}
       />
-      <Table
+      <ZebraTable
         rowKey="id"
         dataSource={dataSource}
         pagination={false}
@@ -120,10 +121,10 @@ function Carers({ babyId }) {
             render(id, record) {
               return (
                 <Space>
-                  <Button type="link" onClick={() => handleDelete(id)}>
+                  <Button size="small" type="link" onClick={() => handleDelete(id)}>
                     移除
                   </Button>
-                  <Button type="link" onClick={() => openCarerEdit(record)}>
+                  <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
                     编辑
                   </Button>
                 </Space>

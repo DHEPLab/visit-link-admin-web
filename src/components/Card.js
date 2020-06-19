@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function ({ title, children, extra }) {
+export default function ({ title, children, extra, noPadding }) {
   return (
     <Card>
       <TitleContainer>
         <Title>{title}</Title>
         <div>{extra}</div>
       </TitleContainer>
-      <Content>{children}</Content>
+      <Content noPadding={noPadding}>{children}</Content>
     </Card>
   );
 }
@@ -34,5 +34,5 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 20px;
+  ${({ noPadding }) => !noPadding && 'padding: 20px;'}
 `;

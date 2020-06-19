@@ -74,6 +74,7 @@ export default function (
         loadData={loadData}
         onChangeSearch={debounceChangeSearch}
         onChangePage={onChangePage}
+        onChange={onChangePage}
         {...props}
       />
     );

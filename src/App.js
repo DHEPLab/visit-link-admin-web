@@ -1,18 +1,18 @@
 import React, { useEffect, useCallback } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { message, ConfigProvider } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
+import { message, ConfigProvider } from 'antd';
 
+import RouteView from './Router';
+import { Role } from './constants/enums';
+import { Header, Menu } from './components/*';
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
-import RouteView from './Router';
 
-import { Header, Menu } from './components/*';
-
+import rootReducer from './reducers';
 import { createStore } from 'redux';
 import { Provider, useSelector } from 'react-redux';
-import rootReducer from './reducers';
 import { loadProfileSuccess, httpRequestStart, httpRequestEnd } from './actions';
 
 const store = createStore(
@@ -53,7 +53,12 @@ function App() {
 
   return (
     <>
-      <Header username={user.realName} onNavigate={history.push} onLogout={handleLogout} />
+      <Header
+        username={user.realName}
+        role={Role[user.role]}
+        onNavigate={history.push}
+        onLogout={handleLogout}
+      />
       <RouteContainer>
         <Menu />
         <RouteView></RouteView>
