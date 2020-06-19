@@ -4,21 +4,46 @@ import Axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Form, Modal, Button, Space, Input, Radio, Select } from 'antd';
 
-import StaticField from '../components/StaticField';
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card, ZebraTable } from '../components/*';
+import { Card, ZebraTable, BabyModalForm, StaticField } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
   const { id } = useParams();
-  const [baby] = useFetch(`/admin/baby/${id}`);
+  const [baby, refresh] = useFetch(`/admin/baby/${id}`);
+  const [visible, openModal, closeModal] = useBoolState();
 
   const chw = () => baby.chw || {};
+  const initialValues = () => ({
+    ...baby,
+    chw: null,
+    edc: moment(baby.edc),
+    birthday: moment(baby.birthday),
+  });
+
+  function handleChangeBaby(values) {
+    Axios.put(`/admin/baby/${id}`, { ...baby, ...values }).then(() => {
+      refresh();
+      closeModal();
+    });
+  }
 
   return (
     <>
-      <Card title="宝宝信息">
+      <Card title="负责社区工作者">
+        <StaticField label="真实姓名">{chw().realName}</StaticField>
+        <StaticField label="联系电话">{chw().phone}</StaticField>
+      </Card>
+
+      <Card
+        title="宝宝信息"
+        extra={
+          <Button type="primary" onClick={openModal}>
+            编辑资料
+          </Button>
+        }
+      >
         <StaticField label="真实姓名">{baby.name}</StaticField>
         <StaticField label="ID">{baby.identity}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
@@ -31,11 +56,15 @@ export default function Baby() {
         <StaticField label="详细地址">{baby.location}</StaticField>
         <StaticField label="备注信息">{baby.remark}</StaticField>
       </Card>
+
       <Carers babyId={id} />
-      <Card title="负责社区工作者">
-        <StaticField label="真实姓名">{chw().realName}</StaticField>
-        <StaticField label="联系电话">{chw().phone}</StaticField>
-      </Card>
+      <BabyModalForm
+        title="修改宝宝信息"
+        visible={visible}
+        onCancel={closeModal}
+        onFinish={handleChangeBaby}
+        initialValues={initialValues()}
+      />
     </>
   );
 }
