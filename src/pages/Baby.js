@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Modal, Button, Space, Input, Radio, Select } from 'antd';
+import { Form, Button, Space, Input, Radio, Select } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card, ZebraTable, BabyModalForm, StaticField } from '../components/*';
+import { Card, ZebraTable, BabyModalForm, StaticField, ModalForm } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
 
 export default function Baby() {
@@ -70,44 +70,81 @@ export default function Baby() {
 }
 
 function Carers({ babyId }) {
-  const [dataSource, refresh] = useFetch(`/admin/baby/${babyId}/carer`, {}, []);
   const [carer, setCarer] = useState({});
-  const [visible, openCarer, closeCarer] = useBoolState(false);
+  const [visible, openModal, closeModal] = useBoolState(false);
+  const [dataSource, refresh] = useFetch(`/admin/baby/${babyId}/carer`, {}, []);
 
   const openCarerEdit = (record) => {
     setCarer(record);
-    openCarer();
+    openModal();
   };
 
   const safeCloseCarer = () => {
     setCarer({});
-    closeCarer();
+    closeModal();
   };
 
   function handleDelete(id) {
     Axios.delete(`/admin/carer/${id}`).then(refresh);
   }
 
+  function onFinish(values) {
+    const { id } = carer;
+    const method = id ? 'put' : 'post';
+    Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
+      baby: {
+        id: babyId,
+      },
+      ...values,
+    }).then(() => {
+      refresh();
+      safeCloseCarer();
+    });
+  }
+
   return (
     <Card
-      title="照料人列表"
+      title="照看人列表"
       noPadding
       extra={
-        <Button onClick={openCarer} type="link">
+        <Button onClick={openModal} type="primary">
           新增照看人
         </Button>
       }
     >
-      <CarerFormModal
-        carer={carer}
-        babyId={babyId}
+      <ModalForm
+        title={`${carer.id ? '编辑' : '新增'}照看人`}
+        initialValues={carer}
         visible={visible}
         onCancel={safeCloseCarer}
-        onSuccess={() => {
-          refresh();
-          safeCloseCarer();
-        }}
-      />
+        onFinish={onFinish}
+      >
+        <Form.Item label="看护状态" name="master" rules={Required}>
+          <Radio.Group>
+            <Radio value={true}>主看护人</Radio>
+            <Radio value={false}>次看护人</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label="真实姓名" name="name" rules={Required}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="亲属关系" name="familyTies" rules={Required}>
+          <Select>
+            {Object.keys(FamilyTies).map((key) => (
+              <Select.Option key={key} value={key}>
+                {FamilyTies[key]}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label="联系电话" name="phone" rules={Required}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="微信号" name="wechat">
+          <Input />
+        </Form.Item>
+      </ModalForm>
+
       <ZebraTable
         rowKey="id"
         dataSource={dataSource}
@@ -163,76 +200,5 @@ function Carers({ babyId }) {
         ]}
       />
     </Card>
-  );
-}
-
-function CarerFormModal({ carer, babyId, onSuccess, ...props }) {
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    if (!props.visible) return;
-    carer.id ? form.setFieldsValue(carer) : form.resetFields();
-  }, [props.visible, carer, form]);
-
-  function onFinish(values) {
-    const { id } = carer;
-    const method = id ? 'put' : 'post';
-    Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
-      baby: {
-        id: babyId,
-      },
-      ...values,
-    }).then(onSuccess);
-  }
-
-  return (
-    <Modal
-      destroyOnClose
-      title={`${carer.id ? '编辑' : '新增'}照看人`}
-      footer={
-        <Space>
-          <Button ghost type="primary" onClick={props.onCancel}>
-            放弃
-          </Button>
-          <Button type="primary" onClick={form.submit}>
-            确定
-          </Button>
-        </Space>
-      }
-      {...props}
-    >
-      <Form
-        form={form}
-        initialValues={{ master: true }}
-        labelCol={{ span: 4 }}
-        wrapperCol={{ offset: 1 }}
-        onFinish={onFinish}
-      >
-        <Form.Item label="看护状态" name="master" rules={Required}>
-          <Radio.Group>
-            <Radio value={true}>主看护人</Radio>
-            <Radio value={false}>次看护人</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="真实姓名" name="name" rules={Required}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="亲属关系" name="familyTies" rules={Required}>
-          <Select>
-            {Object.keys(FamilyTies).map((key) => (
-              <Select.Option key={key} value={key}>
-                {FamilyTies[key]}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Required}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="微信号" name="wechat">
-          <Input />
-        </Form.Item>
-      </Form>
-    </Modal>
   );
 }
