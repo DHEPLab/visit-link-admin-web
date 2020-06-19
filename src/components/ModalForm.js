@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Form, Modal, Space, Button } from 'antd';
 
-export default function ({ title, visible, onCancel, onFinish, initialValues, children }) {
+export default function ({ title, visible, onCancel, onFinish, initialValues = {}, children }) {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    visible && form.resetFields();
-  }, [visible, form]);
+    visible && form.setFieldsValue(initialValues);
+  }, [visible, form, initialValues]);
 
   return (
     <Modal
