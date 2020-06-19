@@ -69,7 +69,7 @@ function UserFormModal({ onSuccess, ...props }) {
       closable={false}
       maskClosable={false}
       destroyOnClose
-      title="添加新用户"
+      title="创建新用户"
       footer={
         <Space size="large">
           <Button ghost type="primary" size="large" onClick={props.onCancel}>
@@ -84,7 +84,7 @@ function UserFormModal({ onSuccess, ...props }) {
     >
       <Form
         form={form}
-        labelCol={{ span: 4 }}
+        labelCol={{ span: 4, offset: 1 }}
         wrapperCol={{ offset: 1 }}
         onFinish={handleSubmit}
         initialValues={{ role: 'ROLE_CHW' }}
