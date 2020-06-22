@@ -66,6 +66,7 @@ const Header = styled.header`
   width: 100%;
   background-color: white;
   display: flex;
+  border-bottom: 2px solid #ff9472;
 `;
 
 const Logo = styled.div`
