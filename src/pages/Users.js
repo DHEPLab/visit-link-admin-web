@@ -122,8 +122,10 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
         </Button>
       </ChwBar>
       <ZebraTable
-        rowKey={(record) => record.user.id}
         {...props}
+        className="clickable"
+        rowKey={(record) => record.user.id}
+        onRow={(record) => onRow(history, record.user.id)}
         columns={[
           realName,
           {
@@ -150,7 +152,6 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
             render: (h) => `${h} 位`,
           },
           username,
-          operation(history),
         ]}
       />
     </div>
@@ -176,8 +177,10 @@ function Supervisor({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ZebraTable
-        rowKey={(record) => record.user.id}
         {...props}
+        className="clickable"
+        rowKey={(record) => record.user.id}
+        onRow={(record) => onRow(history, record.user.id)}
         columns={[
           realName,
           phone,
@@ -203,13 +206,14 @@ function Admin({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ZebraTable
-        rowKey="id"
         {...props}
+        rowKey="id"
+        className="clickable"
+        onRow={(record) => onRow(history, record.id)}
         columns={[
           { ...realName, dataIndex: 'realName' },
           { ...phone, dataIndex: 'phone' },
           { ...username, dataIndex: 'username' },
-          operation(history, 'id'),
         ]}
       />
     </div>
@@ -232,6 +236,14 @@ const username = {
   title: '账户名称',
   align: 'center',
   dataIndex: ['user', 'username'],
+};
+
+const onRow = (history, id) => {
+  return {
+    onClick: () => {
+      history.push(`/users/${id}`);
+    },
+  };
 };
 
 const operation = (history, dataIndex = ['user', 'id']) => ({

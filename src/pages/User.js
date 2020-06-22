@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import React, { useEffect } from 'react';
 import { Form, Modal, Button, Table, Input, Space, Select } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -123,6 +123,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 }
 
 function AssignBaby({ id }) {
+  const history = useHistory();
   const [visible, openAssign, closeAssign] = useBoolState();
   const [dataSource, load] = useFetch(`/admin/chw/${id}/baby`, {}, []);
 
@@ -143,6 +144,12 @@ function AssignBaby({ id }) {
     >
       <ZebraTable
         rowKey="id"
+        className="clickable"
+        onRow={(record) => ({
+          onClick: () => {
+            history.push(`/babies/${record.id}`);
+          },
+        })}
         dataSource={dataSource}
         pagination={false}
         columns={[
