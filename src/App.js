@@ -110,8 +110,8 @@ Axios.interceptors.response.use(
         const { data } = response;
         if (data.violations) {
           msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
-        } else if (data.message) {
-          msg = data.message;
+        } else if (data.detail) {
+          msg = data.detail;
         }
     }
     message.error(msg);
