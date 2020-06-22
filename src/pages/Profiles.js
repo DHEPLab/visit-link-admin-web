@@ -5,8 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Button, Form, Input } from 'antd';
 
+import Rules from '../constants/rules';
 import { useBoolState } from '../utils';
-import { Required } from '../constants';
 import { Role } from '../constants/enums';
 import { clearToken } from '../utils/token';
 import { Card, StaticField, ModalForm } from '../components/*';
@@ -67,10 +67,10 @@ export default function Profiles() {
         onFinish={handleChangeProfile}
         onCancel={closeProfileModal}
       >
-        <Form.Item label="真实姓名" name="realName">
+        <Form.Item label="真实姓名" name="realName" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone">
+        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
       </ModalForm>
@@ -81,17 +81,17 @@ export default function Profiles() {
         onFinish={handleChangePassword}
         onCancel={closePasswordModal}
       >
-        <Form.Item label="旧密码" name="oldPassword" rules={Required}>
+        <Form.Item label="旧密码" name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
         </Form.Item>
-        <Form.Item label="新密码" name="password" rules={[...Required, { min: 6 }]}>
+        <Form.Item label="新密码" name="password" rules={Rules.Password}>
           <Input.Password></Input.Password>
         </Form.Item>
         <Form.Item
           label="确认密码"
           name="confirmPassword"
           rules={[
-            ...Required,
+            ...Rules.Required,
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('password') === value) {
