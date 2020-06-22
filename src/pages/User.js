@@ -24,11 +24,19 @@ export default function User() {
     });
   }
 
+  function role() {
+    if (roleChw()) {
+      return `${Role[user.role]}ID ${user.chw.identity}`;
+    }
+    return Role[user.role];
+  }
+
   return (
     <>
       <DetailHeader
         menu="账户管理"
         title={user.realName}
+        role={role()}
         extra={
           <Button ghost type="danger">
             注销账户
@@ -44,14 +52,10 @@ export default function User() {
         }
       >
         <StaticField label="真实姓名">{user.realName}</StaticField>
-        {roleChw() && (
-          <>
-            <StaticField label="ID">{user.chw.identity}</StaticField>
-            <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
-          </>
-        )}
         <StaticField label="联系电话">{user.phone}</StaticField>
-        <StaticField label="权限">{Role[user.role]}</StaticField>
+        {roleChw() && (
+          <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
+        )}
       </Card>
       <Card
         title="账户信息"

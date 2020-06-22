@@ -38,7 +38,16 @@ export default function Baby() {
 
   return (
     <>
-      <DetailHeader menu="宝宝管理" title={baby.name} />
+      <DetailHeader
+        menu="宝宝管理"
+        title={baby.name}
+        role={`宝宝ID ${baby.identity}`}
+        extra={
+          <Button ghost type="danger">
+            注销宝宝
+          </Button>
+        }
+      />
       <Card title="负责社区工作者">
         <StaticField label="真实姓名">{chw().realName}</StaticField>
         <StaticField label="联系电话">{chw().phone}</StaticField>
@@ -53,7 +62,6 @@ export default function Baby() {
         }
       >
         <StaticField label="真实姓名">{baby.name}</StaticField>
-        <StaticField label="ID">{baby.identity}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
         <StaticField label="成长阶段">{BabyStage[baby.stage]}</StaticField>
         {baby.stage === 'EDC' ? (
