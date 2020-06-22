@@ -14,7 +14,7 @@ export function httpRequestEnd(config) {
   };
 }
 
-export function loadProfileSuccess({ data }) {
+export function apiAccountProfile({ data }) {
   return {
     type: 'LOAD_PROFILE_SUCCESS',
     payload: data,

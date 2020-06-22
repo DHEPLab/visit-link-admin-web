@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { applyToken } from '../utils/token';
-import { loadProfileSuccess } from '../actions';
+import { apiAccountProfile } from '../actions';
 import SignInBg from '../assets/signin-bg.png';
 
 export default function () {
@@ -24,7 +24,7 @@ export default function () {
       const auth = await Axios.post('/admin/authenticate', { username, password });
       applyToken(auth.data.idToken);
       const profile = await Axios.get('/api/account/profile');
-      dispatch(loadProfileSuccess(profile));
+      dispatch(apiAccountProfile(profile));
       history.push('/');
     } catch {
       setError(true);

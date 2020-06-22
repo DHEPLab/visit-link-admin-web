@@ -13,7 +13,7 @@ import { applyToken, getToken, clearToken } from './utils/token';
 import rootReducer from './reducers';
 import { createStore } from 'redux';
 import { Provider, useSelector } from 'react-redux';
-import { loadProfileSuccess, httpRequestStart, httpRequestEnd } from './actions';
+import { apiAccountProfile, httpRequestStart, httpRequestEnd } from './actions';
 
 const store = createStore(
   rootReducer,
@@ -40,7 +40,7 @@ function App() {
 
   const loadProfile = useCallback(() => {
     Axios.get('/api/account/profile')
-      .then((r) => store.dispatch(loadProfileSuccess(r)))
+      .then((r) => store.dispatch(apiAccountProfile(r)))
       .catch((_) => history.push('/sign_in'));
   }, [history]);
 
