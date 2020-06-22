@@ -12,7 +12,9 @@ export default function ({ label, children }) {
 
 const Container = styled.div`
   display: flex;
-  margin-bottom: 24px;
+  & + & {
+    margin-top: 20px;
+  }
 `;
 
 const Label = styled.div`
@@ -24,6 +26,6 @@ const Label = styled.div`
 `;
 
 const Value = styled.div`
-  color: #000;
+  color: #4a4a4a;
   font-weight: bold;
 `;
