@@ -6,7 +6,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
-import { Card, ZebraTable, ModalForm, StaticField } from '../components/*';
+import { Card, ZebraTable, ModalForm, StaticField, DetailHeader } from '../components/*';
 
 export default function User() {
   const { id } = useParams();
@@ -26,7 +26,15 @@ export default function User() {
 
   return (
     <>
-      <h2>账户管理详情</h2>
+      <DetailHeader
+        menu="账户管理"
+        title={user.realName}
+        extra={
+          <Button ghost type="danger">
+            注销账户
+          </Button>
+        }
+      />
       <Card
         title="用户信息"
         extra={

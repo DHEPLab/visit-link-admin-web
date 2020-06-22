@@ -37,8 +37,14 @@ function Babies({ loadData, ...props }) {
       <CardTabs>
         <TabPane tab="已审核">
           <ZebraTable
-            rowKey="id"
             {...props}
+            rowKey="id"
+            className="clickable"
+            onRow={(record) => ({
+              onClick: () => {
+                history.push(`/babies/${record.id}`);
+              },
+            })}
             columns={[
               {
                 title: '宝宝姓名',
@@ -60,19 +66,6 @@ function Babies({ loadData, ...props }) {
                 title: '负责社区工作者',
                 dataIndex: ['chw', 'realName'],
                 align: 'center',
-              },
-              {
-                title: '操作',
-                dataIndex: 'id',
-                width: 200,
-                align: 'center',
-                render(id) {
-                  return (
-                    <Button size="small" type="link" onClick={() => history.push(`/babies/${id}`)}>
-                      查看
-                    </Button>
-                  );
-                },
               },
             ]}
           />

@@ -6,8 +6,15 @@ import { Form, Button, Space, Input, Radio, Select } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Card, ZebraTable, BabyModalForm, StaticField, ModalForm } from '../components/*';
 import { Gender, BabyStage, FamilyTies } from '../constants/enums';
+import {
+  Card,
+  ZebraTable,
+  BabyModalForm,
+  StaticField,
+  ModalForm,
+  DetailHeader,
+} from '../components/*';
 
 export default function Baby() {
   const { id } = useParams();
@@ -31,6 +38,7 @@ export default function Baby() {
 
   return (
     <>
+      <DetailHeader menu="宝宝管理" title={baby.name} />
       <Card title="负责社区工作者">
         <StaticField label="真实姓名">{chw().realName}</StaticField>
         <StaticField label="联系电话">{chw().phone}</StaticField>
