@@ -39,7 +39,7 @@ export default function Baby() {
       <Card
         title="宝宝信息"
         extra={
-          <Button type="primary" onClick={openModal}>
+          <Button type="shade" onClick={openModal}>
             编辑资料
           </Button>
         }
@@ -107,7 +107,7 @@ function Carers({ babyId }) {
       title="照看人列表"
       noPadding
       extra={
-        <Button onClick={openModal} type="primary">
+        <Button onClick={openModal} type="shade">
           新增照看人
         </Button>
       }

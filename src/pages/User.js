@@ -30,7 +30,7 @@ export default function User() {
       <Card
         title="用户信息"
         extra={
-          <Button type="primary" onClick={openChangeProfile}>
+          <Button type="shade" onClick={openChangeProfile}>
             编辑资料
           </Button>
         }
@@ -48,7 +48,7 @@ export default function User() {
       <Card
         title="账户信息"
         extra={
-          <Button type="primary" onClick={openChangePassword}>
+          <Button type="shade" onClick={openChangePassword}>
             修改密码
           </Button>
         }
@@ -136,7 +136,7 @@ function AssignBaby({ id }) {
       title="负责宝宝列表"
       noPadding
       extra={
-        <Button type="primary" onClick={openAssign}>
+        <Button type="shade" onClick={openAssign}>
           添加新宝宝
         </Button>
       }

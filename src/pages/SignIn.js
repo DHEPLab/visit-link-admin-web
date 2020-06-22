@@ -65,7 +65,7 @@ export default function () {
         {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <Button
           size="large"
-          type="primary"
+          type="shade"
           onClick={handleSignIn}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
         >

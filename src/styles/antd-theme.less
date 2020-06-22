@@ -68,10 +68,27 @@
 @btn-padding-horizontal-base: 30px;
 @btn-padding-horizontal-lg: 60px;
 @btn-font-size-sm: 14px;
+@btn-font-size-lg: 20px;
 
 .ant-btn {
   border-radius: 26px;
   font-weight: bold;
+}
+
+.ant-btn-lg {
+  min-width: 200px;
+}
+
+.ant-btn.ant-btn-shade {
+  background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
+  border: none;
+  color: #fff;
+
+  &:hover {
+    background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
+    color: #fff;
+    opacity: .8;
+  }
 }
 
 .ant-btn-background-ghost {

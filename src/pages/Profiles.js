@@ -38,7 +38,7 @@ export default function Profiles() {
       <Card
         title="基本信息"
         extra={
-          <Button type="primary" onClick={openProfileModal}>
+          <Button type="shade" onClick={openProfileModal}>
             编辑资料
           </Button>
         }
@@ -51,7 +51,7 @@ export default function Profiles() {
       <Card
         title="账户信息"
         extra={
-          <Button type="primary" onClick={openPasswordModal}>
+          <Button type="shade" onClick={openPasswordModal}>
             修改密码
           </Button>
         }
