@@ -13,7 +13,6 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
-        <SplitLine />
         <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
           个人中心
         </StyledButton>
@@ -36,11 +35,13 @@ const SplitLine = styled.div`
 const Role = styled.span`
   margin-left: 14px;
   color: #8e8e93;
+  font-weight: 400;
 `;
 
 const Welcome = styled.div`
   font-size: 16px;
   font-weight: 500;
+  margin-right: 30px;
   color: #9b9b9b;
   b {
     color: #001831;

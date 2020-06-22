@@ -191,7 +191,6 @@ function Supervisor({ tab, history, loadData, ...props }) {
             render: (h) => `${h} 位`,
           },
           username,
-          operation(history),
         ]}
       />
     </div>
@@ -245,16 +244,3 @@ const onRow = (history, id) => {
     },
   };
 };
-
-const operation = (history, dataIndex = ['user', 'id']) => ({
-  title: '操作',
-  dataIndex,
-  align: 'center',
-  render(id) {
-    return (
-      <Button size="small" type="link" onClick={() => history.push(`/users/${id}`)}>
-        查看
-      </Button>
-    );
-  },
-});
