@@ -1,8 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import { Form, Input, Radio, Select, DatePicker } from 'antd';
+import { Form, Input, Radio, Select, DatePicker, Cascader } from 'antd';
 
 import ModalForm from './ModalForm';
+import Pcas from '../constants/pcas-code.json';
 import { Required } from '../constants';
 import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
 
@@ -67,6 +68,12 @@ export default function (props) {
             );
           }
         }}
+      </Form.Item>
+      <Form.Item label="所在区域" name="area" rules={Required}>
+        <Cascader
+          options={Pcas}
+          fieldNames={{ label: 'name', value: 'name', children: 'children' }}
+        />
       </Form.Item>
       <Form.Item label="详细地址" name="location" rules={Required}>
         <Input />
