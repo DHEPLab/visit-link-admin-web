@@ -7,7 +7,14 @@ import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 import { Required } from '../constants';
-import { ModalForm, WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
+import {
+  ModalForm,
+  WithPage,
+  ContentHeader,
+  CardTabs,
+  ZebraTable,
+  SearchInput,
+} from '../components/*';
 
 const { TabPane } = Tabs;
 export default function Users() {
@@ -112,8 +119,7 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   return (
     <div>
       <ChwBar>
-        <Input
-          className="master"
+        <SearchInput
           onChange={(e) => onChangeSearch('search', e.target.value)}
           placeholder="请输入社区工作者姓名、ID或所在区域搜索"
         />

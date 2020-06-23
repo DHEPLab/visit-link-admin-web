@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Modal, Space, Button, Input, Table } from 'antd';
+import { Modal, Space, Button, Table } from 'antd';
+
+import SearchInput from './SearchInput';
 
 export default function ({
   title,
@@ -40,9 +42,8 @@ export default function ({
       destroyOnClose
     >
       <SearchBar>
-        <Input
+        <SearchInput
           style={{ width: '100%' }}
-          className="master"
           onChange={onChangeSearch}
           placeholder="请输入姓名、ID或所在区域搜索"
         />

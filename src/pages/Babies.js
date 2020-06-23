@@ -1,11 +1,18 @@
 import React from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { Button, Input, Space, Tabs } from 'antd';
+import { Button, Space, Tabs } from 'antd';
 
 import { useBoolState } from '../utils';
 import { Gender } from '../constants/enums';
-import { WithPage, ContentHeader, CardTabs, ZebraTable, BabyModalForm } from '../components/*';
+import {
+  WithPage,
+  ContentHeader,
+  CardTabs,
+  ZebraTable,
+  BabyModalForm,
+  SearchInput,
+} from '../components/*';
 
 const { TabPane } = Tabs;
 
@@ -25,7 +32,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
     <>
       <ContentHeader title="宝宝管理">
         <Space size="large">
-          <Input
+          <SearchInput
             className="master"
             placeholder="请输入宝宝姓名、ID或所在区域搜索"
             onChange={(e) => onChangeSearch('search', e.target.value)}

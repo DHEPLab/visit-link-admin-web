@@ -12,12 +12,15 @@
 @input-height-lg: 50px;
 @input-padding-horizontal: 30px;
 
-.ant-checkbox-inner {
+.ant-checkbox-inner,
+.ant-input-affix-wrapper.master .ant-input {
   border-radius: 0;
 }
 
 .ant-input.master,
 .ant-input-password.master,
+.ant-input-affix-wrapper.master,
+.ant-input-affix-wrapper.master .ant-input,
 .ant-input-password.master .ant-input {
   &::placeholder {
     color: #FFC3A0;
@@ -31,10 +34,15 @@
 .ant-input,
 .ant-picker,
 .ant-input-password,
+.ant-input-affix-wrapper,
 .ant-select.ant-select,
 .ant-select-selector.ant-select-selector {
   border-radius: 26px;
   width: 400px;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  width: 100%;
 }
 
 .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
