@@ -13,6 +13,7 @@ import {
   StaticField,
   DetailHeader,
   AssignModalTable,
+  DeletePopconfirm,
 } from '../components/*';
 
 export default function User() {
@@ -204,9 +205,11 @@ function AssignBaby({ id }) {
             align: 'center',
             render(babyId) {
               return (
-                <Button size="small" type="link" onClick={() => handleRelease(babyId)}>
-                  删除
-                </Button>
+                <DeletePopconfirm onConfirm={() => handleRelease(babyId)}>
+                  <Button size="small" type="link">
+                    删除
+                  </Button>
+                </DeletePopconfirm>
               );
             },
           },
@@ -304,9 +307,11 @@ function AssignChw({ id }) {
             align: 'center',
             render(chwId) {
               return (
-                <Button size="small" type="link" onClick={() => handleRelease(chwId)}>
-                  删除
-                </Button>
+                <DeletePopconfirm onConfirm={() => handleRelease(chwId)}>
+                  <Button size="small" type="link">
+                    删除
+                  </Button>
+                </DeletePopconfirm>
               );
             },
           },

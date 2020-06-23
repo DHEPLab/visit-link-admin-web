@@ -14,6 +14,7 @@ import {
   StaticField,
   ModalForm,
   DetailHeader,
+  DeletePopconfirm,
 } from '../components/*';
 
 export default function Baby() {
@@ -203,12 +204,14 @@ function Carers({ babyId }) {
             render(id, record) {
               return (
                 <Space>
-                  <Button size="small" type="link" onClick={() => handleDelete(id)}>
-                    移除
-                  </Button>
                   <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
                     编辑
                   </Button>
+                  <DeletePopconfirm onConfirm={() => handleDelete(id)}>
+                    <Button size="small" type="link">
+                      删除
+                    </Button>
+                  </DeletePopconfirm>
                 </Space>
               );
             },
