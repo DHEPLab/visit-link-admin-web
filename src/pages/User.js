@@ -158,8 +158,11 @@ function AssignBaby({ id }) {
         rowKey="id"
         className="clickable"
         onRow={(record) => ({
-          onClick: () => {
-            history.push(`/babies/${record.id}`);
+          onClick: (event) => {
+            // do noting when click other target
+            if (event.target.tagName === 'TD') {
+              history.push(`/babies/${record.id}`);
+            }
           },
         })}
         dataSource={dataSource}
@@ -177,6 +180,14 @@ function AssignBaby({ id }) {
             title: '性别',
             dataIndex: 'gender',
             render: (h) => Gender[h],
+          },
+          {
+            title: '主看护人',
+            dataIndex: 'masterCarerName',
+          },
+          {
+            title: '联系方式',
+            dataIndex: 'masterCarerPhone',
           },
           {
             title: '操作',
