@@ -117,14 +117,15 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
   return (
     <Modal
       title="您确定要修改密码吗？"
+      closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
-        <Space>
-          <Button ghost type="primary" onClick={onCancel}>
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
             放弃
           </Button>
-          <Button type="primary" onClick={form.submit}>
+          <Button type="danger" onClick={form.submit}>
             确定
           </Button>
         </Space>
@@ -134,7 +135,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
       <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label="新的账户密码" name="password" rules={[{ required: true, min: 6 }]}>
-          <Input.Password placeholder="请输入新的账户密码" />
+          <Input.Password style={{ width: '100%' }} placeholder="请输入新的账户密码" />
         </Form.Item>
       </Form>
     </Modal>
