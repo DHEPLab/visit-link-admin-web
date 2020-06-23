@@ -9,7 +9,7 @@ import { WithPage, ContentHeader, CardTabs, ZebraTable, BabyModalForm } from '..
 
 const { TabPane } = Tabs;
 
-function Babies({ loadData, ...props }) {
+function Babies({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
   const [visible, openBaby, closeBaby] = useBoolState(false);
 
@@ -24,7 +24,11 @@ function Babies({ loadData, ...props }) {
     <>
       <ContentHeader title="宝宝管理">
         <Space size="large">
-          <Input className="master" placeholder="请输入宝宝姓名、ID或所在区域搜索" />
+          <Input
+            className="master"
+            placeholder="请输入宝宝姓名、ID或所在区域搜索"
+            onChange={(e) => onChangeSearch('search', e.target.value)}
+          />
           <Button ghost type="primary">
             批量创建宝宝
           </Button>
@@ -48,25 +52,37 @@ function Babies({ loadData, ...props }) {
             columns={[
               {
                 title: '宝宝姓名',
-                dataIndex: 'name',
                 align: 'center',
+                dataIndex: 'name',
               },
               {
                 title: 'ID',
-                dataIndex: 'identity',
                 align: 'center',
+                dataIndex: 'identity',
               },
               {
                 title: '性别',
-                dataIndex: 'gender',
                 align: 'center',
+                dataIndex: 'gender',
                 render: (h) => Gender[h],
               },
+              // {
+              //   title: '所在区域',
+              //   dataIndex: 'area',
+              // },
               {
                 title: '负责社区工作者',
-                dataIndex: ['chw', 'realName'],
                 align: 'center',
+                dataIndex: 'chw',
               },
+              // {
+              //   title: '已上课程',
+              //   dataIndex: 'area',
+              // },
+              // {
+              //   title: '当前进度',
+              //   dataIndex: 'area',
+              // },
             ]}
           />
         </TabPane>
