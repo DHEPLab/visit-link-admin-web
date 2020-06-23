@@ -35,7 +35,7 @@ export default function ({ title, dataSource, columns, visible, onCancel, onFini
         <Input
           style={{ width: '100%' }}
           className="master"
-          placeholder="请输入宝宝姓名、ID或所在区域搜索"
+          placeholder="请输入姓名、ID或所在区域搜索"
         />
       </SearchBar>
 

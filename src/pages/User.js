@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect } from 'react';
-import { Form, Modal, Button, Table, Input, Space, Select } from 'antd';
+import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { Required } from '../constants';
@@ -221,6 +221,13 @@ function AssignBaby({ id }) {
 function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
   const [dataSource, refresh] = useFetch(`/admin/baby/not_assigned`, {}, []);
 
+  useEffect(() => {
+    if (visible) {
+      refresh();
+    }
+    // eslint-disable-next-line
+  }, [visible]);
+
   async function handleAssign(babyIds) {
     await Axios.post(`/admin/chw/${id}/baby`, babyIds);
     refresh();
@@ -250,12 +257,12 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
 }
 
 function AssignChw({ id }) {
-  const [visible, openAssign, closeAssign] = useBoolState();
-  const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
+  const [visible, openModal, closeModal] = useBoolState();
+  const [dataSource, refresh] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
-    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
+    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(refresh);
   }
 
   return (
@@ -263,7 +270,7 @@ function AssignChw({ id }) {
       title="负责社区工作者列表"
       noPadding
       extra={
-        <Button type="link" onClick={openAssign}>
+        <Button type="shade" onClick={openModal}>
           分配新人员
         </Button>
       }
@@ -280,6 +287,11 @@ function AssignChw({ id }) {
           {
             title: 'ID',
             dataIndex: ['chw', 'identity'],
+          },
+          {
+            title: '所在区域',
+            dataIndex: ['chw', 'tags'],
+            render: (tags) => tags && tags.join(', '),
           },
           {
             title: '联系电话',
@@ -300,53 +312,51 @@ function AssignChw({ id }) {
           },
         ]}
       />
-      <NotAssignedChwModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
+      <NotAssignedChwModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 }
 
 // open a new modal, assign chw to supervisor
-function NotAssignedChwModal({ id, onChange, ...props }) {
-  const [dataSource, load] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
+function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
+  const [dataSource, refresh] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
 
-  // on modal visble, reload data
   useEffect(() => {
-    props.visible && load();
-  }, [props.visible, load]);
+    if (visible) {
+      refresh();
+    }
+    // eslint-disable-next-line
+  }, [visible]);
 
-  function handleAssign(chwId) {
-    Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]).then(() => {
-      load();
-      onChange();
-    });
+  async function handleAssign(chwIds) {
+    await Axios.post(`/admin/user/supervisor/${id}/chw`, chwIds);
+    refresh();
+    onFinish();
+    onCancel();
   }
 
   return (
-    <Modal title="分配新工作人员" {...props} footer={null}>
-      <Table
-        rowKey="id"
-        pagination={false}
-        dataSource={dataSource}
-        columns={[
-          {
-            title: '工作人员姓名',
-            dataIndex: 'realName',
-          },
-          {
-            title: '操作',
-            dataIndex: 'id',
-            width: 200,
-            align: 'center',
-            render(chwId) {
-              return (
-                <Button type="link" onClick={() => handleAssign(chwId)}>
-                  分配
-                </Button>
-              );
-            },
-          },
-        ]}
-      />
-    </Modal>
+    <AssignModalTable
+      visible={visible}
+      onCancel={onCancel}
+      onFinish={handleAssign}
+      dataSource={dataSource}
+      title="分配新社区工作者"
+      columns={[
+        {
+          title: '社区工作者姓名',
+          dataIndex: 'realName',
+        },
+        {
+          title: 'ID',
+          dataIndex: ['chw', 'identity'],
+        },
+        {
+          title: '所在区域',
+          dataIndex: ['chw', 'tags'],
+          render: (tags) => tags && tags.join(', '),
+        },
+      ]}
+    />
   );
 }
