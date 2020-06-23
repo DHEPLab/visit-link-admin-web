@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Space, Input, Radio, Select } from 'antd';
+import { Form, Button, Space, Input, Radio, Select, message } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -101,36 +101,37 @@ function Carers({ babyId }) {
     closeModal();
   };
 
-  function handleDelete(id) {
-    Axios.delete(`/admin/carer/${id}`).then(refresh);
+  async function handleDelete({ id, master }) {
+    if (master) return message.warn('主看护人不可删除，请更换主看护人后进行此操作');
+    await Axios.delete(`/admin/carer/${id}`);
+    refresh();
   }
 
-  function onFinish(values) {
+  async function onFinish(values) {
     const { id } = carer;
     const method = id ? 'put' : 'post';
-    Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
+    await Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
       baby: {
         id: babyId,
       },
       ...values,
-    }).then(() => {
-      refresh();
-      safeCloseCarer();
     });
+    refresh();
+    safeCloseCarer();
   }
 
   return (
     <Card
-      title="照看人列表"
+      title="看护人列表"
       noPadding
       extra={
         <Button onClick={openModal} type="shade">
-          新增照看人
+          新增看护人
         </Button>
       }
     >
       <ModalForm
-        title={`${carer.id ? '编辑' : '新增'}照看人`}
+        title={`${carer.id ? '编辑' : '新增'}看护人`}
         initialValues={carer}
         visible={visible}
         onCancel={safeCloseCarer}
@@ -168,7 +169,7 @@ function Carers({ babyId }) {
         pagination={false}
         columns={[
           {
-            title: '主照看人',
+            title: '主看护人',
             dataIndex: 'master',
             align: 'center',
             render(h) {
@@ -176,7 +177,7 @@ function Carers({ babyId }) {
             },
           },
           {
-            title: '照料人姓名',
+            title: '看护人姓名',
             dataIndex: 'name',
             align: 'center',
           },
@@ -207,7 +208,7 @@ function Carers({ babyId }) {
                   <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
                     编辑
                   </Button>
-                  <DeletePopconfirm onConfirm={() => handleDelete(id)}>
+                  <DeletePopconfirm onConfirm={() => handleDelete(record)}>
                     <Button size="small" type="link">
                       删除
                     </Button>
