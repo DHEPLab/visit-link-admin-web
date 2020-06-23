@@ -26,11 +26,13 @@ export default function Baby() {
   const initialValues = () => ({
     ...baby,
     chw: null,
+    area: (baby.area && baby.area.split('/')) || [],
     edc: moment(baby.edc),
     birthday: moment(baby.birthday),
   });
 
   function handleChangeBaby(values) {
+    values.area = values.area.join('/');
     Axios.put(`/admin/baby/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
@@ -70,6 +72,7 @@ export default function Baby() {
         ) : (
           <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
         )}
+        <StaticField label="所在区域">{baby.area}</StaticField>
         <StaticField label="详细地址">{baby.location}</StaticField>
         <StaticField label="备注信息">{baby.remark}</StaticField>
       </Card>

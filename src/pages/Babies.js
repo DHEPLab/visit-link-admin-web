@@ -14,6 +14,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
   const [visible, openBaby, closeBaby] = useBoolState(false);
 
   function handleCreateBaby(values) {
+    values.area = values.area.join('/');
     Axios.post('/admin/baby', values).then(() => {
       loadData();
       closeBaby();
@@ -66,10 +67,10 @@ function Babies({ loadData, onChangeSearch, ...props }) {
                 dataIndex: 'gender',
                 render: (h) => Gender[h],
               },
-              // {
-              //   title: '所在区域',
-              //   dataIndex: 'area',
-              // },
+              {
+                title: '所在区域',
+                dataIndex: 'area',
+              },
               {
                 title: '负责社区工作者',
                 align: 'center',
