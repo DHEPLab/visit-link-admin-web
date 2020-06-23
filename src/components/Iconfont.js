@@ -9,7 +9,10 @@ export default styled(
   })
 )`
   svg {
-    width: 16px;
-    height: 16px;
+    ${({ opacity }) => opacity && `opacity: ${opacity};`}
+    ${({ size }) => `
+      width: ${size || 16}px;
+      height: ${size || 16}px;
+    `}
   }
 `;
