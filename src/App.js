@@ -3,6 +3,7 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import zhCN from 'antd/es/locale/zh_CN';
 import { message, ConfigProvider } from 'antd';
+import 'moment/locale/zh-cn';
 
 import RouteView from './Router';
 import { Role } from './constants/enums';

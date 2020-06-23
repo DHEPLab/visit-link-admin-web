@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { Form, Input, Radio, Select, DatePicker } from 'antd';
 
 import ModalForm from './ModalForm';
@@ -38,14 +39,20 @@ export default function (props) {
           if (stage === 'EDC') {
             return (
               <Form.Item label="待产日期" name="edc" rules={Required}>
-                <DatePicker />
+                <DatePicker
+                  // Can not select days before today and today
+                  disabledDate={(current) => current && current < moment().endOf('day')}
+                />
               </Form.Item>
             );
           } else {
             return (
               <>
                 <Form.Item label="出生日期" name="birthday" rules={Required}>
-                  <DatePicker />
+                  <DatePicker
+                    // Can not select days after today
+                    disabledDate={(current) => current && current > moment().endOf('day')}
+                  />
                 </Form.Item>
                 <Form.Item label="喂养方式" name="feedingPattern" rules={Required}>
                   <Select>
