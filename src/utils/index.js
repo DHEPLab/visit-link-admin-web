@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import Axios from 'axios';
 
-export function useFetch(url, params, initialState = {}) {
+export function useFetch(url, params = {}, initialState = {}) {
   const [data, setData] = useState(initialState);
 
-  function load() {
+  function load(search = {}) {
     Axios.get(url, {
-      params,
+      params: {
+        ...params,
+        ...search,
+      },
     }).then((r) => setData(r.data));
   }
 

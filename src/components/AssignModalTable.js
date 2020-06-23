@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Modal, Space, Button, Input, Table } from 'antd';
 
-export default function ({ title, dataSource, columns, visible, onCancel, onFinish }) {
+export default function ({
+  title,
+  dataSource,
+  columns,
+  visible,
+  onCancel,
+  onFinish,
+  onChangeSearch,
+}) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -35,6 +43,7 @@ export default function ({ title, dataSource, columns, visible, onCancel, onFini
         <Input
           style={{ width: '100%' }}
           className="master"
+          onChange={onChangeSearch}
           placeholder="请输入姓名、ID或所在区域搜索"
         />
       </SearchBar>

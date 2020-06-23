@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import React, { useEffect } from 'react';
+import { debounce } from 'lodash';
 import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -225,9 +226,7 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
   const [dataSource, refresh] = useFetch(`/admin/baby/not_assigned`, {}, []);
 
   useEffect(() => {
-    if (visible) {
-      refresh();
-    }
+    if (visible) refresh();
     // eslint-disable-next-line
   }, [visible]);
 
@@ -238,10 +237,13 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
     onCancel();
   }
 
+  const debounceRefresh = debounce((search) => refresh({ search }), 400);
+
   return (
     <AssignModalTable
       title="分配新宝宝"
       visible={visible}
+      onChangeSearch={(e) => debounceRefresh(e.target.value)}
       onCancel={onCancel}
       dataSource={dataSource}
       onFinish={handleAssign}
@@ -253,6 +255,10 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
         {
           title: 'ID',
           dataIndex: 'identity',
+        },
+        {
+          title: '所在区域',
+          dataIndex: 'area',
         },
       ]}
     />
@@ -340,6 +346,8 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
     onCancel();
   }
 
+  const debounceRefresh = debounce((search) => refresh({ search }), 400);
+
   return (
     <AssignModalTable
       visible={visible}
@@ -347,6 +355,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
       onFinish={handleAssign}
       dataSource={dataSource}
       title="分配新社区工作者"
+      onChangeSearch={(e) => debounceRefresh(e.target.value)}
       columns={[
         {
           title: '社区工作者姓名',
