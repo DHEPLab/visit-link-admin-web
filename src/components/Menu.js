@@ -9,60 +9,35 @@ export default function () {
     <Menu>
       <MenuItemGroup>
         <li>
-          <ActivableLink
-            to="/curriculums"
-            icon="iconiconzuocexuanguadaohangkechengguanliweixuanzhong"
-            activeIcon="iconiconzuocexuanguadaohangkechengguanliyixuanzhong"
-          >
-            课程管理
-          </ActivableLink>
+          <ActivableLink title="课程管理" to="/curriculums" icon="iconcurriculum" />
         </li>
         <li>
-          <ActivableLink
-            to="/modules"
-            icon="iconxingzhuangiconzuocexuanguadaohangyonghuguanliweixuanzhong"
-            activeIcon="iconiconzuocexuanguadaohangmokuaiguanliyixuanzhong"
-          >
-            模块管理
-          </ActivableLink>
+          <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
         </li>
         <li>
-          <ActivableLink
-            to="/users"
-            icon="iconiconzuocexuanguadaohangyonghuguanliweixuanzhong"
-            activeIcon="iconiconzuocexuanguadaohangyonghuguanliyixuanzhong"
-          >
-            账户管理
-          </ActivableLink>
+          <ActivableLink title="账户管理" to="/users" icon="iconuser" />
         </li>
         <li>
-          <ActivableLink
-            to="/babies"
-            icon="iconiconzuocexuanguadaohangbaobaoguanliweixuanzhong"
-            activeIcon="iconiconzuocexuanguadaohangbaobaoguanliyixuanzhong"
-          >
-            宝宝管理
-          </ActivableLink>
+          <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby" />
         </li>
       </MenuItemGroup>
     </Menu>
   );
 }
 
-function ActivableLink({ to, icon, activeIcon, children }) {
+function ActivableLink({ to, icon, title }) {
   const location = useLocation();
   const active = location.pathname.includes(to);
   const className = active && 'active';
-  const type = activeIcon;
 
   return (
     <StyledLink to={to} className={className}>
       {active && <ActiveBar />}
       <Wrapper>
-        {type && <Iconfont opacity={active ? 1 : 0.5} type={type} size={20} />}
-        {children}
+        {icon && <Iconfont opacity={active ? 1 : 0.5} type={icon} size={20} />}
+        {title}
       </Wrapper>
-      <Iconfont type="iconiconjiantoudaohang" size={10} />
+      <Iconfont type="iconarrow" size={10} />
     </StyledLink>
   );
 }
@@ -75,7 +50,7 @@ const Wrapper = styled.div`
 const Menu = styled.div`
   width: 248px;
   background: linear-gradient(180deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
-  padding-top: 50px;
+  padding-top: 10px;
   height: 100%;
   color: #fff;
 `;

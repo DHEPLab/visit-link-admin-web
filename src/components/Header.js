@@ -21,7 +21,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
         <SplitLine />
         <StyledButton type="link" onClick={() => onLogout()}>
           退出
-          <Iconfont type="iconicontuichudenglu" />
+          <Iconfont type="iconescape" />
         </StyledButton>
       </Content>
     </Header>
