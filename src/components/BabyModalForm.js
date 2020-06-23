@@ -7,7 +7,7 @@ import Pcas from '../constants/pcas-code.json';
 import { Required } from '../constants';
 import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
 
-export default function (props) {
+export default function BabyModalForm({ disableStage, ...props }) {
   return (
     <ModalForm {...props}>
       <Form.Item label="真实姓名" name="name" rules={Required}>
@@ -28,7 +28,7 @@ export default function (props) {
       <Form.Item label="成长阶段" name="stage" rules={Required}>
         <Radio.Group>
           {Object.keys(BabyStage).map((key) => (
-            <Radio key={key} value={key}>
+            <Radio key={key} value={key} disabled={disableStage}>
               {BabyStage[key]}
             </Radio>
           ))}

@@ -27,8 +27,8 @@ export default function Baby() {
     ...baby,
     chw: null,
     area: (baby.area && baby.area.split('/')) || [],
-    edc: moment(baby.edc),
-    birthday: moment(baby.birthday),
+    edc: baby.edc && moment(baby.edc),
+    birthday: baby.birthday && moment(baby.birthday),
   });
 
   function handleChangeBaby(values) {
@@ -84,6 +84,8 @@ export default function Baby() {
         onCancel={closeModal}
         onFinish={handleChangeBaby}
         initialValues={initialValues()}
+        // 一旦进入婴幼期则不可修改回待产期
+        disableStage={baby.stage === 'BIRTH'}
       />
     </>
   );
