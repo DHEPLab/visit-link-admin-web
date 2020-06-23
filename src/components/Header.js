@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
+import { Iconfont } from '../components/*';
+
 export default function ({ username, role, onNavigate, onLogout }) {
   return (
     <Header>
@@ -19,6 +21,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
         <SplitLine />
         <StyledButton type="link" onClick={() => onLogout()}>
           退出
+          <Iconfont type="iconicontuichudenglu" />
         </StyledButton>
       </Content>
     </Header>
