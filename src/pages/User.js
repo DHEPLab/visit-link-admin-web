@@ -6,7 +6,14 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
-import { Card, ZebraTable, ModalForm, StaticField, DetailHeader } from '../components/*';
+import {
+  Card,
+  ZebraTable,
+  ModalForm,
+  StaticField,
+  DetailHeader,
+  AssignModalTable,
+} from '../components/*';
 
 export default function User() {
   const { id } = useParams();
@@ -136,12 +143,12 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 
 function AssignBaby({ id }) {
   const history = useHistory();
-  const [visible, openAssign, closeAssign] = useBoolState();
-  const [dataSource, load] = useFetch(`/admin/chw/${id}/baby`, {}, []);
+  const [visible, openModal, closeModal] = useBoolState(false);
+  const [dataSource, refresh] = useFetch(`/admin/chw/${id}/baby`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/baby/${babyId}/chw`).then(load);
+    Axios.delete(`/admin/baby/${babyId}/chw`).then(refresh);
   }
 
   return (
@@ -149,7 +156,7 @@ function AssignBaby({ id }) {
       title="负责宝宝列表"
       noPadding
       extra={
-        <Button type="shade" onClick={openAssign}>
+        <Button type="shade" onClick={openModal}>
           添加新宝宝
         </Button>
       }
@@ -204,60 +211,46 @@ function AssignBaby({ id }) {
           },
         ]}
       />
-      <NotAssignedBabyModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
+      <NotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 }
 
 // open a new modal, assign chw to supervisor
-function NotAssignedBabyModal({ id, onChange, ...props }) {
-  const [dataSource, load] = useFetch(`/admin/baby/not_assigned`, {}, []);
+function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
+  const [dataSource, refresh] = useFetch(`/admin/baby/not_assigned`, {}, []);
 
-  // on modal visble, reload data
-  useEffect(() => {
-    props.visible && load();
-  }, [props.visible, load]);
-
-  function handleAssign(babyId) {
-    Axios.post(`/admin/chw/${id}/baby`, [babyId]).then(() => {
-      load();
-      onChange();
-    });
+  async function handleAssign(babyIds) {
+    await Axios.post(`/admin/chw/${id}/baby`, babyIds);
+    refresh();
+    onFinish();
+    onCancel();
   }
 
   return (
-    <Modal title="分配新宝宝" {...props} footer={null}>
-      <Table
-        rowKey="id"
-        pagination={false}
-        dataSource={dataSource}
-        columns={[
-          {
-            title: '宝宝姓名',
-            dataIndex: 'name',
-          },
-          {
-            title: '操作',
-            dataIndex: 'id',
-            width: 200,
-            align: 'center',
-            render(chwId) {
-              return (
-                <Button type="link" onClick={() => handleAssign(chwId)}>
-                  分配
-                </Button>
-              );
-            },
-          },
-        ]}
-      />
-    </Modal>
+    <AssignModalTable
+      title="分配新宝宝"
+      visible={visible}
+      onCancel={onCancel}
+      dataSource={dataSource}
+      onFinish={handleAssign}
+      columns={[
+        {
+          title: '宝宝姓名',
+          dataIndex: 'name',
+        },
+        {
+          title: 'ID',
+          dataIndex: 'identity',
+        },
+      ]}
+    />
   );
 }
 
 function AssignChw({ id }) {
-  const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
   const [visible, openAssign, closeAssign] = useBoolState();
+  const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
