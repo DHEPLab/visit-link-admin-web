@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { applyToken } from '../utils/token';
 import { apiAccountProfile } from '../actions';
 import SignInBg from '../assets/signin-bg.png';
+import { Message } from '../components/*';
 
 export default function () {
   const history = useHistory();
@@ -23,8 +24,11 @@ export default function () {
     try {
       const auth = await Axios.post('/admin/authenticate', { username, password });
       applyToken(auth.data.idToken);
+
       const profile = await Axios.get('/api/account/profile');
       dispatch(apiAccountProfile(profile));
+
+      Message.success('登录成功', '您已成功登录系统');
       history.push('/');
     } catch {
       setError(true);

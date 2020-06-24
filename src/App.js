@@ -7,7 +7,7 @@ import 'moment/locale/zh-cn';
 
 import RouteView from './Router';
 import { Role } from './constants/enums';
-import { Header, Menu } from './components/*';
+import { Header, Menu, Message } from './components/*';
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
 
@@ -50,6 +50,7 @@ function App() {
   function handleLogout() {
     clearToken();
     history.push('/sign_in');
+    Message.success('您已退出登录', '如您需进入系统，请重新登录');
   }
 
   return (
