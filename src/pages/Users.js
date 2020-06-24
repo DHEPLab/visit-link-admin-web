@@ -109,7 +109,7 @@ export default function Users() {
 
 const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
 const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/user/admin', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/user/admin?sort=id,desc', {}, false);
 
 function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
