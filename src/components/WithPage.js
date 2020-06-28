@@ -44,6 +44,8 @@ export default function (
 
     function pagination() {
       return {
+        // 是否展示 pageSize 切换器，当 total 大于 50 时默认为 true
+        showSizeChanger: false,
         pageSize: size,
         total: totalElements,
         showTotal(total) {
