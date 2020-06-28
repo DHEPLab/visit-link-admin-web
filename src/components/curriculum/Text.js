@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Quill from 'react-quill';
 import styled from 'styled-components';
 
-export default function Text({ value, setValue }) {
+const toolbar = [
+  ['bold', 'italic', 'underline'], // toggled buttons
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  [{ align: [] }],
+];
+
+export default function Text(props) {
+  const [value, setValue] = useState(props.value);
+
   return (
     <Container>
-      <Quill theme="snow" value={value} onChange={setValue} />
+      <Quill theme="snow" modules={{ toolbar }} value={value} onChange={setValue} />
     </Container>
   );
 }
