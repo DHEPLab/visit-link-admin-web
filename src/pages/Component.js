@@ -1,10 +1,11 @@
 import React from 'react';
 import Axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
-import { useHistory } from 'react-router-dom';
+import { Text, Media, Switch, PageFooter } from '../components/curriculum/*';
 
 export default function Component() {
   const [form] = Form.useForm();
@@ -46,6 +47,12 @@ export default function Component() {
             <SelectEnum name="ComponentTopic" />
           </Form.Item>
         </Form>
+      </Card>
+      <Card title="模块内容">
+        <Text />
+        <Media />
+        <Switch />
+        <PageFooter />
       </Card>
     </>
   );
