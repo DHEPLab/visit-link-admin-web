@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Form, Space, Button, Input } from 'antd';
@@ -9,6 +9,7 @@ import { Text, Media, Switch, PageFooter } from '../components/curriculum/*';
 
 export default function Component() {
   const [form] = Form.useForm();
+  const [value, setValue] = useState('');
   const history = useHistory();
 
   async function handleSave(values) {
@@ -49,7 +50,7 @@ export default function Component() {
         </Form>
       </Card>
       <Card title="模块内容">
-        <Text />
+        <Text value={value} setValue={setValue} />
         <Media />
         <Switch />
         <PageFooter />

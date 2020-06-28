@@ -1,8 +1,13 @@
 import React from 'react';
+import Quill from 'react-quill';
 import styled from 'styled-components';
 
-export default function Text({ value }) {
-  return <Container>{value}</Container>;
+export default function Text({ value, setValue }) {
+  return (
+    <Container>
+      <Quill theme="snow" value={value} onChange={setValue} />
+    </Container>
+  );
 }
 
 const Container = styled.div`
