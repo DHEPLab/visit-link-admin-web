@@ -27,3 +27,12 @@ export const FamilyTies = {
   GRANDFATHER: '(外)祖父',
   OTHER: '其他',
 };
+
+export const ComponentTopic = {
+  MOTHER_NUTRITION: '母亲营养',
+  BREASTFEEDING: '母乳喂养',
+  BABY_FOOD: '婴儿辅食',
+  INFANT_INJURY_AND_PREVENTION: '婴儿伤病和预防',
+  CAREGIVER_MENTAL_HEALTH: '照料人心理健康',
+  GOVERNMENT_SERVICES: '政府服务',
+};

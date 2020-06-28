@@ -12,7 +12,7 @@ export default function () {
           <ActivableLink title="课程管理" to="/curriculums" icon="iconcurriculum" />
         </li>
         <li>
-          <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
+          <ActivableLink title="模块管理" to="/components" icon="iconmodule" />
         </li>
         <li>
           <ActivableLink title="账户管理" to="/users" icon="iconuser" />

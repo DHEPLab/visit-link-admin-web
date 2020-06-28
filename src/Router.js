@@ -1,9 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
-import styled from 'styled-components';
 
-import { SignIn, Profiles, Curriculums, User, Users, Babies, Baby, Modules } from './pages/*';
+import {
+  SignIn,
+  Profiles,
+  Curriculums,
+  User,
+  Users,
+  Babies,
+  Baby,
+  Components,
+  Component,
+} from './pages/*';
 
 const routes = [
   {
@@ -31,8 +41,16 @@ const routes = [
     component: Babies,
   },
   {
-    path: '/modules',
-    component: Modules,
+    path: '/components/new',
+    component: Component,
+  },
+  {
+    path: '/components/edit/:id',
+    component: Component,
+  },
+  {
+    path: '/components',
+    component: Components,
   },
   {
     path: '*',
