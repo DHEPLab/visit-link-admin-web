@@ -3,17 +3,18 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import zhCN from 'antd/es/locale/zh_CN';
 import { message, ConfigProvider } from 'antd';
+import 'moment/locale/zh-cn';
 
 import RouteView from './Router';
 import { Role } from './constants/enums';
-import { Header, Menu } from './components/*';
+import { Header, Menu, Message } from './components/*';
 import { BrowserRouter, useHistory } from 'react-router-dom';
 import { applyToken, getToken, clearToken } from './utils/token';
 
 import rootReducer from './reducers';
 import { createStore } from 'redux';
 import { Provider, useSelector } from 'react-redux';
-import { loadProfileSuccess, httpRequestStart, httpRequestEnd } from './actions';
+import { apiAccountProfile, httpRequestStart, httpRequestEnd } from './actions';
 
 const store = createStore(
   rootReducer,
@@ -40,7 +41,7 @@ function App() {
 
   const loadProfile = useCallback(() => {
     Axios.get('/api/account/profile')
-      .then((r) => store.dispatch(loadProfileSuccess(r)))
+      .then((r) => store.dispatch(apiAccountProfile(r)))
       .catch((_) => history.push('/sign_in'));
   }, [history]);
 
@@ -49,6 +50,7 @@ function App() {
   function handleLogout() {
     clearToken();
     history.push('/sign_in');
+    Message.success('您已退出登录', '如您需进入系统，请重新登录');
   }
 
   return (
@@ -110,8 +112,8 @@ Axios.interceptors.response.use(
         const { data } = response;
         if (data.violations) {
           msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
-        } else if (data.message) {
-          msg = data.message;
+        } else if (data.detail) {
+          msg = data.detail;
         }
     }
     message.error(msg);

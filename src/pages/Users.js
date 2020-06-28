@@ -7,7 +7,14 @@ import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 import { Required } from '../constants';
-import { ModalForm, WithPage, ContentHeader, CardTabs, ZebraTable } from '../components/*';
+import {
+  ModalForm,
+  WithPage,
+  ContentHeader,
+  CardTabs,
+  ZebraTable,
+  SearchInput,
+} from '../components/*';
 
 const { TabPane } = Tabs;
 export default function Users() {
@@ -102,9 +109,9 @@ export default function Users() {
 
 const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
 const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/user/admin', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/user/admin?sort=id,desc', {}, false);
 
-function CHW({ tab, history, loadData, ...props }) {
+function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
     tab === 'chw' && loadData();
   }, [tab, loadData]);
@@ -112,14 +119,19 @@ function CHW({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ChwBar>
-        <Input className="master" placeholder="请输入社区工作者姓名、ID或所在区域搜索" />
+        <SearchInput
+          onChange={(e) => onChangeSearch('search', e.target.value)}
+          placeholder="请输入社区工作者姓名、ID或所在区域搜索"
+        />
         <Button ghost type="primary">
           批量创建社区工作者
         </Button>
       </ChwBar>
       <ZebraTable
-        rowKey={(record) => record.user.id}
         {...props}
+        className="clickable"
+        rowKey={(record) => record.user.id}
+        onRow={(record) => onRow(history, record.user.id)}
         columns={[
           realName,
           {
@@ -146,7 +158,6 @@ function CHW({ tab, history, loadData, ...props }) {
             render: (h) => `${h} 位`,
           },
           username,
-          operation(history),
         ]}
       />
     </div>
@@ -172,8 +183,10 @@ function Supervisor({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ZebraTable
-        rowKey={(record) => record.user.id}
         {...props}
+        className="clickable"
+        rowKey={(record) => record.user.id}
+        onRow={(record) => onRow(history, record.user.id)}
         columns={[
           realName,
           phone,
@@ -184,7 +197,6 @@ function Supervisor({ tab, history, loadData, ...props }) {
             render: (h) => `${h} 位`,
           },
           username,
-          operation(history),
         ]}
       />
     </div>
@@ -199,13 +211,14 @@ function Admin({ tab, history, loadData, ...props }) {
   return (
     <div>
       <ZebraTable
-        rowKey="id"
         {...props}
+        rowKey="id"
+        className="clickable"
+        onRow={(record) => onRow(history, record.id)}
         columns={[
           { ...realName, dataIndex: 'realName' },
           { ...phone, dataIndex: 'phone' },
           { ...username, dataIndex: 'username' },
-          operation(history, 'id'),
         ]}
       />
     </div>
@@ -230,15 +243,10 @@ const username = {
   dataIndex: ['user', 'username'],
 };
 
-const operation = (history, dataIndex = ['user', 'id']) => ({
-  title: '操作',
-  dataIndex,
-  align: 'center',
-  render(id) {
-    return (
-      <Button size="small" type="link" onClick={() => history.push(`/users/${id}`)}>
-        查看
-      </Button>
-    );
-  },
-});
+const onRow = (history, id) => {
+  return {
+    onClick: () => {
+      history.push(`/users/${id}`);
+    },
+  };
+};

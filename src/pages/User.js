@@ -1,12 +1,21 @@
 import Axios from 'axios';
 import React, { useEffect } from 'react';
-import { Form, Modal, Button, Table, Input, Space, Select } from 'antd';
-import { useParams } from 'react-router-dom';
+import { debounce } from 'lodash';
+import { Form, Modal, Button, Input, Space, Select } from 'antd';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
-import { Card, ZebraTable, ModalForm, StaticField } from '../components/*';
+import {
+  Card,
+  ZebraTable,
+  ModalForm,
+  StaticField,
+  DetailHeader,
+  AssignModalTable,
+  DeletePopconfirm,
+} from '../components/*';
 
 export default function User() {
   const { id } = useParams();
@@ -24,31 +33,43 @@ export default function User() {
     });
   }
 
+  function role() {
+    if (roleChw()) {
+      return `${Role[user.role]}ID ${user.chw.identity}`;
+    }
+    return Role[user.role];
+  }
+
   return (
     <>
-      <h2>账户管理详情</h2>
+      <DetailHeader
+        menu="账户管理"
+        title={user.realName}
+        role={role()}
+        extra={
+          <Button ghost type="danger">
+            注销账户
+          </Button>
+        }
+      />
       <Card
         title="用户信息"
         extra={
-          <Button type="primary" onClick={openChangeProfile}>
+          <Button type="shade" onClick={openChangeProfile}>
             编辑资料
           </Button>
         }
       >
         <StaticField label="真实姓名">{user.realName}</StaticField>
-        {roleChw() && (
-          <>
-            <StaticField label="ID">{user.chw.identity}</StaticField>
-            <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
-          </>
-        )}
         <StaticField label="联系电话">{user.phone}</StaticField>
-        <StaticField label="权限">{Role[user.role]}</StaticField>
+        {roleChw() && (
+          <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
+        )}
       </Card>
       <Card
         title="账户信息"
         extra={
-          <Button type="primary" onClick={openChangePassword}>
+          <Button type="shade" onClick={openChangePassword}>
             修改密码
           </Button>
         }
@@ -98,14 +119,15 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
   return (
     <Modal
       title="您确定要修改密码吗？"
+      closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
-        <Space>
-          <Button ghost type="primary" onClick={onCancel}>
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
             放弃
           </Button>
-          <Button type="primary" onClick={form.submit}>
+          <Button type="danger" onClick={form.submit}>
             确定
           </Button>
         </Space>
@@ -115,7 +137,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
       <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label="新的账户密码" name="password" rules={[{ required: true, min: 6 }]}>
-          <Input.Password placeholder="请输入新的账户密码" />
+          <Input.Password style={{ width: '100%' }} placeholder="请输入新的账户密码" />
         </Form.Item>
       </Form>
     </Modal>
@@ -123,12 +145,13 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 }
 
 function AssignBaby({ id }) {
-  const [visible, openAssign, closeAssign] = useBoolState();
-  const [dataSource, load] = useFetch(`/admin/chw/${id}/baby`, {}, []);
+  const history = useHistory();
+  const [visible, openModal, closeModal] = useBoolState(false);
+  const [dataSource, refresh] = useFetch(`/admin/chw/${id}/baby`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/baby/${babyId}/chw`).then(load);
+    Axios.delete(`/admin/baby/${babyId}/chw`).then(refresh);
   }
 
   return (
@@ -136,13 +159,22 @@ function AssignBaby({ id }) {
       title="负责宝宝列表"
       noPadding
       extra={
-        <Button type="primary" onClick={openAssign}>
+        <Button type="shade" onClick={openModal}>
           添加新宝宝
         </Button>
       }
     >
       <ZebraTable
         rowKey="id"
+        className="clickable"
+        onRow={(record) => ({
+          onClick: (event) => {
+            // do noting when click other target
+            if (event.target.tagName === 'TD') {
+              history.push(`/babies/${record.id}`);
+            }
+          },
+        })}
         dataSource={dataSource}
         pagination={false}
         columns={[
@@ -160,78 +192,86 @@ function AssignBaby({ id }) {
             render: (h) => Gender[h],
           },
           {
+            title: '主看护人',
+            dataIndex: 'masterCarerName',
+          },
+          {
+            title: '联系方式',
+            dataIndex: 'masterCarerPhone',
+          },
+          {
             title: '操作',
             dataIndex: 'id',
             width: 200,
             align: 'center',
             render(babyId) {
               return (
-                <Button size="small" type="link" onClick={() => handleRelease(babyId)}>
-                  删除
-                </Button>
+                <DeletePopconfirm onConfirm={() => handleRelease(babyId)}>
+                  <Button size="small" type="link">
+                    删除
+                  </Button>
+                </DeletePopconfirm>
               );
             },
           },
         ]}
       />
-      <NotAssignedBabyModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
+      <NotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 }
 
 // open a new modal, assign chw to supervisor
-function NotAssignedBabyModal({ id, onChange, ...props }) {
-  const [dataSource, load] = useFetch(`/admin/baby/not_assigned`, {}, []);
+function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
+  const [dataSource, refresh] = useFetch(`/admin/baby/not_assigned`, {}, []);
 
-  // on modal visble, reload data
   useEffect(() => {
-    props.visible && load();
-  }, [props.visible, load]);
+    if (visible) refresh();
+    // eslint-disable-next-line
+  }, [visible]);
 
-  function handleAssign(babyId) {
-    Axios.post(`/admin/chw/${id}/baby`, [babyId]).then(() => {
-      load();
-      onChange();
-    });
+  async function handleAssign(babyIds) {
+    await Axios.post(`/admin/chw/${id}/baby`, babyIds);
+    refresh();
+    onFinish();
+    onCancel();
   }
 
+  const debounceRefresh = debounce((search) => refresh({ search }), 400);
+
   return (
-    <Modal title="分配新宝宝" {...props} footer={null}>
-      <Table
-        rowKey="id"
-        pagination={false}
-        dataSource={dataSource}
-        columns={[
-          {
-            title: '宝宝姓名',
-            dataIndex: 'name',
-          },
-          {
-            title: '操作',
-            dataIndex: 'id',
-            width: 200,
-            align: 'center',
-            render(chwId) {
-              return (
-                <Button type="link" onClick={() => handleAssign(chwId)}>
-                  分配
-                </Button>
-              );
-            },
-          },
-        ]}
-      />
-    </Modal>
+    <AssignModalTable
+      title="分配新宝宝"
+      visible={visible}
+      onChangeSearch={(e) => debounceRefresh(e.target.value)}
+      onCancel={onCancel}
+      dataSource={dataSource}
+      onFinish={handleAssign}
+      columns={[
+        {
+          title: '宝宝姓名',
+          dataIndex: 'name',
+        },
+        {
+          title: 'ID',
+          dataIndex: 'identity',
+        },
+        {
+          title: '所在区域',
+          dataIndex: 'area',
+        },
+      ]}
+    />
   );
 }
 
 function AssignChw({ id }) {
-  const [dataSource, load] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
-  const [visible, openAssign, closeAssign] = useBoolState();
+  const [visible, openModal, closeModal] = useBoolState();
+  const [dataSource, refresh] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
-    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(load);
+    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(refresh);
   }
 
   return (
@@ -239,7 +279,7 @@ function AssignChw({ id }) {
       title="负责社区工作者列表"
       noPadding
       extra={
-        <Button type="link" onClick={openAssign}>
+        <Button type="shade" onClick={openModal}>
           分配新人员
         </Button>
       }
@@ -258,6 +298,11 @@ function AssignChw({ id }) {
             dataIndex: ['chw', 'identity'],
           },
           {
+            title: '所在区域',
+            dataIndex: ['chw', 'tags'],
+            render: (tags) => tags && tags.join(', '),
+          },
+          {
             title: '联系电话',
             dataIndex: 'phone',
           },
@@ -268,61 +313,64 @@ function AssignChw({ id }) {
             align: 'center',
             render(chwId) {
               return (
-                <Button size="small" type="link" onClick={() => handleRelease(chwId)}>
-                  删除
-                </Button>
+                <DeletePopconfirm onConfirm={() => handleRelease(chwId)}>
+                  <Button size="small" type="link">
+                    删除
+                  </Button>
+                </DeletePopconfirm>
               );
             },
           },
         ]}
       />
-      <NotAssignedChwModal id={id} onChange={load} visible={visible} onCancel={closeAssign} />
+      <NotAssignedChwModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 }
 
 // open a new modal, assign chw to supervisor
-function NotAssignedChwModal({ id, onChange, ...props }) {
-  const [dataSource, load] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
+function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
+  const [dataSource, refresh] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
 
-  // on modal visble, reload data
   useEffect(() => {
-    props.visible && load();
-  }, [props.visible, load]);
+    if (visible) {
+      refresh();
+    }
+    // eslint-disable-next-line
+  }, [visible]);
 
-  function handleAssign(chwId) {
-    Axios.post(`/admin/user/supervisor/${id}/chw`, [chwId]).then(() => {
-      load();
-      onChange();
-    });
+  async function handleAssign(chwIds) {
+    await Axios.post(`/admin/user/supervisor/${id}/chw`, chwIds);
+    refresh();
+    onFinish();
+    onCancel();
   }
 
+  const debounceRefresh = debounce((search) => refresh({ search }), 400);
+
   return (
-    <Modal title="分配新工作人员" {...props} footer={null}>
-      <Table
-        rowKey="id"
-        pagination={false}
-        dataSource={dataSource}
-        columns={[
-          {
-            title: '工作人员姓名',
-            dataIndex: 'realName',
-          },
-          {
-            title: '操作',
-            dataIndex: 'id',
-            width: 200,
-            align: 'center',
-            render(chwId) {
-              return (
-                <Button type="link" onClick={() => handleAssign(chwId)}>
-                  分配
-                </Button>
-              );
-            },
-          },
-        ]}
-      />
-    </Modal>
+    <AssignModalTable
+      visible={visible}
+      onCancel={onCancel}
+      onFinish={handleAssign}
+      dataSource={dataSource}
+      title="分配新社区工作者"
+      onChangeSearch={(e) => debounceRefresh(e.target.value)}
+      columns={[
+        {
+          title: '社区工作者姓名',
+          dataIndex: 'realName',
+        },
+        {
+          title: 'ID',
+          dataIndex: ['chw', 'identity'],
+        },
+        {
+          title: '所在区域',
+          dataIndex: ['chw', 'tags'],
+          render: (tags) => tags && tags.join(', '),
+        },
+      ]}
+    />
   );
 }

@@ -34,5 +34,5 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
-  ${({ noPadding }) => !noPadding && 'padding: 20px;'}
+  ${({ noPadding }) => !noPadding && 'padding: 30px;'}
 `;

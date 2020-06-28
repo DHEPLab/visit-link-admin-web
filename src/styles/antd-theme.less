@@ -12,8 +12,15 @@
 @input-height-lg: 50px;
 @input-padding-horizontal: 30px;
 
+.ant-checkbox-inner,
+.ant-input-affix-wrapper.master .ant-input {
+  border-radius: 0;
+}
+
 .ant-input.master,
 .ant-input-password.master,
+.ant-input-affix-wrapper.master,
+.ant-input-affix-wrapper.master .ant-input,
 .ant-input-password.master .ant-input {
   &::placeholder {
     color: #FFC3A0;
@@ -27,16 +34,27 @@
 .ant-input,
 .ant-picker,
 .ant-input-password,
+.ant-input-affix-wrapper,
+.ant-select.ant-select,
 .ant-select-selector.ant-select-selector {
   border-radius: 26px;
   width: 400px;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  width: 100%;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  border-radius: 26px;
 }
 
 .ant-input-password .ant-input {
   border-radius: 0;
 }
 
-.ant-select-multiple .ant-select-selector {
+.ant-select-multiple .ant-select-selector,
+.ant-cascader-picker-label {
   padding-left: 30px;
 }
 
@@ -44,10 +62,19 @@
   margin-left: 0px;
 }
 
+.ant-cascader-picker.ant-cascader-picker {
+  width: 400px;
+}
+
 // Modal
 // --
 @modal-header-bg: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
 @modal-heading-color: #fff;
+@modal-header-padding: 12px 24px;
+
+.ant-modal-title {
+  font-size: 16px;
+}
 
 .ant-modal-footer {
   border: none;
@@ -63,10 +90,30 @@
 @btn-padding-horizontal-base: 30px;
 @btn-padding-horizontal-lg: 60px;
 @btn-font-size-sm: 14px;
+@btn-font-size-lg: 20px;
+@btn-danger-bg: #F2709C;
+@btn-danger-border: @btn-danger-bg;
 
 .ant-btn {
   border-radius: 26px;
   font-weight: bold;
+  box-shadow: none;
+}
+
+.ant-btn-lg {
+  min-width: 200px;
+}
+
+.ant-btn.ant-btn-shade {
+  background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
+  border: none;
+  color: #fff;
+
+  &:hover {
+    background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
+    color: #fff;
+    opacity: .8;
+  }
 }
 
 .ant-btn-background-ghost {
@@ -78,11 +125,25 @@
 @table-header-bg: #fff;
 @table-header-color: #8E8E93;
 @table-font-size: 14px;
-@table-padding-vertical: 24px;
-@table-padding-horizontal: 24px;
+@table-padding-vertical: 19px;
+@table-padding-horizontal: 19px;
+
+.ant-table-wrapper.small {
+  .ant-table-thead>tr>th {
+    padding-top: 15px;
+  }
+
+  .ant-table-tbody>tr>td {
+    padding: 10px;
+  }
+}
 
 .ant-table.ant-table {
   font-size: @table-font-size;
+}
+
+.ant-table-wrapper.clickable .ant-table-row {
+  cursor: pointer;
 }
 
 .ant-table-row {
@@ -90,8 +151,14 @@
 }
 
 // zebra crossing
-.ant-table-row.even-row {
-  background: #FFF9F5;
+.ant-table-tbody>tr.ant-table-row.even-row {
+  td {
+    background: #FFF9F5;
+  }
+
+  &:hover>td {
+    background: #fff6f0;
+  }
 }
 
 .ant-table-row.odd-row {

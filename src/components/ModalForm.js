@@ -5,7 +5,10 @@ export default function ({ title, visible, onCancel, onFinish, initialValues = {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    visible && form.setFieldsValue(initialValues);
+    if (visible) {
+      form.resetFields();
+      form.setFieldsValue(initialValues);
+    }
   }, [visible, form, initialValues]);
 
   return (
@@ -32,7 +35,6 @@ export default function ({ title, visible, onCancel, onFinish, initialValues = {
         labelCol={{ span: 4, offset: 1 }}
         wrapperCol={{ offset: 1 }}
         onFinish={onFinish}
-        initialValues={initialValues}
       >
         {children}
       </Form>

@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
+import { Iconfont } from '../components/*';
+
 export default function ({ username, role, onNavigate, onLogout }) {
   return (
     <Header>
@@ -13,13 +15,13 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
-        <SplitLine />
         <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
           个人中心
         </StyledButton>
         <SplitLine />
         <StyledButton type="link" onClick={() => onLogout()}>
           退出
+          <Iconfont type="iconescape" />
         </StyledButton>
       </Content>
     </Header>
@@ -36,11 +38,13 @@ const SplitLine = styled.div`
 const Role = styled.span`
   margin-left: 14px;
   color: #8e8e93;
+  font-weight: 400;
 `;
 
 const Welcome = styled.div`
   font-size: 16px;
   font-weight: 500;
+  margin-right: 30px;
   color: #9b9b9b;
   b {
     color: #001831;
@@ -66,6 +70,7 @@ const Header = styled.header`
   width: 100%;
   background-color: white;
   display: flex;
+  border-bottom: 2px solid #ff9472;
 `;
 
 const Logo = styled.div`

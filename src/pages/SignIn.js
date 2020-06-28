@@ -6,8 +6,9 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { applyToken } from '../utils/token';
-import { loadProfileSuccess } from '../actions';
+import { apiAccountProfile } from '../actions';
 import SignInBg from '../assets/signin-bg.png';
+import { Message } from '../components/*';
 
 export default function () {
   const history = useHistory();
@@ -23,8 +24,11 @@ export default function () {
     try {
       const auth = await Axios.post('/admin/authenticate', { username, password });
       applyToken(auth.data.idToken);
+
       const profile = await Axios.get('/api/account/profile');
-      dispatch(loadProfileSuccess(profile));
+      dispatch(apiAccountProfile(profile));
+
+      Message.success('登录成功', '您已成功登录系统');
       history.push('/');
     } catch {
       setError(true);
@@ -57,15 +61,15 @@ export default function () {
             />
           </Form.Item>
         </Form>
-        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <ForgetPassword>
           <Button size="small" type="link">
             忘记密码？
           </Button>
         </ForgetPassword>
+        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <Button
           size="large"
-          type="primary"
+          type="shade"
           onClick={handleSignIn}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
         >
