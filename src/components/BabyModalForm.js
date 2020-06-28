@@ -1,11 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import { Form, Input, Radio, Select, DatePicker, Cascader } from 'antd';
+import { Form, Input, Radio, DatePicker, Cascader } from 'antd';
 
 import ModalForm from './ModalForm';
+import SelectEnum from './SelectEnum';
 import Pcas from '../constants/pcas-code.json';
 import { Required } from '../constants';
-import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
+import { Gender, BabyStage } from '../constants/enums';
 
 export default function BabyModalForm({ disableStage, ...props }) {
   return (
@@ -56,13 +57,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
                   />
                 </Form.Item>
                 <Form.Item label="喂养方式" name="feedingPattern" rules={Required}>
-                  <Select>
-                    {Object.keys(FeedingPattern).map((key) => (
-                      <Select.Option key={key} value={key}>
-                        {FeedingPattern[key]}
-                      </Select.Option>
-                    ))}
-                  </Select>
+                  <SelectEnum name="FeedingPattern" />
                 </Form.Item>
               </>
             );

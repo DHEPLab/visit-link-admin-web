@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Space, Input, Radio, Select, message } from 'antd';
+import { Form, Button, Space, Input, Radio, message } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -15,6 +15,7 @@ import {
   ModalForm,
   DetailHeader,
   DeletePopconfirm,
+  SelectEnum,
 } from '../components/*';
 
 export default function Baby() {
@@ -152,13 +153,7 @@ function Carers({ babyId }) {
           <Input />
         </Form.Item>
         <Form.Item label="亲属关系" name="familyTies" rules={Required}>
-          <Select>
-            {Object.keys(FamilyTies).map((key) => (
-              <Select.Option key={key} value={key}>
-                {FamilyTies[key]}
-              </Select.Option>
-            ))}
-          </Select>
+          <SelectEnum name="FamilyTies" />
         </Form.Item>
         <Form.Item label="联系电话" name="phone" rules={Required}>
           <Input />
