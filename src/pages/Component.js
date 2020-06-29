@@ -5,8 +5,9 @@ import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
-import { Text, Media } from '../components/curriculum/*';
-import { Formik, Field, FieldArray, Form as FormikForm } from 'formik';
+import { ComponentField } from '../components/curriculum/*';
+import { Formik, FieldArray, Form as FormikForm } from 'formik';
+import styled from 'styled-components';
 
 export default function Component() {
   const history = useHistory();
@@ -14,13 +15,18 @@ export default function Component() {
   const [components] = useState([
     {
       type: 'Text',
-      key: '1',
+      key: 1,
       value: { type: '1', html: '<p>Hello</p>' },
     },
     {
       type: 'Text',
-      key: '2',
+      key: 2,
       value: { type: '2', html: '<p>Hello</p>' },
+    },
+    {
+      type: 'Media',
+      key: 3,
+      value: { type: 'video', file: 'abc.mp4', alt: 'test video' },
     },
   ]);
 
@@ -49,20 +55,30 @@ export default function Component() {
       <Card title="模块内容">
         <Formik initialValues={{ components }}>
           {({ values }) => (
-            <FormikForm>
+            <>
               <FieldArray name="components">
                 {(helpers) => (
-                  <>
-                    {values.components.map((component, index) => (
-                      <Field key={component.key} name={`components.${index}.value`} as={Text} />
-                    ))}
-                  </>
+                  <FieldArrayContainer>
+                    <ComponentForm>
+                      {values.components.map((component, index) => (
+                        <ComponentField
+                          key={component.key}
+                          name="components"
+                          component={component}
+                          index={index}
+                          arrayHelpers={helpers}
+                        />
+                      ))}
+                    </ComponentForm>
+                    <ComponentToolBar>
+                      <Button type="link">添加文本组件</Button>
+                      <Button type="link">添加媒体组件</Button>
+                    </ComponentToolBar>
+                  </FieldArrayContainer>
                 )}
               </FieldArray>
-              {/* <Field name="text" as={Text} />
-              <Field name="media" as={Media} /> */}
               <pre>{JSON.stringify(values, null, 2)}</pre>
-            </FormikForm>
+            </>
           )}
         </Formik>
       </Card>
@@ -86,3 +102,9 @@ export default function Component() {
     </>
   );
 }
+
+const FieldArrayContainer = styled.div`
+  display: flex;
+`;
+const ComponentForm = styled.div``;
+const ComponentToolBar = styled.div``;
