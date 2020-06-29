@@ -10,15 +10,14 @@ const toolbar = [
 ];
 
 export default function Text({ name, onBlur, onChange, value }) {
+  const nameHtml = `${name}.html`;
+  const valueHtml = value.html;
+  const nameType = `${name}.type`;
+  const valueType = value.type;
   return (
     <Container>
-      <Quill
-        theme="snow"
-        modules={{ toolbar }}
-        onBlur={onBlur}
-        value={value}
-        onChange={onChange(name)}
-      />
+      <input name={nameType} value={valueType} onChange={onChange} onBlur={onBlur} />
+      <Quill theme="snow" modules={{ toolbar }} value={valueHtml} onChange={onChange(nameHtml)} />
     </Container>
   );
 }

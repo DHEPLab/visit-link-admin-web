@@ -35,10 +35,10 @@ export default function Component() {
       ></DetailHeader>
 
       <Card title="模块内容">
-        <Formik initialValues={{ text: '<p>Hello</p>', firstName: '' }}>
+        <Formik initialValues={{ text: { type: '', html: '<p>Hello</p>' }, firstName: '' }}>
           {({ values }) => (
             <FormikForm>
-              <Field name="text" type="input" as={Text} />
+              <Field name="text" as={Text} />
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikForm>
           )}
