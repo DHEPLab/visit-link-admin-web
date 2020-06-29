@@ -13,4 +13,20 @@ function addText(components) {
   });
 }
 
-export default { addText };
+function addMedia(components) {
+  components.push({
+    type: 'Media',
+    key: generateKey(),
+    value: {
+      type: '',
+      file: '',
+      alt: '',
+    },
+  });
+}
+
+function removeComponent(components, index) {
+  components.splice(index, 1);
+}
+
+export default { addText, addMedia, removeComponent };

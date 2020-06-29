@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
+import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
+import helpers from '../components/curriculum/helpers';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
-import { Formik, FieldArray, Form as FormikForm } from 'formik';
-import styled from 'styled-components';
 
 export default function Component() {
   const history = useHistory();
@@ -17,11 +18,6 @@ export default function Component() {
       type: 'Text',
       key: 1,
       value: { type: '1', html: '<p>Hello</p>' },
-    },
-    {
-      type: 'Text',
-      key: 2,
-      value: { type: '2', html: '<p>Hello</p>' },
     },
     {
       type: 'Media',
@@ -57,22 +53,26 @@ export default function Component() {
           {({ values }) => (
             <>
               <FieldArray name="components">
-                {(helpers) => (
+                {(arrays) => (
                   <FieldArrayContainer>
                     <ComponentForm>
                       {values.components.map((component, index) => (
                         <ComponentField
                           key={component.key}
                           name="components"
-                          component={component}
                           index={index}
-                          arrayHelpers={helpers}
+                          onRemove={arrays.remove}
+                          component={component}
                         />
                       ))}
                     </ComponentForm>
                     <ComponentToolBar>
-                      <Button type="link">添加文本组件</Button>
-                      <Button type="link">添加媒体组件</Button>
+                      <Button type="link" onClick={() => helpers.addText(arrays)}>
+                        添加文本组件
+                      </Button>
+                      <Button type="link" onClick={() => helpers.addMedia(arrays)}>
+                        添加媒体组件
+                      </Button>
                     </ComponentToolBar>
                   </FieldArrayContainer>
                 )}
@@ -106,5 +106,10 @@ export default function Component() {
 const FieldArrayContainer = styled.div`
   display: flex;
 `;
-const ComponentForm = styled.div``;
-const ComponentToolBar = styled.div``;
+const ComponentForm = styled.div`
+  flex: 1;
+`;
+const ComponentToolBar = styled.div`
+  width: 230px;
+  margin-left: 40px;
+`;

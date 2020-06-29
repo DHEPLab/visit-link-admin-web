@@ -3,7 +3,7 @@ import { Field } from 'formik';
 
 import { Text, Media } from './*';
 
-export default function ComponentField({ name, component, index, arrayHelpers }) {
+export default function ComponentField({ name, component, index, onRemove }) {
   let As;
   switch (component.type) {
     case 'Text':
@@ -15,5 +15,5 @@ export default function ComponentField({ name, component, index, arrayHelpers })
     default:
       As = <div>{component.type}</div>;
   }
-  return <Field name={`${name}.${index}.value`} as={As} />;
+  return <Field name={`${name}.${index}.value`} onRemove={onRemove} as={As} />;
 }
