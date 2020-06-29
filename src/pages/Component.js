@@ -5,7 +5,7 @@ import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
-import { Text } from '../components/curriculum/*';
+import { Text, Media } from '../components/curriculum/*';
 import { Formik, Field, Form as FormikForm } from 'formik';
 
 export default function Component() {
@@ -35,10 +35,17 @@ export default function Component() {
       ></DetailHeader>
 
       <Card title="模块内容">
-        <Formik initialValues={{ text: { type: '', html: '<p>Hello</p>' }, firstName: '' }}>
+        <Formik
+          initialValues={{
+            text: { type: '', html: '<p>Hello</p>' },
+            media: { type: '', file: '', alt: '' },
+            firstName: '',
+          }}
+        >
           {({ values }) => (
             <FormikForm>
               <Field name="text" as={Text} />
+              <Field name="media" as={Media} />
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikForm>
           )}
