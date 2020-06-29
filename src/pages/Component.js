@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
-import { Text, Media, Switch, PageFooter } from '../components/curriculum/*';
+import { Text } from '../components/curriculum/*';
+import { Formik, Field, Form as FormikForm } from 'formik';
 
 export default function Component() {
   const [form] = Form.useForm();
-  const [value, setValue] = useState('');
   const history = useHistory();
 
   async function handleSave(values) {
@@ -33,6 +33,18 @@ export default function Component() {
           </Space>
         }
       ></DetailHeader>
+
+      <Card title="模块内容">
+        <Formik initialValues={{ text: '<p>Hello</p>', firstName: '' }}>
+          {({ values }) => (
+            <FormikForm>
+              <Field name="text" type="input" as={Text} />
+              <pre>{JSON.stringify(values, null, 2)}</pre>
+            </FormikForm>
+          )}
+        </Formik>
+      </Card>
+
       <Card title="模块基本信息">
         <Form form={form} onFinish={handleSave}>
           <Form.Item label="模块名称" name="name" rules={Rules.Required}>
@@ -48,12 +60,6 @@ export default function Component() {
             <SelectEnum name="ComponentTopic" />
           </Form.Item>
         </Form>
-      </Card>
-      <Card title="模块内容">
-        <Text value={value} setValue={setValue} />
-        <Media />
-        <Switch />
-        <PageFooter />
       </Card>
     </>
   );
