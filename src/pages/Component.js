@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { Form, Space, Button, Input } from 'antd';
@@ -6,11 +6,23 @@ import { Form, Space, Button, Input } from 'antd';
 import Rules from '../constants/rules';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { Text, Media } from '../components/curriculum/*';
-import { Formik, Field, Form as FormikForm } from 'formik';
+import { Formik, Field, FieldArray, Form as FormikForm } from 'formik';
 
 export default function Component() {
-  const [form] = Form.useForm();
   const history = useHistory();
+  const [form] = Form.useForm();
+  const [components] = useState([
+    {
+      type: 'Text',
+      key: '1',
+      value: { type: '1', html: '<p>Hello</p>' },
+    },
+    {
+      type: 'Text',
+      key: '2',
+      value: { type: '2', html: '<p>Hello</p>' },
+    },
+  ]);
 
   async function handleSave(values) {
     await Axios.post('/admin/component', values);
@@ -35,17 +47,20 @@ export default function Component() {
       ></DetailHeader>
 
       <Card title="模块内容">
-        <Formik
-          initialValues={{
-            text: { type: '', html: '<p>Hello</p>' },
-            media: { type: '', file: '', alt: '' },
-            firstName: '',
-          }}
-        >
+        <Formik initialValues={{ components }}>
           {({ values }) => (
             <FormikForm>
-              <Field name="text" as={Text} />
-              <Field name="media" as={Media} />
+              <FieldArray name="components">
+                {(helpers) => (
+                  <>
+                    {values.components.map((component, index) => (
+                      <Field key={component.key} name={`components.${index}.value`} as={Text} />
+                    ))}
+                  </>
+                )}
+              </FieldArray>
+              {/* <Field name="text" as={Text} />
+              <Field name="media" as={Media} /> */}
               <pre>{JSON.stringify(values, null, 2)}</pre>
             </FormikForm>
           )}
