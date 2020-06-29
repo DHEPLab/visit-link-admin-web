@@ -1,15 +1,16 @@
 import React from 'react';
+import Container from './Container';
 
 export default function Media({ name, value, onChange }) {
-  const nameType = `${name}.type`;
-  const nameFile = `${name}.file`;
-  const nameAlt = `${name}.alt`;
+  const type = `${name}.type`;
+  const file = `${name}.file`;
+  const alt = `${name}.alt`;
 
   return (
-    <div>
-      <input name={nameType} value={value.type} onChange={onChange} placeholder="类型" />
-      <input name={nameFile} value={value.file} onChange={onChange} placeholder="上传" />
-      <input name={nameAlt} value={value.alt} onChange={onChange} placeholder="Alt" />
-    </div>
+    <Container title="媒体组件">
+      <input name={type} value={value.type} onChange={onChange} placeholder="Type" />
+      <input name={file} value={value.file} onChange={onChange} placeholder="File" />
+      <input name={alt} value={value.alt} onChange={onChange} placeholder="Alt" />
+    </Container>
   );
 }
