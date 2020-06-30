@@ -59,7 +59,11 @@ function Components({ loadData, onChangeSearch, ...props }) {
                       删除
                     </Button>
                   </DeletePopconfirm>
-                  <Button size="small" type="link">
+                  <Button
+                    size="small"
+                    type="link"
+                    onClick={() => history.push(`/modules/edit/${id}`)}
+                  >
                     编辑
                   </Button>
                 </Space>

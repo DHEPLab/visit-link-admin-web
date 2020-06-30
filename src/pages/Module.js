@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input } from 'antd';
 
@@ -11,20 +11,25 @@ import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
 
 export default function Component() {
+  const { id } = useParams();
   const history = useHistory();
   const [basicForm] = Form.useForm();
-  const [components, setComponents] = useState([
-    {
-      type: 'Text',
-      key: 1,
-      value: { type: '1', html: '<p>Hello</p>' },
-    },
-    {
-      type: 'Media',
-      key: 3,
-      value: { type: 'video', file: 'abc.mp4', alt: 'test video' },
-    },
-  ]);
+  const [saveAsStatus, setSaveAsStatus] = useState();
+  const [components, setComponents] = useState();
+
+  const saveAsDraftStatus = () => setSaveAsStatus('DRAFT');
+  const saveAsPublishedStatus = () => setSaveAsStatus('PUBLISHED');
+
+  useEffect(() => {
+    if (!id) {
+      setComponents([]);
+    } else {
+      Axios.get(`/admin/module/${id}`).then(({ data }) => {
+        basicForm.setFieldsValue(data);
+        setComponents(data.components);
+      });
+    }
+  }, [id, basicForm]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -32,11 +37,17 @@ export default function Component() {
   }
 
   async function handleSave(values) {
-    await Axios.post('/admin/module', {
+    const method = id ? 'put' : 'post';
+    await Axios[method](`/admin/module${id ? `/${id}` : ''}`, {
       components,
       ...values,
+      status: saveAsStatus,
     });
     history.goBack();
+  }
+
+  if (!components) {
+    return null;
   }
 
   return (
@@ -48,10 +59,23 @@ export default function Component() {
             title="创建新模块"
             extra={
               <Space size="large">
-                <Button ghost type="danger">
+                <Button
+                  ghost
+                  type="danger"
+                  onClick={() => {
+                    saveAsDraftStatus();
+                    handleSubmit();
+                  }}
+                >
                   保存至草稿
                 </Button>
-                <Button type="danger" onClick={handleSubmit}>
+                <Button
+                  type="danger"
+                  onClick={() => {
+                    saveAsPublishedStatus();
+                    handleSubmit();
+                  }}
+                >
                   保存并发布
                 </Button>
               </Space>
