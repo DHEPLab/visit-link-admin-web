@@ -15,7 +15,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
 
   async function handleDelete(id) {
-    await Axios.delete(`/admin/component/${id}`);
+    await Axios.delete(`/admin/module/${id}`);
     loadData();
   }
 
@@ -24,7 +24,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
       <ContentHeader title="模块管理">
         <Space size="large">
           <SearchInput className="master" placeholder="请输入模块名称搜索" />
-          <Button type="primary" onClick={() => history.push('/components/new')}>
+          <Button type="primary" onClick={() => history.push('/modules/new')}>
             创建新模块
           </Button>
         </Space>
@@ -32,6 +32,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
 
       <ZebraTable
         {...props}
+        rowKey="id"
         columns={[
           {
             title: '模块名称',
@@ -71,4 +72,4 @@ function Components({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Components, '/admin/component?sort=id,desc');
+export default WithPage(Components, '/admin/module?sort=id,desc');

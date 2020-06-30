@@ -11,8 +11,8 @@ import {
   Users,
   Babies,
   Baby,
-  Components,
-  Component,
+  Modules,
+  Module,
 } from './pages/*';
 
 const routes = [
@@ -41,16 +41,16 @@ const routes = [
     component: Babies,
   },
   {
-    path: '/components/new',
-    component: Component,
+    path: '/modules/new',
+    component: Module,
   },
   {
-    path: '/components/edit/:id',
-    component: Component,
+    path: '/modules/edit/:id',
+    component: Module,
   },
   {
-    path: '/components',
-    component: Components,
+    path: '/modules',
+    component: Modules,
   },
   {
     path: '*',
