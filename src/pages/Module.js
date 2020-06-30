@@ -59,16 +59,18 @@ export default function Component() {
             title="创建新模块"
             extra={
               <Space size="large">
-                <Button
-                  ghost
-                  type="danger"
-                  onClick={() => {
-                    saveAsDraftStatus();
-                    handleSubmit();
-                  }}
-                >
-                  保存至草稿
-                </Button>
+                {id && (
+                  <Button
+                    ghost
+                    type="danger"
+                    onClick={() => {
+                      saveAsDraftStatus();
+                      handleSubmit();
+                    }}
+                  >
+                    保存至草稿
+                  </Button>
+                )}
                 <Button
                   type="danger"
                   onClick={() => {
