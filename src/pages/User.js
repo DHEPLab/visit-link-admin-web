@@ -43,6 +43,7 @@ export default function User() {
   return (
     <>
       <DetailHeader
+        icon="iconuser-primary"
         menu="账户管理"
         title={user.realName}
         role={role()}

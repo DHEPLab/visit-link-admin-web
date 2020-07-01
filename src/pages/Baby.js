@@ -43,6 +43,7 @@ export default function Baby() {
   return (
     <>
       <DetailHeader
+        icon="iconbaby-primary"
         menu="宝宝管理"
         title={baby.name}
         role={`宝宝ID ${baby.identity}`}

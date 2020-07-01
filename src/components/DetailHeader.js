@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function ({ menu, title, role, extra }) {
+import { Iconfont } from '../components/*';
+
+export default function ({ icon, menu, title, role, extra }) {
   return (
     <Container>
       <Flex>
+        <Iconfont type={icon} />
         <Menu>{menu}</Menu>
+        <Iconfont type="iconarrow-gray" size={10} />
         <Title>{title}</Title>
         {role && <Role>{role}</Role>}
       </Flex>
@@ -40,9 +44,11 @@ const Flex = styled.div`
 const Menu = styled.div`
   color: #ff794f;
   font-weight: 500;
+  margin-left: 8px;
+  margin-right: 10px;
 `;
 
 const Title = styled.div`
   font-weight: bold;
-  margin-left: 20px;
+  margin-left: 10px;
 `;

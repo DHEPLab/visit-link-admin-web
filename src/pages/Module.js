@@ -55,6 +55,7 @@ export default function Component() {
       {({ values, handleSubmit }) => (
         <>
           <DetailHeader
+            icon="iconmodule-primary"
             menu="模块管理"
             title={title}
             extra={
