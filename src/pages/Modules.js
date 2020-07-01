@@ -24,7 +24,11 @@ function Components({ loadData, onChangeSearch, ...props }) {
     <>
       <ContentHeader title="模块管理">
         <Space size="large">
-          <SearchInput className="master" placeholder="请输入模块名称搜索" />
+          <SearchInput
+            onChange={(e) => onChangeSearch('search', e.target.value)}
+            className="master"
+            placeholder="请输入模块名称搜索"
+          />
           <Button type="primary" onClick={() => history.push('/modules/new')}>
             创建新模块
           </Button>
