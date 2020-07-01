@@ -28,7 +28,7 @@ export const FamilyTies = {
   OTHER: '其他',
 };
 
-export const ComponentTopic = {
+export const ModuleTopic = {
   MOTHER_NUTRITION: '母亲营养',
   BREASTFEEDING: '母乳喂养',
   BABY_FOOD: '婴儿辅食',
