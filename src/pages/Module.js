@@ -14,17 +14,19 @@ export default function Component() {
   const { id } = useParams();
   const history = useHistory();
   const [basicForm] = Form.useForm();
-  const [saveAsStatus, setSaveAsStatus] = useState();
+  const [title, setTitle] = useState('创建新模块');
+  const [submitURL, setSubmitURL] = useState();
   const [components, setComponents] = useState();
 
-  const saveAsDraftStatus = () => setSaveAsStatus('DRAFT');
-  const saveAsPublishedStatus = () => setSaveAsStatus('PUBLISHED');
+  const submitDraft = () => setSubmitURL('/admin/module/draft');
+  const submitPublish = () => setSubmitURL('/admin/module');
 
   useEffect(() => {
     if (!id) {
       setComponents([]);
     } else {
       Axios.get(`/admin/module/${id}`).then(({ data }) => {
+        setTitle(data.name);
         basicForm.setFieldsValue(data);
         setComponents(data.components);
       });
@@ -36,14 +38,12 @@ export default function Component() {
     basicForm.submit();
   }
 
-  async function handleSave(values) {
-    const method = id ? 'put' : 'post';
-    await Axios[method](`/admin/module${id ? `/${id}` : ''}`, {
+  function onSubmit(values) {
+    Axios.post(submitURL, {
+      id,
       components,
       ...values,
-      status: saveAsStatus,
-    });
-    history.goBack();
+    }).then(history.goBack);
   }
 
   if (!components) {
@@ -56,7 +56,7 @@ export default function Component() {
         <>
           <DetailHeader
             menu="模块管理"
-            title="创建新模块"
+            title={title}
             extra={
               <Space size="large">
                 {id && (
@@ -64,7 +64,7 @@ export default function Component() {
                     ghost
                     type="danger"
                     onClick={() => {
-                      saveAsDraftStatus();
+                      submitDraft();
                       handleSubmit();
                     }}
                   >
@@ -74,7 +74,7 @@ export default function Component() {
                 <Button
                   type="danger"
                   onClick={() => {
-                    saveAsPublishedStatus();
+                    submitPublish();
                     handleSubmit();
                   }}
                 >
@@ -85,7 +85,7 @@ export default function Component() {
           ></DetailHeader>
 
           <Card title="模块基本信息">
-            <Form form={basicForm} onFinish={handleSave}>
+            <Form form={basicForm} onFinish={onSubmit}>
               <Form.Item label="模块名称" name="name" rules={Rules.Required}>
                 <Input />
               </Form.Item>
@@ -96,7 +96,7 @@ export default function Component() {
                 <Input />
               </Form.Item>
               <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                <SelectEnum name="ComponentTopic" />
+                <SelectEnum name="ModuleTopic" />
               </Form.Item>
             </Form>
           </Card>
