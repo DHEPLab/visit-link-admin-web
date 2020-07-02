@@ -50,23 +50,12 @@ export default function Curriculum() {
     if (!requestURL) return;
     Axios.get(requestURL).then(({ data }) => {
       if (!data) return;
-      mapperCurriculum(data);
+      form.setFieldsValue({ name: data.name, description: data.description });
+      setCurriculum({ ...data, lessons: [], schedules: [] });
       setLessons(data.lessons);
       setSchedules(data.schedules);
     });
-  }, [requestURL]);
-
-  function mapperCurriculum({
-    id,
-    name,
-    description,
-    hasDraft,
-    lastPublishedAt,
-    lastModifiedDraftAt,
-  }) {
-    setCurriculum({ id, name, description, hasDraft, lastPublishedAt, lastModifiedDraftAt });
-    form.setFieldsValue({ name, description });
-  }
+  }, [requestURL, form]);
 
   function handleEdit() {
     history.push('/curriculum/draft');
