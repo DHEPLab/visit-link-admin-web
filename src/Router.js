@@ -6,13 +6,13 @@ import { getToken } from './utils/token';
 import {
   SignIn,
   Profiles,
-  Curriculums,
   User,
   Users,
   Babies,
   Baby,
   Modules,
   Module,
+  Curriculum,
 } from './pages/*';
 
 const routes = [
@@ -21,8 +21,12 @@ const routes = [
     component: Profiles,
   },
   {
-    path: '/curriculums',
-    component: Curriculums,
+    path: '/curriculum/draft',
+    component: Curriculum,
+  },
+  {
+    path: '/curriculum',
+    component: Curriculum,
   },
   {
     path: '/users/:id',

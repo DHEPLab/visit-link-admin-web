@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-export default function DraftBar() {
+export default function DraftBar({ onClick }) {
   return (
     <Container>
       <Title>本课程有1个尚未发布的草稿：</Title>
       <Flex>
         <Label>编辑日期：</Label>
         <Date>2020/06/30</Date>
-        <StyledButton ghost type="primary">
+        <StyledButton ghost type="primary" onClick={onClick}>
           继续编辑
         </StyledButton>
       </Flex>
