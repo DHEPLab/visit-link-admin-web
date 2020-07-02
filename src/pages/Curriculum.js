@@ -21,11 +21,15 @@ export default function Curriculum() {
   const location = useLocation();
 
   const [requestURL, setRequestURL] = useState();
+  const [submitURL, setSubmitURL] = useState();
   const [editable, setEditable] = useState();
 
   const [curriculum, setCurriculum] = useState({});
   const [lessons, setLessons] = useState([]);
   const [schedules, setSchedules] = useState([]);
+
+  const submitDraft = () => setSubmitURL('/admin/curriculum/draft');
+  const submitPublish = () => setSubmitURL('/admin/curriculum');
 
   useEffect(() => {
     switch (location.pathname) {
@@ -61,6 +65,7 @@ export default function Curriculum() {
     lastModifiedDraftAt,
   }) {
     setCurriculum({ id, name, description, hasDraft, lastPublishedAt, lastModifiedDraftAt });
+    form.setFieldsValue({ name, description });
   }
 
   function handleEdit() {
@@ -68,7 +73,7 @@ export default function Curriculum() {
   }
 
   function onFinish(values) {
-    Axios.post('/admin/curriculum', {
+    Axios.post(submitURL, {
       ...values,
       lessons,
       schedules,
@@ -83,23 +88,45 @@ export default function Curriculum() {
         extra={
           editable ? (
             <Space size="large">
-              <Button ghost type="danger">
+              <Button
+                ghost
+                type="danger"
+                onClick={() => {
+                  submitDraft();
+                  form.submit();
+                }}
+              >
                 保存草稿
               </Button>
-              <Button type="danger" onClick={form.submit}>
+              <Button
+                type="danger"
+                onClick={() => {
+                  submitPublish();
+                  form.submit();
+                }}
+              >
                 保存并发布
               </Button>
             </Space>
           ) : (
-            <Button ghost type="primary" onClick={handleEdit}>
-              编辑
-            </Button>
+            <>
+              {!curriculum.hasDraft && (
+                <Button ghost type="primary" onClick={handleEdit}>
+                  编辑
+                </Button>
+              )}
+            </>
           )
         }
       />
       {(curriculum.id || editable) && (
         <>
-          {curriculum.hasDraft && <DraftBar onClick={() => history.push('/curriculum/draft')} />}
+          {curriculum.hasDraft && (
+            <DraftBar
+              lastModifiedDraftAt={curriculum.lastModifiedDraftAt}
+              onClick={() => history.push('/curriculum/draft')}
+            />
+          )}
 
           <Card title="课程基本信息">
             {editable ? (
