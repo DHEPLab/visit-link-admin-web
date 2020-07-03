@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container, ComponentField } from './*';
 
-export default function Case({ name, value, index, onChange, onRemove }) {
+export default function Case({ name, value, index, onChange, ...props }) {
   const Name = {
     text: `${name}.text`,
     finishAction: `${name}.finishAction`,
@@ -10,7 +10,7 @@ export default function Case({ name, value, index, onChange, onRemove }) {
   };
 
   return (
-    <Container title={`选项 ${index + 1}`} onRemove={onRemove}>
+    <Container title={`选项 ${index + 1}`} name={name} {...props}>
       <input name={Name.text} value={value.text} onChange={onChange} placeholder="Case Text" />
       <input
         name={Name.finishAction}
@@ -20,6 +20,7 @@ export default function Case({ name, value, index, onChange, onRemove }) {
       />
       {value.components.map((component, index) => (
         <ComponentField
+          {...props}
           key={component.key}
           name={Name.components}
           index={index}

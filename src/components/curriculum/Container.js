@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-export default function Container({ title, children, onRemove }) {
+export default function Container({ name, title, children, onRemove, onActive, activeName }) {
   return (
-    <StyledContainer>
-      <TitleContainer>
+    <StyledContainer active={name === activeName}>
+      <TitleContainer onClick={() => onActive(name)}>
         <Title>{title}</Title>
         <Button size="small" type="link" onClick={onRemove}>
           移除
@@ -23,12 +23,18 @@ const TitleContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #eee;
+  cursor: pointer;
 `;
 
 const StyledContainer = styled.div`
   border: 1px solid #eee;
   border-radius: 10px;
   margin-bottom: 20px;
+  ${({ active }) =>
+    active &&
+    `
+    border-color: #8E8E93;
+    border-width: 2px;`}
 `;
 
 const Title = styled.div`

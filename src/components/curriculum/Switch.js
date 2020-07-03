@@ -5,7 +5,7 @@ import { FieldArray } from 'formik';
 import Factory from './factory';
 import { Text, Container, Case } from './*';
 
-export default function Switch({ name, value, onRemove, onChange }) {
+export default function Switch({ name, value, onChange, ...props }) {
   const Name = {
     question: `${name}.question`,
     cases: `${name}.cases`,
@@ -13,8 +13,8 @@ export default function Switch({ name, value, onRemove, onChange }) {
   };
 
   return (
-    <Container title="选择组件" onRemove={onRemove}>
-      <Text name={Name.question} value={value.question} onChange={onChange} />
+    <Container title="选择组件" name={name} {...props}>
+      <Text name={Name.question} value={value.question} onChange={onChange} {...props} />
       <FieldArray name={Name.cases}>
         {(helpers) => (
           <>
@@ -23,6 +23,7 @@ export default function Switch({ name, value, onRemove, onChange }) {
             </Button>
             {value.cases.map((c, index) => (
               <Case
+                {...props}
                 key={c.key}
                 index={index}
                 name={Name.case(index)}

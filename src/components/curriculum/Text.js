@@ -5,14 +5,14 @@ import Container from './Container';
 
 const toolbar = [['bold', 'italic'], [{ list: 'ordered' }]];
 
-export default function Text({ name, onBlur, onChange, value, onRemove }) {
+export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
   };
 
   return (
-    <Container title="文本组件" onRemove={onRemove}>
+    <Container title="文本组件" name={name} {...props}>
       <input
         placeholder="Type"
         name={Name.type}

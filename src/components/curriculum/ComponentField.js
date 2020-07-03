@@ -3,7 +3,7 @@ import { Field } from 'formik';
 
 import { Text, Media, Switch } from './*';
 
-export default function ComponentField({ name, component, index, onRemove }) {
+export default function ComponentField({ name, component, index, ...props }) {
   let As;
   switch (component.type) {
     case 'Text':
@@ -20,5 +20,5 @@ export default function ComponentField({ name, component, index, onRemove }) {
   }
   // as can either be a React component or the name of an HTML element to render.
   // Formik will automagically inject onChange, onBlur, name, and value props of the field designated by the name prop to the (custom) component.
-  return <Field name={`${name}.${index}.value`} onRemove={onRemove} as={As} />;
+  return <Field name={`${name}.${index}.value`} {...props} as={As} />;
 }

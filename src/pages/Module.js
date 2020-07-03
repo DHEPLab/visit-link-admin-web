@@ -10,16 +10,13 @@ import Factory from '../components/curriculum/factory';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
 
-export default function Component() {
+export default function Module() {
   const { id } = useParams();
   const history = useHistory();
-  const [basicForm] = Form.useForm();
+  const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
   const [submitURL, setSubmitURL] = useState();
   const [components, setComponents] = useState();
-
-  const submitDraft = () => setSubmitURL('/admin/module/draft');
-  const submitPublish = () => setSubmitURL('/admin/module');
 
   useEffect(() => {
     if (!id) {
@@ -27,15 +24,25 @@ export default function Component() {
     } else {
       Axios.get(`/admin/module/${id}`).then(({ data }) => {
         setTitle(data.name);
-        basicForm.setFieldsValue(data);
+        form.setFieldsValue(data);
         setComponents(data.components);
       });
     }
-  }, [id, basicForm]);
+  }, [id, form]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
-    basicForm.submit();
+    form.submit();
+  }
+
+  function submitDraft(submit) {
+    setSubmitURL('/admin/module/draft');
+    submit();
+  }
+
+  function submitPublish(submit) {
+    setSubmitURL('/admin/module');
+    submit();
   }
 
   function onSubmit(values) {
@@ -61,24 +68,11 @@ export default function Component() {
             extra={
               <Space size="large">
                 {id && (
-                  <Button
-                    ghost
-                    type="danger"
-                    onClick={() => {
-                      submitDraft();
-                      handleSubmit();
-                    }}
-                  >
+                  <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
                     保存至草稿
                   </Button>
                 )}
-                <Button
-                  type="danger"
-                  onClick={() => {
-                    submitPublish();
-                    handleSubmit();
-                  }}
-                >
+                <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
                   保存并发布
                 </Button>
               </Space>
@@ -86,39 +80,11 @@ export default function Component() {
           ></DetailHeader>
 
           <Card title="模块内容">
-            <FieldArray name="components">
-              {(helpers) => (
-                <FieldArrayContainer>
-                  <ComponentForm>
-                    {values.components.map((component, index) => (
-                      <ComponentField
-                        key={component.key}
-                        name="components"
-                        index={index}
-                        onRemove={() => helpers.remove(index)}
-                        component={component}
-                      />
-                    ))}
-                  </ComponentForm>
-                  <ComponentToolBar>
-                    <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                      添加文本组件
-                    </Button>
-                    <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                      添加媒体组件
-                    </Button>
-                    <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-                      添加选择组件
-                    </Button>
-                  </ComponentToolBar>
-                </FieldArrayContainer>
-              )}
-            </FieldArray>
-            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+            <ModuleComponents values={values} />
           </Card>
 
           <Card title="模块基本信息">
-            <Form form={basicForm} onFinish={onSubmit}>
+            <Form form={form} onFinish={onSubmit}>
               <Form.Item label="模块名称" name="name" rules={Rules.Required}>
                 <Input />
               </Form.Item>
@@ -136,6 +102,44 @@ export default function Component() {
         </>
       )}
     </Formik>
+  );
+}
+
+function ModuleComponents({ values }) {
+  // current active component name path
+  const [activeName, setActiveName] = useState();
+
+  return (
+    <FieldArray name="components">
+      {(helpers) => (
+        <FieldArrayContainer>
+          <ComponentForm>
+            {values.components.map((component, index) => (
+              <ComponentField
+                index={index}
+                name="components"
+                key={component.key}
+                component={component}
+                activeName={activeName}
+                onActive={setActiveName}
+                onRemove={() => helpers.remove(index)}
+              />
+            ))}
+          </ComponentForm>
+          <ComponentToolBar>
+            <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+              添加文本组件
+            </Button>
+            <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+              添加媒体组件
+            </Button>
+            <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+              添加选择组件
+            </Button>
+          </ComponentToolBar>
+        </FieldArrayContainer>
+      )}
+    </FieldArray>
   );
 }
 
