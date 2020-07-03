@@ -32,16 +32,13 @@ function createSwitch() {
     key: generateKey(),
     value: {
       question: createText().value,
-      cases: [
-        {
-          key: generateKey(),
-          text: '',
-          redirectTo: '',
-          components: [createText()],
-        },
-      ],
+      cases: [createCase()],
     },
   };
 }
 
-export default { createText, createMedia, createSwitch };
+function createCase() {
+  return { key: generateKey(), text: '', finishAction: '', components: [createText()] };
+}
+
+export default { createText, createMedia, createSwitch, createCase };
