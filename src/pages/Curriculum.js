@@ -30,9 +30,6 @@ export default function Curriculum() {
   const [lessons, setLessons] = useState([]);
   const [schedules, setSchedules] = useState([]);
 
-  const submitDraft = () => setSubmitURL('/admin/curriculum/draft');
-  const submitPublish = () => setSubmitURL('/admin/curriculum');
-
   useEffect(() => {
     switch (location.pathname) {
       case '/curriculum':
@@ -59,8 +56,14 @@ export default function Curriculum() {
     });
   }, [requestURL, form]);
 
-  function handleEdit() {
-    history.push('/curriculum/draft');
+  function submitDraft() {
+    setSubmitURL('/admin/curriculum/draft');
+    form.submit();
+  }
+
+  function submitPublish() {
+    setSubmitURL('/admin/curriculum');
+    form.submit();
   }
 
   function onFinish(values) {
@@ -79,30 +82,17 @@ export default function Curriculum() {
         extra={
           editable ? (
             <Space size="large">
-              <Button
-                ghost
-                type="danger"
-                onClick={() => {
-                  submitDraft();
-                  form.submit();
-                }}
-              >
+              <Button ghost type="danger" onClick={submitDraft}>
                 保存草稿
               </Button>
-              <Button
-                type="danger"
-                onClick={() => {
-                  submitPublish();
-                  form.submit();
-                }}
-              >
+              <Button type="danger" onClick={submitPublish}>
                 保存并发布
               </Button>
             </Space>
           ) : (
             <>
               {!curriculum.hasDraft && (
-                <Button ghost type="primary" onClick={handleEdit}>
+                <Button ghost type="primary" onClick={() => history.push('/curriculum/draft')}>
                   编辑
                 </Button>
               )}
@@ -110,6 +100,7 @@ export default function Curriculum() {
           )
         }
       />
+
       {(curriculum.id || editable) && (
         <>
           {curriculum.hasDraft && (
@@ -134,8 +125,8 @@ export default function Curriculum() {
             )}
           </Card>
 
-          <Lessons disabled={!editable} value={lessons} onChange={setLessons} />
-          <Schedules
+          <EnhancedLessons disabled={!editable} value={lessons} onChange={setLessons} />
+          <EnhancedSchedules
             disabled={!editable}
             value={schedules}
             lessonOptions={lessons}
@@ -147,6 +138,9 @@ export default function Curriculum() {
   );
 }
 
+const EnhancedLessons = withEdit(Lessons);
+const EnhancedSchedules = withEdit(Schedules);
+
 function StaticForm({ value: { name, description } }) {
   return (
     <>
@@ -156,11 +150,68 @@ function StaticForm({ value: { name, description } }) {
   );
 }
 
-function Lessons({ disabled, value, onChange }) {
-  const [visible, openModal, closeModal] = useBoolState();
+function withEdit(Wrapper) {
+  return function (props) {
+    const [visible, openModal, closeModal] = useBoolState();
+    const [currentEditIndex, setCurrentEditIndex] = useState(-1);
+    const [currentEditValue, setCurrentEditValue] = useState({});
+
+    function pullAt(array, index) {
+      const clone = [...array];
+      Arrays.pullAt(clone, [index]);
+      return clone;
+    }
+
+    function replace(array, index, object) {
+      const clone = [...array];
+      clone[index] = object;
+      return clone;
+    }
+
+    function openEditModal(values, index) {
+      setCurrentEditIndex(index);
+      setCurrentEditValue(values);
+      openModal();
+    }
+
+    function openCreateModal() {
+      setCurrentEditIndex(-1);
+      setCurrentEditValue({});
+      openModal();
+    }
+
+    return (
+      <Wrapper
+        {...props}
+        {...{
+          visible,
+          pullAt,
+          replace,
+          currentEditIndex,
+          currentEditValue,
+          openEditModal,
+          openCreateModal,
+          closeModal,
+        }}
+      />
+    );
+  };
+}
+
+function Lessons({
+  disabled,
+  value,
+  onChange,
+  pullAt,
+  replace,
+  currentEditIndex,
+  currentEditValue,
+  openEditModal,
+  openCreateModal,
+  closeModal,
+  visible,
+}) {
   const [moduleOptions, setModuleOptions] = useState([]);
-  const [currentEditIndex, setCurrentEditIndex] = useState(-1);
-  const [currentEditValue, setCurrentEditValue] = useState({});
 
   useEffect(() => {
     Axios.get('/admin/module', {
@@ -173,32 +224,16 @@ function Lessons({ disabled, value, onChange }) {
   }, []);
 
   function onFinish(formValues) {
-    if (currentEditIndex !== -1) {
-      const clone = [...value];
-      clone[currentEditIndex] = formValues;
-      onChange(clone);
-    } else {
+    if (currentEditIndex === -1) {
       onChange(Arrays.concat(value, formValues));
+    } else {
+      onChange(replace(value, currentEditIndex, formValues));
     }
     closeModal();
   }
 
   function handleDelete(index) {
-    const clone = [...value];
-    Arrays.pullAt(clone, [index]);
-    onChange(clone);
-  }
-
-  function openEditModal(values, index) {
-    setCurrentEditIndex(index);
-    setCurrentEditValue(values);
-    openModal();
-  }
-
-  function openCreateModal() {
-    setCurrentEditIndex(-1);
-    setCurrentEditValue({});
-    openModal();
+    onChange(pullAt(value, index));
   }
 
   return (
@@ -272,45 +307,46 @@ function Lessons({ disabled, value, onChange }) {
           {
             title: '包含模块',
             dataIndex: 'modules',
-            render: (h) => h.map((v) => v.label).join('、'),
+            render: renderDomain,
           },
-          {
-            title: '操作',
-            width: 200,
-            align: 'center',
-            dataIndex: 'number',
-            render(_, record, index) {
-              if (disabled) return null;
-              return (
-                <Space size="large">
-                  <Button size="small" type="link" onClick={() => handleDelete(index)}>
-                    删除
-                  </Button>
-                  <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
-                    编辑
-                  </Button>
-                </Space>
-              );
-            },
-          },
+          operation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
   );
 }
 
-function Schedules({ disabled, value, onChange, lessonOptions }) {
-  const [visible, openModal, closeModal] = useBoolState();
-
+function Schedules({
+  disabled,
+  value,
+  onChange,
+  lessonOptions,
+  pullAt,
+  replace,
+  currentEditIndex,
+  currentEditValue,
+  openEditModal,
+  openCreateModal,
+  closeModal,
+  visible,
+}) {
   function onFinish(formValues) {
-    onChange(
-      Arrays.concat(value, {
-        ...formValues,
-        // clean lesson.value, backend will be reconnect by label
-        lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
-      })
-    );
+    if (currentEditIndex === -1) {
+      onChange(
+        Arrays.concat(value, {
+          ...formValues,
+          // clean lesson.value, backend will be reconnect by label
+          lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
+        })
+      );
+    } else {
+      onChange(replace(value, currentEditIndex, formValues));
+    }
     closeModal();
+  }
+
+  function handleDelete(index) {
+    onChange(pullAt(value, index));
   }
 
   return (
@@ -318,14 +354,20 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
       title="课程区间匹配规则"
       extra={
         !disabled && (
-          <Button type="shade" onClick={openModal}>
+          <Button type="shade" onClick={openCreateModal}>
             添加规则
           </Button>
         )
       }
       noPadding
     >
-      <ModalForm title="编辑规则" visible={visible} onCancel={closeModal} onFinish={onFinish}>
+      <ModalForm
+        title="编辑规则"
+        initialValues={currentEditValue}
+        visible={visible}
+        onCancel={closeModal}
+        onFinish={onFinish}
+      >
         <Form.Item label="规则名称" name="name">
           <Input />
         </Form.Item>
@@ -373,14 +415,34 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
           {
             title: '包含课堂',
             dataIndex: 'lessons',
-            render: (h) => h.map((v) => v.label).join('、'),
+            render: renderDomain,
           },
-          {
-            title: '操作',
-            width: 200,
-          },
+          operation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
   );
 }
+
+const renderDomain = (h) => h.map((v) => v.label).join('、');
+
+const operation = (disabled, handleDelete, openEditModal) => {
+  return {
+    title: '操作',
+    width: 200,
+    align: 'center',
+    render(_, record, index) {
+      if (disabled) return null;
+      return (
+        <Space size="large">
+          <Button size="small" type="link" onClick={() => handleDelete(index)}>
+            删除
+          </Button>
+          <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
+            编辑
+          </Button>
+        </Space>
+      );
+    },
+  };
+};
