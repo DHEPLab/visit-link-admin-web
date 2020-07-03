@@ -6,7 +6,7 @@ import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
-import helpers from '../components/curriculum/helpers';
+import Factory from '../components/curriculum/factory';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
 
@@ -23,7 +23,7 @@ export default function Component() {
 
   useEffect(() => {
     if (!id) {
-      setComponents([]);
+      setComponents([Factory.createSwitch()]);
     } else {
       Axios.get(`/admin/module/${id}`).then(({ data }) => {
         setTitle(data.name);
@@ -85,6 +85,38 @@ export default function Component() {
             }
           ></DetailHeader>
 
+          <Card title="模块内容">
+            <FieldArray name="components">
+              {(helpers) => (
+                <FieldArrayContainer>
+                  <ComponentForm>
+                    {values.components.map((component, index) => (
+                      <ComponentField
+                        key={component.key}
+                        name="components"
+                        index={index}
+                        onRemove={() => helpers.remove(index)}
+                        component={component}
+                      />
+                    ))}
+                  </ComponentForm>
+                  <ComponentToolBar>
+                    <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                      添加文本组件
+                    </Button>
+                    <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                      添加媒体组件
+                    </Button>
+                    <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+                      添加选择组件
+                    </Button>
+                  </ComponentToolBar>
+                </FieldArrayContainer>
+              )}
+            </FieldArray>
+            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
+          </Card>
+
           <Card title="模块基本信息">
             <Form form={basicForm} onFinish={onSubmit}>
               <Form.Item label="模块名称" name="name" rules={Rules.Required}>
@@ -100,35 +132,6 @@ export default function Component() {
                 <SelectEnum name="ModuleTopic" />
               </Form.Item>
             </Form>
-          </Card>
-
-          <Card title="模块内容">
-            <FieldArray name="components">
-              {(arrays) => (
-                <FieldArrayContainer>
-                  <ComponentForm>
-                    {values.components.map((component, index) => (
-                      <ComponentField
-                        key={component.key}
-                        name="components"
-                        index={index}
-                        onRemove={() => arrays.remove(index)}
-                        component={component}
-                      />
-                    ))}
-                  </ComponentForm>
-                  <ComponentToolBar>
-                    <Button type="link" onClick={() => helpers.addText(arrays)}>
-                      添加文本组件
-                    </Button>
-                    <Button type="link" onClick={() => helpers.addMedia(arrays)}>
-                      添加媒体组件
-                    </Button>
-                  </ComponentToolBar>
-                </FieldArrayContainer>
-              )}
-            </FieldArray>
-            {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
           </Card>
         </>
       )}

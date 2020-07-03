@@ -5,20 +5,22 @@ import Container from './Container';
 
 const toolbar = [['bold', 'italic'], [{ list: 'ordered' }]];
 
-export default function Text({ name, onBlur, onChange, value, index, onRemove }) {
-  const html = `${name}.html`;
-  const type = `${name}.type`;
+export default function Text({ name, onBlur, onChange, value, onRemove }) {
+  const Name = {
+    html: `${name}.html`,
+    type: `${name}.type`,
+  };
 
   return (
-    <Container title="文本组件" onRemove={() => onRemove(index)}>
+    <Container title="文本组件" onRemove={onRemove}>
       <input
         placeholder="Type"
-        name={type}
+        name={Name.type}
         value={value.type}
         onChange={onChange}
         onBlur={onBlur}
       />
-      <Quill theme="snow" modules={{ toolbar }} value={value.html} onChange={onChange(html)} />
+      <Quill theme="snow" modules={{ toolbar }} value={value.html} onChange={onChange(Name.html)} />
     </Container>
   );
 }
