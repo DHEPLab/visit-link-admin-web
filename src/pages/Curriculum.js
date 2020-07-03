@@ -159,6 +159,8 @@ function StaticForm({ value: { name, description } }) {
 function Lessons({ disabled, value, onChange }) {
   const [visible, openModal, closeModal] = useBoolState();
   const [moduleOptions, setModuleOptions] = useState([]);
+  const [currentEditIndex, setCurrentEditIndex] = useState(-1);
+  const [currentEditValue, setCurrentEditValue] = useState({});
 
   useEffect(() => {
     Axios.get('/admin/module', {
@@ -171,8 +173,32 @@ function Lessons({ disabled, value, onChange }) {
   }, []);
 
   function onFinish(formValues) {
-    onChange(Arrays.concat(value, formValues));
+    if (currentEditIndex !== -1) {
+      const clone = [...value];
+      clone[currentEditIndex] = formValues;
+      onChange(clone);
+    } else {
+      onChange(Arrays.concat(value, formValues));
+    }
     closeModal();
+  }
+
+  function handleDelete(index) {
+    const clone = [...value];
+    Arrays.pullAt(clone, [index]);
+    onChange(clone);
+  }
+
+  function openEditModal(values, index) {
+    setCurrentEditIndex(index);
+    setCurrentEditValue(values);
+    openModal();
+  }
+
+  function openCreateModal() {
+    setCurrentEditIndex(-1);
+    setCurrentEditValue({});
+    openModal();
   }
 
   return (
@@ -180,14 +206,20 @@ function Lessons({ disabled, value, onChange }) {
       title="课堂列表"
       extra={
         !disabled && (
-          <Button type="shade" onClick={openModal}>
+          <Button type="shade" onClick={openCreateModal}>
             添加新课堂
           </Button>
         )
       }
       noPadding
     >
-      <ModalForm title="编辑课堂" visible={visible} onCancel={closeModal} onFinish={onFinish}>
+      <ModalForm
+        title="编辑课堂"
+        visible={visible}
+        initialValues={currentEditValue}
+        onCancel={closeModal}
+        onFinish={onFinish}
+      >
         <Form.Item label="课堂序号" name="number">
           <Input />
         </Form.Item>
@@ -216,6 +248,7 @@ function Lessons({ disabled, value, onChange }) {
           <Input />
         </Form.Item>
       </ModalForm>
+
       <ZebraTable
         rowKey="number"
         pagination={false}
@@ -244,6 +277,21 @@ function Lessons({ disabled, value, onChange }) {
           {
             title: '操作',
             width: 200,
+            align: 'center',
+            dataIndex: 'number',
+            render(_, record, index) {
+              if (disabled) return null;
+              return (
+                <Space size="large">
+                  <Button size="small" type="link" onClick={() => handleDelete(index)}>
+                    删除
+                  </Button>
+                  <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
+                    编辑
+                  </Button>
+                </Space>
+              );
+            },
           },
         ]}
       />
