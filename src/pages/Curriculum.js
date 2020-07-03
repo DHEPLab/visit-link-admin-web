@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Form, Space, Button, Input, InputNumber } from 'antd';
+import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
 import { useBoolState } from '../utils';
@@ -133,7 +133,12 @@ export default function Curriculum() {
           </Card>
 
           <Lessons disabled={!editable} value={lessons} onChange={setLessons} />
-          <Schedules disabled={!editable} value={schedules} onChange={setSchedules} />
+          <Schedules
+            disabled={!editable}
+            value={schedules}
+            lessonOptions={lessons}
+            onChange={setSchedules}
+          />
         </>
       )}
     </>
@@ -151,48 +156,41 @@ function StaticForm({ value: { name, description } }) {
 
 function Lessons({ disabled, value, onChange }) {
   const [visible, openModal, closeModal] = useBoolState();
+  const [moduleOptions, setModuleOptions] = useState([]);
+
+  useEffect(() => {
+    Axios.get('/admin/module', {
+      params: {
+        size: 1000,
+      },
+    }).then(({ data }) => {
+      setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
+    });
+  }, []);
 
   function onFinish(values) {
-    onChange([...value, values]);
+    onChange([
+      ...value,
+      {
+        ...values,
+        modules: values.modules.map((module) => ({ id: module.value, name: module.label })),
+      },
+    ]);
     closeModal();
   }
 
   return (
-    <>
-      <Card
-        title="课堂列表"
-        extra={
-          !disabled && (
-            <Button type="shade" onClick={openModal}>
-              添加新课堂
-            </Button>
-          )
-        }
-        noPadding
-      >
-        <ZebraTable
-          rowKey="number"
-          pagination={false}
-          dataSource={value}
-          columns={[
-            {
-              title: '序号',
-              dataIndex: 'number',
-            },
-            {
-              title: '适用宝宝成长时期区间',
-              dataIndex: 'stage',
-            },
-            {
-              title: '包含模块',
-            },
-            {
-              title: '操作',
-            },
-          ]}
-        />
-      </Card>
-
+    <Card
+      title="课堂列表"
+      extra={
+        !disabled && (
+          <Button type="shade" onClick={openModal}>
+            添加新课堂
+          </Button>
+        )
+      }
+      noPadding
+    >
       <ModalForm title="编辑课堂" visible={visible} onCancel={closeModal} onFinish={onFinish}>
         <Form.Item label="课堂序号" name="number">
           <Input />
@@ -212,6 +210,9 @@ function Lessons({ disabled, value, onChange }) {
         <Form.Item label="结束" name="endOfApplicableDays">
           <InputNumber />
         </Form.Item>
+        <Form.Item label="包含模块" name="modules">
+          <Select mode="multiple" labelInValue options={moduleOptions}></Select>
+        </Form.Item>
         <Form.Item label="调查问卷" name="questionnaireAddress">
           <Input />
         </Form.Item>
@@ -219,53 +220,54 @@ function Lessons({ disabled, value, onChange }) {
           <Input />
         </Form.Item>
       </ModalForm>
-    </>
+      <ZebraTable
+        rowKey="number"
+        pagination={false}
+        dataSource={value}
+        columns={[
+          {
+            title: '序号',
+            dataIndex: 'number',
+          },
+          {
+            title: '适用宝宝成长时期区间',
+            dataIndex: 'stage',
+          },
+          {
+            title: '包含模块',
+          },
+          {
+            title: '操作',
+          },
+        ]}
+      />
+    </Card>
   );
 }
 
-function Schedules({ disabled, value, onChange }) {
+function Schedules({ disabled, value, onChange, lessonOptions }) {
   const [visible, openModal, closeModal] = useBoolState();
 
   function onFinish(values) {
-    onChange([...value, values]);
+    onChange([
+      ...value,
+      { ...values, lessons: values.lessons.map((lesson) => ({ name: lesson.value })) },
+    ]);
     closeModal();
   }
 
   return (
-    <>
-      <Card
-        title="课程区间匹配规则"
-        extra={
-          !disabled && (
-            <Button type="shade" onClick={openModal}>
-              添加规则
-            </Button>
-          )
-        }
-        noPadding
-      >
-        <ZebraTable
-          rowKey="name"
-          pagination={false}
-          dataSource={value}
-          columns={[
-            {
-              title: '规则',
-              dataIndex: 'name',
-            },
-            {
-              title: '适用宝宝成长时期区间',
-              dataIndex: 'stage',
-            },
-            {
-              title: '包含课堂',
-            },
-            {
-              title: '规则',
-            },
-          ]}
-        />
-      </Card>
+    <Card
+      title="课程区间匹配规则"
+      extra={
+        !disabled && (
+          <Button type="shade" onClick={openModal}>
+            添加规则
+          </Button>
+        )
+      }
+      noPadding
+    >
       <ModalForm title="编辑规则" visible={visible} onCancel={closeModal} onFinish={onFinish}>
         <Form.Item label="规则名称" name="name">
           <Input />
@@ -279,7 +281,39 @@ function Schedules({ disabled, value, onChange }) {
         <Form.Item label="结束" name="endOfApplicableMonths">
           <InputNumber />
         </Form.Item>
+        <Form.Item label="包含课堂" name="lessons">
+          <Select
+            mode="multiple"
+            labelInValue
+            options={lessonOptions.map((lesson) => ({
+              label: lesson.number,
+              value: lesson.number,
+            }))}
+          ></Select>
+        </Form.Item>
       </ModalForm>
-    </>
+
+      <ZebraTable
+        rowKey="name"
+        pagination={false}
+        dataSource={value}
+        columns={[
+          {
+            title: '规则',
+            dataIndex: 'name',
+          },
+          {
+            title: '适用宝宝成长时期区间',
+            dataIndex: 'stage',
+          },
+          {
+            title: '包含课堂',
+          },
+          {
+            title: '规则',
+          },
+        ]}
+      />
+    </Card>
   );
 }
