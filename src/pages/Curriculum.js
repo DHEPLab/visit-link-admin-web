@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import Arrays from 'lodash/array';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
+import { BabyStage } from '../constants/enums';
 import { useBoolState } from '../utils';
 import {
   StaticField,
@@ -168,14 +170,8 @@ function Lessons({ disabled, value, onChange }) {
     });
   }, []);
 
-  function onFinish(values) {
-    onChange([
-      ...value,
-      {
-        ...values,
-        modules: values.modules.map((module) => ({ id: module.value, name: module.label })),
-      },
-    ]);
+  function onFinish(formValues) {
+    onChange(Arrays.concat(value, formValues));
     closeModal();
   }
 
@@ -228,16 +224,26 @@ function Lessons({ disabled, value, onChange }) {
           {
             title: '序号',
             dataIndex: 'number',
+            width: 200,
           },
           {
             title: '适用宝宝成长时期区间',
             dataIndex: 'stage',
+            width: 400,
+            render: (_, record) => {
+              return `${BabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
+                record.endOfApplicableDays
+              }天`;
+            },
           },
           {
             title: '包含模块',
+            dataIndex: 'modules',
+            render: (h) => h.map((v) => v.label).join('、'),
           },
           {
             title: '操作',
+            width: 200,
           },
         ]}
       />
@@ -248,11 +254,14 @@ function Lessons({ disabled, value, onChange }) {
 function Schedules({ disabled, value, onChange, lessonOptions }) {
   const [visible, openModal, closeModal] = useBoolState();
 
-  function onFinish(values) {
-    onChange([
-      ...value,
-      { ...values, lessons: values.lessons.map((lesson) => ({ name: lesson.value })) },
-    ]);
+  function onFinish(formValues) {
+    onChange(
+      Arrays.concat(value, {
+        ...formValues,
+        // clean lesson.value, backend will be reconnect by label
+        lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
+      })
+    );
     closeModal();
   }
 
@@ -301,16 +310,26 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
           {
             title: '规则',
             dataIndex: 'name',
+            width: 200,
           },
           {
             title: '适用宝宝成长时期区间',
             dataIndex: 'stage',
+            width: 400,
+            render: (_, record) => {
+              return `${BabyStage[record.stage]} ${record.startOfApplicableMonths}个月 - ${
+                record.endOfApplicableMonths
+              }个月`;
+            },
           },
           {
             title: '包含课堂',
+            dataIndex: 'lessons',
+            render: (h) => h.map((v) => v.label).join('、'),
           },
           {
-            title: '规则',
+            title: '操作',
+            width: 200,
           },
         ]}
       />
