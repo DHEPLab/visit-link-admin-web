@@ -106,9 +106,6 @@ export default function Module() {
 }
 
 function ModuleComponents({ values }) {
-  // current active component name path
-  const [activeName, setActiveName] = useState();
-
   return (
     <FieldArray name="components">
       {(helpers) => (
@@ -120,8 +117,6 @@ function ModuleComponents({ values }) {
                 name="components"
                 key={component.key}
                 component={component}
-                activeName={activeName}
-                onActive={setActiveName}
                 onRemove={() => helpers.remove(index)}
               />
             ))}

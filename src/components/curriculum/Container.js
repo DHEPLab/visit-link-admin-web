@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function Container({ name, title, children, onRemove, onActive, activeName }) {
+import { activeComponent } from '../../actions';
+
+export default function Container({ name, title, children, onRemove }) {
+  const { activeName } = useSelector((state) => state.components);
+  const dispatch = useDispatch();
+
   return (
     <StyledContainer active={name === activeName}>
-      <TitleContainer onClick={() => onActive(name)}>
+      <TitleContainer onClick={() => dispatch(activeComponent(name))}>
         <Title>{title}</Title>
         <Button size="small" type="link" onClick={onRemove}>
           移除
