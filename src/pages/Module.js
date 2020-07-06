@@ -108,32 +108,34 @@ export default function Module() {
 function ModuleComponents({ values }) {
   return (
     <FieldArray name="components">
-      {(helpers) => (
-        <FieldArrayContainer>
-          <ComponentForm>
-            {values.components.map((component, index) => (
-              <ComponentField
-                index={index}
-                name="components"
-                key={component.key}
-                component={component}
-                onRemove={() => helpers.remove(index)}
-              />
-            ))}
-          </ComponentForm>
-          <ComponentToolBar>
-            <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-              添加文本组件
-            </Button>
-            <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-              添加媒体组件
-            </Button>
-            <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-              添加选择组件
-            </Button>
-          </ComponentToolBar>
-        </FieldArrayContainer>
-      )}
+      {(helpers) => {
+        return (
+          <FieldArrayContainer>
+            <ComponentForm>
+              {values.components.map((component, index) => (
+                <ComponentField
+                  index={index}
+                  name="components"
+                  key={component.key}
+                  component={component}
+                  onRemove={() => helpers.remove(index)}
+                />
+              ))}
+            </ComponentForm>
+            <ComponentToolBar>
+              <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                添加文本组件
+              </Button>
+              <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                添加媒体组件
+              </Button>
+              <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+                添加选择组件
+              </Button>
+            </ComponentToolBar>
+          </FieldArrayContainer>
+        );
+      }}
     </FieldArray>
   );
 }
