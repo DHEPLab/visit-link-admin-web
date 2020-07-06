@@ -1,5 +1,5 @@
 import React from 'react';
-// import Axios from 'axios';
+import Axios from 'axios';
 import { Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
@@ -8,17 +8,16 @@ import {
   ContentHeader,
   ZebraTable,
   SearchInput,
-  // DeletePopconfirm,
+  DeletePopconfirm,
 } from '../components/*';
 import { ModuleTopic } from '../constants/enums';
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
 
-  // async function handleDelete(id) {
-  //   await Axios.delete(`/admin/module/${id}`);
-  //   loadData();
-  // }
+  function handleDelete(id) {
+    Axios.delete(`/admin/module/${id}`).then(loadData);
+  }
 
   return (
     <>
@@ -61,19 +60,21 @@ function Components({ loadData, onChangeSearch, ...props }) {
             render(id, { draftId }) {
               return (
                 <Space>
-                  {/* <DeletePopconfirm onConfirm={() => handleDelete(id)}>
-                    <Button size="small" type="link">
-                      删除
-                    </Button>
-                  </DeletePopconfirm> */}
                   {draftId ? (
-                    <Button
-                      size="small"
-                      type="link"
-                      onClick={() => history.push(`/modules/edit/${draftId}`)}
-                    >
-                      编辑草稿
-                    </Button>
+                    <Space size="large">
+                      <Button
+                        size="small"
+                        type="link"
+                        onClick={() => history.push(`/modules/edit/${draftId}`)}
+                      >
+                        编辑草稿
+                      </Button>
+                      <DeletePopconfirm onConfirm={() => handleDelete(draftId)}>
+                        <Button size="small" type="link">
+                          删除草稿
+                        </Button>
+                      </DeletePopconfirm>
+                    </Space>
                   ) : (
                     <Button
                       size="small"
