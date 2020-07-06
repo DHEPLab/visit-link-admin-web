@@ -10,6 +10,53 @@ import Factory from '../components/curriculum/factory';
 import { Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
 
+function ModuleComponents({ values }) {
+  return (
+    <FieldArray name="components">
+      {(helpers) => {
+        function handleMoveUp(index) {
+          if (index === 0) return;
+          helpers.move(index, index - 1);
+        }
+
+        function handleMoveDown(index) {
+          if (index === values.components.length - 1) return;
+          helpers.move(index, index + 1);
+        }
+
+        return (
+          <FieldArrayContainer>
+            <ComponentForm>
+              {values.components.map((component, index) => (
+                <ComponentField
+                  index={index}
+                  name="components"
+                  key={component.key}
+                  component={component}
+                  onRemove={() => helpers.remove(index)}
+                  onMoveUp={() => handleMoveUp(index)}
+                  onMoveDown={() => handleMoveDown(index)}
+                />
+              ))}
+            </ComponentForm>
+            <ComponentToolBar>
+              <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                添加文本组件
+              </Button>
+              <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                添加媒体组件
+              </Button>
+              <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+                添加选择组件
+              </Button>
+            </ComponentToolBar>
+          </FieldArrayContainer>
+        );
+      }}
+    </FieldArray>
+  );
+}
+
 export default function Module() {
   const { id } = useParams();
   const history = useHistory();
@@ -102,41 +149,6 @@ export default function Module() {
         </>
       )}
     </Formik>
-  );
-}
-
-function ModuleComponents({ values }) {
-  return (
-    <FieldArray name="components">
-      {(helpers) => {
-        return (
-          <FieldArrayContainer>
-            <ComponentForm>
-              {values.components.map((component, index) => (
-                <ComponentField
-                  index={index}
-                  name="components"
-                  key={component.key}
-                  component={component}
-                  onRemove={() => helpers.remove(index)}
-                />
-              ))}
-            </ComponentForm>
-            <ComponentToolBar>
-              <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                添加文本组件
-              </Button>
-              <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                添加媒体组件
-              </Button>
-              <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-                添加选择组件
-              </Button>
-            </ComponentToolBar>
-          </FieldArrayContainer>
-        );
-      }}
-    </FieldArray>
   );
 }
 

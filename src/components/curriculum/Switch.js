@@ -14,28 +14,35 @@ export default function Switch({ name, value, onChange, ...props }) {
 
   return (
     <Container title="选择组件" name={name} {...props}>
-      <Text name={Name.question} value={value.question} onChange={onChange} {...props} />
+      <Text
+        {...props}
+        name={Name.question}
+        value={value.question}
+        onChange={onChange}
+        hideMove
+        hideRemove
+      />
       <FieldArray name={Name.cases}>
         {(helpers) => (
           <>
             <Button size="mini" type="link" onClick={() => helpers.push(Factory.createCase())}>
               添加选项
             </Button>
-            {value.cases.map((c, index) => (
+            {value.cases.map((v, index) => (
               <Case
                 {...props}
-                key={c.key}
+                key={v.key}
+                value={v}
                 index={index}
                 name={Name.case(index)}
                 onRemove={() => helpers.remove(index)}
-                value={c}
                 onChange={onChange}
               />
             ))}
           </>
         )}
       </FieldArray>
-      <pre>{JSON.stringify(value, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </Container>
   );
 }

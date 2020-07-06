@@ -5,22 +5,51 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { activeComponent } from '../../actions';
 
-export default function Container({ name, title, children, onRemove }) {
-  const { activeName } = useSelector((state) => state.components);
+export default function Container({
+  name,
+  title,
+  children,
+  hideMove,
+  hideRemove,
+  onRemove,
+  onMoveUp,
+  onMoveDown,
+}) {
   const dispatch = useDispatch();
+  const { activeName } = useSelector((state) => state.components);
 
   return (
-    <StyledContainer active={name === activeName}>
-      <TitleContainer onClick={() => dispatch(activeComponent(name))}>
-        <Title>{title}</Title>
-        <Button size="small" type="link" onClick={onRemove}>
-          移除
-        </Button>
-      </TitleContainer>
-      <Body>{children}</Body>
-    </StyledContainer>
+    <Flex>
+      {!hideMove && (
+        <MoveContainer>
+          <button onClick={onMoveUp}>上移</button>
+          <br />
+          <br />
+          <button onClick={onMoveDown}>下移</button>
+        </MoveContainer>
+      )}
+      <StyledContainer active={name === activeName}>
+        <TitleContainer onClick={() => dispatch(activeComponent(name))}>
+          <Title>{title}</Title>
+          {!hideRemove && (
+            <Button size="small" type="link" onClick={onRemove}>
+              移除
+            </Button>
+          )}
+        </TitleContainer>
+        <Body>{children}</Body>
+      </StyledContainer>
+    </Flex>
   );
 }
+
+const MoveContainer = styled.div`
+  margin-right: 14px;
+`;
+
+const Flex = styled.div`
+  display: flex;
+`;
 
 const TitleContainer = styled.div`
   display: flex;
@@ -33,6 +62,7 @@ const TitleContainer = styled.div`
 `;
 
 const StyledContainer = styled.div`
+  flex: 1;
   border: 1px solid #eee;
   border-radius: 10px;
   margin-bottom: 20px;

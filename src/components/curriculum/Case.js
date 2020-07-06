@@ -11,7 +11,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
   };
 
   return (
-    <Container title={`选项 ${index + 1}`} name={name} {...props}>
+    <Container title={`选项 ${index + 1}`} name={name} hideMove {...props}>
       <input name={Name.text} value={value.text} onChange={onChange} placeholder="Case Text" />
       <input
         name={Name.finishAction}
@@ -21,15 +21,28 @@ export default function Case({ name, value, index, onChange, ...props }) {
       />
       <FieldArray name={Name.components}>
         {(helpers) => {
+          function handleMoveUp(index) {
+            if (index === 0) return;
+            helpers.move(index, index - 1);
+          }
+
+          function handleMoveDown(index) {
+            if (index === value.components.length - 1) return;
+            helpers.move(index, index + 1);
+          }
+
           return (
             <>
               {value.components.map((component, index) => (
                 <ComponentField
                   {...props}
+                  index={index}
                   key={component.key}
                   name={Name.components}
-                  index={index}
                   component={component}
+                  onRemove={() => helpers.remove(index)}
+                  onMoveUp={() => handleMoveUp(index)}
+                  onMoveDown={() => handleMoveDown(index)}
                 />
               ))}
             </>
