@@ -1,4 +1,5 @@
 import React from 'react';
+import { FieldArray } from 'formik';
 
 import { Container, ComponentField } from './*';
 
@@ -18,15 +19,23 @@ export default function Case({ name, value, index, onChange, ...props }) {
         onChange={onChange}
         placeholder="Finish Action"
       />
-      {value.components.map((component, index) => (
-        <ComponentField
-          {...props}
-          key={component.key}
-          name={Name.components}
-          index={index}
-          component={component}
-        />
-      ))}
+      <FieldArray name={Name.components}>
+        {(helpers) => {
+          return (
+            <>
+              {value.components.map((component, index) => (
+                <ComponentField
+                  {...props}
+                  key={component.key}
+                  name={Name.components}
+                  index={index}
+                  component={component}
+                />
+              ))}
+            </>
+          );
+        }}
+      </FieldArray>
     </Container>
   );
 }
