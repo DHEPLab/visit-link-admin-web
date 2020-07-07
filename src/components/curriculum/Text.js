@@ -7,6 +7,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
+    toolbar: `toolbar-${name.split('.').join('')}`,
   };
 
   function insertCustomTags(args) {
@@ -19,12 +20,12 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   return (
     <Container title="文本组件" name={name} {...props}>
       <QuillContainer className="text-editor">
-        <CustomToolbar />
+        <CustomToolbar id={Name.toolbar} value={value.type} />
         <ReactQuill
           theme="snow"
           modules={{
             toolbar: {
-              container: '#toolbar',
+              container: `#${Name.toolbar}`,
               handlers: {
                 insertCustomTags: insertCustomTags,
               },
@@ -42,12 +43,12 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 /*
  * Custom toolbar component including insertStar button and dropdowns
  */
-const CustomToolbar = () => (
-  <div id="toolbar">
-    <select className="ql-insertCustomTags">
+const CustomToolbar = ({ id, value }) => (
+  <div id={id}>
+    <select className="ql-insertCustomTags" defaultValue={value}>
       <option value="1">One</option>
       <option value="2">Two</option>
-      <option value="3">Two</option>
+      <option value="3">Three</option>
     </select>
     <select className="ql-header">
       <option value="1"></option>
