@@ -14,6 +14,7 @@ export default function Container({
   onRemove,
   onMoveUp,
   onMoveDown,
+  noPadding,
 }) {
   // const dispatch = useDispatch();
   // const { activeName } = useSelector((state) => state.components);
@@ -39,7 +40,7 @@ export default function Container({
             </Button>
           )}
         </TitleContainer>
-        <Body>{children}</Body>
+        <Body noPadding={noPadding}>{children}</Body>
       </StyledContainer>
     </Flex>
   );
@@ -81,5 +82,5 @@ const Title = styled.div`
 `;
 
 const Body = styled.div`
-  padding: 10px;
+  ${({ noPadding }) => !noPadding && 'padding: 10px;'}
 `;

@@ -10,15 +10,12 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     toolbar: `toolbar-${name.split('.').join('')}`,
   };
 
-  function insertCustomTags(args) {
-    console.log('insertCustomTags', args);
-
-    const value = args[0];
-    onChange(Name.type)(value);
+  function type(args) {
+    onChange(Name.type)(args);
   }
 
   return (
-    <Container title="文本组件" name={name} {...props}>
+    <Container title="文本组件" name={name} {...props} noPadding>
       <QuillContainer className="text-editor">
         <CustomToolbar id={Name.toolbar} value={value.type} />
         <ReactQuill
@@ -27,11 +24,11 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
             toolbar: {
               container: `#${Name.toolbar}`,
               handlers: {
-                insertCustomTags: insertCustomTags,
+                type,
               },
             },
           }}
-          value={value.html}
+          defaultValue={value.html}
           onChange={onChange(Name.html)}
         />
       </QuillContainer>
@@ -45,48 +42,43 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
  */
 const CustomToolbar = ({ id, value }) => (
   <div id={id}>
-    <select className="ql-insertCustomTags" defaultValue={value}>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
-    <select className="ql-header">
-      <option value="1"></option>
-      <option value="2"></option>
-      <option selected></option>
+    <select className="ql-type" defaultValue={value}>
+      <option value="narrate">One</option>
+      <option value="hint">Two</option>
+      <option value="refrence">Three</option>
     </select>
     <button className="ql-bold"></button>
     <button className="ql-italic"></button>
-    <select className="ql-color">
-      <option value="red"></option>
-      <option value="green"></option>
-      <option value="blue"></option>
-      <option value="orange"></option>
-      <option value="violet"></option>
-      <option value="#d0d1d2"></option>
-      <option selected></option>
-    </select>
   </div>
 );
 
 const QuillContainer = styled.div`
-  .ql-picker.ql-insertCustomTags {
+  .ql-picker.ql-type {
     width: 90px;
   }
 
-  .ql-picker.ql-insertCustomTags .ql-picker-item::before,
-  .ql-picker.ql-insertCustomTags .ql-picker-label::before {
-    content: 'Custom';
+  .ql-picker.ql-type .ql-picker-item::before,
+  .ql-picker.ql-type .ql-picker-label::before {
+    content: 'Type';
   }
 
-  .ql-picker.ql-insertCustomTags [data-value='1']::before {
+  .ql-picker.ql-type [data-value='narrate']::before {
     content: '叙述文本';
   }
 
-  .ql-picker.ql-insertCustomTags [data-value='2']::before {
+  .ql-picker.ql-type [data-value='hint']::before {
     content: '提示文本';
   }
-  .ql-picker.ql-insertCustomTags [data-value='3']::before {
+  .ql-picker.ql-type [data-value='refrence']::before {
     content: '参考文本';
+  }
+
+  .ql-container.ql-snow,
+  .ql-toolbar.ql-snow {
+    border: none;
+  }
+
+  .ql-toolbar.ql-snow {
+    background: rgba(238, 238, 238, 0.5);
   }
 `;
