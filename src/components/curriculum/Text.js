@@ -29,10 +29,14 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
             },
           }}
           defaultValue={value.html}
-          onChange={onChange(Name.html)}
+          // On quill blur trigger that formik on change event
+          // fix typing Chinese always automatically triggers onChange
+          onBlur={(_, __, editor) => {
+            onChange(Name.html)(editor.getHTML());
+          }}
         />
       </QuillContainer>
-      <pre>{JSON.stringify(value, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </Container>
   );
 }
@@ -80,5 +84,9 @@ const QuillContainer = styled.div`
 
   .ql-toolbar.ql-snow {
     background: rgba(238, 238, 238, 0.5);
+  }
+
+  .ql-editor {
+    min-height: 100px;
   }
 `;
