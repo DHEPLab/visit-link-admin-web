@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
 
-import { activeComponent } from '../../actions';
+// import { activeComponent } from '../../actions';
 
 export default function Container({
-  name,
+  // name,
   title,
   children,
   hideMove,
@@ -15,8 +15,8 @@ export default function Container({
   onMoveUp,
   onMoveDown,
 }) {
-  const dispatch = useDispatch();
-  const { activeName } = useSelector((state) => state.components);
+  // const dispatch = useDispatch();
+  // const { activeName } = useSelector((state) => state.components);
 
   return (
     <Flex>

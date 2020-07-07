@@ -1,26 +1,91 @@
 import React from 'react';
-import Quill from 'react-quill';
+import styled from 'styled-components';
+import ReactQuill from 'react-quill';
 
 import Container from './Container';
-
-const toolbar = [['bold', 'italic'], [{ list: 'ordered' }]];
-
 export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
   };
 
+  function insertCustomTags(args) {
+    console.log('insertCustomTags', args);
+
+    const value = args[0];
+    onChange(Name.type)(value);
+  }
+
   return (
     <Container title="文本组件" name={name} {...props}>
-      <input
-        placeholder="Type"
-        name={Name.type}
-        value={value.type}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-      <Quill theme="snow" modules={{ toolbar }} value={value.html} onChange={onChange(Name.html)} />
+      <QuillContainer className="text-editor">
+        <CustomToolbar />
+        <ReactQuill
+          theme="snow"
+          modules={{
+            toolbar: {
+              container: '#toolbar',
+              handlers: {
+                insertCustomTags: insertCustomTags,
+              },
+            },
+          }}
+          value={value.html}
+          onChange={onChange(Name.html)}
+        />
+      </QuillContainer>
+      <pre>{JSON.stringify(value, null, 2)}</pre>
     </Container>
   );
 }
+
+/*
+ * Custom toolbar component including insertStar button and dropdowns
+ */
+const CustomToolbar = () => (
+  <div id="toolbar">
+    <select className="ql-insertCustomTags">
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Two</option>
+    </select>
+    <select className="ql-header">
+      <option value="1"></option>
+      <option value="2"></option>
+      <option selected></option>
+    </select>
+    <button className="ql-bold"></button>
+    <button className="ql-italic"></button>
+    <select className="ql-color">
+      <option value="red"></option>
+      <option value="green"></option>
+      <option value="blue"></option>
+      <option value="orange"></option>
+      <option value="violet"></option>
+      <option value="#d0d1d2"></option>
+      <option selected></option>
+    </select>
+  </div>
+);
+
+const QuillContainer = styled.div`
+  .ql-picker.ql-insertCustomTags {
+    width: 90px;
+  }
+
+  .ql-picker.ql-insertCustomTags .ql-picker-item::before,
+  .ql-picker.ql-insertCustomTags .ql-picker-label::before {
+    content: 'Custom';
+  }
+
+  .ql-picker.ql-insertCustomTags [data-value='1']::before {
+    content: '叙述文本';
+  }
+
+  .ql-picker.ql-insertCustomTags [data-value='2']::before {
+    content: '提示文本';
+  }
+  .ql-picker.ql-insertCustomTags [data-value='3']::before {
+    content: '参考文本';
+  }
+`;
