@@ -28,8 +28,10 @@ export default function Container({
           <button onClick={onMoveDown}>下移</button>
         </MoveContainer>
       )}
-      <StyledContainer active={name === activeName}>
-        <TitleContainer onClick={() => dispatch(activeComponent(name))}>
+      <StyledContainer>
+        {/* <StyledContainer active={name === activeName}> */}
+        {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
+        <TitleContainer>
           <Title>{title}</Title>
           {!hideRemove && (
             <Button size="small" type="link" onClick={onRemove}>

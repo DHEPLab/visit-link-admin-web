@@ -1,6 +1,8 @@
 import React from 'react';
+import { Button } from 'antd';
 import { FieldArray } from 'formik';
 
+import Factory from './factory';
 import { Container, ComponentField } from './*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
@@ -33,6 +35,17 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
           return (
             <>
+              <div>
+                <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                  添加文本组件
+                </Button>
+                <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                  添加媒体组件
+                </Button>
+                <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+                  添加选择组件
+                </Button>
+              </div>
               {value.components.map((component, index) => (
                 <ComponentField
                   {...props}
