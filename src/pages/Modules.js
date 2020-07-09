@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios';
+// import Axios from 'axios';
 import { Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
@@ -8,16 +8,16 @@ import {
   ContentHeader,
   ZebraTable,
   SearchInput,
-  DeletePopconfirm,
+  // DeletePopconfirm,
 } from '../components/*';
 import { ModuleTopic } from '../constants/enums';
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
 
-  function handleDelete(id) {
-    Axios.delete(`/admin/module/${id}`).then(loadData);
-  }
+  // function handleDelete(id) {
+  //   Axios.delete(`/admin/module/${id}`).then(loadData);
+  // }
 
   return (
     <>
@@ -37,7 +37,23 @@ function Components({ loadData, onChangeSearch, ...props }) {
       <ZebraTable
         {...props}
         rowKey="id"
+        className="clickable"
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              history.push(`/modules/edit/${record.id}`);
+            },
+          };
+        }}
         columns={[
+          {
+            title: '模块状态',
+            dataIndex: 'draftId',
+            width: 150,
+            render(h) {
+              return h ? '有草稿' : '已发布';
+            },
+          },
           {
             title: '模块编号',
             dataIndex: 'number',
@@ -51,42 +67,6 @@ function Components({ loadData, onChangeSearch, ...props }) {
             title: '模块主题',
             dataIndex: 'topic',
             render: (h) => ModuleTopic[h],
-          },
-          {
-            title: '操作',
-            width: 200,
-            align: 'center',
-            dataIndex: 'id',
-            render(id, { draftId }) {
-              return (
-                <Space>
-                  {draftId ? (
-                    <Space size="large">
-                      <Button
-                        size="small"
-                        type="link"
-                        onClick={() => history.push(`/modules/edit/${draftId}`)}
-                      >
-                        编辑草稿
-                      </Button>
-                      <DeletePopconfirm onConfirm={() => handleDelete(draftId)}>
-                        <Button size="small" type="link">
-                          删除草稿
-                        </Button>
-                      </DeletePopconfirm>
-                    </Space>
-                  ) : (
-                    <Button
-                      size="small"
-                      type="link"
-                      onClick={() => history.push(`/modules/edit/${id}`)}
-                    >
-                      编辑
-                    </Button>
-                  )}
-                </Space>
-              );
-            },
           },
         ]}
       />
