@@ -59,7 +59,7 @@ export default function Media({ name, value, onChange, ...props }) {
   }
 
   return (
-    <Container title="媒体组件" {...props}>
+    <Container icon="iconmedia-gray" title="媒体组件" {...props}>
       <Flex>
         {value.file ? (
           <Preview type={value.type} file={value.file} />

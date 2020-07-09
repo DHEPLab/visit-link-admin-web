@@ -15,7 +15,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   }
 
   return (
-    <Container title="文本组件" name={name} {...props} noPadding>
+    <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
       <QuillContainer className="text-editor">
         <CustomToolbar id={Name.toolbar} value={value.type} />
         <ReactQuill

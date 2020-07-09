@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
+import { Iconfont } from '../*';
 // import { useSelector, useDispatch } from 'react-redux';
 
 // import { activeComponent } from '../../actions';
 
 export default function Container({
   // name,
+  icon,
   title,
   children,
   hideMove,
@@ -23,20 +25,22 @@ export default function Container({
     <Flex>
       {!hideMove && (
         <MoveContainer>
-          <button onClick={onMoveUp}>上移</button>
-          <br />
-          <br />
-          <button onClick={onMoveDown}>下移</button>
+          <Space direction="vertical">
+            <IconfontButton type="iconup" size={24} onClick={onMoveUp} />
+            <IconfontButton type="icondown" size={24} onClick={onMoveDown} />
+          </Space>
         </MoveContainer>
       )}
       <StyledContainer>
         {/* <StyledContainer active={name === activeName}> */}
         {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
         <TitleContainer>
-          <Title>{title}</Title>
+          <Title>
+            <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title}
+          </Title>
           {!hideRemove && (
             <Button size="small" type="link" onClick={onRemove}>
-              移除
+              <Iconfont type="icontrash-orange" size={14} /> 移除
             </Button>
           )}
         </TitleContainer>
@@ -45,6 +49,11 @@ export default function Container({
     </Flex>
   );
 }
+
+const IconfontButton = styled(Iconfont)`
+  cursor: point;
+  display: block;
+`;
 
 const MoveContainer = styled.div`
   margin-right: 14px;

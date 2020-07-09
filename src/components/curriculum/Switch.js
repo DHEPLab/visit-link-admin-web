@@ -14,7 +14,7 @@ export default function Switch({ name, value, onChange, ...props }) {
   };
 
   return (
-    <Container title="选择组件" name={name} {...props}>
+    <Container icon="iconswitch-gray" title="选择组件" name={name} {...props}>
       <Text
         {...props}
         name={Name.question}
