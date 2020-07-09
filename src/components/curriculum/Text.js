@@ -34,6 +34,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
           onBlur={(_, __, editor) => {
             onChange(Name.html)(editor.getHTML());
           }}
+          placeholder="请输入文本内容"
         />
       </QuillContainer>
       {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
@@ -53,6 +54,8 @@ const CustomToolbar = ({ id, value }) => (
     </select>
     <button className="ql-bold"></button>
     <button className="ql-italic"></button>
+    <button class="ql-list" value="ordered"></button>
+    <button class="ql-list" value="bullet"></button>
   </div>
 );
 
@@ -87,6 +90,6 @@ const QuillContainer = styled.div`
   }
 
   .ql-editor {
-    min-height: 100px;
+    min-height: 126px;
   }
 `;

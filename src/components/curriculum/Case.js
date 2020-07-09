@@ -4,6 +4,7 @@ import { FieldArray } from 'formik';
 
 import Factory from './factory';
 import { Container, ComponentField } from './*';
+import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
   const Name = {
@@ -14,7 +15,12 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
   return (
     <Container title={`选项 ${index + 1}`} name={name} hideMove {...props}>
-      <input name={Name.text} value={value.text} onChange={onChange} placeholder="Case Text" />
+      <GhostInput
+        name={Name.text}
+        value={value.text}
+        onChange={onChange}
+        placeholder="请输入选项文本，限20个字符"
+      />
       <input
         name={Name.finishAction}
         value={value.finishAction}
@@ -37,13 +43,13 @@ export default function Case({ name, value, index, onChange, ...props }) {
             <>
               <div>
                 <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                  添加文本组件
+                  添加文本
                 </Button>
                 <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                  添加媒体组件
+                  添加媒体
                 </Button>
                 <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-                  添加选择组件
+                  添加选择
                 </Button>
               </div>
               {value.components.map((component, index) => (

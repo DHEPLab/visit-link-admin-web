@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Upload } from 'antd';
 
 import Container from './Container';
-import { UploadButton } from '../*';
+import { GhostInput, UploadButton } from '../*';
 import { fileFormat } from '../../utils';
 import { OSS_HOST } from '../../constants';
 
@@ -89,7 +89,12 @@ export default function Media({ name, value, onChange, ...props }) {
           </>
         )}
       </Flex>
-      <input name={Name.text} value={value.text} onChange={onChange} placeholder="Media Text" />
+      <GhostInput
+        name={Name.text}
+        value={value.text}
+        onChange={onChange}
+        placeholder="请输入媒体描述文本。"
+      />
     </Container>
   );
 }
