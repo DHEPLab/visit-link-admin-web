@@ -28,7 +28,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
             className="master"
             placeholder="请输入模块名称搜索"
           />
-          <Button type="primary" onClick={() => history.push('/modules/new')}>
+          <Button type="primary" onClick={() => history.push('/modules/edit/-1')}>
             创建新模块
           </Button>
         </Space>
@@ -41,7 +41,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
         onRow={(record) => {
           return {
             onClick: () => {
-              history.push(`/modules/edit/${record.id}`);
+              history.push(`/modules/${record.id}`);
             },
           };
         }}

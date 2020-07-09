@@ -45,7 +45,7 @@ const routes = [
     component: Babies,
   },
   {
-    path: '/modules/new',
+    path: '/modules/:id',
     component: Module,
   },
   {
