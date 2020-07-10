@@ -14,18 +14,26 @@ export default function Case({ name, value, index, onChange, ...props }) {
   };
 
   return (
-    <Container title={`选项 ${index + 1}`} name={name} hideMove {...props}>
+    <Container
+      {...props}
+      title={`选项 ${index + 1}`}
+      name={name}
+      hideMove
+      nested
+      extra={
+        <input
+          name={Name.finishAction}
+          value={value.finishAction}
+          onChange={onChange}
+          placeholder="Finish Action"
+        />
+      }
+    >
       <GhostInput
         name={Name.text}
         value={value.text}
         onChange={onChange}
         placeholder="请输入选项文本，限20个字符"
-      />
-      <input
-        name={Name.finishAction}
-        value={value.finishAction}
-        onChange={onChange}
-        placeholder="Finish Action"
       />
       <FieldArray name={Name.components}>
         {(helpers) => {

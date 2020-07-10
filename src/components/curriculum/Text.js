@@ -48,14 +48,14 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 const CustomToolbar = ({ id, value }) => (
   <div id={id}>
     <select className="ql-type" defaultValue={value}>
-      <option value="narrate">One</option>
-      <option value="hint">Two</option>
+      <option value="script">One</option>
+      <option value="instruction">Two</option>
       <option value="refrence">Three</option>
     </select>
     <button className="ql-bold"></button>
     <button className="ql-italic"></button>
-    <button class="ql-list" value="ordered"></button>
-    <button class="ql-list" value="bullet"></button>
+    <button className="ql-list" value="ordered"></button>
+    <button className="ql-list" value="bullet"></button>
   </div>
 );
 
@@ -69,15 +69,18 @@ const QuillContainer = styled.div`
     content: 'Type';
   }
 
-  .ql-picker.ql-type [data-value='narrate']::before {
+  .ql-picker.ql-type [data-value='script']::before {
     content: '叙述文本';
+    color: #3490de;
   }
 
-  .ql-picker.ql-type [data-value='hint']::before {
+  .ql-picker.ql-type [data-value='instruction']::before {
     content: '提示文本';
+    color: #05bfb2;
   }
   .ql-picker.ql-type [data-value='refrence']::before {
     content: '参考文本';
+    color: #6a2c70;
   }
 
   .ql-container.ql-snow,

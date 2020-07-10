@@ -10,7 +10,9 @@ export default function Container({
   // name,
   icon,
   title,
+  extra,
   children,
+  nested,
   hideMove,
   hideRemove,
   onRemove,
@@ -31,12 +33,12 @@ export default function Container({
           </Space>
         </MoveContainer>
       )}
-      <StyledContainer>
+      <StyledContainer nested={nested}>
         {/* <StyledContainer active={name === activeName}> */}
         {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
         <TitleContainer>
           <Title>
-            <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title}
+            <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title} {extra}
           </Title>
           {!hideRemove && (
             <Button size="small" type="link" onClick={onRemove}>
@@ -44,7 +46,9 @@ export default function Container({
             </Button>
           )}
         </TitleContainer>
-        <Body noPadding={noPadding}>{children}</Body>
+        <Body nested={nested} noPadding={noPadding}>
+          {children}
+        </Body>
       </StyledContainer>
     </Flex>
   );
@@ -77,7 +81,7 @@ const StyledContainer = styled.div`
   flex: 1;
   border: 1px solid #eee;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: ${({ nested }) => (nested ? 0 : 20)}px;
   ${({ active }) =>
     active &&
     `
@@ -92,4 +96,5 @@ const Title = styled.div`
 
 const Body = styled.div`
   ${({ noPadding }) => !noPadding && 'padding: 10px;'}
+  ${({ nested }) => nested && 'margin-bottom: -20px;'}
 `;

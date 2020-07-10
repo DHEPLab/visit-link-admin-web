@@ -20,8 +20,8 @@ function createText() {
     type: 'Text',
     key: generateKey(),
     value: {
-      // narrate, hint, refrence
-      type: 'narrate',
+      // script, instruction, refrence
+      type: 'script',
       html: '',
     },
   };
