@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 
-import Rules from '../constants/rules';
+import { Rules } from '../constants/*';
 import Factory from '../components/curriculum/factory';
-import { Iconfont, Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
+import { Iconfont, Card, DetailHeader, SelectEnum } from '../components/*';
 
 function ModuleComponents({ values }) {
   return (
@@ -39,6 +39,7 @@ function ModuleComponents({ values }) {
                 />
               ))}
             </ComponentForm>
+
             <ComponentToolBar>
               <Card title="添加组件：">
                 <Space direction="vertical" size="large">
@@ -70,16 +71,7 @@ function ModuleComponents({ values }) {
   );
 }
 
-/**
- * Curriculum Module Detail Page
- *
- * when route path is /modules/:id, can't edit
- * when route path is /modules/edit/:id, editable
- * when route path is /modules/edit/-1, create new module
- */
 export default function Module() {
-  const location = useLocation();
-  const [editable, setEditable] = useState(false);
   const { id } = useParams();
   const history = useHistory();
   const [form] = Form.useForm();
@@ -88,26 +80,16 @@ export default function Module() {
   const [components, setComponents] = useState();
 
   useEffect(() => {
-    setEditable(location.pathname.includes('/modules/edit'));
-  }, [location]);
-
-  useEffect(() => {
-    if (Number(id) === -1) {
-      setComponents([Factory.createPageFooter()]);
+    if (!id) {
+      setComponents([Factory.createText()]);
+    } else {
+      Axios.get(`/admin/module/${id}`).then(({ data }) => {
+        setTitle(data.name);
+        form.setFieldsValue(data);
+        setComponents(data.components);
+      });
     }
-  }, [id]);
-
-  // useEffect(() => {
-  //   if (!id) {
-  //     setComponents([Factory.createSwitch()]);
-  //   } else {
-  //     Axios.get(`/admin/module/${id}`).then(({ data }) => {
-  //       setTitle(data.name);
-  //       form.setFieldsValue(data);
-  //       setComponents(data.components);
-  //     });
-  //   }
-  // }, [id, form]);
+  }, [id, form]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -146,11 +128,9 @@ export default function Module() {
             title={title}
             extra={
               <Space size="large">
-                {id && (
-                  <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
-                    保存至草稿
-                  </Button>
-                )}
+                <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
+                  保存至草稿
+                </Button>
                 <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
                   保存并发布
                 </Button>
@@ -190,6 +170,7 @@ const FieldArrayContainer = styled.div`
 const ComponentForm = styled.div`
   flex: 1;
 `;
+
 const ComponentToolBar = styled.div`
   height: 360px;
   margin-left: 40px;

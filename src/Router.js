@@ -49,6 +49,10 @@ const routes = [
     component: Module,
   },
   {
+    path: '/modules/create',
+    component: Module,
+  },
+  {
     path: '/modules/:id',
     component: Module,
   },
