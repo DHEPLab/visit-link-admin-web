@@ -48,10 +48,11 @@ function Components({ loadData, onChangeSearch, ...props }) {
         columns={[
           {
             title: '模块状态',
-            dataIndex: 'draftId',
-            width: 150,
+            dataIndex: 'published',
+            width: 120,
+            align: 'center',
             render(h) {
-              return h ? '有草稿' : '已发布';
+              return h ? '已发布' : '草稿';
             },
           },
           {

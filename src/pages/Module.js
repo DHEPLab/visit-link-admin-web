@@ -3,14 +3,15 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
 
-import { Rules } from '../constants/*';
 import Factory from '../components/curriculum/factory';
+import { Rules } from '../constants/*';
+import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
-import { Iconfont, Card, DetailHeader, SelectEnum } from '../components/*';
+import { Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
 
-function ModuleComponents({ values }) {
+function ModuleComponents({ values, readonly }) {
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -29,10 +30,11 @@ function ModuleComponents({ values }) {
             <ComponentForm>
               {values.components.map((component, index) => (
                 <ComponentField
-                  index={index}
                   name="components"
-                  key={component.key}
+                  index={index}
+                  readonly={readonly}
                   component={component}
+                  key={component.key}
                   onRemove={() => helpers.remove(index)}
                   onMoveUp={() => handleMoveUp(index)}
                   onMoveDown={() => handleMoveDown(index)}
@@ -40,30 +42,32 @@ function ModuleComponents({ values }) {
               ))}
             </ComponentForm>
 
-            <ComponentToolBar>
-              <Card title="添加组件：">
-                <Space direction="vertical" size="large">
-                  <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                    <Iconfont type="icontext" /> 添加文本组件
-                  </Button>
-                  <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
-                    <Iconfont type="iconmedia" />
-                    添加媒体组件
-                  </Button>
-                  <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
-                    <Iconfont type="iconswitch" />
-                    添加选择组件
-                  </Button>
-                  <Button
-                    style={{ width: '182px' }}
-                    type="primary"
-                    onClick={() => helpers.push(Factory.createPageFooter())}
-                  >
-                    添加翻页分割组件
-                  </Button>
-                </Space>
-              </Card>
-            </ComponentToolBar>
+            {!readonly && (
+              <ComponentToolBar>
+                <Card title="添加组件：">
+                  <Space direction="vertical" size="large">
+                    <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
+                      <Iconfont type="icontext" /> 添加文本组件
+                    </Button>
+                    <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
+                      <Iconfont type="iconmedia" />
+                      添加媒体组件
+                    </Button>
+                    <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
+                      <Iconfont type="iconswitch" />
+                      添加选择组件
+                    </Button>
+                    <Button
+                      style={{ width: '182px' }}
+                      type="primary"
+                      onClick={() => helpers.push(Factory.createPageFooter())}
+                    >
+                      添加翻页分割组件
+                    </Button>
+                  </Space>
+                </Card>
+              </ComponentToolBar>
+            )}
           </FieldArrayContainer>
         );
       }}
@@ -73,19 +77,29 @@ function ModuleComponents({ values }) {
 
 export default function Module() {
   const { id } = useParams();
+  const { pathname } = useLocation();
+  const [readonly, setReadonly] = useState(false);
   const history = useHistory();
+
   const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
   const [submitURL, setSubmitURL] = useState();
+
+  const [module, setModule] = useState({});
   const [components, setComponents] = useState();
+
+  useEffect(() => {
+    setReadonly(!pathname.includes('/modules/edit') && !pathname.includes('/modules/create'));
+  }, [pathname, setReadonly]);
 
   useEffect(() => {
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
       Axios.get(`/admin/module/${id}`).then(({ data }) => {
-        setTitle(data.name);
         form.setFieldsValue(data);
+        setTitle(data.name);
+        setModule(data);
         setComponents(data.components);
       });
     }
@@ -128,39 +142,65 @@ export default function Module() {
             title={title}
             extra={
               <Space size="large">
-                <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
-                  保存至草稿
+                <Button ghost type="primary">
+                  删除模块
                 </Button>
-                <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
-                  保存并发布
-                </Button>
+                {readonly ? (
+                  <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
+                    编辑模块
+                  </Button>
+                ) : (
+                  <>
+                    <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
+                      保存至草稿
+                    </Button>
+                    <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
+                      保存并发布
+                    </Button>
+                  </>
+                )}
               </Space>
             }
           ></DetailHeader>
 
           <Card title="模块基本信息">
-            <Form form={form} onFinish={onSubmit}>
-              <Form.Item label="模块名称" name="name" rules={Rules.Required}>
-                <Input placeholder="请输入模块名称，限20个汉字" />
-              </Form.Item>
-              <Form.Item label="模块编号" name="number" rules={Rules.Required}>
-                <Input placeholder="请输入模块名称，限20个汉字" />
-              </Form.Item>
-              <Form.Item label="模块描述" name="description" rules={Rules.Required}>
-                <Input.TextArea rows={4} placeholder="请输入模块描述，限50个汉字" />
-              </Form.Item>
-              <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
-              </Form.Item>
-            </Form>
+            {readonly ? (
+              <ReadonlyForm value={module} />
+            ) : (
+              <Form form={form} onFinish={onSubmit}>
+                <Form.Item label="模块名称" name="name" rules={Rules.Required}>
+                  <Input placeholder="请输入模块名称，限20个汉字" />
+                </Form.Item>
+                <Form.Item label="模块编号" name="number" rules={Rules.Required}>
+                  <Input placeholder="请输入模块名称，限20个汉字" />
+                </Form.Item>
+                <Form.Item label="模块描述" name="description" rules={Rules.Required}>
+                  <Input.TextArea rows={4} placeholder="请输入模块描述，限50个汉字" />
+                </Form.Item>
+                <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
+                  <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
+                </Form.Item>
+              </Form>
+            )}
           </Card>
 
           <Card title="模块内容">
-            <ModuleComponents values={values} />
+            <ModuleComponents values={values} readonly={readonly} />
           </Card>
         </>
       )}
     </Formik>
+  );
+}
+
+function ReadonlyForm({ value }) {
+  return (
+    <>
+      <StaticField label="模块名称">{value.name}</StaticField>
+      <StaticField label="模块编号">{value.number}</StaticField>
+      <StaticField label="模块描述">{value.description}</StaticField>
+      <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
+    </>
   );
 }
 
