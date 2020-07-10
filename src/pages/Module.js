@@ -7,7 +7,7 @@ import { Form, Space, Button, Input } from 'antd';
 
 import Rules from '../constants/rules';
 import Factory from '../components/curriculum/factory';
-import { Card, DetailHeader, SelectEnum } from '../components/*';
+import { Iconfont, Card, DetailHeader, SelectEnum } from '../components/*';
 import { ComponentField } from '../components/curriculum/*';
 
 function ModuleComponents({ values }) {
@@ -43,13 +43,22 @@ function ModuleComponents({ values }) {
               <Card title="添加组件：">
                 <Space direction="vertical" size="large">
                   <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                    添加文本组件
+                    <Iconfont type="icontext" /> 添加文本组件
                   </Button>
                   <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
+                    <Iconfont type="iconmedia" />
                     添加媒体组件
                   </Button>
                   <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
+                    <Iconfont type="iconswitch" />
                     添加选择组件
+                  </Button>
+                  <Button
+                    style={{ width: '182px' }}
+                    type="primary"
+                    onClick={() => helpers.push(Factory.createSwitch())}
+                  >
+                    添加翻页分割组件
                   </Button>
                 </Space>
               </Card>
@@ -182,7 +191,6 @@ const ComponentForm = styled.div`
   flex: 1;
 `;
 const ComponentToolBar = styled.div`
-  width: 230px;
   height: 360px;
   margin-left: 40px;
   box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);

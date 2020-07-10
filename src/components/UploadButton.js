@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Iconfont } from './*';
 
-export default function UploadButton({ title, children }) {
+export default function UploadButton({ icon, title, children }) {
   return (
     <Container>
+      <Iconfont type={icon} size={40} />
       <Title>{title}</Title>
       <Placeholder>{children}</Placeholder>
     </Container>
@@ -19,6 +21,7 @@ const Container = styled.div`
   margin: 0 15px;
   cursor: pointer;
   text-align: center;
+  padding-top: 24px;
 `;
 
 const Title = styled.div`

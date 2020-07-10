@@ -70,7 +70,7 @@ export default function Media({ name, value, onChange, ...props }) {
               showUploadList={false}
               beforeUpload={handleUploadPicture}
             >
-              <UploadButton title="点击上传图片">
+              <UploadButton title="点击上传图片" icon="iconpicture">
                 支持JPG/PNG/GIF
                 <br />
                 大小不超过5M
@@ -79,7 +79,7 @@ export default function Media({ name, value, onChange, ...props }) {
               </UploadButton>
             </Upload>
             <Upload accept=".mp4" beforeUpload={handleUploadVideo}>
-              <UploadButton title="点击上传视频">
+              <UploadButton title="点击上传视频" icon="iconvideo">
                 支持MP4 <br />
                 大小不超过10M
                 <br />
@@ -93,7 +93,7 @@ export default function Media({ name, value, onChange, ...props }) {
         name={Name.text}
         value={value.text}
         onChange={onChange}
-        placeholder="请输入媒体描述文本。"
+        placeholder="请输入媒体描述文本"
       />
     </Container>
   );
