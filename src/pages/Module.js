@@ -56,7 +56,7 @@ function ModuleComponents({ values }) {
                   <Button
                     style={{ width: '182px' }}
                     type="primary"
-                    onClick={() => helpers.push(Factory.createSwitch())}
+                    onClick={() => helpers.push(Factory.createPageFooter())}
                   >
                     添加翻页分割组件
                   </Button>
@@ -85,15 +85,15 @@ export default function Module() {
   const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
   const [submitURL, setSubmitURL] = useState();
-  const [components, setComponents] = useState([]);
+  const [components, setComponents] = useState();
 
   useEffect(() => {
     setEditable(location.pathname.includes('/modules/edit'));
   }, [location]);
 
   useEffect(() => {
-    if (id === -1) {
-      setComponents([]);
+    if (Number(id) === -1) {
+      setComponents([Factory.createPageFooter()]);
     }
   }, [id]);
 

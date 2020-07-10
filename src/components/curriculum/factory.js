@@ -38,8 +38,15 @@ function createSwitch() {
   };
 }
 
+function createPageFooter() {
+  return {
+    type: 'PageFooter',
+    key: generateKey(),
+  };
+}
+
 function createCase() {
   return { key: generateKey(), text: '', finishAction: '', components: [createText()] };
 }
 
-export default { createText, createMedia, createSwitch, createCase };
+export default { createText, createMedia, createSwitch, createCase, createPageFooter };

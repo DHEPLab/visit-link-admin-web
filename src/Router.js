@@ -45,11 +45,11 @@ const routes = [
     component: Babies,
   },
   {
-    path: '/modules/:id',
+    path: '/modules/edit/:id',
     component: Module,
   },
   {
-    path: '/modules/edit/:id',
+    path: '/modules/:id',
     component: Module,
   },
   {

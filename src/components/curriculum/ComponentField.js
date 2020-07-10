@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'formik';
 
-import { Text, Media, Switch } from './*';
+import { Text, Media, Switch, PageFooter } from './*';
 
 export default function ComponentField({ name, component, index, ...props }) {
   let As;
@@ -14,6 +14,9 @@ export default function ComponentField({ name, component, index, ...props }) {
       break;
     case 'Switch':
       As = Switch;
+      break;
+    case 'PageFooter':
+      As = PageFooter;
       break;
     default:
       As = <div>{component.type}</div>;

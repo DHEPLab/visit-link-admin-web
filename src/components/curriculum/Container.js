@@ -19,6 +19,7 @@ export default function Container({
   onMoveUp,
   onMoveDown,
   noPadding,
+  component,
 }) {
   // const dispatch = useDispatch();
   // const { activeName } = useSelector((state) => state.components);
@@ -33,23 +34,27 @@ export default function Container({
           </Space>
         </MoveContainer>
       )}
-      <StyledContainer nested={nested}>
-        {/* <StyledContainer active={name === activeName}> */}
-        {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
-        <TitleContainer>
-          <Title>
-            <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title} {extra}
-          </Title>
-          {!hideRemove && (
-            <Button size="small" type="link" onClick={onRemove}>
-              <Iconfont type="icontrash-orange" size={14} /> 移除
-            </Button>
-          )}
-        </TitleContainer>
-        <Body nested={nested} noPadding={noPadding}>
-          {children}
-        </Body>
-      </StyledContainer>
+      {component ? (
+        component
+      ) : (
+        <StyledContainer nested={nested}>
+          {/* <StyledContainer active={name === activeName}> */}
+          {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
+          <TitleContainer>
+            <Title>
+              <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title} {extra}
+            </Title>
+            {!hideRemove && (
+              <Button size="small" type="link" onClick={onRemove}>
+                <Iconfont type="icontrash-orange" size={14} /> 移除
+              </Button>
+            )}
+          </TitleContainer>
+          <Body nested={nested} noPadding={noPadding}>
+            {children}
+          </Body>
+        </StyledContainer>
+      )}
     </Flex>
   );
 }
