@@ -3,7 +3,7 @@
 @primary-color: #ff794f; // 全局主色
 @font-size-base: 16px; // 主字号
 
-@heading-color: #8E8E93; // 标题色
+@heading-color: #8e8e93; // 标题色
 @border-radius-base: 8px; // 组件/浮层圆角
 
 // Input, Select
@@ -23,12 +23,12 @@
 .ant-input-affix-wrapper.master .ant-input,
 .ant-input-password.master .ant-input {
   &::placeholder {
-    color: #FFC3A0;
+    color: #ffc3a0;
   }
 
-  color: #4A4A4A;
-  background: #FFF9F5;
-  border-color: #FFC3A0;
+  color: #4a4a4a;
+  background: #fff9f5;
+  border-color: #ffc3a0;
 }
 
 textarea.ant-input {
@@ -95,7 +95,7 @@ textarea.ant-input {
 @btn-padding-horizontal-lg: 60px;
 @btn-font-size-sm: 14px;
 @btn-font-size-lg: 20px;
-@btn-danger-bg: #F2709C;
+@btn-danger-bg: #f2709c;
 @btn-danger-border: @btn-danger-bg;
 
 .ant-btn {
@@ -116,7 +116,7 @@ textarea.ant-input {
   &:hover {
     background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
     color: #fff;
-    opacity: .8;
+    opacity: 0.8;
   }
 }
 
@@ -127,23 +127,30 @@ textarea.ant-input {
 // Table
 // --
 @table-header-bg: #fff;
-@table-header-color: #8E8E93;
+@table-header-color: #8e8e93;
 @table-font-size: 14px;
 @table-padding-vertical: 19px;
 @table-padding-horizontal: 19px;
 
 .ant-table-wrapper.small {
-  .ant-table-thead>tr>th {
+  .ant-table-thead > tr > th {
     padding-top: 15px;
   }
 
-  .ant-table-tbody>tr>td {
+  .ant-table-tbody > tr > td {
     padding: 10px;
   }
 }
 
 .ant-table.ant-table {
   font-size: @table-font-size;
+}
+
+.ant-table-container table > thead > tr:first-child th:first-child,
+.ant-table-container table > thead > tr:first-child th:last-child,
+.ant-table table,
+.ant-table {
+  border-radius: 0 !important;
 }
 
 .ant-table-wrapper.clickable .ant-table-row {
@@ -155,12 +162,12 @@ textarea.ant-input {
 }
 
 // zebra crossing
-.ant-table-tbody>tr.ant-table-row.even-row {
+.ant-table-tbody > tr.ant-table-row.even-row {
   td {
-    background: #FFF9F5;
+    background: #fff9f5;
   }
 
-  &:hover>td {
+  &:hover > td {
     background: #fff6f0;
   }
 }
@@ -169,11 +176,11 @@ textarea.ant-input {
   background: #fff;
 }
 
-.ant-table-thead>tr>th {
+.ant-table-thead > tr > th {
   padding-top: 30px;
   padding-bottom: 12px;
   font-weight: 400;
-  border-color: #FFC3A0;
+  border-color: #ffc3a0;
 }
 
 // Pagination
