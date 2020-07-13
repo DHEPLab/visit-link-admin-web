@@ -8,6 +8,7 @@ import { Iconfont } from '../*';
 
 export default function Container({
   // name,
+  readonly,
   icon,
   title,
   extra,
@@ -26,8 +27,8 @@ export default function Container({
 
   return (
     <Flex>
-      {!hideMove && (
-        <MoveContainer>
+      {!readonly && !hideMove && (
+        <MoveContainer testid="move">
           <Space direction="vertical">
             <IconfontButton type="iconup" size={24} onClick={onMoveUp} />
             <IconfontButton type="icondown" size={24} onClick={onMoveDown} />
@@ -44,7 +45,7 @@ export default function Container({
             <Title>
               <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title} {extra}
             </Title>
-            {!hideRemove && (
+            {!readonly && !hideRemove && (
               <Button size="small" type="link" onClick={onRemove}>
                 <Iconfont type="icontrash-orange" size={14} /> 移除
               </Button>
