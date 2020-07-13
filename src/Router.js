@@ -12,6 +12,7 @@ import {
   Baby,
   Modules,
   Module,
+  Curriculums,
   Curriculum,
 } from './pages/*';
 
@@ -21,12 +22,20 @@ const routes = [
     component: Profiles,
   },
   {
-    path: '/curriculum/draft',
+    path: '/curriculums/create',
     component: Curriculum,
   },
   {
-    path: '/curriculum',
+    path: '/curriculums/edit/:id',
     component: Curriculum,
+  },
+  {
+    path: '/curriculums/:id',
+    component: Curriculum,
+  },
+  {
+    path: '/curriculums',
+    component: Curriculums,
   },
   {
     path: '/users/:id',
