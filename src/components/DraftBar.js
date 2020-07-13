@@ -1,11 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Button } from 'antd';
 import moment from 'moment';
+import styled from 'styled-components';
+import { Space, Button } from 'antd';
+
+import { DeletePopconfirm } from './*';
 
 export default function DraftBar({
   title = '本课程有1个尚未发布的草稿：',
   onClick,
+  onRemove,
   lastModifiedDraftAt,
 }) {
   return (
@@ -14,9 +17,14 @@ export default function DraftBar({
       <Flex>
         <Label>编辑日期：</Label>
         <Date>{moment(lastModifiedDraftAt).format('YYYY/MM/DD')}</Date>
-        <StyledButton ghost type="primary" onClick={onClick}>
-          继续编辑
-        </StyledButton>
+        <Space size="large">
+          <DeletePopconfirm onConfirm={onRemove}>
+            <DeleteButton ghost>删除草稿</DeleteButton>
+          </DeletePopconfirm>
+          <EditButton ghost type="primary" onClick={onClick}>
+            继续编辑
+          </EditButton>
+        </Space>
       </Flex>
     </Container>
   );
@@ -51,9 +59,16 @@ const Date = styled.div`
   margin-right: 30px;
 `;
 
-const StyledButton = styled(Button)`
+const EditButton = styled(Button)`
   &.ant-btn.ant-btn-background-ghost {
     background: #fff !important;
     border: none;
+  }
+`;
+
+const DeleteButton = styled(Button)`
+  &.ant-btn.ant-btn-background-ghost {
+    border-color: #fff !important;
+    color: #fff !important;
   }
 `;

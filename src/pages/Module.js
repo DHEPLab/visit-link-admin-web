@@ -134,6 +134,12 @@ export default function Module() {
     }).then(history.goBack);
   }
 
+  function handleDelteDraft() {
+    Axios.delete(`/admin/module/${draftId}`).then(() => {
+      setDraftId('');
+    });
+  }
+
   if (!components) {
     return null;
   }
@@ -177,6 +183,7 @@ export default function Module() {
             <DraftBar
               title="本模块有1个尚未发布的草稿："
               lastModifiedDraftAt={draftDate}
+              onRemove={handleDelteDraft}
               onClick={() => history.push(`/modules/edit/${draftId}`)}
             />
           )}
