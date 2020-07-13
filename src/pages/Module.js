@@ -154,9 +154,9 @@ export default function Module() {
             title={title}
             extra={
               <Space size="large">
-                <Button ghost type="primary">
+                {/* <Button ghost type="primary">
                   删除模块
-                </Button>
+                </Button> */}
                 {readonly ? (
                   <>
                     {!draftId && (

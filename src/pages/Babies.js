@@ -37,9 +37,9 @@ function Babies({ loadData, onChangeSearch, ...props }) {
             placeholder="请输入宝宝姓名、ID或所在区域搜索"
             onChange={(e) => onChangeSearch('search', e.target.value)}
           />
-          <Button ghost type="primary">
+          {/* <Button ghost type="primary">
             批量创建宝宝
-          </Button>
+          </Button> */}
           <Button type="primary" onClick={openBaby}>
             创建新宝宝
           </Button>
