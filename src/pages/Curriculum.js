@@ -67,6 +67,7 @@ export default function Curriculum() {
 
   function onFinish(values) {
     Axios.post(submitURL, {
+      id,
       ...values,
       lessons,
       schedules,
