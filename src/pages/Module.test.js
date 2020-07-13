@@ -13,7 +13,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('axios');
 
-test('should render create module page', () => {
+test('should render create page', () => {
   useParams.mockImplementation(() => ({}));
   useLocation.mockImplementation(() => ({ pathname: '/modules/create' }));
   const { queryByText, queryByTestId } = render(<Module />);
@@ -22,7 +22,7 @@ test('should render create module page', () => {
   expect(queryByTestId('readonly-form')).not.toBeInTheDocument();
 });
 
-test('should render readonly module page', async () => {
+test('should render readonly page', async () => {
   useParams.mockImplementation(() => ({ id: 1 }));
   useLocation.mockImplementation(() => ({ pathname: '/modules/1' }));
   Axios.get.mockResolvedValue({
@@ -33,6 +33,7 @@ test('should render readonly module page', async () => {
       topic: 'BABY_FOOD',
       components: [],
     },
+    headers: {},
   });
   let renderResult;
   await act(async () => {
@@ -46,4 +47,30 @@ test('should render readonly module page', async () => {
   expect(queryByText(/婴儿辅食/)).toBeInTheDocument();
   expect(queryByTestId('basic-form')).not.toBeInTheDocument();
   expect(queryByTestId('readonly-form')).toBeInTheDocument();
+});
+
+test('should render readonly page and has draft', async () => {
+  useParams.mockImplementation(() => ({ id: 2 }));
+  useLocation.mockImplementation(() => ({ pathname: '/modules/2' }));
+  Axios.get.mockResolvedValue({
+    data: {
+      name: 'Module Name',
+      number: 'M1',
+      description: 'Module Description',
+      topic: 'BABY_FOOD',
+      components: [],
+    },
+    headers: {
+      'x-draft-id': 3,
+      'x-draft-date': '2020-07-10T19:55:37',
+    },
+  });
+  let renderResult;
+  await act(async () => {
+    renderResult = render(<Module />);
+  });
+
+  const { queryByText } = renderResult;
+  expect(queryByText(/本模块有1个尚未发布的草稿：/)).toBeInTheDocument();
+  expect(queryByText(/2020\/07\/10/)).toBeInTheDocument();
 });

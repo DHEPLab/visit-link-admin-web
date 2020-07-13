@@ -3,10 +3,14 @@ import styled from 'styled-components';
 import { Button } from 'antd';
 import moment from 'moment';
 
-export default function DraftBar({ onClick, lastModifiedDraftAt }) {
+export default function DraftBar({
+  title = '本课程有1个尚未发布的草稿：',
+  onClick,
+  lastModifiedDraftAt,
+}) {
   return (
     <Container>
-      <Title>本课程有1个尚未发布的草稿：</Title>
+      <Title>{title}</Title>
       <Flex>
         <Label>编辑日期：</Label>
         <Date>{moment(lastModifiedDraftAt).format('YYYY/MM/DD')}</Date>

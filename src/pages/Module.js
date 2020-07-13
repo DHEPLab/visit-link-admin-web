@@ -9,7 +9,7 @@ import Factory from '../components/curriculum/factory';
 import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
-import { Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
+import { DraftBar, Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
 
 function ModuleComponents({ values, readonly }) {
   return (
@@ -78,7 +78,7 @@ function ModuleComponents({ values, readonly }) {
 export default function Module() {
   const { id } = useParams();
   const { pathname } = useLocation();
-  const [readonly, setReadonly] = useState(false);
+  const [readonly, setReadonly] = useState();
   const history = useHistory();
 
   const [form] = Form.useForm();
@@ -88,22 +88,28 @@ export default function Module() {
   const [module, setModule] = useState({});
   const [components, setComponents] = useState();
 
+  const [draftId, setDraftId] = useState();
+  const [draftDate, setDraftDate] = useState();
+
   useEffect(() => {
     setReadonly(!pathname.includes('/modules/edit') && !pathname.includes('/modules/create'));
   }, [pathname, setReadonly]);
 
   useEffect(() => {
+    if (readonly == null) return;
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
-      Axios.get(`/admin/module/${id}`).then(({ data }) => {
-        form.setFieldsValue(data);
-        setTitle(data.name);
+      Axios.get(`/admin/module/${id}`).then(({ data, headers }) => {
+        if (!readonly) form.setFieldsValue(data);
         setModule(data);
+        setTitle(data.name);
         setComponents(data.components);
+        setDraftId(headers['x-draft-id']);
+        setDraftDate(headers['x-draft-date']);
       });
     }
-  }, [id, form]);
+  }, [id, form, readonly]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -146,9 +152,13 @@ export default function Module() {
                   删除模块
                 </Button>
                 {readonly ? (
-                  <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
-                    编辑模块
-                  </Button>
+                  <>
+                    {!draftId && (
+                      <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
+                        编辑模块
+                      </Button>
+                    )}
+                  </>
                 ) : (
                   <>
                     <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
@@ -162,6 +172,14 @@ export default function Module() {
               </Space>
             }
           ></DetailHeader>
+
+          {draftId && (
+            <DraftBar
+              title="本模块有1个尚未发布的草稿："
+              lastModifiedDraftAt={draftDate}
+              onClick={() => history.push(`/modules/edit/${draftId}`)}
+            />
+          )}
 
           <Card title="模块基本信息">
             {readonly ? (
