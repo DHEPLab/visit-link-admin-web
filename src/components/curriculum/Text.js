@@ -16,9 +16,10 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 
   return (
     <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
-      <QuillContainer className="text-editor">
-        <CustomToolbar id={Name.toolbar} value={value.type} />
+      <QuillContainer className="text-editor" readonly={props.readonly}>
+        <CustomToolbar id={Name.toolbar} value={value.type} readonly={props.readonly} />
         <ReactQuill
+          readOnly={props.readonly}
           theme="snow"
           modules={{
             toolbar: {
@@ -45,21 +46,33 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 /*
  * Custom toolbar component including insertStar button and dropdowns
  */
-const CustomToolbar = ({ id, value }) => (
+const CustomToolbar = ({ id, value, readonly }) => (
   <div id={id}>
-    <select className="ql-type" defaultValue={value}>
-      <option value="script">One</option>
-      <option value="instruction">Two</option>
-      <option value="refrence">Three</option>
-    </select>
-    <button className="ql-bold"></button>
-    <button className="ql-italic"></button>
-    <button className="ql-list" value="ordered"></button>
-    <button className="ql-list" value="bullet"></button>
+    {!readonly && (
+      <>
+        <select className="ql-type" defaultValue={value}>
+          <option value="script">One</option>
+          <option value="instruction">Two</option>
+          <option value="refrence">Three</option>
+        </select>
+        <button className="ql-bold"></button>
+        <button className="ql-italic"></button>
+        <button className="ql-list" value="ordered"></button>
+        <button className="ql-list" value="bullet"></button>
+      </>
+    )}
   </div>
 );
 
 const QuillContainer = styled.div`
+  ${({ readonly }) =>
+    readonly &&
+    `
+  .ql-toolbar.ql-snow {
+    padding: 0;
+  }
+  `}
+
   .ql-picker.ql-type {
     width: 90px;
   }
