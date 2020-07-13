@@ -29,7 +29,7 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         onRow={(record) => {
           return {
             onClick: () => {
-              history.push(`/curriculum/${record.id}`);
+              history.push(`/curriculums/${record.id}`);
             },
           };
         }}

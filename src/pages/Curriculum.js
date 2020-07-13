@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import Arrays from 'lodash/array';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
@@ -41,16 +43,16 @@ export default function Curriculum() {
   }, [pathname, setReadonly]);
 
   useEffect(() => {
-    if (readonly == null) return;
-    if (id) {
-      Axios.get(`/admin/curriculum/${id}`).then(({ data, headers }) => {
-        if (!readonly) form.setFieldsValue(data);
-        setTitle(data.name);
-        setDraftId(headers['x-draft-id']);
-        setDraftDate(headers['x-draft-date']);
-        setCurriculum({ ...data, lessons: [], schedules: [] });
-      });
-    }
+    if (readonly == null || !id) return;
+    Axios.get(`/admin/curriculum/${id}`).then(({ data, headers }) => {
+      if (!readonly) form.setFieldsValue(data);
+      setTitle(data.name);
+      setDraftId(headers['x-draft-id']);
+      setDraftDate(headers['x-draft-date']);
+      setLessons(data.lessons);
+      setSchedules(data.schedules);
+      setCurriculum({ ...data, lessons: [], schedules: [] });
+    });
   }, [id, form, readonly]);
 
   function submitDraft() {
@@ -88,7 +90,7 @@ export default function Curriculum() {
             {readonly ? (
               <>
                 {!draftId && (
-                  <Button type="danger" onClick={() => history.push(`/curriculum/edit/${id}`)}>
+                  <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
                     编辑模块
                   </Button>
                 )}
@@ -112,7 +114,7 @@ export default function Curriculum() {
           title="本课程有1个尚未发布的草稿："
           lastModifiedDraftAt={draftDate}
           onRemove={handleDelteDraft}
-          onClick={() => history.push(`/curriculum/edit/${draftId}`)}
+          onClick={() => history.push(`/curriculums/edit/${draftId}`)}
         />
       )}
 
@@ -178,9 +180,9 @@ function withEdit(Wrapper) {
       openModal();
     }
 
-    function openCreateModal() {
+    function openCreateModal(defaultValue = {}) {
       setCurrentEditIndex(-1);
-      setCurrentEditValue({});
+      setCurrentEditValue(defaultValue);
       openModal();
     }
 
@@ -215,17 +217,8 @@ function Lessons({
   closeModal,
   visible,
 }) {
+  const { networks } = useSelector((state) => state);
   const [moduleOptions, setModuleOptions] = useState([]);
-
-  // useEffect(() => {
-  //   Axios.get('/admin/module', {
-  //     params: {
-  //       size: 1000,
-  //     },
-  //   }).then(({ data }) => {
-  //     setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
-  //   });
-  // }, []);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -240,12 +233,22 @@ function Lessons({
     onChange(pullAt(value, index));
   }
 
+  function loadModuleOptions() {
+    Axios.get('/admin/module', {
+      params: {
+        size: 1000,
+      },
+    }).then(({ data }) => {
+      setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
+    });
+  }
+
   return (
     <Card
       title="课堂列表"
       extra={
         !disabled && (
-          <Button type="shade" onClick={openCreateModal}>
+          <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
             添加新课堂
           </Button>
         )
@@ -259,31 +262,40 @@ function Lessons({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item label="课堂序号" name="number">
+        <Form.Item label="课堂序号" name="number" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="课堂名称" name="name">
+        <Form.Item label="课堂名称" name="name" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="课堂描述" name="description">
+        <Form.Item label="课堂描述" name="description" rules={Rules.Required}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="适用宝宝" name="stage">
+        <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
           <RadioEnum name="BabyStage" />
         </Form.Item>
-        <Form.Item label="开始" name="startOfApplicableDays">
-          <InputNumber />
+        <ApplicableDaysContainer>
+          <Form.Item name="startOfApplicableDays" rules={Rules.Required}>
+            <InputNumber />
+          </Form.Item>
+          <ApplicableDaysConnector>至</ApplicableDaysConnector>
+          <Form.Item name="endOfApplicableDays" rules={Rules.Required}>
+            <InputNumber />
+          </Form.Item>
+        </ApplicableDaysContainer>
+        <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
+          <Select
+            mode="multiple"
+            labelInValue
+            options={moduleOptions}
+            onFocus={loadModuleOptions}
+            loading={networks['/admin/module' > 0]}
+          ></Select>
         </Form.Item>
-        <Form.Item label="结束" name="endOfApplicableDays">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="包含模块" name="modules">
-          <Select mode="multiple" labelInValue options={moduleOptions}></Select>
-        </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress">
+        <Form.Item label="调查问卷" name="questionnaireAddress" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress">
+        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={Rules.Required}>
           <Input />
         </Form.Item>
       </ModalForm>
@@ -319,6 +331,16 @@ function Lessons({
     </Card>
   );
 }
+
+const ApplicableDaysContainer = styled.div`
+  display: flex;
+  padding-left: ${92 + 23 + 14}px;
+`;
+
+const ApplicableDaysConnector = styled.div`
+  margin: 0 14px;
+  margin-top: 8px;
+`;
 
 function Schedules({
   disabled,
