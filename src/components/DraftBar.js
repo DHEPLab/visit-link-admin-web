@@ -5,12 +5,7 @@ import { Space, Button } from 'antd';
 
 import { DeletePopconfirm } from './*';
 
-export default function DraftBar({
-  title = '本课程有1个尚未发布的草稿：',
-  onClick,
-  onRemove,
-  lastModifiedDraftAt,
-}) {
+export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt }) {
   return (
     <Container>
       <Title>{title}</Title>

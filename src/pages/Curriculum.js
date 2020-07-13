@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import Arrays from 'lodash/array';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
@@ -18,43 +18,40 @@ import {
 } from '../components/*';
 
 export default function Curriculum() {
-  const [form] = Form.useForm();
+  const { id } = useParams();
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const [requestURL, setRequestURL] = useState();
+  const [readonly, setReadonly] = useState();
+  const [title, setTitle] = useState('创建新课程');
   const [submitURL, setSubmitURL] = useState();
-  const [editable, setEditable] = useState();
 
+  const [form] = Form.useForm();
   const [curriculum, setCurriculum] = useState({});
   const [lessons, setLessons] = useState([]);
   const [schedules, setSchedules] = useState([]);
 
-  useEffect(() => {
-    switch (location.pathname) {
-      case '/curriculum':
-        setEditable(false);
-        setRequestURL('/admin/curriculum');
-        break;
-      case '/curriculum/draft':
-        setEditable(true);
-        setRequestURL('/admin/curriculum/draft');
-        break;
-      default:
-        console.warn(`error location.pathname ${location.pathname}`);
-    }
-  }, [location]);
+  const [draftId, setDraftId] = useState();
+  const [draftDate, setDraftDate] = useState();
 
   useEffect(() => {
-    if (!requestURL) return;
-    Axios.get(requestURL).then(({ data }) => {
-      if (!data) return;
-      form.setFieldsValue({ name: data.name, description: data.description });
-      setCurriculum({ ...data, lessons: [], schedules: [] });
-      setLessons(data.lessons);
-      setSchedules(data.schedules);
-    });
-  }, [requestURL, form]);
+    setReadonly(
+      !pathname.includes('/curriculums/edit') && !pathname.includes('/curriculums/create')
+    );
+  }, [pathname, setReadonly]);
+
+  useEffect(() => {
+    if (readonly == null) return;
+    if (id) {
+      Axios.get(`/admin/curriculum/${id}`).then(({ data, headers }) => {
+        if (!readonly) form.setFieldsValue(data);
+        setTitle(data.name);
+        setDraftId(headers['x-draft-id']);
+        setDraftDate(headers['x-draft-date']);
+        setCurriculum({ ...data, lessons: [], schedules: [] });
+      });
+    }
+  }, [id, form, readonly]);
 
   function submitDraft() {
     setSubmitURL('/admin/curriculum/draft');
@@ -71,7 +68,13 @@ export default function Curriculum() {
       ...values,
       lessons,
       schedules,
-    }).then(() => history.push('/curriculum'));
+    }).then(history.goBack);
+  }
+
+  function handleDelteDraft() {
+    Axios.delete(`/admin/curriculum/${draftId}`).then(() => {
+      setDraftId('');
+    });
   }
 
   return (
@@ -79,61 +82,62 @@ export default function Curriculum() {
       <DetailHeader
         icon="iconcurriculum-primary"
         menu="课程管理"
+        title={title}
         extra={
-          editable ? (
-            <Space size="large">
-              <Button ghost type="danger" onClick={submitDraft}>
-                保存草稿
-              </Button>
-              <Button type="danger" onClick={submitPublish}>
-                保存并发布
-              </Button>
-            </Space>
-          ) : (
-            <>
-              {!curriculum.hasDraft && (
-                <Button ghost type="primary" onClick={() => history.push('/curriculum/draft')}>
-                  编辑
+          <Space size="large">
+            {readonly ? (
+              <>
+                {!draftId && (
+                  <Button type="danger" onClick={() => history.push(`/curriculum/edit/${id}`)}>
+                    编辑模块
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <Button ghost type="danger" onClick={submitDraft}>
+                  保存至草稿
                 </Button>
-              )}
-            </>
-          )
+                <Button type="danger" onClick={submitPublish}>
+                  保存并发布
+                </Button>
+              </>
+            )}
+          </Space>
         }
       />
 
-      {(curriculum.id || editable) && (
-        <>
-          {curriculum.hasDraft && (
-            <DraftBar
-              lastModifiedDraftAt={curriculum.lastModifiedDraftAt}
-              onClick={() => history.push('/curriculum/draft')}
-            />
-          )}
-
-          <Card title="课程基本信息">
-            {editable ? (
-              <Form form={form} onFinish={onFinish}>
-                <Form.Item label="课程名称" name="name" rules={Rules.Required}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="课程描述" name="description" rules={Rules.Required}>
-                  <Input />
-                </Form.Item>
-              </Form>
-            ) : (
-              <StaticForm value={curriculum} />
-            )}
-          </Card>
-
-          <EnhancedLessons disabled={!editable} value={lessons} onChange={setLessons} />
-          <EnhancedSchedules
-            disabled={!editable}
-            value={schedules}
-            lessonOptions={lessons}
-            onChange={setSchedules}
-          />
-        </>
+      {draftId && (
+        <DraftBar
+          title="本课程有1个尚未发布的草稿："
+          lastModifiedDraftAt={draftDate}
+          onRemove={handleDelteDraft}
+          onClick={() => history.push(`/curriculum/edit/${draftId}`)}
+        />
       )}
+
+      <Card title="课程基本信息">
+        {readonly ? (
+          <ReadonlyForm value={curriculum} />
+        ) : (
+          <Form data-testid="basic-form" form={form} onFinish={onFinish}>
+            <Form.Item label="课程名称" name="name" rules={Rules.Required}>
+              <Input placeholder="请输入课程名称，限20个汉字" />
+            </Form.Item>
+            <Form.Item label="课程描述" name="description" rules={Rules.Required}>
+              <Input placeholder="请输入课程描述，限50个汉字" />
+            </Form.Item>
+          </Form>
+        )}
+      </Card>
+
+      <EnhancedLessons disabled={readonly} value={lessons} onChange={setLessons} />
+      <EnhancedSchedules
+        disabled={readonly}
+        value={schedules}
+        lessonOptions={lessons}
+        onChange={setSchedules}
+      />
     </>
   );
 }
@@ -141,12 +145,12 @@ export default function Curriculum() {
 const EnhancedLessons = withEdit(Lessons);
 const EnhancedSchedules = withEdit(Schedules);
 
-function StaticForm({ value: { name, description } }) {
+function ReadonlyForm({ value: { name, description } }) {
   return (
-    <>
+    <div data-testid="readonly-form">
       <StaticField label="课程名称">{name}</StaticField>
       <StaticField label="课程描述">{description}</StaticField>
-    </>
+    </div>
   );
 }
 
@@ -213,15 +217,15 @@ function Lessons({
 }) {
   const [moduleOptions, setModuleOptions] = useState([]);
 
-  useEffect(() => {
-    Axios.get('/admin/module', {
-      params: {
-        size: 1000,
-      },
-    }).then(({ data }) => {
-      setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
-    });
-  }, []);
+  // useEffect(() => {
+  //   Axios.get('/admin/module', {
+  //     params: {
+  //       size: 1000,
+  //     },
+  //   }).then(({ data }) => {
+  //     setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
+  //   });
+  // }, []);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
