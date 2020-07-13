@@ -30,12 +30,7 @@ export default function ({ title, visible, onCancel, onFinish, initialValues = {
         </Space>
       }
     >
-      <Form
-        form={form}
-        labelCol={{ span: 4, offset: 1 }}
-        wrapperCol={{ offset: 1 }}
-        onFinish={onFinish}
-      >
+      <Form form={form} labelCol={{ span: 4, offset: 1 }} onFinish={onFinish}>
         {children}
       </Form>
     </Modal>

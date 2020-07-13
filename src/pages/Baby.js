@@ -94,7 +94,7 @@ export default function Baby() {
 }
 
 function Carers({ babyId }) {
-  const [carer, setCarer] = useState({});
+  const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/baby/${babyId}/carer`, {}, []);
 
@@ -104,7 +104,7 @@ function Carers({ babyId }) {
   };
 
   const safeCloseCarer = () => {
-    setCarer({});
+    setCarer({ master: false });
     closeModal();
   };
 
@@ -151,7 +151,7 @@ function Carers({ babyId }) {
           </Radio.Group>
         </Form.Item>
         <Form.Item label="真实姓名" name="name" rules={Required}>
-          <Input />
+          <Input autoFocus />
         </Form.Item>
         <Form.Item label="亲属关系" name="familyTies" rules={Required}>
           <SelectEnum name="FamilyTies" />
