@@ -167,7 +167,7 @@ export default function Module() {
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-              <Form form={form} onFinish={onSubmit}>
+              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
                 <Form.Item label="模块名称" name="name" rules={Rules.Required}>
                   <Input placeholder="请输入模块名称，限20个汉字" />
                 </Form.Item>
@@ -195,12 +195,12 @@ export default function Module() {
 
 function ReadonlyForm({ value }) {
   return (
-    <>
+    <div data-testid="readonly-form">
       <StaticField label="模块名称">{value.name}</StaticField>
       <StaticField label="模块编号">{value.number}</StaticField>
       <StaticField label="模块描述">{value.description}</StaticField>
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
-    </>
+    </div>
   );
 }
 
