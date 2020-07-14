@@ -30,7 +30,7 @@ export default function Users() {
   }
 
   function handleCreateUser(value) {
-    Axios.post('/admin/user', value).then(() => {
+    Axios.post('/admin/users', value).then(() => {
       refresh();
       closeUser();
     });
@@ -107,9 +107,9 @@ export default function Users() {
   );
 }
 
-const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
-const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/user/admin?sort=id,desc', {}, false);
+const PageCHW = WithPage(CHW, '/admin/users/chw', {}, false);
+const PageSupervisor = WithPage(Supervisor, '/admin/users/supervisor', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/users/admin?sort=id,desc', {}, false);
 
 function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {

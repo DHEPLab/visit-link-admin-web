@@ -33,7 +33,7 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function upload(file) {
     return new Promise((resolve, reject) => {
-      Axios.get('/admin/oss/presigned-url', {
+      Axios.get('/admin/oss/pre-signed-url', {
         params: {
           format: fileFormat(file),
         },

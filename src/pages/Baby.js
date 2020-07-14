@@ -20,7 +20,7 @@ import {
 
 export default function Baby() {
   const { id } = useParams();
-  const [baby, refresh] = useFetch(`/admin/baby/${id}`);
+  const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
 
   const chw = () => baby.chw || {};
@@ -34,7 +34,7 @@ export default function Baby() {
 
   function handleChangeBaby(values) {
     values.area = values.area.join('/');
-    Axios.put(`/admin/baby/${id}`, { ...baby, ...values }).then(() => {
+    Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
     });
@@ -96,7 +96,7 @@ export default function Baby() {
 function Carers({ babyId }) {
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
-  const [dataSource, refresh] = useFetch(`/admin/baby/${babyId}/carer`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carer`, {}, []);
 
   const openCarerEdit = (record) => {
     setCarer(record);
@@ -110,14 +110,14 @@ function Carers({ babyId }) {
 
   async function handleDelete({ id, master }) {
     if (master) return message.warn('主看护人不可删除，请更换主看护人后进行此操作');
-    await Axios.delete(`/admin/carer/${id}`);
+    await Axios.delete(`/admin/carers/${id}`);
     refresh();
   }
 
   async function onFinish(values) {
     const { id } = carer;
     const method = id ? 'put' : 'post';
-    await Axios[method](`/admin/carer${id ? `/${id}` : ''}`, {
+    await Axios[method](`/admin/carers${id ? `/${id}` : ''}`, {
       baby: {
         id: babyId,
       },

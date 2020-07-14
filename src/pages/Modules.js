@@ -62,4 +62,4 @@ function Components({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Components, '/admin/module');
+export default WithPage(Components, '/admin/modules');

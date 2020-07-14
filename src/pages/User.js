@@ -19,7 +19,7 @@ import {
 
 export default function User() {
   const { id } = useParams();
-  const [user, refresh] = useFetch(`/admin/user/${id}`);
+  const [user, refresh] = useFetch(`/admin/users/${id}`);
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
 
@@ -27,7 +27,7 @@ export default function User() {
   const roleSupervisor = () => user.role === 'ROLE_SUPERVISOR';
 
   function handleChangeProfile(values) {
-    Axios.put(`/admin/user/${id}`, values).then(() => {
+    Axios.put(`/admin/users/${id}`, values).then(() => {
       refresh();
       closeChangeProfile();
     });
@@ -114,7 +114,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
   }, [props, form]);
 
   function onFinish(values) {
-    Axios.put(`/admin/user/${id}/password`, values).then(onCancel);
+    Axios.put(`/admin/users/${id}/password`, values).then(onCancel);
   }
 
   return (
@@ -152,7 +152,7 @@ function AssignBaby({ id }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/baby/${babyId}/chw`).then(refresh);
+    Axios.delete(`/admin/babies/${babyId}/chw`).then(refresh);
   }
 
   return (
@@ -224,7 +224,7 @@ function AssignBaby({ id }) {
 
 // open a new modal, assign chw to supervisor
 function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
-  const [dataSource, refresh] = useFetch(`/admin/baby/not_assigned`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/babies/not_assigned`, {}, []);
 
   useEffect(() => {
     if (visible) refresh();
@@ -268,11 +268,11 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
 
 function AssignChw({ id }) {
   const [visible, openModal, closeModal] = useBoolState();
-  const [dataSource, refresh] = useFetch(`/admin/user/supervisor/${id}/chw`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/users/supervisor/${id}/chw`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
-    Axios.delete(`/admin/user/chw/${chwId}/supervisor`).then(refresh);
+    Axios.delete(`/admin/users/chw/${chwId}/supervisor`).then(refresh);
   }
 
   return (
@@ -331,7 +331,7 @@ function AssignChw({ id }) {
 
 // open a new modal, assign chw to supervisor
 function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
-  const [dataSource, refresh] = useFetch(`/admin/user/chw/not_assigned`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/users/chw/not_assigned`, {}, []);
 
   useEffect(() => {
     if (visible) {
@@ -341,7 +341,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
   }, [visible]);
 
   async function handleAssign(chwIds) {
-    await Axios.post(`/admin/user/supervisor/${id}/chw`, chwIds);
+    await Axios.post(`/admin/users/supervisor/${id}/chw`, chwIds);
     refresh();
     onFinish();
     onCancel();

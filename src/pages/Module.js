@@ -100,7 +100,7 @@ export default function Module() {
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
-      Axios.get(`/admin/module/${id}`).then(({ data, headers }) => {
+      Axios.get(`/admin/modules/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
@@ -117,12 +117,12 @@ export default function Module() {
   }
 
   function submitDraft(submit) {
-    setSubmitURL('/admin/module/draft');
+    setSubmitURL('/admin/modules/draft');
     submit();
   }
 
   function submitPublish(submit) {
-    setSubmitURL('/admin/module');
+    setSubmitURL('/admin/modules');
     submit();
   }
 
@@ -135,7 +135,7 @@ export default function Module() {
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/module/${draftId}`).then(() => {
+    Axios.delete(`/admin/modules/${draftId}`).then(() => {
       setDraftId('');
     });
   }

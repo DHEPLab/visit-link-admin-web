@@ -22,7 +22,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
 
   function handleCreateBaby(values) {
     values.area = values.area.join('/');
-    Axios.post('/admin/baby', values).then(() => {
+    Axios.post('/admin/babies', values).then(() => {
       loadData();
       closeBaby();
     });
@@ -107,4 +107,4 @@ function Babies({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Babies, '/admin/baby?sort=id,desc');
+export default WithPage(Babies, '/admin/babies?sort=id,desc');

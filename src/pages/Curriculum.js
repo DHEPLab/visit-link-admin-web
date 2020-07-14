@@ -44,7 +44,7 @@ export default function Curriculum() {
 
   useEffect(() => {
     if (readonly == null || !id) return;
-    Axios.get(`/admin/curriculum/${id}`).then(({ data, headers }) => {
+    Axios.get(`/admin/curriculums/${id}`).then(({ data, headers }) => {
       if (!readonly) form.setFieldsValue(data);
       setTitle(data.name);
       setDraftId(headers['x-draft-id']);
@@ -56,12 +56,12 @@ export default function Curriculum() {
   }, [id, form, readonly]);
 
   function submitDraft() {
-    setSubmitURL('/admin/curriculum/draft');
+    setSubmitURL('/admin/curriculums/draft');
     form.submit();
   }
 
   function submitPublish() {
-    setSubmitURL('/admin/curriculum');
+    setSubmitURL('/admin/curriculums');
     form.submit();
   }
 
@@ -75,7 +75,7 @@ export default function Curriculum() {
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/curriculum/${draftId}`).then(() => {
+    Axios.delete(`/admin/curriculums/${draftId}`).then(() => {
       setDraftId('');
     });
   }
@@ -235,7 +235,7 @@ function Lessons({
   }
 
   function loadModuleOptions() {
-    Axios.get('/admin/module', {
+    Axios.get('/admin/modules', {
       params: {
         size: 1000,
       },
@@ -300,7 +300,7 @@ function Lessons({
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
-            loading={networks['/admin/module' > 0]}
+            loading={networks['/admin/modules' > 0]}
           ></Select>
         </Form.Item>
         <Form.Item label="调查问卷" name="questionnaireAddress" rules={Rules.Required}>

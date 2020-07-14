@@ -67,4 +67,4 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Curriculums, '/admin/curriculum?sort=id,desc');
+export default WithPage(Curriculums, '/admin/curriculums?sort=id,desc');
