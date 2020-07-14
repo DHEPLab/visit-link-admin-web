@@ -11,6 +11,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   };
 
   function type(args) {
+    if (!args) return;
     onChange(Name.type)(args);
   }
 
