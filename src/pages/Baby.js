@@ -96,7 +96,7 @@ export default function Baby() {
 function Carers({ babyId }) {
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
-  const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carer`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carers`, {}, []);
 
   const openCarerEdit = (record) => {
     setCarer(record);

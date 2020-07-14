@@ -148,7 +148,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 function AssignBaby({ id }) {
   const history = useHistory();
   const [visible, openModal, closeModal] = useBoolState(false);
-  const [dataSource, refresh] = useFetch(`/admin/chw/${id}/baby`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/users/chw/${id}/babies`, {}, []);
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
@@ -224,7 +224,7 @@ function AssignBaby({ id }) {
 
 // open a new modal, assign chw to supervisor
 function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
-  const [dataSource, refresh] = useFetch(`/admin/babies/not_assigned`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/users/chw/not_assigned/babies`, {}, []);
 
   useEffect(() => {
     if (visible) refresh();
@@ -232,7 +232,7 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
   }, [visible]);
 
   async function handleAssign(babyIds) {
-    await Axios.post(`/admin/chw/${id}/baby`, babyIds);
+    await Axios.post(`/admin/users/chw/${id}/babies`, babyIds);
     refresh();
     onFinish();
     onCancel();
@@ -272,7 +272,7 @@ function AssignChw({ id }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
-    Axios.delete(`/admin/users/chw/${chwId}/supervisor`).then(refresh);
+    Axios.delete(`/admin/users/chw/${chwId}/supervisor`).then(() => refresh());
   }
 
   return (
@@ -331,7 +331,7 @@ function AssignChw({ id }) {
 
 // open a new modal, assign chw to supervisor
 function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
-  const [dataSource, refresh] = useFetch(`/admin/users/chw/not_assigned`, {}, []);
+  const [dataSource, refresh] = useFetch(`/admin/users/supervisor/not_assigned/chw`, {}, []);
 
   useEffect(() => {
     if (visible) {
