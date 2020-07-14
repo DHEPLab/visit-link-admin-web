@@ -11,6 +11,10 @@ jest.mock('react-router-dom', () => ({
   useLocation: jest.fn(),
 }));
 
+jest.mock('react-redux', () => ({
+  useSelector: () => ({ networks: {} }),
+}));
+
 jest.mock('axios');
 
 test('should render create page', () => {
@@ -29,6 +33,8 @@ test('should render readonly page', async () => {
     data: {
       name: 'Curriculum Name',
       description: 'Curriculum Description',
+      lessons: [],
+      schedules: [],
     },
     headers: {},
   });
@@ -51,6 +57,8 @@ test('should render readonly page and has draft', async () => {
     data: {
       name: 'Curriculum Name',
       description: 'Curriculum Description',
+      lessons: [],
+      schedules: [],
     },
     headers: {
       'x-draft-id': 3,
