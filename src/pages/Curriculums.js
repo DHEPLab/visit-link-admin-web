@@ -28,8 +28,11 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         className="clickable"
         onRow={(record) => {
           return {
-            onClick: () => {
-              history.push(`/curriculums/${record.id}`);
+            onClick: (event) => {
+              // do noting when click other target
+              if (event.target.tagName === 'TD') {
+                history.push(`/curriculums/${record.id}`);
+              }
             },
           };
         }}
@@ -44,6 +47,19 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
           {
             title: '课程名称',
             dataIndex: 'name',
+          },
+          {
+            title: '操作',
+            dataIndex: 'id',
+            width: 200,
+            align: 'center',
+            render(id) {
+              return (
+                <Button type="link" size="small">
+                  分配宝宝
+                </Button>
+              );
+            },
           },
         ]}
       />
