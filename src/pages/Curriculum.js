@@ -276,12 +276,22 @@ function Lessons({
           <RadioEnum name="BabyStage" />
         </Form.Item>
         <ApplicableDaysContainer>
-          <Form.Item name="startOfApplicableDays" rules={Rules.Required}>
-            <InputNumber />
+          <Form.Item
+            label="适用天数"
+            labelCol={{ span: 0 }}
+            name="startOfApplicableDays"
+            rules={Rules.Required}
+          >
+            <InputNumber placeholder="天" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
-          <Form.Item name="endOfApplicableDays" rules={Rules.Required}>
-            <InputNumber />
+          <Form.Item
+            label="适用天数"
+            labelCol={{ span: 0 }}
+            name="endOfApplicableDays"
+            rules={Rules.Required}
+          >
+            <InputNumber placeholder="天" />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
@@ -381,7 +391,7 @@ function Schedules({
       title="课程区间匹配规则"
       extra={
         !disabled && (
-          <Button type="shade" onClick={openCreateModal}>
+          <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
             添加规则
           </Button>
         )
@@ -395,19 +405,32 @@ function Schedules({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item label="规则名称" name="name">
+        <Form.Item label="规则名称" name="name" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="适用宝宝" name="stage">
+        <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
           <RadioEnum name="BabyStage" />
         </Form.Item>
-        <Form.Item label="开始" name="startOfApplicableMonths">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="结束" name="endOfApplicableMonths">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="包含课堂" name="lessons">
+        <ApplicableDaysContainer>
+          <Form.Item
+            label="适用月数"
+            labelCol={{ span: 0 }}
+            name="startOfApplicableMonths"
+            rules={Rules.Required}
+          >
+            <InputNumber placeholder="月" />
+          </Form.Item>
+          <ApplicableDaysConnector>至</ApplicableDaysConnector>
+          <Form.Item
+            label="适用月数"
+            labelCol={{ span: 0 }}
+            name="endOfApplicableMonths"
+            rules={Rules.Required}
+          >
+            <InputNumber placeholder="月" />
+          </Form.Item>
+        </ApplicableDaysContainer>
+        <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
           <Select
             mode="multiple"
             labelInValue
