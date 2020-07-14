@@ -72,7 +72,7 @@ function App() {
 const AppContainer = styled.div`
   display: flex;
   width: 100%;
-  min-width: 1300px;
+  min-width: 1100px;
   height: 100vh;
   flex-direction: column;
 `;

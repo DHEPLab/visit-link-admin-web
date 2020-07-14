@@ -6,8 +6,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from '../reducers';
 
-export default (component) => {
-  const history = createMemoryHistory();
+export default (component, history = createMemoryHistory()) => {
   const store = createStore(rootReducer);
   return {
     ...render(

@@ -30,7 +30,7 @@ export default function Users() {
   }
 
   function handleCreateUser(value) {
-    Axios.post('/admin/user', value).then(() => {
+    Axios.post('/admin/users', value).then(() => {
       refresh();
       closeUser();
     });
@@ -107,9 +107,9 @@ export default function Users() {
   );
 }
 
-const PageCHW = WithPage(CHW, '/admin/user/chw', {}, false);
-const PageSupervisor = WithPage(Supervisor, '/admin/user/supervisor', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/user/admin?sort=id,desc', {}, false);
+const PageCHW = WithPage(CHW, '/admin/users/chw', {}, false);
+const PageSupervisor = WithPage(Supervisor, '/admin/users/supervisor', {}, false);
+const PageAdmin = WithPage(Admin, '/admin/users/admin?sort=id,desc', {}, false);
 
 function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
@@ -123,9 +123,9 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
           onChange={(e) => onChangeSearch('search', e.target.value)}
           placeholder="请输入社区工作者姓名、ID或所在区域搜索"
         />
-        <Button ghost type="primary">
+        {/* <Button ghost type="primary">
           批量创建社区工作者
-        </Button>
+        </Button> */}
       </ChwBar>
       <ZebraTable
         {...props}

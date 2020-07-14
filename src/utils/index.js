@@ -17,6 +17,12 @@ export function useFetch(url, params = {}, initialState = {}) {
   return [data, load];
 }
 
+export function fileFormat(file) {
+  if (!file.name) return;
+  const array = file.name.split('.');
+  return array[array.length - 1];
+}
+
 export function useBoolState(initialState = false) {
   const [bool, setBool] = useState(initialState);
   const setBoolTrue = () => {

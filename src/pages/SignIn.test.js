@@ -1,6 +1,6 @@
 import React from 'react';
-import setup from './setup';
-import SignIn from '../pages/SignIn';
+import setup from '../tests/setup';
+import SignIn from './SignIn';
 
 test('renders button sign in page', () => {
   const { getByText } = setup(<SignIn />);

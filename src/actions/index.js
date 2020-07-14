@@ -20,3 +20,10 @@ export function apiAccountProfile({ data }) {
     payload: data,
   };
 }
+
+export function activeComponent(name) {
+  return {
+    type: 'ACTIVE_COMPONENT',
+    payload: name,
+  };
+}

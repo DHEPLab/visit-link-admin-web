@@ -1,14 +1,37 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import { getToken } from './utils/token';
-import styled from 'styled-components';
 
-import { SignIn, Profiles, Curriculums, User, Users, Babies, Baby, Modules } from './pages/*';
+import {
+  SignIn,
+  Profiles,
+  User,
+  Users,
+  Babies,
+  Baby,
+  Modules,
+  Module,
+  Curriculums,
+  Curriculum,
+} from './pages/*';
 
 const routes = [
   {
     path: '/profiles',
     component: Profiles,
+  },
+  {
+    path: '/curriculums/create',
+    component: Curriculum,
+  },
+  {
+    path: '/curriculums/edit/:id',
+    component: Curriculum,
+  },
+  {
+    path: '/curriculums/:id',
+    component: Curriculum,
   },
   {
     path: '/curriculums',
@@ -29,6 +52,18 @@ const routes = [
   {
     path: '/babies',
     component: Babies,
+  },
+  {
+    path: '/modules/edit/:id',
+    component: Module,
+  },
+  {
+    path: '/modules/create',
+    component: Module,
+  },
+  {
+    path: '/modules/:id',
+    component: Module,
   },
   {
     path: '/modules',
