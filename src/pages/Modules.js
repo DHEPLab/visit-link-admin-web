@@ -1,23 +1,12 @@
 import React from 'react';
-// import Axios from 'axios';
 import { Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
-import {
-  WithPage,
-  ContentHeader,
-  ZebraTable,
-  SearchInput,
-  // DeletePopconfirm,
-} from '../components/*';
 import { ModuleTopic } from '../constants/enums';
+import { WithPage, ContentHeader, ZebraTable, SearchInput, Published } from '../components/*';
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
-
-  // function handleDelete(id) {
-  //   Axios.delete(`/admin/module/${id}`).then(loadData);
-  // }
 
   return (
     <>
@@ -51,9 +40,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
             dataIndex: 'published',
             width: 120,
             align: 'center',
-            render(h) {
-              return h ? '已发布' : '草稿';
-            },
+            render: (h) => <Published value={h} />,
           },
           {
             title: '模块编号',
@@ -75,4 +62,4 @@ function Components({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Components, '/admin/module?sort=id,desc');
+export default WithPage(Components, '/admin/module');

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
-import { WithPage, ContentHeader, ZebraTable, SearchInput } from '../components/*';
+import { Published, WithPage, ContentHeader, ZebraTable, SearchInput } from '../components/*';
 
 function Curriculums({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
@@ -39,9 +39,7 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
             dataIndex: 'published',
             width: 120,
             align: 'center',
-            render(h) {
-              return h ? '已发布' : '草稿';
-            },
+            render: (h) => <Published value={h} />,
           },
           {
             title: '课程名称',
