@@ -17,6 +17,21 @@ export function useFetch(url, params = {}, initialState = {}) {
   return [data, load];
 }
 
+export function useManualFetch(url, params = {}, initialState = {}) {
+  const [data, setData] = useState(initialState);
+
+  function load(search = {}) {
+    Axios.get(url, {
+      params: {
+        ...params,
+        ...search,
+      },
+    }).then((r) => setData(r.data));
+  }
+
+  return [data, load];
+}
+
 export function fileFormat(file) {
   if (!file.name) return;
   const array = file.name.split('.');
