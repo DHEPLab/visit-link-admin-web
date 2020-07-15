@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Axios from 'axios';
-import { Modal, Button, Space } from 'antd';
+import { Modal, Button, Space, Popover } from 'antd';
+import { InfoCircleFilled } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { debounce } from 'lodash';
 
-import { useManualFetch, useBoolState } from '../utils';
 import { Gender } from '../constants/enums';
+import { useManualFetch, useBoolState } from '../utils';
 import {
   Published,
   WithPage,
@@ -135,11 +136,17 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
       bodyStyle={{ padding: 0 }}
     >
       <ModalHeader>
-        <Title>课程分配宝宝列表</Title>
+        <Title>
+          <label>课程分配宝宝列表</label>
+          <Popover placement="right" content="宝宝将自动分配至最新发布的课程版本。" trigger="hover">
+            <InfoCircleFilled />
+          </Popover>
+        </Title>
         <Button type="shade" onClick={openModal}>
           添加新宝宝
         </Button>
       </ModalHeader>
+
       <ZebraTable
         rowKey="id"
         dataSource={assignedDataSource}
@@ -222,9 +229,14 @@ const ModalHeader = styled.div`
 `;
 
 const Title = styled.div`
-  color: #4a4a4a;
-  font-size: 20px;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  label {
+    color: #4a4a4a;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
 `;
 
 export default WithPage(Curriculums, '/admin/curriculums?sort=id,desc');
