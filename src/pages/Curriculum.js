@@ -80,6 +80,9 @@ export default function Curriculum() {
     });
   }
 
+  // fix page flash
+  if (readonly == null || (id && curriculum.name == null)) return null;
+
   return (
     <>
       <DetailHeader
