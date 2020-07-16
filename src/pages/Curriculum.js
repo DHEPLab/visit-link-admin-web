@@ -7,7 +7,7 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
-import { BabyStage } from '../constants/enums';
+import { CurriculumBabyStage } from '../constants/enums';
 import { useBoolState } from '../utils';
 import {
   StaticField,
@@ -249,6 +249,7 @@ function Lessons({
 
   return (
     <Card
+      noPadding
       title="课堂列表"
       extra={
         !disabled && (
@@ -257,7 +258,6 @@ function Lessons({
           </Button>
         )
       }
-      noPadding
     >
       <ModalForm
         title="编辑课堂"
@@ -276,7 +276,7 @@ function Lessons({
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
-          <RadioEnum name="BabyStage" />
+          <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDaysContainer>
           <Form.Item
@@ -306,10 +306,10 @@ function Lessons({
             loading={networks['/admin/modules' > 0]}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress" rules={Rules.Required}>
+        <Form.Item label="调查问卷" name="questionnaireAddress">
           <Input />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={Rules.Required}>
+        <Form.Item label="短信问卷" name="smsQuestionnaireAddress">
           <Input />
         </Form.Item>
       </ModalForm>
@@ -329,7 +329,7 @@ function Lessons({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${BabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
+              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
                 record.endOfApplicableDays
               }天`;
             },
@@ -412,7 +412,7 @@ function Schedules({
           <Input />
         </Form.Item>
         <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
-          <RadioEnum name="BabyStage" />
+          <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDaysContainer>
           <Form.Item
@@ -460,9 +460,9 @@ function Schedules({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${BabyStage[record.stage]} ${record.startOfApplicableMonths}个月 - ${
-                record.endOfApplicableMonths
-              }个月`;
+              return `${CurriculumBabyStage[record.stage]} ${
+                record.startOfApplicableMonths
+              }个月 - ${record.endOfApplicableMonths}个月`;
             },
           },
           {

@@ -15,6 +15,11 @@ export const BabyStage = {
   BIRTH: '婴幼期',
 };
 
+export const CurriculumBabyStage = {
+  EDC: '已怀孕',
+  BIRTH: '已出生',
+};
+
 export const FeedingPattern = {
   BREAST_MILK: '纯母乳喂养',
   MILK_POWDER: '纯奶粉喂养',
