@@ -285,16 +285,26 @@ function Lessons({
             name="startOfApplicableDays"
             rules={Rules.Required}
           >
-            <InputNumber placeholder="天" />
+            <InputNumber min={1} precision={0} placeholder="天" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
             label="适用天数"
             labelCol={{ span: 0 }}
             name="endOfApplicableDays"
-            rules={Rules.Required}
+            rules={[
+              ...Rules.Required,
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || Number(value) > Number(getFieldValue('startOfApplicableDays'))) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('必须大于起始天数');
+                },
+              }),
+            ]}
           >
-            <InputNumber placeholder="天" />
+            <InputNumber min={1} precision={0} placeholder="天" />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
@@ -421,16 +431,26 @@ function Schedules({
             name="startOfApplicableMonths"
             rules={Rules.Required}
           >
-            <InputNumber placeholder="月" />
+            <InputNumber min={1} precision={0} placeholder="月" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
             label="适用月数"
             labelCol={{ span: 0 }}
             name="endOfApplicableMonths"
-            rules={Rules.Required}
+            rules={[
+              ...Rules.Required,
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || Number(value) >= Number(getFieldValue('startOfApplicableMonths'))) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('必须大于等于起始月');
+                },
+              }),
+            ]}
           >
-            <InputNumber placeholder="月" />
+            <InputNumber min={1} precision={0} placeholder="月" />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
