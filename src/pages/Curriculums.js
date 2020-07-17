@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Axios from 'axios';
-import { Modal, Button, Space, Popover } from 'antd';
+import { Modal, Button, Space, Tooltip } from 'antd';
 import { InfoCircleFilled } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 import { debounce } from 'lodash';
@@ -138,9 +138,9 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
       <ModalHeader>
         <Title>
           <label>课程分配宝宝列表</label>
-          <Popover placement="right" content="宝宝将自动分配至最新发布的课程版本。" trigger="hover">
+          <Tooltip title="宝宝将自动分配至最新发布的课程版本" placement="right">
             <InfoCircleFilled />
-          </Popover>
+          </Tooltip>
         </Title>
         <Button type="shade" onClick={openModal}>
           添加新宝宝
