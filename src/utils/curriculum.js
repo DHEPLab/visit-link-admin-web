@@ -11,7 +11,7 @@ export function filterLessons(lessons, stage, startMonth, endMonth) {
     );
   });
 }
-export function validateLessonNumberUnique(lessons, number) {
+export function validateLessonNumberUnique(lessons, number, id) {
   if (!lessons || lessons.length === 0) return true;
-  return !lessons.find((lesson) => lesson.number === number);
+  return !lessons.find((lesson) => lesson.number === number && lesson.id !== id);
 }

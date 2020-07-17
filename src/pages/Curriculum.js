@@ -227,9 +227,10 @@ function Lessons({
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
-      onChange(Arrays.concat(value, formValues));
+      // create lesson generate temp id to identity unique lesson
+      onChange(Arrays.concat(value, { ...formValues, id: Date.now() }));
     } else {
-      onChange(replace(value, currentEditIndex, formValues));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
     closeModal();
   }
@@ -275,7 +276,7 @@ function Lessons({
             ...Rules.Required,
             () => ({
               validator(_, number) {
-                if (!number || validateLessonNumberUnique(value, number)) {
+                if (!number || validateLessonNumberUnique(value, number, currentEditValue.id)) {
                   return Promise.resolve();
                 }
                 return Promise.reject('课堂序号不能重复');

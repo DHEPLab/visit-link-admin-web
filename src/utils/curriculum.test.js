@@ -16,9 +16,20 @@ test('should filter lesson by stage, startMonths, endMonths', () => {
 test('should keep lesson number unique', () => {
   const lessons = [
     {
+      id: 1,
       number: 'L1',
     },
   ];
   expect(validateLessonNumberUnique(lessons, 'L1')).toBeFalsy();
   expect(validateLessonNumberUnique(lessons, 'L2')).toBeTruthy();
+});
+
+test('should pass validation when editing lesson', () => {
+  const lessons = [
+    {
+      id: 1,
+      number: 'L1',
+    },
+  ];
+  expect(validateLessonNumberUnique(lessons, 'L1', 1)).toBeTruthy();
 });
