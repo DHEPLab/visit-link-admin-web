@@ -182,7 +182,6 @@ function Carers({ babyId }) {
           {
             title: '主看护人',
             dataIndex: 'master',
-            align: 'center',
             render(h) {
               return h ? '是' : '否';
             },
@@ -190,28 +189,23 @@ function Carers({ babyId }) {
           {
             title: '看护人姓名',
             dataIndex: 'name',
-            align: 'center',
           },
           {
             title: '亲属关系',
             dataIndex: 'familyTies',
-            align: 'center',
             render: (h) => FamilyTies[h],
           },
           {
             title: '联系电话',
             dataIndex: 'phone',
-            align: 'center',
           },
           {
             title: '微信号',
             dataIndex: 'wechat',
-            align: 'center',
           },
           {
             title: '操作',
             dataIndex: 'id',
-            align: 'center',
             width: 200,
             render(id, record) {
               return (

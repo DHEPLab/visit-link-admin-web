@@ -60,28 +60,29 @@ function Babies({ loadData, onChangeSearch, ...props }) {
             columns={[
               {
                 title: '宝宝姓名',
-                align: 'center',
                 dataIndex: 'name',
+                width: 150,
               },
               {
                 title: 'ID',
-                align: 'center',
+                width: 200,
                 dataIndex: 'identity',
               },
               {
                 title: '性别',
-                align: 'center',
+                width: 100,
                 dataIndex: 'gender',
                 render: (h) => Gender[h],
               },
               {
                 title: '所在区域',
                 dataIndex: 'area',
+                width: 500,
               },
               {
                 title: '负责社区工作者',
-                align: 'center',
                 dataIndex: 'chw',
+                width: 200,
               },
               // {
               //   title: '已上课程',

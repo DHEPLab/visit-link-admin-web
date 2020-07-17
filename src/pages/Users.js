@@ -136,24 +136,24 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
           realName,
           {
             title: 'ID',
-            align: 'center',
+            width: 200,
             dataIndex: ['user', 'chw', 'identity'],
           },
           {
             title: '所在区域',
-            align: 'center',
+            width: 500,
             dataIndex: ['user', 'chw', 'tags'],
             render: (tags) => tags && tags.join(', '),
           },
           phone,
           {
             title: '督导',
-            align: 'center',
+            width: 200,
             dataIndex: ['user', 'chw', 'supervisor', 'realName'],
           },
           {
             title: '负责宝宝',
-            align: 'center',
+            width: 200,
             dataIndex: 'babyCount',
             render: (h) => `${h} 位`,
           },
@@ -193,7 +193,7 @@ function Supervisor({ tab, history, loadData, ...props }) {
           {
             title: '负责社区工作者',
             dataIndex: 'chwCount',
-            align: 'center',
+            width: 200,
             render: (h) => `${h} 位`,
           },
           username,
@@ -227,19 +227,19 @@ function Admin({ tab, history, loadData, ...props }) {
 
 const realName = {
   title: '姓名',
-  align: 'center',
+  width: 150,
   dataIndex: ['user', 'realName'],
 };
 
 const phone = {
   title: '联系电话',
-  align: 'center',
+  width: 200,
   dataIndex: ['user', 'phone'],
 };
 
 const username = {
   title: '账户名称',
-  align: 'center',
+  width: 200,
   dataIndex: ['user', 'username'],
 };
 
