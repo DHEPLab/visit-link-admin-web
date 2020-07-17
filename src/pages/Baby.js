@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Space, Input, Radio, message } from 'antd';
+import { Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -132,9 +132,19 @@ function Carers({ babyId }) {
       title="看护人列表"
       noPadding
       extra={
-        <Button onClick={openModal} type="shade">
-          新增看护人
-        </Button>
+        <>
+          {dataSource.length > 3 ? (
+            <Tooltip title="看护人最多可添加4人">
+              <Button disabled={true} type="shade">
+                新增看护人
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button onClick={openModal} type="shade">
+              新增看护人
+            </Button>
+          )}
+        </>
       }
     >
       <ModalForm
