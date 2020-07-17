@@ -23,6 +23,8 @@ export const CurriculumBabyStage = {
 export const FeedingPattern = {
   BREAST_MILK: '纯母乳喂养',
   MILK_POWDER: '纯奶粉喂养',
+  MIXED: '母乳奶粉混合喂养',
+  TERMINATED: '已终止母乳/奶粉喂养',
 };
 
 export const FamilyTies = {
