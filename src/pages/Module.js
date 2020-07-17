@@ -44,28 +44,30 @@ function ModuleComponents({ values, readonly }) {
 
             {!readonly && (
               <ComponentToolBar>
-                <Card title="添加组件：">
-                  <Space direction="vertical" size="large">
-                    <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                      <Iconfont type="icontext" /> 添加文本组件
-                    </Button>
-                    <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
-                      <Iconfont type="iconmedia" />
-                      添加媒体组件
-                    </Button>
-                    <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
-                      <Iconfont type="iconswitch" />
-                      添加选择组件
-                    </Button>
-                    <Button
-                      style={{ width: '182px' }}
-                      type="primary"
-                      onClick={() => helpers.push(Factory.createPageFooter())}
-                    >
-                      添加翻页分割组件
-                    </Button>
-                  </Space>
-                </Card>
+                <StickyContainer>
+                  <Card title="添加组件：">
+                    <Space direction="vertical" size="large">
+                      <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
+                        <Iconfont type="icontext" /> 添加文本组件
+                      </Button>
+                      <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
+                        <Iconfont type="iconmedia" />
+                        添加媒体组件
+                      </Button>
+                      <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
+                        <Iconfont type="iconswitch" />
+                        添加选择组件
+                      </Button>
+                      <Button
+                        style={{ width: '182px' }}
+                        type="primary"
+                        onClick={() => helpers.push(Factory.createPageFooter())}
+                      >
+                        添加翻页分割组件
+                      </Button>
+                    </Space>
+                  </Card>
+                </StickyContainer>
               </ComponentToolBar>
             )}
           </FieldArrayContainer>
@@ -74,6 +76,25 @@ function ModuleComponents({ values, readonly }) {
     </FieldArray>
   );
 }
+
+const FieldArrayContainer = styled.div`
+  display: flex;
+`;
+
+const ComponentForm = styled.div`
+  flex: 1;
+`;
+
+const ComponentToolBar = styled.div``;
+
+const StickyContainer = styled.div`
+  position: -webkit-sticky;
+  position: sticky;
+  height: 360px;
+  margin-left: 40px;
+  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
+  border-radius: 8px;
+`;
 
 export default function Module() {
   const { id } = useParams();
@@ -228,17 +249,3 @@ function ReadonlyForm({ value }) {
     </div>
   );
 }
-
-const FieldArrayContainer = styled.div`
-  display: flex;
-`;
-const ComponentForm = styled.div`
-  flex: 1;
-`;
-
-const ComponentToolBar = styled.div`
-  height: 360px;
-  margin-left: 40px;
-  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
-  border-radius: 8px;
-`;
