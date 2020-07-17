@@ -75,15 +75,15 @@ export default function Media({ name, value, onChange, ...props }) {
                 <br />
                 大小不超过5M
                 <br />
-                建议尺寸为246px x 180px
+                建议尺寸为 16:10
               </UploadButton>
             </Upload>
-            <Upload accept=".mp4" beforeUpload={handleUploadVideo}>
+            <Upload accept=".mp4" showUploadList={false} beforeUpload={handleUploadVideo}>
               <UploadButton title="点击上传视频" icon="iconvideo">
                 支持MP4 <br />
                 大小不超过10M
                 <br />
-                建议尺寸为246px x 180px
+                建议尺寸为 16:10
               </UploadButton>
             </Upload>
           </>
@@ -101,13 +101,35 @@ export default function Media({ name, value, onChange, ...props }) {
 
 function Preview({ type, file }) {
   if (type === 'PICTURE') {
-    return <PreviewImage src={`${OSS_HOST}${file}`} />;
+    return <PreviewImage url={`${OSS_HOST}${file}`} />;
   }
-  return <PreviewVideo src={`${OSS_HOST}${file}`} controls />;
+  return (
+    <PreviewVideo>
+      <video src={`${OSS_HOST}${file}`} controls />
+    </PreviewVideo>
+  );
 }
 
-const PreviewImage = styled.img``;
-const PreviewVideo = styled.video``;
+const PreviewImage = styled.div`
+  width: 400px;
+  height: 250px;
+  background: no-repeat center;
+  border-radius: 8px;
+  background-image: url(${({ url }) => url});
+`;
+
+const PreviewVideo = styled.div`
+  width: 400px;
+  height: 250px;
+  border-radius: 8px;
+  background: #000;
+  align-items: center;
+  display: flex;
+
+  video {
+    width: 400px;
+  }
+`;
 
 const Flex = styled.div`
   display: flex;
