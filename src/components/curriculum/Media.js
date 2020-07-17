@@ -113,7 +113,9 @@ function Preview({ type, file }) {
 const PreviewImage = styled.div`
   width: 400px;
   height: 250px;
-  background: no-repeat center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 8px;
   background-image: url(${({ url }) => url});
 `;
