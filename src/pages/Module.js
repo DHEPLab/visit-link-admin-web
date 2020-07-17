@@ -10,6 +10,7 @@ import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
 import { DraftBar, Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
+import DeletePopconfirm from '../components/DeletePopconfirm';
 
 function ModuleComponents({ values, readonly }) {
   return (
@@ -161,6 +162,12 @@ export default function Module() {
     });
   }
 
+  function handleDeleteModule() {
+    Axios.delete(`/admin/modules/${id}`).then(() => {
+      history.goBack();
+    });
+  }
+
   if (!components) {
     return null;
   }
@@ -175,11 +182,15 @@ export default function Module() {
             title={title}
             extra={
               <Space size="large">
-                {/* <Button ghost type="primary">
-                  删除模块
-                </Button> */}
                 {readonly ? (
                   <>
+                    {id && (
+                      <DeletePopconfirm onConfirm={handleDeleteModule}>
+                        <Button ghost type="primary">
+                          删除模块
+                        </Button>
+                      </DeletePopconfirm>
+                    )}
                     {!draftId && (
                       <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
                         编辑模块
