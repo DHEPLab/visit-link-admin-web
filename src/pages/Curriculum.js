@@ -8,7 +8,7 @@ import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
 import { CurriculumBabyStage } from '../constants/enums';
-import { useBoolState } from '../utils';
+import { useBoolState, filterLessons } from '../utils';
 import {
   StaticField,
   RadioEnum,
@@ -431,7 +431,7 @@ function Schedules({
             name="startOfApplicableMonths"
             rules={Rules.Required}
           >
-            <InputNumber min={1} precision={0} placeholder="月" />
+            <InputNumber min={0} precision={0} placeholder="月" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
@@ -453,15 +453,38 @@ function Schedules({
             <InputNumber min={1} precision={0} placeholder="月" />
           </Form.Item>
         </ApplicableDaysContainer>
-        <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
-          <Select
-            mode="multiple"
-            labelInValue
-            options={lessonOptions.map((lesson) => ({
-              label: lesson.number,
-              value: lesson.number,
-            }))}
-          ></Select>
+        <Form.Item
+          noStyle
+          shouldUpdate={(pre, cur) =>
+            pre.stage !== cur.stage ||
+            pre.startOfApplicableMonths !== cur.startOfApplicableMonths ||
+            pre.endOfApplicableMonths !== cur.endOfApplicableMonths
+          }
+        >
+          {({ getFieldValue, setFieldsValue }) => {
+            // filter lesson options
+            // Only lesson at the same stage are available and schedule range must contain lesson range
+            setFieldsValue({
+              lessons: [],
+            });
+            const stage = getFieldValue('stage');
+            const startMonths = getFieldValue('startOfApplicableMonths');
+            const endMonths = getFieldValue('endOfApplicableMonths');
+            return (
+              <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
+                <Select
+                  mode="multiple"
+                  labelInValue
+                  options={filterLessons(lessonOptions, stage, startMonths, endMonths).map(
+                    (lesson) => ({
+                      label: lesson.number,
+                      value: lesson.number,
+                    })
+                  )}
+                ></Select>
+              </Form.Item>
+            );
+          }}
         </Form.Item>
       </ModalForm>
 
