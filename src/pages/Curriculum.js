@@ -8,7 +8,8 @@ import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
 import { CurriculumBabyStage } from '../constants/enums';
-import { useBoolState, filterLessons } from '../utils';
+import { useBoolState } from '../utils';
+import { filterLessons, validateLessonNumberUnique } from '../utils/curriculum';
 import {
   StaticField,
   RadioEnum,
@@ -266,7 +267,21 @@ function Lessons({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item label="课堂序号" name="number" rules={Rules.Required}>
+        <Form.Item
+          label="课堂序号"
+          name="number"
+          rules={[
+            ...Rules.Required,
+            () => ({
+              validator(_, number) {
+                if (!number || validateLessonNumberUnique(value, number)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('课堂序号不能重复');
+              },
+            }),
+          ]}
+        >
           <Input />
         </Form.Item>
         <Form.Item label="课堂名称" name="name" rules={Rules.Required}>
@@ -295,8 +310,11 @@ function Lessons({
             rules={[
               ...Rules.Required,
               ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || Number(value) > Number(getFieldValue('startOfApplicableDays'))) {
+                validator(_, endOfApplicableDays) {
+                  if (
+                    !endOfApplicableDays ||
+                    Number(endOfApplicableDays) > Number(getFieldValue('startOfApplicableDays'))
+                  ) {
                     return Promise.resolve();
                   }
                   return Promise.reject('必须大于起始天数');
@@ -441,8 +459,12 @@ function Schedules({
             rules={[
               ...Rules.Required,
               ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || Number(value) >= Number(getFieldValue('startOfApplicableMonths'))) {
+                validator(_, endOfApplicableMonths) {
+                  if (
+                    !endOfApplicableMonths ||
+                    Number(endOfApplicableMonths) >=
+                      Number(getFieldValue('startOfApplicableMonths'))
+                  ) {
                     return Promise.resolve();
                   }
                   return Promise.reject('必须大于等于起始月');
