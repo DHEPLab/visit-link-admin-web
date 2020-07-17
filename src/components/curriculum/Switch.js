@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'antd';
 import { FieldArray } from 'formik';
+import styled from 'styled-components';
 
 import Factory from './factory';
 import { Text, Container, Case } from './*';
-import styled from 'styled-components';
 
 export default function Switch({ name, value, onChange, ...props }) {
   const Name = {
