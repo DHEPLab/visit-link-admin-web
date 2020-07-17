@@ -43,7 +43,8 @@ export default function Container({
           {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
           <TitleContainer>
             <Title>
-              <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title}
+              <Iconfont type={icon} style={{ marginRight: '8px' }} />
+              <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
             </Title>
             {!readonly && !hideRemove && (
@@ -104,6 +105,7 @@ const Title = styled.div`
   font-weight: bold;
   color: #8e8e93;
   display: flex;
+  align-items: center;
 `;
 
 const Body = styled.div`

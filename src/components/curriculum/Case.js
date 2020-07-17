@@ -102,6 +102,9 @@ export default function Case({ name, value, index, onChange, ...props }) {
                 <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
                   添加选择
                 </Button>
+                <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
+                  添加翻页分割组件
+                </Button>
               </div>
               {value.components.map((component, index) => (
                 <ComponentField
