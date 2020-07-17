@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Formik, FieldArray } from 'formik';
@@ -11,8 +11,28 @@ import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
 import { DraftBar, Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
 import DeletePopconfirm from '../components/DeletePopconfirm';
+import { debounce } from 'lodash';
 
 function ModuleComponents({ values, readonly }) {
+  // sticky component tool bar to container
+  const headerHeight = 100;
+  const componentsContainerRef = createRef();
+  const [componentsContainerOffsetTop, setComponentsContainerOffsetTop] = useState();
+  const [stickyTop, setStickyTop] = useState(0);
+
+  useEffect(() => {
+    setComponentsContainerOffsetTop(componentsContainerRef.current.offsetTop);
+  }, [componentsContainerRef]);
+
+  useEffect(() => {
+    if (!componentsContainerOffsetTop) return;
+    const onScroll = debounce((event) => {
+      const diffTop = event.target.scrollTop - componentsContainerOffsetTop + headerHeight;
+      setStickyTop(diffTop > 0 ? diffTop : 0);
+    }, 100);
+    document.getElementById('route-view').addEventListener('scroll', onScroll);
+  }, [componentsContainerOffsetTop]);
+
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -27,7 +47,7 @@ function ModuleComponents({ values, readonly }) {
         }
 
         return (
-          <FieldArrayContainer>
+          <FieldArrayContainer ref={componentsContainerRef}>
             <ComponentForm>
               {values.components.map((component, index) => (
                 <ComponentField
@@ -45,7 +65,7 @@ function ModuleComponents({ values, readonly }) {
 
             {!readonly && (
               <ComponentToolBar>
-                <StickyContainer>
+                <StickyContainer top={stickyTop}>
                   <Card title="添加组件：">
                     <Space direction="vertical" size="large">
                       <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
@@ -89,8 +109,8 @@ const ComponentForm = styled.div`
 const ComponentToolBar = styled.div``;
 
 const StickyContainer = styled.div`
-  position: -webkit-sticky;
-  position: sticky;
+  position: relative;
+  top: ${({ top }) => top}px;
   height: 360px;
   margin-left: 40px;
   box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
