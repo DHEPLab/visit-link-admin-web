@@ -242,6 +242,7 @@ function Lessons({
     Axios.get('/admin/modules', {
       params: {
         size: 1000,
+        published: true,
       },
     }).then(({ data }) => {
       setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
