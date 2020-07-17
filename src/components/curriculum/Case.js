@@ -1,5 +1,7 @@
-import React from 'react';
-import { Button } from 'antd';
+import React, { useState } from 'react';
+import Axios from 'axios';
+import styled from 'styled-components';
+import { Button, Cascader } from 'antd';
 import { FieldArray } from 'formik';
 
 import Factory from './factory';
@@ -7,11 +9,51 @@ import { Container, ComponentField } from './*';
 import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
+  const [options, setOptions] = useState([]);
+
   const Name = {
     text: `${name}.text`,
     finishAction: `${name}.finishAction`,
     components: `${name}.components`,
   };
+
+  function onChangeCascader(finishAction) {
+    console.log(finishAction);
+    onChange(Name.finishAction)({ target: { value: finishAction } });
+  }
+
+  function onPopupVisibleChange(visible) {
+    if (visible) {
+      Axios.get('/admin/modules', {
+        params: {
+          size: 1000,
+          published: true,
+        },
+      }).then(({ data }) => {
+        const modules = data.content.map((module) => ({
+          label: `${module.number} ${module.name}`,
+          value: module.id,
+        }));
+
+        setOptions([
+          {
+            label: '结束选项继续本层级内容',
+            value: 'Continue',
+          },
+          {
+            label: '跳转至其他模块并结束本内容模块',
+            value: 'Redirect_End',
+            children: modules,
+          },
+          {
+            label: '跳转至其他模块并继续本层级内容',
+            value: 'Redirect_Continue',
+            children: modules,
+          },
+        ]);
+      });
+    }
+  }
 
   return (
     <Container
@@ -19,13 +61,14 @@ export default function Case({ name, value, index, onChange, ...props }) {
       title={`选项 ${index + 1}`}
       name={name}
       hideMove
-      nested
       extra={
-        <input
-          name={Name.finishAction}
-          value={value.finishAction}
-          onChange={onChange}
-          placeholder="Finish Action"
+        <StyledCascader
+          allowClear={false}
+          options={options}
+          onChange={onChangeCascader}
+          onPopupVisibleChange={onPopupVisibleChange}
+          size="small"
+          placeholder="请选择选项结束跳转至"
         />
       }
     >
@@ -59,6 +102,9 @@ export default function Case({ name, value, index, onChange, ...props }) {
                 <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
                   添加选择
                 </Button>
+                <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
+                  添加翻页分割组件
+                </Button>
               </div>
               {value.components.map((component, index) => (
                 <ComponentField
@@ -79,3 +125,9 @@ export default function Case({ name, value, index, onChange, ...props }) {
     </Container>
   );
 }
+
+const StyledCascader = styled(Cascader)`
+  .ant-input {
+    border-radius: 8px;
+  }
+`;

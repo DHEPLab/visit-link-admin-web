@@ -7,8 +7,9 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
 
 import Rules from '../constants/rules';
-import { BabyStage } from '../constants/enums';
+import { CurriculumBabyStage } from '../constants/enums';
 import { useBoolState } from '../utils';
+import { filterLessons, validateLessonNumberUnique } from '../utils/curriculum';
 import {
   StaticField,
   RadioEnum,
@@ -79,6 +80,9 @@ export default function Curriculum() {
       setDraftId('');
     });
   }
+
+  // fix page flash
+  if (readonly == null || (id && curriculum.name == null)) return null;
 
   return (
     <>
@@ -223,9 +227,10 @@ function Lessons({
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
-      onChange(Arrays.concat(value, formValues));
+      // create lesson generate temp id to identity unique lesson
+      onChange(Arrays.concat(value, { ...formValues, id: Date.now() }));
     } else {
-      onChange(replace(value, currentEditIndex, formValues));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
     closeModal();
   }
@@ -238,6 +243,7 @@ function Lessons({
     Axios.get('/admin/modules', {
       params: {
         size: 1000,
+        published: true,
       },
     }).then(({ data }) => {
       setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
@@ -246,6 +252,7 @@ function Lessons({
 
   return (
     <Card
+      noPadding
       title="课堂列表"
       extra={
         !disabled && (
@@ -254,7 +261,6 @@ function Lessons({
           </Button>
         )
       }
-      noPadding
     >
       <ModalForm
         title="编辑课堂"
@@ -263,7 +269,21 @@ function Lessons({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item label="课堂序号" name="number" rules={Rules.Required}>
+        <Form.Item
+          label="课堂序号"
+          name="number"
+          rules={[
+            ...Rules.Required,
+            () => ({
+              validator(_, number) {
+                if (!number || validateLessonNumberUnique(value, number, currentEditValue.id)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('课堂序号不能重复');
+              },
+            }),
+          ]}
+        >
           <Input />
         </Form.Item>
         <Form.Item label="课堂名称" name="name" rules={Rules.Required}>
@@ -273,7 +293,7 @@ function Lessons({
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
-          <RadioEnum name="BabyStage" />
+          <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDaysContainer>
           <Form.Item
@@ -282,16 +302,29 @@ function Lessons({
             name="startOfApplicableDays"
             rules={Rules.Required}
           >
-            <InputNumber placeholder="天" />
+            <InputNumber min={1} precision={0} placeholder="天" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
             label="适用天数"
             labelCol={{ span: 0 }}
             name="endOfApplicableDays"
-            rules={Rules.Required}
+            rules={[
+              ...Rules.Required,
+              ({ getFieldValue }) => ({
+                validator(_, endOfApplicableDays) {
+                  if (
+                    !endOfApplicableDays ||
+                    Number(endOfApplicableDays) > Number(getFieldValue('startOfApplicableDays'))
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('必须大于起始天数');
+                },
+              }),
+            ]}
           >
-            <InputNumber placeholder="天" />
+            <InputNumber min={1} precision={0} placeholder="天" />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
@@ -303,10 +336,10 @@ function Lessons({
             loading={networks['/admin/modules' > 0]}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress" rules={Rules.Required}>
+        <Form.Item label="调查问卷" name="questionnaireAddress">
           <Input />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={Rules.Required}>
+        <Form.Item label="短信问卷" name="smsQuestionnaireAddress">
           <Input />
         </Form.Item>
       </ModalForm>
@@ -326,7 +359,7 @@ function Lessons({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${BabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
+              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
                 record.endOfApplicableDays
               }天`;
             },
@@ -409,7 +442,7 @@ function Schedules({
           <Input />
         </Form.Item>
         <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
-          <RadioEnum name="BabyStage" />
+          <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDaysContainer>
           <Form.Item
@@ -418,27 +451,64 @@ function Schedules({
             name="startOfApplicableMonths"
             rules={Rules.Required}
           >
-            <InputNumber placeholder="月" />
+            <InputNumber min={0} precision={0} placeholder="月" />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
             label="适用月数"
             labelCol={{ span: 0 }}
             name="endOfApplicableMonths"
-            rules={Rules.Required}
+            rules={[
+              ...Rules.Required,
+              ({ getFieldValue }) => ({
+                validator(_, endOfApplicableMonths) {
+                  if (
+                    !endOfApplicableMonths ||
+                    Number(endOfApplicableMonths) >=
+                      Number(getFieldValue('startOfApplicableMonths'))
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('必须大于等于起始月');
+                },
+              }),
+            ]}
           >
-            <InputNumber placeholder="月" />
+            <InputNumber min={1} precision={0} placeholder="月" />
           </Form.Item>
         </ApplicableDaysContainer>
-        <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
-          <Select
-            mode="multiple"
-            labelInValue
-            options={lessonOptions.map((lesson) => ({
-              label: lesson.number,
-              value: lesson.number,
-            }))}
-          ></Select>
+        <Form.Item
+          noStyle
+          shouldUpdate={(pre, cur) =>
+            pre.stage !== cur.stage ||
+            pre.startOfApplicableMonths !== cur.startOfApplicableMonths ||
+            pre.endOfApplicableMonths !== cur.endOfApplicableMonths
+          }
+        >
+          {({ getFieldValue, setFieldsValue }) => {
+            // filter lesson options
+            // Only lesson at the same stage are available and schedule range must contain lesson range
+            setFieldsValue({
+              lessons: [],
+            });
+            const stage = getFieldValue('stage');
+            const startMonths = getFieldValue('startOfApplicableMonths');
+            const endMonths = getFieldValue('endOfApplicableMonths');
+            return (
+              <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
+                <Select
+                  mode="multiple"
+                  labelInValue
+                  options={filterLessons(lessonOptions, stage, startMonths, endMonths).map(
+                    (lesson) => ({
+                      label: lesson.number,
+                      value: lesson.number,
+                    })
+                  )}
+                ></Select>
+              </Form.Item>
+            );
+          }}
         </Form.Item>
       </ModalForm>
 
@@ -457,9 +527,9 @@ function Schedules({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${BabyStage[record.stage]} ${record.startOfApplicableMonths}个月 - ${
-                record.endOfApplicableMonths
-              }个月`;
+              return `${CurriculumBabyStage[record.stage]} ${
+                record.startOfApplicableMonths
+              }个月 - ${record.endOfApplicableMonths}个月`;
             },
           },
           {

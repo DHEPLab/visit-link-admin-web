@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Space, Input, Radio, message } from 'antd';
+import { Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -132,9 +132,19 @@ function Carers({ babyId }) {
       title="看护人列表"
       noPadding
       extra={
-        <Button onClick={openModal} type="shade">
-          新增看护人
-        </Button>
+        <>
+          {dataSource.length > 3 ? (
+            <Tooltip title="看护人最多可添加4人">
+              <Button disabled={true} type="shade">
+                新增看护人
+              </Button>
+            </Tooltip>
+          ) : (
+            <Button onClick={openModal} type="shade">
+              新增看护人
+            </Button>
+          )}
+        </>
       }
     >
       <ModalForm
@@ -172,7 +182,6 @@ function Carers({ babyId }) {
           {
             title: '主看护人',
             dataIndex: 'master',
-            align: 'center',
             render(h) {
               return h ? '是' : '否';
             },
@@ -180,28 +189,23 @@ function Carers({ babyId }) {
           {
             title: '看护人姓名',
             dataIndex: 'name',
-            align: 'center',
           },
           {
             title: '亲属关系',
             dataIndex: 'familyTies',
-            align: 'center',
             render: (h) => FamilyTies[h],
           },
           {
             title: '联系电话',
             dataIndex: 'phone',
-            align: 'center',
           },
           {
             title: '微信号',
             dataIndex: 'wechat',
-            align: 'center',
           },
           {
             title: '操作',
             dataIndex: 'id',
-            align: 'center',
             width: 200,
             render(id, record) {
               return (

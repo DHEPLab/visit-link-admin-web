@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Formik, FieldArray } from 'formik';
@@ -10,8 +10,29 @@ import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
 import { DraftBar, Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
+import DeletePopconfirm from '../components/DeletePopconfirm';
+import { debounce } from 'lodash';
 
 function ModuleComponents({ values, readonly }) {
+  // sticky component tool bar to container
+  const headerHeight = 100;
+  const componentsContainerRef = createRef();
+  const [componentsContainerOffsetTop, setComponentsContainerOffsetTop] = useState();
+  const [stickyTop, setStickyTop] = useState(0);
+
+  useEffect(() => {
+    setComponentsContainerOffsetTop(componentsContainerRef.current.offsetTop);
+  }, [componentsContainerRef]);
+
+  useEffect(() => {
+    if (!componentsContainerOffsetTop) return;
+    const onScroll = debounce((event) => {
+      const diffTop = event.target.scrollTop - componentsContainerOffsetTop + headerHeight;
+      setStickyTop(diffTop > 0 ? diffTop : 0);
+    }, 100);
+    document.getElementById('route-view').addEventListener('scroll', onScroll);
+  }, [componentsContainerOffsetTop]);
+
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -26,7 +47,7 @@ function ModuleComponents({ values, readonly }) {
         }
 
         return (
-          <FieldArrayContainer>
+          <FieldArrayContainer ref={componentsContainerRef}>
             <ComponentForm>
               {values.components.map((component, index) => (
                 <ComponentField
@@ -44,28 +65,30 @@ function ModuleComponents({ values, readonly }) {
 
             {!readonly && (
               <ComponentToolBar>
-                <Card title="添加组件：">
-                  <Space direction="vertical" size="large">
-                    <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                      <Iconfont type="icontext" /> 添加文本组件
-                    </Button>
-                    <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
-                      <Iconfont type="iconmedia" />
-                      添加媒体组件
-                    </Button>
-                    <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
-                      <Iconfont type="iconswitch" />
-                      添加选择组件
-                    </Button>
-                    <Button
-                      style={{ width: '182px' }}
-                      type="primary"
-                      onClick={() => helpers.push(Factory.createPageFooter())}
-                    >
-                      添加翻页分割组件
-                    </Button>
-                  </Space>
-                </Card>
+                <StickyContainer top={stickyTop}>
+                  <Card title="添加组件：">
+                    <Space direction="vertical" size="large">
+                      <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
+                        <Iconfont type="icontext" /> 添加文本组件
+                      </Button>
+                      <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
+                        <Iconfont type="iconmedia" />
+                        添加媒体组件
+                      </Button>
+                      <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
+                        <Iconfont type="iconswitch" />
+                        添加选择组件
+                      </Button>
+                      <Button
+                        style={{ width: '182px' }}
+                        type="primary"
+                        onClick={() => helpers.push(Factory.createPageFooter())}
+                      >
+                        添加翻页分割组件
+                      </Button>
+                    </Space>
+                  </Card>
+                </StickyContainer>
               </ComponentToolBar>
             )}
           </FieldArrayContainer>
@@ -74,6 +97,25 @@ function ModuleComponents({ values, readonly }) {
     </FieldArray>
   );
 }
+
+const FieldArrayContainer = styled.div`
+  display: flex;
+`;
+
+const ComponentForm = styled.div`
+  flex: 1;
+`;
+
+const ComponentToolBar = styled.div``;
+
+const StickyContainer = styled.div`
+  position: relative;
+  top: ${({ top }) => top}px;
+  height: 360px;
+  margin-left: 40px;
+  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
+  border-radius: 8px;
+`;
 
 export default function Module() {
   const { id } = useParams();
@@ -140,6 +182,12 @@ export default function Module() {
     });
   }
 
+  function handleDeleteModule() {
+    Axios.delete(`/admin/modules/${id}`).then(() => {
+      history.goBack();
+    });
+  }
+
   if (!components) {
     return null;
   }
@@ -154,11 +202,15 @@ export default function Module() {
             title={title}
             extra={
               <Space size="large">
-                {/* <Button ghost type="primary">
-                  删除模块
-                </Button> */}
                 {readonly ? (
                   <>
+                    {id && (
+                      <DeletePopconfirm onConfirm={handleDeleteModule}>
+                        <Button ghost type="primary">
+                          删除模块
+                        </Button>
+                      </DeletePopconfirm>
+                    )}
                     {!draftId && (
                       <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
                         编辑模块
@@ -228,17 +280,3 @@ function ReadonlyForm({ value }) {
     </div>
   );
 }
-
-const FieldArrayContainer = styled.div`
-  display: flex;
-`;
-const ComponentForm = styled.div`
-  flex: 1;
-`;
-
-const ComponentToolBar = styled.div`
-  height: 360px;
-  margin-left: 40px;
-  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
-  border-radius: 8px;
-`;

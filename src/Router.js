@@ -77,7 +77,7 @@ const routes = [
 
 export default function () {
   return (
-    <RouteView>
+    <RouteView id="route-view">
       <Switch>
         <PrivateRoute exact path="/" render={() => <Redirect to="/users" />} />
         <Route path="/sign_in" render={() => <SignIn />} />

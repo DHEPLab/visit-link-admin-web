@@ -46,7 +46,7 @@ function createPageFooter() {
 }
 
 function createCase() {
-  return { key: generateKey(), text: '', finishAction: '', components: [createText()] };
+  return { key: generateKey(), text: '', finishAction: [], components: [createText()] };
 }
 
 export default { createText, createMedia, createSwitch, createCase, createPageFooter };

@@ -87,6 +87,14 @@ textarea.ant-input {
   text-align: center;
 }
 
+.ant-modal-close,
+.ant-modal-close:focus,
+.ant-modal-close:hover {
+  color: #fff;
+  text-decoration: none;
+  top: -4px;
+}
+
 // Button
 // --
 @btn-height-base: 40px;
@@ -117,6 +125,13 @@ textarea.ant-input {
     background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
     color: #fff;
     opacity: 0.8;
+  }
+}
+
+.ant-btn.ant-btn-shade[disabled] {
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.5;
   }
 }
 

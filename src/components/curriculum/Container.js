@@ -43,7 +43,9 @@ export default function Container({
           {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
           <TitleContainer>
             <Title>
-              <Iconfont type={icon} style={{ marginRight: '8px' }} /> {title} {extra}
+              <Iconfont type={icon} style={{ marginRight: '8px' }} />
+              <div>{title}</div>
+              <ExtraContainer>{extra}</ExtraContainer>
             </Title>
             {!readonly && !hideRemove && (
               <Button size="small" type="link" onClick={onRemove}>
@@ -59,6 +61,10 @@ export default function Container({
     </Flex>
   );
 }
+
+const ExtraContainer = styled.div`
+  margin-left: 20px;
+`;
 
 const IconfontButton = styled(Iconfont)`
   cursor: point;
@@ -98,6 +104,8 @@ const StyledContainer = styled.div`
 const Title = styled.div`
   font-weight: bold;
   color: #8e8e93;
+  display: flex;
+  align-items: center;
 `;
 
 const Body = styled.div`
