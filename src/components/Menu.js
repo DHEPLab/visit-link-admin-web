@@ -9,7 +9,7 @@ export default function () {
     <Menu>
       <MenuItemGroup>
         <li>
-          <ActivableLink title="课程管理" to="/curriculums" icon="iconcurriculum" />
+          <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum" />
         </li>
         <li>
           <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />

@@ -85,7 +85,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
                 width: 200,
               },
               // {
-              //   title: '已上课程',
+              //   title: '已上大纲',
               //   dataIndex: 'area',
               // },
               // {

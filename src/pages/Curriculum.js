@@ -26,7 +26,7 @@ export default function Curriculum() {
   const { pathname } = useLocation();
 
   const [readonly, setReadonly] = useState();
-  const [title, setTitle] = useState('创建新课程');
+  const [title, setTitle] = useState('创建新大纲');
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
@@ -88,7 +88,7 @@ export default function Curriculum() {
     <>
       <DetailHeader
         icon="iconcurriculum-primary"
-        menu="课程管理"
+        menu="大纲管理"
         title={title}
         extra={
           <Space size="large">
@@ -116,23 +116,23 @@ export default function Curriculum() {
 
       {draftId && (
         <DraftBar
-          title="本课程有1个尚未发布的草稿："
+          title="本大纲有1个尚未发布的草稿："
           lastModifiedDraftAt={draftDate}
           onRemove={handleDelteDraft}
           onClick={() => history.push(`/curriculums/edit/${draftId}`)}
         />
       )}
 
-      <Card title="课程基本信息">
+      <Card title="大纲基本信息">
         {readonly ? (
           <ReadonlyForm value={curriculum} />
         ) : (
           <Form data-testid="basic-form" form={form} onFinish={onFinish}>
-            <Form.Item label="课程名称" name="name" rules={Rules.Required}>
-              <Input placeholder="请输入课程名称，限20个汉字" />
+            <Form.Item label="大纲名称" name="name" rules={Rules.Required}>
+              <Input placeholder="请输入大纲名称，限20个汉字" />
             </Form.Item>
-            <Form.Item label="课程描述" name="description" rules={Rules.Required}>
-              <Input placeholder="请输入课程描述，限50个汉字" />
+            <Form.Item label="大纲描述" name="description" rules={Rules.Required}>
+              <Input placeholder="请输入大纲描述，限50个汉字" />
             </Form.Item>
           </Form>
         )}
@@ -155,8 +155,8 @@ const EnhancedSchedules = withEdit(Schedules);
 function ReadonlyForm({ value: { name, description } }) {
   return (
     <div data-testid="readonly-form">
-      <StaticField label="课程名称">{name}</StaticField>
-      <StaticField label="课程描述">{description}</StaticField>
+      <StaticField label="大纲名称">{name}</StaticField>
+      <StaticField label="大纲描述">{description}</StaticField>
     </div>
   );
 }
@@ -421,7 +421,7 @@ function Schedules({
 
   return (
     <Card
-      title="课程区间匹配规则"
+      title="大纲区间匹配规则"
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>

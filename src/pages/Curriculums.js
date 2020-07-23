@@ -29,15 +29,15 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
 
   return (
     <>
-      <ContentHeader title="课程管理">
+      <ContentHeader title="大纲管理">
         <Space size="large">
           <SearchInput
             onChange={(e) => onChangeSearch('search', e.target.value)}
             className="master"
-            placeholder="请输入课程名称搜索"
+            placeholder="请输入大纲名称搜索"
           />
           <Button type="primary" onClick={() => history.push('/curriculums/create')}>
-            创建新课程
+            创建新大纲
           </Button>
         </Space>
       </ContentHeader>
@@ -58,14 +58,14 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         }}
         columns={[
           {
-            title: '课程状态',
+            title: '大纲状态',
             dataIndex: 'published',
             width: 120,
             align: 'center',
             render: (h) => <Published value={h} />,
           },
           {
-            title: '课程名称',
+            title: '大纲名称',
             dataIndex: 'name',
           },
           {
@@ -137,8 +137,8 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
     >
       <ModalHeader>
         <Title>
-          <label>课程分配宝宝列表</label>
-          <Tooltip title="宝宝将自动分配至最新发布的课程版本" placement="right">
+          <label>大纲分配宝宝列表</label>
+          <Tooltip title="宝宝将自动分配至最新发布的大纲版本" placement="right">
             <InfoCircleFilled />
           </Tooltip>
         </Title>
