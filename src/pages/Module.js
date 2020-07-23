@@ -2,7 +2,7 @@ import React, { useState, useEffect, createRef } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Formik, FieldArray } from 'formik';
-import { Form, Space, Button, Input } from 'antd';
+import { Form, Space, Button, Input, message } from 'antd';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 
 import Factory from '../components/curriculum/factory';
@@ -169,6 +169,8 @@ export default function Module() {
   }
 
   function onSubmit(values) {
+    if (components.length === 0) return message.warn('至少添加一个组件');
+
     Axios.post(submitURL, {
       id,
       components,
@@ -245,14 +247,18 @@ export default function Module() {
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={Rules.Required}>
-                  <Input placeholder="请输入模块名称，限20个汉字" />
+                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
+                  <Input placeholder="请输入模块名称，限20个字符" />
                 </Form.Item>
-                <Form.Item label="模块编号" name="number" rules={Rules.Required}>
-                  <Input placeholder="请输入模块名称，限20个汉字" />
+                <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
+                  <Input placeholder="请输入模块名称，限20个字符" />
                 </Form.Item>
-                <Form.Item label="模块描述" name="description" rules={Rules.Required}>
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限50个汉字" />
+                <Form.Item
+                  label="模块描述"
+                  name="description"
+                  rules={[...Rules.Required, { max: 50 }]}
+                >
+                  <Input.TextArea rows={4} placeholder="请输入模块描述，限50个字符" />
                 </Form.Item>
                 <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
                   <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
