@@ -152,7 +152,7 @@ function AssignBaby({ id }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/babies/${babyId}/chw`).then(refresh);
+    Axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
   }
 
   return (
