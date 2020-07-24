@@ -425,7 +425,7 @@ function Schedules({
         })
       );
     } else {
-      onChange(replace(value, currentEditIndex, formValues));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
     closeModal();
   }
