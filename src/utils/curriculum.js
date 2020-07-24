@@ -9,7 +9,7 @@ export function filterLessons(lessons, stage, startMonth, endMonth) {
   return lessons.filter((lesson) => {
     return (
       lesson.stage === stage &&
-      lesson.startOfApplicableDays >= (startMonth - 1) * dayOfMonth - offset &&
+      lesson.startOfApplicableDays > (startMonth - 1) * dayOfMonth - offset &&
       lesson.endOfApplicableDays <= endMonth * dayOfMonth - offset
     );
   });
