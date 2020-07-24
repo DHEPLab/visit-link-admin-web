@@ -1,4 +1,7 @@
 const dayOfMonth = 30;
+const dayOfFirstMonth = 10;
+const offset = dayOfMonth - dayOfFirstMonth;
+
 export function filterLessons(lessons, stage, startMonth, endMonth) {
   if (!stage || startMonth == null || startMonth === '' || endMonth == null || endMonth === '')
     return [];
@@ -6,8 +9,8 @@ export function filterLessons(lessons, stage, startMonth, endMonth) {
   return lessons.filter((lesson) => {
     return (
       lesson.stage === stage &&
-      lesson.startOfApplicableDays >= startMonth * dayOfMonth &&
-      lesson.endOfApplicableDays <= endMonth * dayOfMonth
+      lesson.startOfApplicableDays >= (startMonth - 1) * dayOfMonth - offset &&
+      lesson.endOfApplicableDays <= endMonth * dayOfMonth - offset
     );
   });
 }

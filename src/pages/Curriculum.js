@@ -467,7 +467,7 @@ function Schedules({
             rules={Rules.Required}
           >
             <InputNumber
-              min={0}
+              min={1}
               max={9}
               precision={0}
               formatter={(value) => `${value}月`}
