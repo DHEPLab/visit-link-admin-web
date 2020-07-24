@@ -34,6 +34,8 @@ export default function Baby() {
 
   function handleChangeBaby(values) {
     values.area = values.area.join('/');
+    values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
+    values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
     Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
