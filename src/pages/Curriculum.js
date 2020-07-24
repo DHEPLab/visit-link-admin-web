@@ -99,7 +99,7 @@ export default function Curriculum() {
               <>
                 {!draftId && (
                   <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
-                    编辑模块
+                    编辑大纲
                   </Button>
                 )}
               </>
