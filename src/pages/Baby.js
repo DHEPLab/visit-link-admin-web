@@ -6,7 +6,7 @@ import { Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Gender, BabyStage, FamilyTies } from '../constants/enums';
+import { Gender, BabyStage, FamilyTies, FeedingPattern } from '../constants/enums';
 import {
   Card,
   ZebraTable,
@@ -48,7 +48,7 @@ export default function Baby() {
         icon="iconbaby-primary"
         menu="宝宝管理"
         title={baby.name}
-        role={`宝宝ID ${baby.identity}`}
+        role={`宝宝ID ${baby.identity || ''}`}
         extra={
           <Button ghost type="danger">
             注销宝宝
@@ -56,6 +56,7 @@ export default function Baby() {
         }
       />
       <Card title="负责社区工作者">
+        <StaticField label="社区工作者ID">{chw().chw?.identity}</StaticField>
         <StaticField label="真实姓名">{chw().realName}</StaticField>
         <StaticField label="联系电话">{chw().phone}</StaticField>
       </Card>
@@ -70,6 +71,9 @@ export default function Baby() {
       >
         <StaticField label="真实姓名">{baby.name}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
+        {baby.feedingPattern && (
+          <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
+        )}
         <StaticField label="成长阶段">{BabyStage[baby.stage]}</StaticField>
         {baby.stage === 'EDC' ? (
           <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
