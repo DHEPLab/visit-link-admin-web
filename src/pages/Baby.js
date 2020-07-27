@@ -14,7 +14,7 @@ import {
   StaticField,
   ModalForm,
   DetailHeader,
-  DeletePopconfirm,
+  DeleteConfirmModal,
   SelectEnum,
 } from '../components/*';
 
@@ -215,11 +215,15 @@ function Carers({ babyId }) {
                   <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
                     编辑
                   </Button>
-                  <DeletePopconfirm onConfirm={() => handleDelete(record)}>
+                  <DeleteConfirmModal
+                    title="删除看护人"
+                    content="确认要删除此看护人？"
+                    onConfirm={() => handleDelete(record)}
+                  >
                     <Button size="small" type="link">
                       删除
                     </Button>
-                  </DeletePopconfirm>
+                  </DeleteConfirmModal>
                 </Space>
               );
             },
