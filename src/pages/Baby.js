@@ -71,14 +71,15 @@ export default function Baby() {
       >
         <StaticField label="真实姓名">{baby.name}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
-        {baby.feedingPattern && (
-          <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
-        )}
         <StaticField label="成长阶段">{BabyStage[baby.stage]}</StaticField>
         {baby.stage === 'EDC' ? (
           <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
         ) : (
-          <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
+          <>
+            <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
+            <StaticField label="辅食">{baby.assistedFood ? '已添加' : '未添加'}</StaticField>
+            <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
+          </>
         )}
         <StaticField label="所在区域">{baby.area}</StaticField>
         <StaticField label="详细地址">{baby.location}</StaticField>
