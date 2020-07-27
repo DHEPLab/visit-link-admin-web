@@ -9,8 +9,15 @@ import Factory from '../components/curriculum/factory';
 import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
 import { ComponentField } from '../components/curriculum/*';
-import { DraftBar, Iconfont, Card, DetailHeader, SelectEnum, StaticField } from '../components/*';
-import DeletePopconfirm from '../components/DeletePopconfirm';
+import {
+  DraftBar,
+  Iconfont,
+  Card,
+  DetailHeader,
+  SelectEnum,
+  StaticField,
+  DeleteConfirmModal,
+} from '../components/*';
 import { debounce } from 'lodash';
 
 function ModuleComponents({ values, readonly }) {
@@ -207,11 +214,15 @@ export default function Module() {
                 {readonly ? (
                   <>
                     {id && (
-                      <DeletePopconfirm onConfirm={handleDeleteModule}>
+                      <DeleteConfirmModal
+                        title="删除模块"
+                        content="删除后模块内容将无法恢复是否继续？"
+                        onConfirm={handleDeleteModule}
+                      >
                         <Button ghost type="primary">
                           删除模块
                         </Button>
-                      </DeletePopconfirm>
+                      </DeleteConfirmModal>
                     )}
                     {!draftId && (
                       <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>

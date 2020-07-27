@@ -3,7 +3,13 @@ import React from 'react';
 import { useBoolState } from '../utils';
 import { Space, Button, Modal } from 'antd';
 
-export default function DeleteConfirmModal({ title, content, onConfirm, children }) {
+export default function DeleteConfirmModal({
+  title = '删除',
+  content = '确认删除？',
+  onConfirm,
+  children,
+  okText = '删除',
+}) {
   const [visible, openModal, closeModal] = useBoolState();
 
   return (
@@ -26,7 +32,7 @@ export default function DeleteConfirmModal({ title, content, onConfirm, children
                 onConfirm();
               }}
             >
-              删除
+              {okText}
             </Button>
           </Space>
         }
