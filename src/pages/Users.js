@@ -227,7 +227,8 @@ function Admin({ tab, history, loadData, ...props }) {
 
 const realName = {
   title: '姓名',
-  width: 150,
+  align: 'center',
+  width: 100,
   dataIndex: ['user', 'realName'],
 };
 
@@ -239,7 +240,6 @@ const phone = {
 
 const username = {
   title: '账户名称',
-  width: 200,
   dataIndex: ['user', 'username'],
 };
 

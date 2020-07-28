@@ -182,6 +182,8 @@ function AssignBaby({ id }) {
           {
             title: '宝宝姓名',
             dataIndex: 'name',
+            width: 140,
+            align: 'center',
           },
           {
             title: 'ID',
@@ -298,6 +300,8 @@ function AssignChw({ id }) {
           {
             title: '社区工作者姓名',
             dataIndex: 'realName',
+            width: 180,
+            align: 'center',
           },
           {
             title: 'ID',

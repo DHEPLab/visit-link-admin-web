@@ -64,7 +64,8 @@ function Babies({ loadData, onChangeSearch, ...props }) {
               {
                 title: '宝宝姓名',
                 dataIndex: 'name',
-                width: 150,
+                align: 'center',
+                width: 80,
               },
               {
                 title: 'ID',
