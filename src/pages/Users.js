@@ -48,7 +48,7 @@ export default function Users() {
         <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
         </TabPane>
-        <TabPane tab="督导" key="supervisor">
+        <TabPane tab="督导员" key="supervisor">
           <PageSupervisor tab={tab} history={history} />
         </TabPane>
         <TabPane tab="管理员" key="admin">
@@ -147,7 +147,7 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
           },
           phone,
           {
-            title: '督导',
+            title: '督导员',
             width: 200,
             dataIndex: ['user', 'chw', 'supervisor', 'realName'],
           },
