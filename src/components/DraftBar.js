@@ -3,7 +3,7 @@ import moment from 'moment';
 import styled from 'styled-components';
 import { Space, Button } from 'antd';
 
-import { DeletePopconfirm } from './*';
+import { DeleteConfirmModal } from './*';
 
 export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt }) {
   return (
@@ -13,9 +13,13 @@ export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt
         <Label>编辑日期：</Label>
         <Date>{moment(lastModifiedDraftAt).format('YYYY/MM/DD')}</Date>
         <Space size="large">
-          <DeletePopconfirm onConfirm={onRemove}>
+          <DeleteConfirmModal
+            title="删除草稿"
+            content="删除草稿后将无法恢复是否继续？"
+            onConfirm={onRemove}
+          >
             <DeleteButton ghost>删除草稿</DeleteButton>
-          </DeletePopconfirm>
+          </DeleteConfirmModal>
           <EditButton ghost type="primary" onClick={onClick}>
             继续编辑
           </EditButton>

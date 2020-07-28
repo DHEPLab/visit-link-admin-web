@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
+import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import { Button, Space, Tabs } from 'antd';
 
@@ -22,6 +23,8 @@ function Babies({ loadData, onChangeSearch, ...props }) {
 
   function handleCreateBaby(values) {
     values.area = values.area.join('/');
+    values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
+    values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
     Axios.post('/admin/babies', values).then(() => {
       loadData();
       closeBaby();
@@ -61,7 +64,8 @@ function Babies({ loadData, onChangeSearch, ...props }) {
               {
                 title: '宝宝姓名',
                 dataIndex: 'name',
-                width: 150,
+                align: 'center',
+                width: 80,
               },
               {
                 title: 'ID',
@@ -85,7 +89,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
                 width: 200,
               },
               // {
-              //   title: '已上课程',
+              //   title: '已上大纲',
               //   dataIndex: 'area',
               // },
               // {

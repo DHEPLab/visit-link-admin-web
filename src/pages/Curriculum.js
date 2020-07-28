@@ -4,7 +4,7 @@ import Arrays from 'lodash/array';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Form, Space, Button, Input, InputNumber, Select } from 'antd';
+import { Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
 
 import Rules from '../constants/rules';
 import { CurriculumBabyStage } from '../constants/enums';
@@ -26,7 +26,7 @@ export default function Curriculum() {
   const { pathname } = useLocation();
 
   const [readonly, setReadonly] = useState();
-  const [title, setTitle] = useState('创建新课程');
+  const [title, setTitle] = useState('创建新大纲');
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
@@ -67,6 +67,9 @@ export default function Curriculum() {
   }
 
   function onFinish(values) {
+    if (lessons.length === 0) return message.warn('至少添加一个课堂');
+    if (schedules.length === 0) return message.warn('至少添加一个匹配计划');
+
     Axios.post(submitURL, {
       id,
       ...values,
@@ -88,7 +91,7 @@ export default function Curriculum() {
     <>
       <DetailHeader
         icon="iconcurriculum-primary"
-        menu="课程管理"
+        menu="大纲管理"
         title={title}
         extra={
           <Space size="large">
@@ -96,7 +99,7 @@ export default function Curriculum() {
               <>
                 {!draftId && (
                   <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
-                    编辑模块
+                    编辑大纲
                   </Button>
                 )}
               </>
@@ -116,23 +119,23 @@ export default function Curriculum() {
 
       {draftId && (
         <DraftBar
-          title="本课程有1个尚未发布的草稿："
+          title="本大纲有1个尚未发布的草稿："
           lastModifiedDraftAt={draftDate}
           onRemove={handleDelteDraft}
           onClick={() => history.push(`/curriculums/edit/${draftId}`)}
         />
       )}
 
-      <Card title="课程基本信息">
+      <Card title="大纲基本信息">
         {readonly ? (
           <ReadonlyForm value={curriculum} />
         ) : (
           <Form data-testid="basic-form" form={form} onFinish={onFinish}>
-            <Form.Item label="课程名称" name="name" rules={Rules.Required}>
-              <Input placeholder="请输入课程名称，限20个汉字" />
+            <Form.Item label="大纲名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
+              <Input placeholder="请输入大纲名称，限20个汉字" />
             </Form.Item>
-            <Form.Item label="课程描述" name="description" rules={Rules.Required}>
-              <Input placeholder="请输入课程描述，限50个汉字" />
+            <Form.Item label="大纲描述" name="description" rules={[...Rules.Required, { max: 50 }]}>
+              <Input.TextArea rows={5} placeholder="请输入大纲描述，限50个汉字" />
             </Form.Item>
           </Form>
         )}
@@ -155,8 +158,8 @@ const EnhancedSchedules = withEdit(Schedules);
 function ReadonlyForm({ value: { name, description } }) {
   return (
     <div data-testid="readonly-form">
-      <StaticField label="课程名称">{name}</StaticField>
-      <StaticField label="课程描述">{description}</StaticField>
+      <StaticField label="大纲名称">{name}</StaticField>
+      <StaticField label="大纲描述">{description}</StaticField>
     </div>
   );
 }
@@ -302,7 +305,13 @@ function Lessons({
             name="startOfApplicableDays"
             rules={Rules.Required}
           >
-            <InputNumber min={1} precision={0} placeholder="天" />
+            <InputNumber
+              min={1}
+              max={279}
+              precision={0}
+              formatter={(value) => `${value}天`}
+              parser={(value) => value.replace('天', '')}
+            />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
@@ -324,7 +333,13 @@ function Lessons({
               }),
             ]}
           >
-            <InputNumber min={1} precision={0} placeholder="天" />
+            <InputNumber
+              min={1}
+              max={280}
+              precision={0}
+              formatter={(value) => `${value}天`}
+              parser={(value) => value.replace('天', '')}
+            />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
@@ -410,7 +425,7 @@ function Schedules({
         })
       );
     } else {
-      onChange(replace(value, currentEditIndex, formValues));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
     closeModal();
   }
@@ -421,7 +436,7 @@ function Schedules({
 
   return (
     <Card
-      title="课程区间匹配规则"
+      title="大纲区间匹配规则"
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
@@ -451,7 +466,13 @@ function Schedules({
             name="startOfApplicableMonths"
             rules={Rules.Required}
           >
-            <InputNumber min={0} precision={0} placeholder="月" />
+            <InputNumber
+              min={1}
+              max={9}
+              precision={0}
+              formatter={(value) => `${value}月`}
+              parser={(value) => value.replace('月', '')}
+            />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
@@ -474,7 +495,13 @@ function Schedules({
               }),
             ]}
           >
-            <InputNumber min={1} precision={0} placeholder="月" />
+            <InputNumber
+              min={1}
+              max={10}
+              precision={0}
+              formatter={(value) => `${value}月`}
+              parser={(value) => value.replace('月', '')}
+            />
           </Form.Item>
         </ApplicableDaysContainer>
         <Form.Item

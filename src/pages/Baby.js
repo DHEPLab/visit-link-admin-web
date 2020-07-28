@@ -6,7 +6,7 @@ import { Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
-import { Gender, BabyStage, FamilyTies } from '../constants/enums';
+import { Gender, BabyStage, FamilyTies, FeedingPattern } from '../constants/enums';
 import {
   Card,
   ZebraTable,
@@ -14,7 +14,7 @@ import {
   StaticField,
   ModalForm,
   DetailHeader,
-  DeletePopconfirm,
+  DeleteConfirmModal,
   SelectEnum,
 } from '../components/*';
 
@@ -34,6 +34,8 @@ export default function Baby() {
 
   function handleChangeBaby(values) {
     values.area = values.area.join('/');
+    values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
+    values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
     Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
@@ -46,7 +48,7 @@ export default function Baby() {
         icon="iconbaby-primary"
         menu="宝宝管理"
         title={baby.name}
-        role={`宝宝ID ${baby.identity}`}
+        role={`宝宝ID ${baby.identity || ''}`}
         extra={
           <Button ghost type="danger">
             注销宝宝
@@ -54,6 +56,7 @@ export default function Baby() {
         }
       />
       <Card title="负责社区工作者">
+        <StaticField label="社区工作者ID">{chw().chw?.identity}</StaticField>
         <StaticField label="真实姓名">{chw().realName}</StaticField>
         <StaticField label="联系电话">{chw().phone}</StaticField>
       </Card>
@@ -72,7 +75,11 @@ export default function Baby() {
         {baby.stage === 'EDC' ? (
           <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
         ) : (
-          <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
+          <>
+            <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
+            <StaticField label="辅食">{baby.assistedFood ? '已添加' : '未添加'}</StaticField>
+            <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
+          </>
         )}
         <StaticField label="所在区域">{baby.area}</StaticField>
         <StaticField label="详细地址">{baby.location}</StaticField>
@@ -213,11 +220,15 @@ function Carers({ babyId }) {
                   <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
                     编辑
                   </Button>
-                  <DeletePopconfirm onConfirm={() => handleDelete(record)}>
+                  <DeleteConfirmModal
+                    title="删除看护人"
+                    content="确认要删除此看护人？"
+                    onConfirm={() => handleDelete(record)}
+                  >
                     <Button size="small" type="link">
                       删除
                     </Button>
-                  </DeletePopconfirm>
+                  </DeleteConfirmModal>
                 </Space>
               );
             },

@@ -21,7 +21,7 @@ test('should render create page', () => {
   useParams.mockImplementation(() => ({}));
   useLocation.mockImplementation(() => ({ pathname: '/curriculums/create' }));
   const { queryByText, queryByTestId } = render(<Curriculum />);
-  expect(queryByText(/创建新课程/)).toBeInTheDocument();
+  expect(queryByText(/创建新大纲/)).toBeInTheDocument();
   expect(queryByTestId('basic-form')).toBeInTheDocument();
   expect(queryByTestId('readonly-form')).not.toBeInTheDocument();
 });
@@ -71,6 +71,6 @@ test('should render readonly page and has draft', async () => {
   });
 
   const { queryByText } = renderResult;
-  expect(queryByText(/本课程有1个尚未发布的草稿：/)).toBeInTheDocument();
+  expect(queryByText(/本大纲有1个尚未发布的草稿：/)).toBeInTheDocument();
   expect(queryByText(/2020\/07\/13/)).toBeInTheDocument();
 });

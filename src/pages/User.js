@@ -14,7 +14,7 @@ import {
   StaticField,
   DetailHeader,
   AssignModalTable,
-  DeletePopconfirm,
+  DeleteConfirmModal,
 } from '../components/*';
 
 export default function User() {
@@ -152,7 +152,7 @@ function AssignBaby({ id }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/babies/${babyId}/chw`).then(refresh);
+    Axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
   }
 
   return (
@@ -182,6 +182,8 @@ function AssignBaby({ id }) {
           {
             title: '宝宝姓名',
             dataIndex: 'name',
+            width: 140,
+            align: 'center',
           },
           {
             title: 'ID',
@@ -207,11 +209,16 @@ function AssignBaby({ id }) {
             align: 'center',
             render(babyId) {
               return (
-                <DeletePopconfirm onConfirm={() => handleRelease(babyId)}>
+                <DeleteConfirmModal
+                  title="解绑宝宝"
+                  content="解绑宝宝后，该宝宝将处于未分配状态，且不会出现在社区工作者 app 端宝宝列表中，该工作者也无法对宝宝进行家访。确定要继续吗？"
+                  onConfirm={() => handleRelease(babyId)}
+                  okText="解绑"
+                >
                   <Button size="small" type="link">
-                    删除
+                    解绑
                   </Button>
-                </DeletePopconfirm>
+                </DeleteConfirmModal>
               );
             },
           },
@@ -293,6 +300,8 @@ function AssignChw({ id }) {
           {
             title: '社区工作者姓名',
             dataIndex: 'realName',
+            width: 180,
+            align: 'center',
           },
           {
             title: 'ID',
@@ -314,11 +323,16 @@ function AssignChw({ id }) {
             align: 'center',
             render(chwId) {
               return (
-                <DeletePopconfirm onConfirm={() => handleRelease(chwId)}>
+                <DeleteConfirmModal
+                  title="解绑社区工作者"
+                  content="确认要解绑此社区工作者？"
+                  okText="解绑"
+                  onConfirm={() => handleRelease(chwId)}
+                >
                   <Button size="small" type="link">
-                    删除
+                    解绑
                   </Button>
-                </DeletePopconfirm>
+                </DeleteConfirmModal>
               );
             },
           },
