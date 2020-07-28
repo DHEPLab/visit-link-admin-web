@@ -1,19 +1,27 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import Iconfont from './Iconfont';
 
-export default function () {
+export default function Menu() {
+  const { user } = useSelector((state) => state.users);
+  const isAdmin = user?.role === 'ROLE_ADMIN';
+
   return (
-    <Menu>
+    <Container>
       <MenuItemGroup>
-        <li>
-          <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum" />
-        </li>
-        <li>
-          <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
-        </li>
+        {isAdmin && (
+          <>
+            <li>
+              <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum" />
+            </li>
+            <li>
+              <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
+            </li>
+          </>
+        )}
         <li>
           <ActivableLink title="账户管理" to="/users" icon="iconuser" />
         </li>
@@ -21,7 +29,7 @@ export default function () {
           <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby" />
         </li>
       </MenuItemGroup>
-    </Menu>
+    </Container>
   );
 }
 
@@ -47,7 +55,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Menu = styled.div`
+const Container = styled.div`
   width: 248px;
   background: linear-gradient(180deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
   padding-top: 10px;

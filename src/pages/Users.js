@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
 
 import { useBoolState } from '../utils';
@@ -21,6 +22,8 @@ export default function Users() {
   const history = useHistory();
   const [tab, setTab] = useState('chw');
   const [visible, openUser, closeUser] = useBoolState();
+  const { user } = useSelector((state) => state.users);
+  const isAdmin = user?.role === 'ROLE_ADMIN';
 
   // change tab to refresh table
   function refresh() {
@@ -39,21 +42,27 @@ export default function Users() {
   return (
     <>
       <ContentHeader title="账户管理">
-        <Button type="primary" onClick={openUser}>
-          创建新用户
-        </Button>
+        {isAdmin && (
+          <Button type="primary" onClick={openUser}>
+            创建新用户
+          </Button>
+        )}
       </ContentHeader>
 
       <CardTabs onChange={setTab}>
         <TabPane tab="社区工作者" key="chw">
           <PageCHW tab={tab} history={history} />
         </TabPane>
-        <TabPane tab="督导员" key="supervisor">
-          <PageSupervisor tab={tab} history={history} />
-        </TabPane>
-        <TabPane tab="管理员" key="admin">
-          <PageAdmin tab={tab} history={history} />
-        </TabPane>
+        {isAdmin && (
+          <>
+            <TabPane tab="督导员" key="supervisor">
+              <PageSupervisor tab={tab} history={history} />
+            </TabPane>
+            <TabPane tab="管理员" key="admin">
+              <PageAdmin tab={tab} history={history} />
+            </TabPane>
+          </>
+        )}
       </CardTabs>
 
       <ModalForm
