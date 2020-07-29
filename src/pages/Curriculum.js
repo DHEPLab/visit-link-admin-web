@@ -7,9 +7,9 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
 
 import Rules from '../constants/rules';
+import CurriculumUtils from '../utils/curriculum';
 import { CurriculumBabyStage } from '../constants/enums';
 import { useBoolState } from '../utils';
-import { filterLessons, validateLessonNumberUnique } from '../utils/curriculum';
 import {
   StaticField,
   RadioEnum,
@@ -279,7 +279,10 @@ function Lessons({
             ...Rules.Required,
             () => ({
               validator(_, number) {
-                if (!number || validateLessonNumberUnique(value, number, currentEditValue.id)) {
+                if (
+                  !number ||
+                  CurriculumUtils.validateLessonNumberUnique(value, number, currentEditValue.id)
+                ) {
                   return Promise.resolve();
                 }
                 return Promise.reject('课堂序号不能重复');
@@ -526,12 +529,15 @@ function Schedules({
                 <Select
                   mode="multiple"
                   labelInValue
-                  options={filterLessons(lessonOptions, stage, startMonths, endMonths).map(
-                    (lesson) => ({
-                      label: lesson.number,
-                      value: lesson.number,
-                    })
-                  )}
+                  options={CurriculumUtils.filterLessons(
+                    lessonOptions,
+                    stage,
+                    startMonths,
+                    endMonths
+                  ).map((lesson) => ({
+                    label: lesson.number,
+                    value: lesson.number,
+                  }))}
                 ></Select>
               </Form.Item>
             );

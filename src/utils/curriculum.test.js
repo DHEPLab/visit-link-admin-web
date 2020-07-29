@@ -1,4 +1,4 @@
-import { filterLessons, validateLessonNumberUnique } from './curriculum';
+import Curriculum from './curriculum';
 
 test('should filter lesson by stage, startMonths, endMonths', () => {
   const lessons = [
@@ -13,9 +13,9 @@ test('should filter lesson by stage, startMonths, endMonths', () => {
       endOfApplicableDays: 30,
     },
   ];
-  expect(filterLessons(lessons, 'EDC', 1, 1).length).toBe(0);
-  expect(filterLessons(lessons, 'EDC', 1, 2).length).toBe(1);
-  expect(filterLessons(lessons, 'BIRTH', 1, 1).length).toBe(1);
+  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 1).length).toBe(0);
+  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 2).length).toBe(1);
+  expect(Curriculum.filterLessons(lessons, 'BIRTH', 1, 1).length).toBe(1);
 });
 
 test('should keep lesson number unique', () => {
@@ -25,8 +25,8 @@ test('should keep lesson number unique', () => {
       number: 'L1',
     },
   ];
-  expect(validateLessonNumberUnique(lessons, 'L1')).toBeFalsy();
-  expect(validateLessonNumberUnique(lessons, 'L2')).toBeTruthy();
+  expect(Curriculum.validateLessonNumberUnique(lessons, 'L1')).toBeFalsy();
+  expect(Curriculum.validateLessonNumberUnique(lessons, 'L2')).toBeTruthy();
 });
 
 test('should pass validation when editing lesson', () => {
@@ -36,5 +36,5 @@ test('should pass validation when editing lesson', () => {
       number: 'L1',
     },
   ];
-  expect(validateLessonNumberUnique(lessons, 'L1', 1)).toBeTruthy();
+  expect(Curriculum.validateLessonNumberUnique(lessons, 'L1', 1)).toBeTruthy();
 });
