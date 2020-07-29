@@ -1,22 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import { debounce } from 'lodash';
 
 import Container from './Container';
 
 const container = [
-  [{ type: ['script', 'instruction', 'refrence'] }],
-  // [{ size: ['small', false, 'large', 'huge'] }],
   ['bold', 'italic'],
   [{ list: 'ordered' }, { list: 'bullet' }],
 ];
 
-let typeDropdown = Quill.import('ui/picker');
-typeDropdown = ['script', 'instruction', 'refrence'];
-Quill.register(typeDropdown, true);
-
 export default function Text({ name, onBlur, onChange, value, ...props }) {
+  const types = ['instruction', 'script', 'refrence'];
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
@@ -28,6 +23,13 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     onChange(Name.type)(args);
   }
 
+  function toolbarContainer() {
+    return props.readonly
+      ? []
+      : // use quill toolbar default value echo type, put current type to first item
+        [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
+  }
+
   return (
     <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
       <QuillContainer className="text-editor" readonly={props.readonly}>
@@ -36,9 +38,9 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
           theme="snow"
           modules={{
             toolbar: {
-              container: props.readonly ? [] : container,
+              container: toolbarContainer(),
               handlers: {
-                // type,
+                type,
               },
             },
           }}
@@ -53,27 +55,6 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     </Container>
   );
 }
-
-/*
- * Custom toolbar component including insertStar button and dropdowns
- */
-const CustomToolbar = ({ id, value, readonly }) => (
-  <div id={id}>
-    {!readonly && (
-      <>
-        <select className="ql-type" defaultValue={value}>
-          <option value="script">One</option>
-          <option value="instruction">Two</option>
-          <option value="refrence">Three</option>
-        </select>
-        <button className="ql-bold"></button>
-        <button className="ql-italic"></button>
-        <button className="ql-list" value="ordered"></button>
-        <button className="ql-list" value="bullet"></button>
-      </>
-    )}
-  </div>
-);
 
 const QuillContainer = styled.div`
   ${({ readonly }) =>
