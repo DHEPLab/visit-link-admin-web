@@ -15,7 +15,6 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
-    toolbar: `toolbar-${name.split('.').join('')}`,
   };
 
   function type(args) {
@@ -62,6 +61,7 @@ const QuillContainer = styled.div`
     `
   .ql-toolbar.ql-snow {
     padding: 0;
+    height: 0;
   }
   `}
 
