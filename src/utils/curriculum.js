@@ -30,7 +30,9 @@ function validateLessonDateRange(lessons, lesson) {
         (item.startOfApplicableDays <= lesson.startOfApplicableDays &&
           item.endOfApplicableDays >= lesson.startOfApplicableDays) ||
         (item.startOfApplicableDays <= lesson.endOfApplicableDays &&
-          item.endOfApplicableDays >= lesson.endOfApplicableDays)
+          item.endOfApplicableDays >= lesson.endOfApplicableDays) ||
+        (lesson.startOfApplicableDays <= item.startOfApplicableDays &&
+          lesson.endOfApplicableDays >= item.endOfApplicableDays)
     );
 }
 

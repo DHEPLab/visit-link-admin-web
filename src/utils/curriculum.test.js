@@ -55,6 +55,13 @@ it('should validate lesson date range cannot overlap', () => {
   ).toBeFalsy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
+      stage: 'EDC',
+      startOfApplicableDays: 1,
+      endOfApplicableDays: 30,
+    })
+  ).toBeFalsy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
       stage: 'BIRTH',
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
