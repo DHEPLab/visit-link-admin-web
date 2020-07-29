@@ -1,8 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import ReactQuill from 'react-quill';
+import { debounce } from 'lodash';
 
 import Container from './Container';
+
+const container = [
+  ['bold', 'italic'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+];
+
 export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
     html: `${name}.html`,
@@ -18,24 +25,21 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   return (
     <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
       <QuillContainer className="text-editor" readonly={props.readonly}>
-        <CustomToolbar id={Name.toolbar} value={value.type} readonly={props.readonly} />
         <ReactQuill
           readOnly={props.readonly}
           theme="snow"
           modules={{
             toolbar: {
-              container: `#${Name.toolbar}`,
+              container,
               handlers: {
                 type,
               },
             },
           }}
           defaultValue={value.html}
-          // On quill blur trigger that formik on change event
+          // Debounce trigger that formik on change event
           // fix typing Chinese always automatically triggers onChange
-          onBlur={(_, __, editor) => {
-            onChange(Name.html)(editor.getHTML());
-          }}
+          onChange={debounce(onChange(Name.html), 1000)}
           placeholder="请输入文本内容"
         />
       </QuillContainer>
