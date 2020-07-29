@@ -261,18 +261,18 @@ export default function Module() {
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块名称，限20个字符" />
+                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                  <Input placeholder="请输入模块名称，限40个字符" />
                 </Form.Item>
                 <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块名称，限20个字符" />
+                  <Input placeholder="请输入模块编号，限20个字符" />
                 </Form.Item>
                 <Form.Item
                   label="模块描述"
                   name="description"
-                  rules={[...Rules.Required, { max: 50 }]}
+                  rules={[...Rules.Required, { max: 200 }]}
                 >
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限50个字符" />
+                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
                 </Form.Item>
                 <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
                   <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
