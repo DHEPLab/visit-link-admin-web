@@ -32,13 +32,16 @@ function ModuleComponents({ values, readonly }) {
   }, [componentsContainerRef]);
 
   useEffect(() => {
-    if (!componentsContainerOffsetTop) return;
+    if (!componentsContainerOffsetTop || readonly) return;
     const onScroll = debounce((event) => {
       const diffTop = event.target.scrollTop - componentsContainerOffsetTop + headerHeight;
       setStickyTop(diffTop > 0 ? diffTop : 0);
     }, 100);
     document.getElementById('route-view').addEventListener('scroll', onScroll);
-  }, [componentsContainerOffsetTop]);
+    return () => {
+      document.getElementById('route-view').removeEventListener('scroll', onScroll);
+    };
+  }, [componentsContainerOffsetTop, readonly]);
 
   return (
     <FieldArray name="components">
