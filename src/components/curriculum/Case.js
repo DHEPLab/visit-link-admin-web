@@ -73,13 +73,15 @@ export default function Case({ name, value, index, onChange, ...props }) {
         />
       }
     >
-      <GhostInput
-        disabled={props.readonly}
-        name={Name.text}
-        value={value.text}
-        onChange={onChange}
-        placeholder="请输入选项文本，限20个字符"
-      />
+      <GhostInputContainer>
+        <GhostInput
+          disabled={props.readonly}
+          name={Name.text}
+          value={value.text}
+          onChange={onChange}
+          placeholder="请输入选项文本，限20个字符"
+        />
+      </GhostInputContainer>
       <FieldArray name={Name.components}>
         {(helpers) => {
           function handleMoveUp(index) {
@@ -94,6 +96,18 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
           return (
             <>
+              {value.components.map((component, index) => (
+                <ComponentField
+                  {...props}
+                  index={index}
+                  key={component.key}
+                  name={Name.components}
+                  component={component}
+                  onRemove={() => helpers.remove(index)}
+                  onMoveUp={() => handleMoveUp(index)}
+                  onMoveDown={() => handleMoveDown(index)}
+                />
+              ))}
               {!props.readonly && (
                 <div>
                   <Button type="link" onClick={() => helpers.push(Factory.createText())}>
@@ -110,18 +124,6 @@ export default function Case({ name, value, index, onChange, ...props }) {
                   </Button>
                 </div>
               )}
-              {value.components.map((component, index) => (
-                <ComponentField
-                  {...props}
-                  index={index}
-                  key={component.key}
-                  name={Name.components}
-                  component={component}
-                  onRemove={() => helpers.remove(index)}
-                  onMoveUp={() => handleMoveUp(index)}
-                  onMoveDown={() => handleMoveDown(index)}
-                />
-              ))}
             </>
           );
         }}
@@ -134,4 +136,8 @@ const StyledCascader = styled(Cascader)`
   .ant-input {
     border-radius: 8px;
   }
+`;
+
+const GhostInputContainer = styled.div`
+  padding: 20px;
 `;
