@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
+import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { Required } from '../constants';
 import { useFetch, useBoolState } from '../utils';
@@ -121,7 +122,7 @@ function Carers({ babyId }) {
     refresh();
   }
 
-  async function onFinish(values) {
+  async function submit(values) {
     const { id } = carer;
     const method = id ? 'put' : 'post';
     await Axios[method](`/admin/carers${id ? `/${id}` : ''}`, {
@@ -132,6 +133,24 @@ function Carers({ babyId }) {
     });
     refresh();
     safeCloseCarer();
+  }
+
+  function onFinish(values) {
+    if (
+      values.master &&
+      dataSource.filter((item) => item.id !== carer.id).find((item) => item.master)
+    ) {
+      Modal.confirm({
+        title: '确认',
+        icon: <ExclamationCircleOutlined />,
+        content: '设置当前看护人为主看护人时会替换原来的看护人，是否继续？',
+        cancelText: '再想想',
+        okText: '继续',
+        onOk: () => submit(values),
+      });
+      return;
+    }
+    submit(values);
   }
 
   return (
@@ -180,7 +199,7 @@ function Carers({ babyId }) {
                 if (
                   !value ||
                   !dataSource
-                    .filter((item) => item.id != carer.id)
+                    .filter((item) => item.id !== carer.id)
                     .find((item) => item.familyTies === value)
                 ) {
                   return Promise.resolve();
