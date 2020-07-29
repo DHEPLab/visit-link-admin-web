@@ -64,6 +64,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
       extra={
         <StyledCascader
           allowClear={false}
+          disabled={props.readonly}
           options={options}
           onChange={onChangeCascader}
           onPopupVisibleChange={onPopupVisibleChange}
@@ -73,6 +74,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
       }
     >
       <GhostInput
+        disabled={props.readonly}
         name={Name.text}
         value={value.text}
         onChange={onChange}
@@ -92,20 +94,22 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
           return (
             <>
-              <div>
-                <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                  添加文本
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                  添加媒体
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-                  添加选择
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
-                  添加翻页分割组件
-                </Button>
-              </div>
+              {!props.readonly && (
+                <div>
+                  <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                    添加文本
+                  </Button>
+                  <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                    添加媒体
+                  </Button>
+                  <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
+                    添加选择
+                  </Button>
+                  <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
+                    添加翻页分割组件
+                  </Button>
+                </div>
+              )}
               {value.components.map((component, index) => (
                 <ComponentField
                   {...props}

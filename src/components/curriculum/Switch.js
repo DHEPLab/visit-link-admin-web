@@ -26,11 +26,13 @@ export default function Switch({ name, value, onChange, ...props }) {
       <FieldArray name={Name.cases}>
         {(helpers) => (
           <>
-            <ButtonContainer>
-              <Button size="mini" type="link" onClick={() => helpers.push(Factory.createCase())}>
-                添加选项
-              </Button>
-            </ButtonContainer>
+            {!props.readonly && (
+              <ButtonContainer>
+                <Button size="mini" type="link" onClick={() => helpers.push(Factory.createCase())}>
+                  添加选项
+                </Button>
+              </ButtonContainer>
+            )}
             {value.cases.map((v, index) => (
               <Case
                 {...props}
