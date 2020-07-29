@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { debounce } from 'lodash';
 
 import Container from './Container';
 
 const container = [
+  // [{ type: ['script', 'instruction', 'refrence'] }],
   ['bold', 'italic'],
   [{ list: 'ordered' }, { list: 'bullet' }],
 ];
+
+let typeDropdown = Quill.import('ui/picker');
+typeDropdown = ['script', 'instruction', 'refrence'];
+Quill.register(typeDropdown, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
   const Name = {
