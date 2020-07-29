@@ -1,6 +1,6 @@
 import Curriculum from './curriculum';
 
-test('should filter lesson by stage, startMonths, endMonths', () => {
+it('should filter lesson by stage, start months, end months', () => {
   const lessons = [
     {
       stage: 'EDC',
@@ -18,23 +18,61 @@ test('should filter lesson by stage, startMonths, endMonths', () => {
   expect(Curriculum.filterLessons(lessons, 'BIRTH', 1, 1).length).toBe(1);
 });
 
-test('should keep lesson number unique', () => {
+it('should validate lesson number to keep unique', () => {
   const lessons = [
     {
       id: 1,
       number: 'L1',
     },
   ];
-  expect(Curriculum.validateLessonNumberUnique(lessons, 'L1')).toBeFalsy();
-  expect(Curriculum.validateLessonNumberUnique(lessons, 'L2')).toBeTruthy();
+  expect(Curriculum.validateLessonNumber(lessons, { number: 'L1' })).toBeFalsy();
+  expect(Curriculum.validateLessonNumber(lessons, { number: 'L2' })).toBeTruthy();
+  expect(Curriculum.validateLessonNumber(lessons, { number: 'L1', id: 1 })).toBeTruthy();
 });
 
-test('should pass validation when editing lesson', () => {
+it('should validate lesson date range cannot overlap', () => {
   const lessons = [
     {
       id: 1,
-      number: 'L1',
+      startOfApplicableDays: 10,
+      endOfApplicableDays: 20,
+      stage: 'EDC',
     },
   ];
-  expect(Curriculum.validateLessonNumberUnique(lessons, 'L1', 1)).toBeTruthy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
+      stage: 'EDC',
+      startOfApplicableDays: 20,
+      endOfApplicableDays: 30,
+    })
+  ).toBeFalsy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
+      stage: 'EDC',
+      startOfApplicableDays: 1,
+      endOfApplicableDays: 10,
+    })
+  ).toBeFalsy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
+      stage: 'BIRTH',
+      startOfApplicableDays: 1,
+      endOfApplicableDays: 10,
+    })
+  ).toBeTruthy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
+      id: 1,
+      stage: 'EDC',
+      startOfApplicableDays: 1,
+      endOfApplicableDays: 10,
+    })
+  ).toBeTruthy();
+  expect(
+    Curriculum.validateLessonDateRange(lessons, {
+      stage: 'EDC',
+      startOfApplicableDays: 21,
+      endOfApplicableDays: 30,
+    })
+  ).toBeTruthy();
 });

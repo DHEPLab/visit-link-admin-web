@@ -249,7 +249,7 @@ function Lessons({
         published: true,
       },
     }).then(({ data }) => {
-      setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
+      setModuleOptions(data.content.map(({ number, id }) => ({ label: number, value: id })));
     });
   }
 
@@ -281,7 +281,10 @@ function Lessons({
               validator(_, number) {
                 if (
                   !number ||
-                  CurriculumUtils.validateLessonNumberUnique(value, number, currentEditValue.id)
+                  CurriculumUtils.validateLessonNumber(value, {
+                    id: currentEditValue.id,
+                    number,
+                  })
                 ) {
                   return Promise.resolve();
                 }
@@ -334,6 +337,25 @@ function Lessons({
                   return Promise.reject('必须大于起始天数');
                 },
               }),
+              ({ getFieldValue }) => ({
+                validator(_, endOfApplicableDays) {
+                  const stage = getFieldValue('stage');
+                  const startOfApplicableDays = Number(getFieldValue('startOfApplicableDays'));
+                  endOfApplicableDays = Number(endOfApplicableDays);
+                  if (
+                    !endOfApplicableDays ||
+                    CurriculumUtils.validateLessonDateRange(value, {
+                      id: currentEditValue.id,
+                      stage,
+                      startOfApplicableDays,
+                      endOfApplicableDays,
+                    })
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('适用天数不能重叠');
+                },
+              }),
             ]}
           >
             <InputNumber
@@ -351,7 +373,7 @@ function Lessons({
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
-            loading={networks['/admin/modules' > 0]}
+            loading={!!networks['/admin/modules']}
           ></Select>
         </Form.Item>
         <Form.Item label="调查问卷" name="questionnaireAddress">

@@ -9,7 +9,6 @@ function offset(stage) {
 function filterLessons(lessons, stage, startMonth, endMonth) {
   if (!stage || startMonth == null || startMonth === '' || endMonth == null || endMonth === '')
     return [];
-  if (!lessons || lessons.length === 0) return [];
   return lessons.filter((lesson) => {
     return (
       lesson.stage === stage &&
@@ -19,12 +18,24 @@ function filterLessons(lessons, stage, startMonth, endMonth) {
   });
 }
 
-function validateLessonNumberUnique(lessons, number, id) {
-  if (!lessons || lessons.length === 0) return true;
-  return !lessons.find((lesson) => lesson.number === number && lesson.id !== id);
+function validateLessonNumber(lessons, { number, id }) {
+  return !lessons.filter((item) => item.id !== id).find((item) => item.number === number);
+}
+
+function validateLessonDateRange(lessons, lesson) {
+  return !lessons
+    .filter((item) => item.id !== lesson.id && item.stage === lesson.stage)
+    .find(
+      (item) =>
+        (item.startOfApplicableDays <= lesson.startOfApplicableDays &&
+          item.endOfApplicableDays >= lesson.startOfApplicableDays) ||
+        (item.startOfApplicableDays <= lesson.endOfApplicableDays &&
+          item.endOfApplicableDays >= lesson.endOfApplicableDays)
+    );
 }
 
 export default {
   filterLessons,
-  validateLessonNumberUnique,
+  validateLessonNumber,
+  validateLessonDateRange,
 };
