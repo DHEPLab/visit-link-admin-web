@@ -6,7 +6,8 @@ import { debounce } from 'lodash';
 import Container from './Container';
 
 const container = [
-  // [{ type: ['script', 'instruction', 'refrence'] }],
+  [{ type: ['script', 'instruction', 'refrence'] }],
+  // [{ size: ['small', false, 'large', 'huge'] }],
   ['bold', 'italic'],
   [{ list: 'ordered' }, { list: 'bullet' }],
 ];
@@ -35,9 +36,9 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
           theme="snow"
           modules={{
             toolbar: {
-              container,
+              container: props.readonly ? [] : container,
               handlers: {
-                type,
+                // type,
               },
             },
           }}
