@@ -145,24 +145,24 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
           realName,
           {
             title: 'ID',
-            width: 200,
+            width: 150,
             dataIndex: ['user', 'chw', 'identity'],
           },
           {
             title: '所在区域',
-            width: 500,
+            width: 350,
             dataIndex: ['user', 'chw', 'tags'],
             render: (tags) => tags && tags.join(', '),
           },
           phone,
           {
             title: '督导员',
-            width: 200,
+            width: 120,
             dataIndex: ['user', 'chw', 'supervisor', 'realName'],
           },
           {
             title: '负责宝宝',
-            width: 200,
+            width: 100,
             dataIndex: 'babyCount',
             render: (h) => `${h} 位`,
           },
