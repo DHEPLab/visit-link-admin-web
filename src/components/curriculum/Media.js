@@ -61,7 +61,7 @@ export default function Media({ name, value, onChange, ...props }) {
   return (
     <Container icon="iconmedia-gray" title="媒体组件" {...props}>
       <Flex>
-        {value.file ? (
+        {value.file || props.readonly ? (
           <Preview type={value.type} file={value.file} />
         ) : (
           <>
@@ -93,6 +93,7 @@ export default function Media({ name, value, onChange, ...props }) {
         name={Name.text}
         value={value.text}
         onChange={onChange}
+        disabled={props.readonly}
         placeholder="请输入媒体描述文本"
       />
     </Container>

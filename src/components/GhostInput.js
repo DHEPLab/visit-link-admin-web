@@ -6,4 +6,7 @@ export default styled.input`
   &::placeholder {
     color: #cecece;
   }
+  &:disabled {
+    background: none;
+  }
 `;
