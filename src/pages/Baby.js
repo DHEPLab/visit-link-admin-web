@@ -147,7 +147,7 @@ function Carers({ babyId }) {
               </Button>
             </Tooltip>
           ) : (
-            <Button onClick={openModal} type="shade">
+            <Button onClick={openModal} type="shade" data-testid="add-carer">
               新增看护人
             </Button>
           )}
@@ -170,7 +170,16 @@ function Carers({ babyId }) {
         <Form.Item label="真实姓名" name="name" rules={Required}>
           <Input autoFocus />
         </Form.Item>
-        <Form.Item label="亲属关系" name="familyTies" rules={Required}>
+        <Form.Item
+          label="亲属关系"
+          name="familyTies"
+          rules={[
+            ...Required,
+            () => ({
+              validator: (_, value) => {},
+            }),
+          ]}
+        >
           <SelectEnum name="FamilyTies" />
         </Form.Item>
         <Form.Item label="联系电话" name="phone" rules={Required}>
