@@ -176,7 +176,17 @@ function Carers({ babyId }) {
           rules={[
             ...Required,
             () => ({
-              validator: (_, value) => {},
+              validator: (_, value) => {
+                if (
+                  !value ||
+                  !dataSource
+                    .filter((item) => item.id != carer.id)
+                    .find((item) => item.familyTies === value)
+                ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('亲属关系不能重复选择');
+              },
             }),
           ]}
         >
