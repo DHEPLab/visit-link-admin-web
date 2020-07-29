@@ -34,8 +34,23 @@ function validateLessonDateRange(lessons, lesson) {
     );
 }
 
+function cleanInvalidLessons(schedules, lessons) {
+  return schedules.map((schedule) => ({
+    ...schedule,
+    lessons: schedule.lessons.filter((domain) =>
+      filterLessons(
+        lessons,
+        schedule.stage,
+        schedule.startOfApplicableMonths,
+        schedule.endOfApplicableMonths
+      ).find((lesson) => domain.label === lesson.number)
+    ),
+  }));
+}
+
 export default {
   filterLessons,
   validateLessonNumber,
   validateLessonDateRange,
+  cleanInvalidLessons,
 };

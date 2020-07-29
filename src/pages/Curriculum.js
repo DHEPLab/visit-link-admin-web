@@ -84,6 +84,11 @@ export default function Curriculum() {
     });
   }
 
+  function onChangeLessons(_lessons) {
+    setLessons(_lessons);
+    setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
+  }
+
   // fix page flash
   if (readonly == null || (id && curriculum.name == null)) return null;
 
@@ -141,7 +146,7 @@ export default function Curriculum() {
         )}
       </Card>
 
-      <EnhancedLessons disabled={readonly} value={lessons} onChange={setLessons} />
+      <EnhancedLessons disabled={readonly} value={lessons} onChange={onChangeLessons} />
       <EnhancedSchedules
         disabled={readonly}
         value={schedules}

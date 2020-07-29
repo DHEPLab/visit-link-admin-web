@@ -76,3 +76,66 @@ it('should validate lesson date range cannot overlap', () => {
     })
   ).toBeTruthy();
 });
+
+it('should clean invalid lessons from schedule', () => {
+  const schedules = [
+    {
+      stage: 'EDC',
+      startOfApplicableMonths: 2,
+      endOfApplicableMonths: 3,
+      lessons: [
+        {
+          label: 'L1',
+        },
+      ],
+    },
+  ];
+  const cleaned = [
+    {
+      stage: 'EDC',
+      startOfApplicableMonths: 2,
+      endOfApplicableMonths: 3,
+      lessons: [],
+    },
+  ];
+  expect(
+    Curriculum.cleanInvalidLessons(schedules, [
+      {
+        number: 'L1',
+        stage: 'EDC',
+        startOfApplicableDays: 9,
+        endOfApplicableDays: 100,
+      },
+    ])
+  ).toStrictEqual(cleaned);
+  expect(
+    Curriculum.cleanInvalidLessons(schedules, [
+      {
+        number: 'L1',
+        stage: 'EDC',
+        startOfApplicableDays: 21,
+        endOfApplicableDays: 30,
+      },
+    ])
+  ).toStrictEqual(schedules);
+  expect(
+    Curriculum.cleanInvalidLessons(schedules, [
+      {
+        number: 'L2',
+        stage: 'EDC',
+        startOfApplicableDays: 21,
+        endOfApplicableDays: 30,
+      },
+    ])
+  ).toStrictEqual(cleaned);
+  expect(
+    Curriculum.cleanInvalidLessons(schedules, [
+      {
+        number: 'L1',
+        stage: 'BIRTH',
+        startOfApplicableDays: 21,
+        endOfApplicableDays: 30,
+      },
+    ])
+  ).toStrictEqual(cleaned);
+});
