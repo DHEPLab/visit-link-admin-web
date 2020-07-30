@@ -18,7 +18,6 @@ export default function Case({ name, value, index, onChange, ...props }) {
   };
 
   function onChangeCascader(finishAction) {
-    console.log(finishAction);
     onChange(Name.finishAction)({ target: { value: finishAction } });
   }
 

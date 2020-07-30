@@ -1,124 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
-import { Formik, FieldArray } from 'formik';
+import { Formik } from 'formik';
 import { Form, Space, Button, Input, message } from 'antd';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { debounce } from 'lodash';
 
 import Factory from '../components/curriculum/factory';
+import ModuleComponents from '../components/curriculum/ModuleComponents';
 import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
-import { ComponentField } from '../components/curriculum/*';
 import {
   DraftBar,
-  Iconfont,
   Card,
   DetailHeader,
   SelectEnum,
   StaticField,
   DeleteConfirmModal,
 } from '../components/*';
-
-function ModuleComponents({ values, readonly, stickyTop }) {
-  return (
-    <FieldArray name="components">
-      {(helpers) => {
-        function handleMoveUp(index) {
-          if (index === 0) return;
-          helpers.move(index, index - 1);
-        }
-
-        function handleMoveDown(index) {
-          if (index === values.components.length - 1) return;
-          helpers.move(index, index + 1);
-        }
-
-        return (
-          <FieldArrayContainer>
-            <ComponentForm>
-              {values.components.map((component, index) => (
-                <ComponentField
-                  name="components"
-                  index={index}
-                  readonly={readonly}
-                  component={component}
-                  key={component.key}
-                  onRemove={() => helpers.remove(index)}
-                  onMoveUp={() => handleMoveUp(index)}
-                  onMoveDown={() => handleMoveDown(index)}
-                />
-              ))}
-            </ComponentForm>
-
-            {!readonly && (
-              <ComponentToolBar>
-                <StickyContainer top={stickyTop}>
-                  <Card title="添加组件：">
-                    <Space direction="vertical" size="large">
-                      <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                        <Iconfont type="icontext" /> 添加文本组件
-                      </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
-                        <Iconfont type="iconmedia" />
-                        添加媒体组件
-                      </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
-                        <Iconfont type="iconswitch" />
-                        添加选择组件
-                      </Button>
-                      <Button
-                        style={{ width: '182px' }}
-                        type="primary"
-                        onClick={() => helpers.push(Factory.createPageFooter())}
-                      >
-                        添加翻页分割组件
-                      </Button>
-                    </Space>
-                  </Card>
-                </StickyContainer>
-              </ComponentToolBar>
-            )}
-          </FieldArrayContainer>
-        );
-      }}
-    </FieldArray>
-  );
-}
-
-function stickyScrollListener(offsetTop, onChangeStickyTop) {
-  // console.log('add listener');
-  const onScroll = debounce((event) => {
-    const diffTop = event.target.scrollTop - offsetTop;
-    // console.log('set sticky top, top', diffTop);
-    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
-  }, 100);
-  document.getElementById('route-view').addEventListener('scroll', onScroll);
-  return () => {
-    // console.log('remove listener');
-    document.getElementById('route-view').removeEventListener('scroll', onScroll);
-  };
-}
-
-const FieldArrayContainer = styled.div`
-  display: flex;
-`;
-
-const ComponentForm = styled.div`
-  flex: 1;
-`;
-
-const ComponentToolBar = styled.div``;
-
-const StickyContainer = styled.div`
-  position: relative;
-  top: ${({ top }) => top}px;
-  height: 360px;
-  margin-left: 40px;
-  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
-  border-radius: 8px;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-`;
 
 export default function Module() {
   const { id } = useParams();
@@ -297,4 +195,18 @@ function ReadonlyForm({ value }) {
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
     </div>
   );
+}
+
+function stickyScrollListener(offsetTop, onChangeStickyTop) {
+  // console.log('add listener');
+  const onScroll = debounce((event) => {
+    const diffTop = event.target.scrollTop - offsetTop;
+    // console.log('set sticky top, top', diffTop);
+    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
+  }, 100);
+  document.getElementById('route-view').addEventListener('scroll', onScroll);
+  return () => {
+    // console.log('remove listener');
+    document.getElementById('route-view').removeEventListener('scroll', onScroll);
+  };
 }
