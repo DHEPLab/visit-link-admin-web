@@ -1,9 +1,10 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Formik, FieldArray } from 'formik';
 import { Form, Space, Button, Input, message } from 'antd';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
+import { debounce } from 'lodash';
 
 import Factory from '../components/curriculum/factory';
 import { Rules } from '../constants/*';
@@ -18,31 +19,8 @@ import {
   StaticField,
   DeleteConfirmModal,
 } from '../components/*';
-import { debounce } from 'lodash';
 
-function ModuleComponents({ values, readonly }) {
-  // sticky component tool bar to container
-  const headerHeight = 100;
-  const componentsContainerRef = createRef();
-  const [componentsContainerOffsetTop, setComponentsContainerOffsetTop] = useState();
-  const [stickyTop, setStickyTop] = useState(0);
-
-  useEffect(() => {
-    setComponentsContainerOffsetTop(componentsContainerRef.current.offsetTop);
-  }, [componentsContainerRef]);
-
-  useEffect(() => {
-    if (!componentsContainerOffsetTop || readonly) return;
-    const onScroll = debounce((event) => {
-      const diffTop = event.target.scrollTop - componentsContainerOffsetTop + headerHeight;
-      setStickyTop(diffTop > 0 ? diffTop : 0);
-    }, 100);
-    document.getElementById('route-view').addEventListener('scroll', onScroll);
-    return () => {
-      document.getElementById('route-view').removeEventListener('scroll', onScroll);
-    };
-  }, [componentsContainerOffsetTop, readonly]);
-
+function ModuleComponents({ values, readonly, stickyTop }) {
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -57,7 +35,7 @@ function ModuleComponents({ values, readonly }) {
         }
 
         return (
-          <FieldArrayContainer ref={componentsContainerRef}>
+          <FieldArrayContainer>
             <ComponentForm>
               {values.components.map((component, index) => (
                 <ComponentField
@@ -108,6 +86,20 @@ function ModuleComponents({ values, readonly }) {
   );
 }
 
+function stickyScrollListener(offsetTop, onChangeStickyTop) {
+  // console.log('add listener');
+  const onScroll = debounce((event) => {
+    const diffTop = event.target.scrollTop - offsetTop;
+    // console.log('set sticky top, top', diffTop);
+    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
+  }, 100);
+  document.getElementById('route-view').addEventListener('scroll', onScroll);
+  return () => {
+    // console.log('remove listener');
+    document.getElementById('route-view').removeEventListener('scroll', onScroll);
+  };
+}
+
 const FieldArrayContainer = styled.div`
   display: flex;
 `;
@@ -125,6 +117,7 @@ const StickyContainer = styled.div`
   margin-left: 40px;
   box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
   border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 export default function Module() {
@@ -139,6 +132,7 @@ export default function Module() {
 
   const [module, setModule] = useState({});
   const [components, setComponents] = useState();
+  const [stickyTop, setStickyTop] = useState(0);
 
   const [draftId, setDraftId] = useState();
   const [draftDate, setDraftDate] = useState();
@@ -160,6 +154,10 @@ export default function Module() {
         setDraftId(headers['x-draft-id']);
         setDraftDate(headers['x-draft-date']);
       });
+    }
+    if (!readonly) {
+      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
+      return stickyScrollListener(687, setStickyTop);
     }
   }, [id, form, readonly]);
 
@@ -282,7 +280,7 @@ export default function Module() {
           </Card>
 
           <Card title="模块内容">
-            <ModuleComponents values={values} readonly={readonly} />
+            <ModuleComponents values={values} readonly={readonly} stickyTop={stickyTop} />
           </Card>
         </>
       )}
