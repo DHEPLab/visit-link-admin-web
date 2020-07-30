@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { ComponentField } from './*';
 import { Iconfont, Card } from '../*';
 
-export default function ModuleComponents({ values, readonly, stickyTop }) {
+export default function ModuleComponents({ value, readonly, stickyTop }) {
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -17,14 +17,14 @@ export default function ModuleComponents({ values, readonly, stickyTop }) {
         }
 
         function handleMoveDown(index) {
-          if (index === values.components.length - 1) return;
+          if (index === value.length - 1) return;
           helpers.move(index, index + 1);
         }
 
         return (
           <FieldArrayContainer>
             <ComponentForm>
-              {values.components.map((component, index) => (
+              {value.map((component, index) => (
                 <ComponentField
                   name="components"
                   index={index}

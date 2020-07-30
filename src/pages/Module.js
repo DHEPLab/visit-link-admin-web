@@ -178,7 +178,7 @@ export default function Module() {
           </Card>
 
           <Card title="模块内容">
-            <ModuleComponents values={values} readonly={readonly} stickyTop={stickyTop} />
+            <ModuleComponents value={values.components} readonly={readonly} stickyTop={stickyTop} />
           </Card>
         </>
       )}
