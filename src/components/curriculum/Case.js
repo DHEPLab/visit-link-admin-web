@@ -22,36 +22,35 @@ export default function Case({ name, value, index, onChange, ...props }) {
   }
 
   function onPopupVisibleChange(visible) {
-    if (visible) {
-      Axios.get('/admin/modules', {
-        params: {
-          size: 1000,
-          published: true,
-        },
-      }).then(({ data }) => {
-        const modules = data.content.map((module) => ({
-          label: `${module.number} ${module.name}`,
-          value: module.id,
-        }));
+    if (!visible) return;
+    Axios.get('/admin/modules', {
+      params: {
+        size: 1000,
+        published: true,
+      },
+    }).then(({ data }) => {
+      const modules = data.content.map((module) => ({
+        label: `${module.number} ${module.name}`,
+        value: module.id,
+      }));
 
-        setOptions([
-          {
-            label: '结束选项继续本层级内容',
-            value: 'Continue',
-          },
-          {
-            label: '跳转至其他模块并结束本内容模块',
-            value: 'Redirect_End',
-            children: modules,
-          },
-          {
-            label: '跳转至其他模块并继续本层级内容',
-            value: 'Redirect_Continue',
-            children: modules,
-          },
-        ]);
-      });
-    }
+      setOptions([
+        {
+          label: '结束选项继续本层级内容',
+          value: 'Continue',
+        },
+        {
+          label: '跳转至其他模块并结束本内容模块',
+          value: 'Redirect_End',
+          children: modules,
+        },
+        {
+          label: '跳转至其他模块并继续本层级内容',
+          value: 'Redirect_Continue',
+          children: modules,
+        },
+      ]);
+    });
   }
 
   return (

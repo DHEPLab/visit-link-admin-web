@@ -1,9 +1,10 @@
 import React from 'react';
-import { FieldArray } from 'formik';
-import Factory from './factory';
-import { Space, Button } from 'antd';
 import styled from 'styled-components';
 
+import { FieldArray } from 'formik';
+import { Space, Button } from 'antd';
+
+import Factory from './factory';
 import { ComponentField } from './*';
 import { Iconfont, Card } from '../*';
 
@@ -26,11 +27,8 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
             <ComponentForm>
               {value.map((component, index) => (
                 <ComponentField
+                  {...{ index, readonly, component, key: component.key }}
                   name="components"
-                  index={index}
-                  readonly={readonly}
-                  component={component}
-                  key={component.key}
                   onRemove={() => helpers.remove(index)}
                   onMoveUp={() => handleMoveUp(index)}
                   onMoveDown={() => handleMoveDown(index)}
@@ -54,13 +52,12 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
                         <Iconfont type="iconswitch" />
                         添加选择组件
                       </Button>
-                      <Button
-                        style={{ width: '182px' }}
+                      <PageButton
                         type="primary"
                         onClick={() => helpers.push(Factory.createPageFooter())}
                       >
                         添加翻页分割组件
-                      </Button>
+                      </PageButton>
                     </Space>
                   </Card>
                 </StickyContainer>
@@ -72,6 +69,10 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
     </FieldArray>
   );
 }
+
+const PageButton = styled(Button)`
+  width: 182px;
+`;
 
 const FieldArrayContainer = styled.div`
   display: flex;
