@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Button, Cascader, message } from 'antd';
@@ -10,6 +10,11 @@ import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
   const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    // initial cascader options
+    onPopupVisibleChange(true);
+  }, []);
 
   const Name = {
     text: `${name}.text`,
@@ -64,6 +69,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
           allowClear={false}
           disabled={props.readonly}
           options={options}
+          value={value.finishAction}
           onChange={onChangeCascader}
           onPopupVisibleChange={onPopupVisibleChange}
           size="small"
