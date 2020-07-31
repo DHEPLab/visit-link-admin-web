@@ -131,9 +131,6 @@ export default function Case({ name, value, index, onChange, ...props }) {
                   <Button type="link" onClick={handleAddSwitch}>
                     添加选择
                   </Button>
-                  <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
-                    添加翻页分割组件
-                  </Button>
                 </div>
               )}
             </>
