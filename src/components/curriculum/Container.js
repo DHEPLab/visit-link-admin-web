@@ -43,7 +43,7 @@ export default function Container({
           {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
           <TitleContainer>
             <Title>
-              <Iconfont type={icon} style={{ marginRight: '8px' }} />
+              {icon && <Iconfont type={icon} style={{ marginRight: '8px' }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
             </Title>
