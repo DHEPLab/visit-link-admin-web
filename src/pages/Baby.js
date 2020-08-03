@@ -228,6 +228,8 @@ function Carers({ babyId }) {
           {
             title: '主看护人',
             dataIndex: 'master',
+            width: 140,
+            align: 'center',
             render(h) {
               return h ? '是' : '否';
             },
