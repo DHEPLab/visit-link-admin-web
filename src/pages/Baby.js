@@ -255,6 +255,7 @@ function Carers({ babyId }) {
             title: '操作',
             dataIndex: 'id',
             width: 200,
+            align: 'center',
             render(id, record) {
               return (
                 <Space>
