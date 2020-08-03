@@ -129,6 +129,7 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
     <div>
       <ChwBar>
         <SearchInput
+          style={{ width: '420px' }}
           onChange={(e) => onChangeSearch('search', e.target.value)}
           placeholder="请输入社区工作者姓名、ID或所在区域搜索"
         />
