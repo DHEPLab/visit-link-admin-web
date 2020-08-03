@@ -118,7 +118,7 @@ export default function Module() {
                         content="删除后模块内容将无法恢复是否继续？"
                         onConfirm={handleDeleteModule}
                       >
-                        <Button ghost type="primary">
+                        <Button ghost type="danger">
                           删除模块
                         </Button>
                       </DeleteConfirmModal>
