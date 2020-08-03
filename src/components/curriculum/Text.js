@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { debounce } from 'lodash';
 
 import Container from './Container';
@@ -9,6 +9,25 @@ const container = [
   ['bold', 'italic'],
   [{ list: 'ordered' }, { list: 'bullet' }],
 ];
+
+// https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
+const Clipboard = Quill.import('modules/clipboard');
+const Delta = Quill.import('delta');
+
+class PlainClipboard extends Clipboard {
+  onPaste(e) {
+    e.preventDefault();
+    const range = this.quill.getSelection();
+    const text = e.clipboardData.getData('text/plain');
+    const delta = new Delta().retain(range.index).delete(range.length).insert(text);
+    const index = text.length + range.index;
+    const length = 0;
+    this.quill.updateContents(delta, 'silent');
+    this.quill.setSelection(index, length, 'silent');
+    this.quill.scrollIntoView();
+  }
+}
+Quill.register('modules/clipboard', PlainClipboard, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
   const types = ['instruction', 'script', 'refrence'];
