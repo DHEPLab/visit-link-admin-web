@@ -9,7 +9,7 @@ import Rules from '../constants/rules';
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
 import { clearToken } from '../utils/token';
-import { Card, StaticField, ModalForm } from '../components/*';
+import { Card, StaticField, ModalForm, Message } from '../components/*';
 import { apiAccountProfile } from '../actions';
 
 export default function Profiles() {
@@ -27,6 +27,7 @@ export default function Profiles() {
 
   async function handleChangePassword(values) {
     await Axios.put('/api/account/password', values);
+    Message.success('密码修改成功', '请您重新登录');
     clearToken();
     history.push('/sign_in');
   }
