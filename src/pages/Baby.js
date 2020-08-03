@@ -174,16 +174,17 @@ function Carers({ babyId }) {
       }
     >
       <ModalForm
+        labelWidth={120}
         title={`${carer.id ? '编辑' : '新增'}看护人`}
         initialValues={carer}
         visible={visible}
         onCancel={safeCloseCarer}
         onFinish={onFinish}
       >
-        <Form.Item label="看护状态" name="master" rules={Required}>
+        <Form.Item label="主看护人" name="master" rules={Required}>
           <Radio.Group>
-            <Radio value={true}>主看护人</Radio>
-            <Radio value={false}>次看护人</Radio>
+            <Radio value={true}>是</Radio>
+            <Radio value={false}>否</Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item label="真实姓名" name="name" rules={Required}>
