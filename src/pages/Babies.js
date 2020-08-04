@@ -65,7 +65,7 @@ function Babies({ loadData, onChangeSearch, ...props }) {
                 title: '宝宝姓名',
                 dataIndex: 'name',
                 align: 'center',
-                width: 80,
+                width: 120,
               },
               {
                 title: 'ID',
@@ -74,28 +74,31 @@ function Babies({ loadData, onChangeSearch, ...props }) {
               },
               {
                 title: '性别',
-                width: 100,
+                width: 80,
                 dataIndex: 'gender',
                 render: (h) => Gender[h],
               },
               {
                 title: '所在区域',
                 dataIndex: 'area',
-                width: 500,
+                width: 300,
               },
               {
                 title: '负责社区工作者',
                 dataIndex: 'chw',
+                width: 150,
+              },
+              {
+                title: '已上课堂',
+                dataIndex: 'visitCount',
+                width: 150,
+                render: (h) => `${h} 节课堂`,
+              },
+              {
+                title: '当前进度',
+                dataIndex: 'currentLessonName',
                 width: 200,
               },
-              // {
-              //   title: '已上大纲',
-              //   dataIndex: 'area',
-              // },
-              // {
-              //   title: '当前进度',
-              //   dataIndex: 'area',
-              // },
             ]}
           />
         </TabPane>
@@ -112,4 +115,4 @@ function Babies({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Babies, '/admin/babies?sort=id,desc');
+export default WithPage(Babies, '/admin/babies');
