@@ -18,6 +18,7 @@ import {
   DraftBar,
   ZebraTable,
   ModalForm,
+  DeleteConfirmModal,
 } from '../components/*';
 
 export default function Curriculum() {
@@ -615,9 +616,11 @@ const operation = (disabled, handleDelete, openEditModal) => {
       if (disabled) return null;
       return (
         <Space size="large">
-          <Button size="small" type="link" onClick={() => handleDelete(index)}>
-            删除
-          </Button>
+          <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
+            <Button size="small" type="link">
+              删除
+            </Button>
+          </DeleteConfirmModal>
           <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
             编辑
           </Button>
