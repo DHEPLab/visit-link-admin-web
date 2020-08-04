@@ -251,6 +251,7 @@ const phone = {
 const username = {
   title: '账户名称',
   dataIndex: ['user', 'username'],
+  width: 200,
 };
 
 const onRow = (history, id) => {
