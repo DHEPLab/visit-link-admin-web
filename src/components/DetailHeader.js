@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 import { Iconfont } from '../components/*';
 
 export default function ({ icon, menu, title, role, extra }) {
+  const history = useHistory();
   return (
     <Container>
       <Flex>
         <Iconfont type={icon} />
-        <Menu>{menu}</Menu>
+        <Menu onClick={() => history.goBack()}>{menu}</Menu>
         <Iconfont type="iconarrow-gray" size={10} />
         <Title>{title}</Title>
         {role && <Role>{role}</Role>}
@@ -46,6 +48,7 @@ const Menu = styled.div`
   font-weight: 500;
   margin-left: 8px;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 const Title = styled.div`
