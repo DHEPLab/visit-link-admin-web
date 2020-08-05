@@ -6,6 +6,7 @@ import Baby from './Baby';
 
 jest.mock('react-router-dom', () => ({
   useParams: () => 1,
+  useHistory: jest.fn(),
 }));
 
 jest.mock('../utils', () => ({
