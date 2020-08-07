@@ -43,3 +43,9 @@ export const ModuleTopic = {
   CAREGIVER_MENTAL_HEALTH: '照料人心理健康',
   GOVERNMENT_SERVICES: '政府服务',
 };
+
+export const ActionFromApp = {
+  CREATE: '待审创建',
+  MODIFY: '待审修改',
+  DELETE: '待审注销',
+};

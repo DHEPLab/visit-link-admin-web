@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { useQueryParam, StringParam } from 'use-query-params';
+
 import { Button, Space, Tabs } from 'antd';
 
 import { useBoolState } from '../utils';
-import { Gender } from '../constants/enums';
+import { Gender, ActionFromApp } from '../constants/enums';
 import {
   WithPage,
   ContentHeader,
@@ -18,15 +20,23 @@ import {
 
 const { TabPane } = Tabs;
 
+function formatDate(datetime) {
+  return moment(datetime).format('YYYY-MM-DD');
+}
+
 export default function Babies() {
   const history = useHistory();
-  const [tab, setTab] = useState('approved');
+  const [tab, setTab] = useQueryParam('tab', StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
+
+  useEffect(() => {
+    if (!tab) setTab('approved');
+  }, [tab, setTab]);
 
   function handleCreateBaby(values) {
     values.area = values.area.join('/');
-    values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
-    values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
+    values.birthday = values.birthday && formatDate(values.birthday);
+    values.edc = values.edc && formatDate(values.edc);
     Axios.post('/admin/babies', values).then(() => {
       refresh();
       closeBaby();
@@ -48,7 +58,7 @@ export default function Babies() {
         </Button>
       </ContentHeader>
 
-      <CardTabs onChange={setTab}>
+      <CardTabs onChange={setTab} defaultActiveKey={tab}>
         <TabPane tab="已审核" key="approved">
           <PageApproved tab={tab} history={history} />
         </TabPane>
@@ -90,12 +100,19 @@ function Unreviewed({ tab, history, loadData, ...props }) {
           title: '修改日期',
           dataIndex: 'lastModifiedAt',
           align: 'center',
-          width: 120,
+          width: 220,
+          render: (h, baby) => {
+            return (
+              <>
+                {formatDate(h)}
+                <ActionFromAppContainer>{ActionFromApp[baby.actionFromApp]}</ActionFromAppContainer>
+              </>
+            );
+          },
         },
         {
           title: '宝宝姓名',
           dataIndex: 'name',
-          align: 'center',
           width: 120,
         },
         {
@@ -130,6 +147,14 @@ function Unreviewed({ tab, history, loadData, ...props }) {
     />
   );
 }
+
+const ActionFromAppContainer = styled.span`
+  color: #ff794f;
+  background: #ffede2;
+  border-radius: 4px;
+  padding: 3px 6px;
+  margin-left: 20px;
+`;
 
 function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {

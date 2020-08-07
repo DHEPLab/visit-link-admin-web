@@ -8,7 +8,8 @@ import 'moment/locale/zh-cn';
 import RouteView from './Router';
 import { Role } from './constants/enums';
 import { Header, Menu, Message } from './components/*';
-import { BrowserRouter, useHistory } from 'react-router-dom';
+import { BrowserRouter, useHistory, Route } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 import { applyToken, getToken, clearToken } from './utils/token';
 
 import rootReducer from './reducers';
@@ -27,7 +28,9 @@ export default function () {
       <Provider store={store}>
         <AppContainer>
           <BrowserRouter>
-            <App />
+            <QueryParamProvider ReactRouterRoute={Route}>
+              <App />
+            </QueryParamProvider>
           </BrowserRouter>
         </AppContainer>
       </Provider>
