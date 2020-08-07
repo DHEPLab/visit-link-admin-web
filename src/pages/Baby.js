@@ -259,9 +259,6 @@ function Carers({ babyId }) {
             render(id, record) {
               return (
                 <Space>
-                  <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
-                    编辑
-                  </Button>
                   <DeleteConfirmModal
                     title="删除看护人"
                     content="确认要删除此看护人？"
@@ -271,6 +268,9 @@ function Carers({ babyId }) {
                       删除
                     </Button>
                   </DeleteConfirmModal>
+                  <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
+                    编辑
+                  </Button>
                 </Space>
               );
             },
