@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
+import { useQueryParam, StringParam } from 'use-query-params';
 
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
@@ -20,10 +21,14 @@ import {
 const { TabPane } = Tabs;
 export default function Users() {
   const history = useHistory();
-  const [tab, setTab] = useState('chw');
+  const [tab, setTab] = useQueryParam('tab', StringParam);
   const [visible, openUser, closeUser] = useBoolState();
   const { user } = useSelector((state) => state.users);
   const isAdmin = user?.role === 'ROLE_ADMIN';
+
+  useEffect(() => {
+    if (!tab) setTab('chw');
+  }, [tab, setTab]);
 
   // change tab to refresh table
   function refresh() {
@@ -49,21 +54,23 @@ export default function Users() {
         )}
       </ContentHeader>
 
-      <CardTabs onChange={setTab}>
-        <TabPane tab="社区工作者" key="chw">
-          <PageCHW tab={tab} history={history} />
-        </TabPane>
-        {isAdmin && (
-          <>
-            <TabPane tab="督导员" key="supervisor">
-              <PageSupervisor tab={tab} history={history} />
-            </TabPane>
-            <TabPane tab="管理员" key="admin">
-              <PageAdmin tab={tab} history={history} />
-            </TabPane>
-          </>
-        )}
-      </CardTabs>
+      {user.id && (
+        <CardTabs onChange={setTab} defaultActiveKey={tab}>
+          <TabPane tab="社区工作者" key="chw">
+            <PageCHW tab={tab} history={history} />
+          </TabPane>
+          {isAdmin && (
+            <>
+              <TabPane tab="督导员" key="supervisor">
+                <PageSupervisor tab={tab} history={history} />
+              </TabPane>
+              <TabPane tab="管理员" key="admin">
+                <PageAdmin tab={tab} history={history} />
+              </TabPane>
+            </>
+          )}
+        </CardTabs>
+      )}
 
       <ModalForm
         title="创建新用户"
