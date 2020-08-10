@@ -17,6 +17,7 @@ import {
   DetailHeader,
   DeleteConfirmModal,
   SelectEnum,
+  BabyReviewBar,
 } from '../components/*';
 
 export default function Baby() {
@@ -49,13 +50,18 @@ export default function Baby() {
         icon="iconbaby-primary"
         menu="宝宝管理"
         title={baby.name}
-        role={`宝宝ID ${baby.identity || ''}`}
+        role={`宝宝ID ${baby.identity || '待核准'}`}
         extra={
-          <Button ghost type="danger">
-            注销宝宝
-          </Button>
+          baby.approved && (
+            <Button ghost type="danger">
+              注销宝宝
+            </Button>
+          )
         }
       />
+
+      <BabyReviewBar baby={baby} />
+
       <Card title="负责社区工作者">
         <StaticField label="社区工作者ID">{chw().chw?.identity}</StaticField>
         <StaticField label="真实姓名">{chw().realName}</StaticField>

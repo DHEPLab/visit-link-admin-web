@@ -49,3 +49,9 @@ export const ActionFromApp = {
   MODIFY: '待审修改',
   DELETE: '待审注销',
 };
+
+export const ReviewActionFromApp = {
+  CREATE: '创建新宝宝账户',
+  MODIFY: '修改宝宝信息',
+  DELETE: '注销宝宝账户',
+};
