@@ -47,7 +47,7 @@ const TitleContainer = styled.div`
   flex: 1;
   height: 52px;
   border-radius: 8px;
-  border: 2px solid #eee;
+  border: 1px solid #eee;
   display: flex;
   margin-bottom: 20px;
   align-items: center;
