@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-import { Required } from '../constants';
+import Rules from '../constants/rules';
 import { useFetch, useBoolState } from '../utils';
 import { Gender, BabyStage, FamilyTies, FeedingPattern } from '../constants/enums';
 import {
@@ -182,20 +182,20 @@ function Carers({ babyId }) {
         onCancel={safeCloseCarer}
         onFinish={onFinish}
       >
-        <Form.Item label="主看护人" name="master" rules={Required}>
+        <Form.Item label="主看护人" name="master" rules={Rules.Required}>
           <Radio.Group>
             <Radio value={true}>是</Radio>
             <Radio value={false}>否</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="name" rules={Required}>
+        <Form.Item label="真实姓名" name="name" rules={Rules.Required}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item
           label="亲属关系"
           name="familyTies"
           rules={[
-            ...Required,
+            ...Rules.Required,
             () => ({
               validator: (_, value) => {
                 if (
@@ -213,7 +213,7 @@ function Carers({ babyId }) {
         >
           <SelectEnum name="FamilyTies" />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Required}>
+        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
         <Form.Item label="微信号" name="wechat">

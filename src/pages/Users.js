@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux';
 import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
 import { useQueryParam, StringParam } from 'use-query-params';
 
+import Rules from '../constants/rules';
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
-import { Required, PHONE_RULES, REAL_NAME_RULES, CHW_AREA_RULES } from '../constants';
 import {
   ModalForm,
   WithPage,
@@ -80,7 +80,7 @@ export default function Users() {
         initialValues={{ role: 'ROLE_CHW' }}
       >
         <h3>用户信息</h3>
-        <Form.Item label="权限" name="role" rules={Required}>
+        <Form.Item label="权限" name="role" rules={Rules.Required}>
           <Radio.Group>
             {Object.keys(Role).map((key) => (
               <Radio key={key} value={key}>
@@ -89,7 +89,7 @@ export default function Users() {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="realName" rules={REAL_NAME_RULES}>
+        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
@@ -97,10 +97,10 @@ export default function Users() {
             <>
               {getFieldValue('role') === 'ROLE_CHW' && (
                 <>
-                  <Form.Item label="ID" name={['chw', 'identity']} rules={Required}>
+                  <Form.Item label="ID" name={['chw', 'identity']} rules={Rules.Required}>
                     <Input />
                   </Form.Item>
-                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={CHW_AREA_RULES}>
+                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
                     <Select mode="tags" />
                   </Form.Item>
                 </>
@@ -108,14 +108,14 @@ export default function Users() {
             </>
           )}
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={PHONE_RULES}>
+        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
         <h3>账户信息</h3>
-        <Form.Item label="账户名称" name="username" rules={Required}>
+        <Form.Item label="账户名称" name="username" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="账户密码" name="password" rules={[{ required: true, min: 6 }]}>
+        <Form.Item label="账户密码" name="password" rules={Rules.Password}>
           <Input.Password />
         </Form.Item>
       </ModalForm>

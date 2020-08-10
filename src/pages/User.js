@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { Required, PHONE_RULES, CHW_AREA_RULES } from '../constants';
+import Rules from '../constants/rules';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
 import {
@@ -91,14 +91,14 @@ export default function User() {
         visible={changeProfileVisible}
         onCancel={closeChangeProfile}
       >
-        <Form.Item label="真实姓名" name="realName" rules={Required}>
+        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
           <Input />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={PHONE_RULES}>
+        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
         {roleChw() && (
-          <Form.Item label="所在区域" name={['chw', 'tags']} rules={CHW_AREA_RULES}>
+          <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
             <Select mode="tags" />
           </Form.Item>
         )}
@@ -137,7 +137,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
     >
       <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label="新的账户密码" name="password" rules={[{ required: true, min: 6 }]}>
+        <Form.Item label="新的账户密码" name="password" rules={Rules.Password}>
           <Input.Password style={{ width: '100%' }} placeholder="请输入新的账户密码" />
         </Form.Item>
       </Form>
