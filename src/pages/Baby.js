@@ -208,7 +208,7 @@ function Visits({ babyId }) {
             title: '课堂内容',
             dataIndex: 'lesson',
             width: 300,
-            render: (h) => h.modules?.map((m) => m.label).join(', '),
+            render: (h) => h?.modules?.map((m) => m.label).join(', '),
           },
           {
             title: '过期/未完成原因',
