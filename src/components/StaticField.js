@@ -12,6 +12,7 @@ export default function ({ label, children }) {
 
 const Container = styled.div`
   display: flex;
+  width: 100%;
   & + & {
     margin-top: 20px;
   }
@@ -28,4 +29,8 @@ const Label = styled.div`
 const Value = styled.div`
   color: #4a4a4a;
   font-weight: bold;
+  flex: 1;
+  word-wrap: break-word;
+  word-break: break-all;
+  flex-wrap: wrap;
 `;

@@ -108,10 +108,10 @@ export default function BabyModalForm({ disableStage, ...props }) {
           fieldNames={{ label: 'name', value: 'name', children: 'children' }}
         />
       </Form.Item>
-      <Form.Item label="详细地址" name="location" rules={Required}>
+      <Form.Item label="详细地址" name="location" rules={[...Required, { max: 200 }]}>
         <Input />
       </Form.Item>
-      <Form.Item label="备注信息" name="remark">
+      <Form.Item label="备注信息" name="remark" rules={[{ max: 500 }]}>
         <Input />
       </Form.Item>
     </ModalForm>
