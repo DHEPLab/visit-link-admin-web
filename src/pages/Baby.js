@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -24,6 +24,7 @@ export default function Baby() {
   const { id } = useParams();
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
+  const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
 
   const chw = () => baby.chw || {};
   const initialValues = () => ({
@@ -44,6 +45,25 @@ export default function Baby() {
     });
   }
 
+  function handleApprove() {
+    switch (baby.actionFromApp) {
+      case 'CREATE':
+        openApproveCreateModal();
+        break;
+      default:
+        break;
+    }
+  }
+
+  function handleApproveCreateFinish(values) {
+    Axios.put(`/admin/babies/${id}/approve`, values).then(() => {
+      closeApproveCreateModal();
+      refresh();
+    });
+  }
+
+  if (!baby.id) return null;
+
   return (
     <>
       <DetailHeader
@@ -60,7 +80,12 @@ export default function Baby() {
         }
       />
 
-      <BabyReviewBar baby={baby} />
+      {!baby.approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
+      <ApproveCreateBabyModal
+        visible={approveCreateVisible}
+        onCancel={closeApproveCreateModal}
+        onFinish={handleApproveCreateFinish}
+      />
 
       <Card title="负责社区工作者">
         <StaticField label="社区工作者ID">{chw().chw?.identity}</StaticField>
@@ -96,6 +121,7 @@ export default function Baby() {
       </Card>
 
       <Carers babyId={id} />
+
       <BabyModalForm
         title="修改宝宝信息"
         visible={visible}
@@ -106,6 +132,43 @@ export default function Baby() {
         disableStage={baby.stage === 'BIRTH'}
       />
     </>
+  );
+}
+
+function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
+  const [form] = Form.useForm();
+  useEffect(() => {
+    props.visible && form.resetFields();
+  }, [props, form]);
+
+  return (
+    <Modal
+      title="您确定要批准创建新宝宝账户的申请吗？"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            稍后再说
+          </Button>
+          <Button type="danger" onClick={form.submit}>
+            批准申请
+          </Button>
+        </Space>
+      }
+      {...props}
+    >
+      <p>
+        请先核对社区工作者提交的新宝宝账户信息，并设置宝宝
+        ID，即可批准该账户新建申请。一旦批准申请后，宝宝ID将不可更改。
+      </p>
+      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
+        <Form.Item label="宝宝ID" name="identity" rules={Rules.Required}>
+          <Input autoFocus style={{ width: '100%' }} placeholder="请输入宝宝的ID" />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 }
 
