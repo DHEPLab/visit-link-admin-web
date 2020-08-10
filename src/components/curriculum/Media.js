@@ -127,10 +127,13 @@ const PreviewVideo = styled.div`
   border-radius: 8px;
   background: #000;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
   display: flex;
 
   video {
-    width: 400px;
+    /* width: 400px; */
+    height: 250px;
   }
 `;
 
