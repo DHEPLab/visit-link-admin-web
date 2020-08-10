@@ -6,8 +6,15 @@ import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import Rules from '../constants/rules';
+import Visit from '../utils/visit';
 import { useFetch, useBoolState } from '../utils';
-import { Gender, CurriculumBabyStage, FamilyTies, FeedingPattern } from '../constants/enums';
+import {
+  Gender,
+  CurriculumBabyStage,
+  FamilyTies,
+  FeedingPattern,
+  VisitStatus,
+} from '../constants/enums';
 import {
   Card,
   ZebraTable,
@@ -122,6 +129,7 @@ export default function Baby() {
       </Card>
 
       <Carers babyId={id} />
+      <Visits babyId={id} />
 
       <BabyModalForm
         title="修改宝宝信息"
@@ -170,6 +178,45 @@ function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
         </Form.Item>
       </Form>
     </Modal>
+  );
+}
+
+function Visits({ babyId }) {
+  const [dataSource] = useFetch(`/admin/babies/${babyId}/visits`, {}, []);
+
+  return (
+    <Card title="家访记录" noPadding>
+      <ZebraTable
+        rowKey="id"
+        dataSource={dataSource}
+        pagination={false}
+        columns={[
+          {
+            title: '家访状态',
+            dataIndex: 'status',
+            width: 140,
+            align: 'center',
+            render: (h) => VisitStatus[h],
+          },
+          {
+            title: '家访时间',
+            dataIndex: 'visitTime',
+            width: 280,
+            render: (h) => Visit.formatDateTimeCN(h),
+          },
+          {
+            title: '课堂内容',
+            dataIndex: 'lesson',
+            width: 300,
+            render: (h) => h.modules?.map((m) => m.label).join(', '),
+          },
+          {
+            title: '过期/未完成原因',
+            dataIndex: 'remark',
+          },
+        ]}
+      />
+    </Card>
   );
 }
 

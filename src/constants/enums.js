@@ -55,3 +55,10 @@ export const ReviewActionFromApp = {
   MODIFY: '修改宝宝信息',
   DELETE: '注销宝宝账户',
 };
+
+export const VisitStatus = {
+  NOT_STARTED: '待开始',
+  UNDONE: '未完成',
+  EXPIRED: '已过期',
+  DONE: '已完成',
+};
