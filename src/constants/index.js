@@ -3,5 +3,9 @@ export const PHONE_RULES = [
   { required: true, message: '请输入手机号码', trigger: 'blur' },
   { pattern: /^1[0-9]{10}$/, message: '请输入11位手机号码', trigger: 'blur' },
 ];
+export const REAL_NAME_RULES = [
+  { required: true, message: '请输入真实姓名', trigger: 'blur' },
+  { pattern: /^[\u4e00-\u9fa5]{2,10}$/, message: '请输入2个以上的汉字，最多10个字符', trigger: 'blur' },
+];
 
 export const OSS_HOST = 'https://healthy-future-dev.oss-cn-shanghai.aliyuncs.com';

@@ -8,7 +8,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
-import { Required, PHONE_RULES } from '../constants';
+import { Required, PHONE_RULES, REAL_NAME_RULES } from '../constants';
 import {
   ModalForm,
   WithPage,
@@ -89,7 +89,7 @@ export default function Users() {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="realName" rules={Required}>
+        <Form.Item label="真实姓名" name="realName" rules={REAL_NAME_RULES}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
