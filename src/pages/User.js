@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { Required, PHONE_RULES } from '../constants';
+import { Required, PHONE_RULES, CHW_AREA_RULES } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
 import {
@@ -98,7 +98,7 @@ export default function User() {
           <Input />
         </Form.Item>
         {roleChw() && (
-          <Form.Item label="所在区域" name={['chw', 'tags']} rules={Required}>
+          <Form.Item label="所在区域" name={['chw', 'tags']} rules={CHW_AREA_RULES}>
             <Select mode="tags" />
           </Form.Item>
         )}

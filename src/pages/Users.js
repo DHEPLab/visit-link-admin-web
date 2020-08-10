@@ -8,7 +8,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
-import { Required, PHONE_RULES, REAL_NAME_RULES } from '../constants';
+import { Required, PHONE_RULES, REAL_NAME_RULES, CHW_AREA_RULES } from '../constants';
 import {
   ModalForm,
   WithPage,
@@ -100,7 +100,7 @@ export default function Users() {
                   <Form.Item label="ID" name={['chw', 'identity']} rules={Required}>
                     <Input />
                   </Form.Item>
-                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Required}>
+                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={CHW_AREA_RULES}>
                     <Select mode="tags" />
                   </Form.Item>
                 </>
