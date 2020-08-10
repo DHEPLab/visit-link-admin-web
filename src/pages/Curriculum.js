@@ -263,6 +263,15 @@ function Lessons({
     <Card
       noPadding
       title="课堂列表"
+      tooltip={
+        !disabled && (
+          <>
+            <p>请注意</p>
+            <p>1.课堂适用时间不符合已添加匹配规则的时间范围会导致匹配规则内已添加的课堂丢失</p>
+            <p>2.修改适用时间可能会导致一些拜访计划不可用，请及时通知社区工作者</p>
+          </>
+        )
+      }
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
