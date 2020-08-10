@@ -26,7 +26,7 @@ export default function Baby() {
   const [visible, openModal, closeModal] = useBoolState();
   const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
 
-  const chw = () => baby.chw || {};
+  const { chw, approved, actionFromApp } = baby;
   const initialValues = () => ({
     ...baby,
     chw: null,
@@ -37,6 +37,7 @@ export default function Baby() {
 
   function handleChangeBaby(values) {
     values.area = values.area.join('/');
+    // format birthday and edc to string date
     values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
     values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
     Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
@@ -46,7 +47,7 @@ export default function Baby() {
   }
 
   function handleApprove() {
-    switch (baby.actionFromApp) {
+    switch (actionFromApp) {
       case 'CREATE':
         openApproveCreateModal();
         break;
@@ -72,7 +73,7 @@ export default function Baby() {
         title={baby.name}
         role={`宝宝ID ${baby.identity || '待核准'}`}
         extra={
-          baby.approved && (
+          approved && (
             <Button ghost type="danger">
               注销宝宝
             </Button>
@@ -80,7 +81,7 @@ export default function Baby() {
         }
       />
 
-      {!baby.approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
+      {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
       <ApproveCreateBabyModal
         visible={approveCreateVisible}
         onCancel={closeApproveCreateModal}
@@ -88,9 +89,9 @@ export default function Baby() {
       />
 
       <Card title="负责社区工作者">
-        <StaticField label="社区工作者ID">{chw().chw?.identity}</StaticField>
-        <StaticField label="真实姓名">{chw().realName}</StaticField>
-        <StaticField label="联系电话">{chw().phone}</StaticField>
+        <StaticField label="社区工作者ID">{chw?.chw?.identity}</StaticField>
+        <StaticField label="真实姓名">{chw?.realName}</StaticField>
+        <StaticField label="联系电话">{chw?.phone}</StaticField>
       </Card>
 
       <Card
