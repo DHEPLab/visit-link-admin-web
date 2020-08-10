@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 
-import { Required } from '../constants';
+import { Required, PHONE_RULES } from '../constants';
 import { useFetch, useBoolState } from '../utils';
 import { Role, Gender } from '../constants/enums';
 import {
@@ -94,7 +94,7 @@ export default function User() {
         <Form.Item label="真实姓名" name="realName" rules={Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Required}>
+        <Form.Item label="联系电话" name="phone" rules={PHONE_RULES}>
           <Input />
         </Form.Item>
         {roleChw() && (

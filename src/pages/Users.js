@@ -8,7 +8,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
-import { Required } from '../constants';
+import { Required, PHONE_RULES } from '../constants';
 import {
   ModalForm,
   WithPage,
@@ -108,7 +108,7 @@ export default function Users() {
             </>
           )}
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={[{ required: true, min: 11, max: 11 }]}>
+        <Form.Item label="联系电话" name="phone" rules={PHONE_RULES}>
           <Input />
         </Form.Item>
         <h3>账户信息</h3>
