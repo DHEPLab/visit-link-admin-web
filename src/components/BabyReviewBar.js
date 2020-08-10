@@ -56,10 +56,3 @@ const EditButton = styled(Button)`
     border: none;
   }
 `;
-
-const DeleteButton = styled(Button)`
-  &.ant-btn.ant-btn-background-ghost {
-    border-color: #fff !important;
-    color: #fff !important;
-  }
-`;
