@@ -5,7 +5,7 @@ export default {
   Password: [{ required: true, min: 6 }],
   Phone: [
     { required: true, message: '请输入手机号', trigger: 'blur' },
-    { pattern: /^1[0-9]{10}$/, message: '请输入正确的手机号', trigger: 'blur' },
+    { pattern: /^1[0-9]{10}$/, message: '请输入11位手机号码', trigger: 'blur' },
   ],
   RealName: [
     { required: true, message: '请输入真实姓名', trigger: 'blur' },
