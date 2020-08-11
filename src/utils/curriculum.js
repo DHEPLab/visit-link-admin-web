@@ -18,8 +18,8 @@ function filterLessons(lessons, stage, startMonth, endMonth) {
   });
 }
 
-function validateLessonNumber(lessons, { number, id }) {
-  return !lessons.filter((item) => item.id !== id).find((item) => item.number === number);
+function validateLessonNumber(lessons, number, exclude) {
+  return !lessons.filter((item) => item.number !== exclude).find((item) => item.number === number);
 }
 
 function validateLessonDateRange(lessons, lesson) {

@@ -252,8 +252,7 @@ function Lessons({
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
-      // create lesson generate temp id to identity unique lesson
-      onChange(Arrays.concat(value, { ...formValues, id: Date.now() }));
+      onChange(Arrays.concat(value, formValues));
     } else {
       onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
@@ -312,10 +311,12 @@ function Lessons({
               validator(_, number) {
                 if (
                   !number ||
-                  CurriculumUtils.validateLessonNumber(value, {
-                    id: currentEditValue.id,
+                  CurriculumUtils.validateLessonNumber(
+                    value,
                     number,
-                  })
+                    // exclude origin number
+                    currentEditIndex === -1 ? null : value[currentEditIndex].number
+                  )
                 ) {
                   return Promise.resolve();
                 }

@@ -25,9 +25,9 @@ it('should validate lesson number to keep unique', () => {
       number: 'L1',
     },
   ];
-  expect(Curriculum.validateLessonNumber(lessons, { number: 'L1' })).toBeFalsy();
-  expect(Curriculum.validateLessonNumber(lessons, { number: 'L2' })).toBeTruthy();
-  expect(Curriculum.validateLessonNumber(lessons, { number: 'L1', id: 1 })).toBeTruthy();
+  expect(Curriculum.validateLessonNumber(lessons, 'L1')).toBeFalsy();
+  expect(Curriculum.validateLessonNumber(lessons, 'L2')).toBeTruthy();
+  expect(Curriculum.validateLessonNumber(lessons, 'L1', 'L1')).toBeTruthy();
 });
 
 it('should validate lesson date range cannot overlap', () => {
