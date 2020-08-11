@@ -114,7 +114,8 @@ Axios.interceptors.response.use(
       default:
         const { data } = response;
         if (data.violations) {
-          msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
+          // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
+          msg = '表单校验失败';
         } else if (data.detail) {
           msg = data.detail;
         }
