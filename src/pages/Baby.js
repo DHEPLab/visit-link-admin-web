@@ -55,8 +55,9 @@ export default function Baby() {
         break;
       case 'MODIFY':
         openApproveModifyModal();
-      default:
         break;
+      default:
+      // TODO
     }
   }
 
