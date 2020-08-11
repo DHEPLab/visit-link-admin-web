@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 import { Form, Modal, Button, Input, Space, Select } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
@@ -19,9 +19,11 @@ import {
 
 export default function User() {
   const { id } = useParams();
+  const history = useHistory();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
+  const [closeAccountVisible, openCloseAccount, closeCloseAccount] = useBoolState();
 
   const roleChw = () => user.role === 'ROLE_CHW';
   const roleSupervisor = () => user.role === 'ROLE_SUPERVISOR';
@@ -40,6 +42,10 @@ export default function User() {
     return Role[user.role];
   }
 
+  function handleCloseAccount(data) {
+    Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => history.goBack());
+  }
+
   return (
     <>
       <DetailHeader
@@ -48,7 +54,7 @@ export default function User() {
         title={user.realName}
         role={role()}
         extra={
-          <Button ghost type="danger">
+          <Button ghost type="danger" onClick={openCloseAccount}>
             注销账户
           </Button>
         }
@@ -83,6 +89,12 @@ export default function User() {
       {roleChw() && <AssignBaby id={id} />}
 
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
+      <CloseAccountModal
+        id={id}
+        visible={closeAccountVisible}
+        onCancel={closeCloseAccount}
+        onFinish={handleCloseAccount}
+      />
 
       <ModalForm
         title="修改用户信息"
@@ -104,6 +116,66 @@ export default function User() {
         )}
       </ModalForm>
     </>
+  );
+}
+
+function CloseAccountModal({ id, visible, onCancel, onFinish }) {
+  const [form] = Form.useForm();
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    visible && form.resetFields();
+  }, [visible, form]);
+
+  const debounceSearch = debounce((search) => {
+    Axios.get('/admin/users/chw', {
+      params: {
+        search,
+        size: 10,
+      },
+    }).then((response) => setOptions(response.data.content));
+  }, 400);
+
+  return (
+    <Modal
+      title="注销用户"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      visible={visible}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            再想想
+          </Button>
+          <Button type="danger" onClick={form.submit}>
+            注销用户
+          </Button>
+        </Space>
+      }
+    >
+      <p>
+        移除社区工作者将使该社区工作者处于未分配状态，同时督导员无法对该社区工作者进行查看、修改信息和分配宝宝是否要继续？
+      </p>
+      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
+        <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
+          <Select
+            showSearch
+            filterOption={false}
+            onFocus={() => debounceSearch()}
+            onSearch={debounceSearch}
+            style={{ width: '100%' }}
+            placeholder="请选择移交宝宝的社区工作者"
+          >
+            {options
+              .filter((o) => o.user.id !== Number(id))
+              .map((o) => (
+                <Select.Option key={o.user.id}>{o.user.realName}</Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 }
 
