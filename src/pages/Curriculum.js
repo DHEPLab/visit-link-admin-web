@@ -77,11 +77,12 @@ export default function Curriculum() {
       return false;
     }
     for (const schedule of schedules) {
-      if (!schedule.lesson || schedule.lesson) {
+      if (!schedule.lessons || schedule.lessons.length === 0) {
         message.warn(`匹配计划 ${schedule.name} 至少选择一个课堂`);
         return false;
       }
     }
+    return true;
   }
 
   function onFinish(values) {
