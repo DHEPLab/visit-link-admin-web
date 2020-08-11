@@ -11,8 +11,8 @@ export const Gender = {
 };
 
 export const BabyStage = {
-  EDC: '预产期',
-  BIRTH: '婴幼期',
+  EDC: '待产期',
+  BIRTH: '已出生',
 };
 
 export const CurriculumBabyStage = {

@@ -8,13 +8,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Rules from '../constants/rules';
 import Visit from '../utils/visit';
 import { useFetch, useBoolState } from '../utils';
-import {
-  Gender,
-  CurriculumBabyStage,
-  FamilyTies,
-  FeedingPattern,
-  VisitStatus,
-} from '../constants/enums';
+import { Gender, BabyStage, FamilyTies, FeedingPattern, VisitStatus } from '../constants/enums';
 import {
   Card,
   ZebraTable,
@@ -127,7 +121,7 @@ export default function Baby() {
         <StaticField label="真实姓名">{baby.name}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
         <StaticField label="成长阶段">
-          {CurriculumBabyStage[baby.stage]} {baby.months} 个月
+          {BabyStage[baby.stage]} {baby.months} 个月
         </StaticField>
         {baby.stage === 'EDC' ? (
           <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
