@@ -32,6 +32,7 @@ export default function Baby() {
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
   const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
+  const [approveModifyVisible, openApproveModifyModal, closeApproveModifyModal] = useBoolState();
 
   const { chw, approved, actionFromApp } = baby;
   const initialValues = () => ({
@@ -58,6 +59,8 @@ export default function Baby() {
       case 'CREATE':
         openApproveCreateModal();
         break;
+      case 'MODIFY':
+        openApproveModifyModal();
       default:
         break;
     }
@@ -66,6 +69,13 @@ export default function Baby() {
   function handleApproveCreateFinish(values) {
     Axios.put(`/admin/babies/${id}/approve`, values).then(() => {
       closeApproveCreateModal();
+      refresh();
+    });
+  }
+
+  function handleApproveModifyFinish() {
+    Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
+      closeApproveModifyModal();
       refresh();
     });
   }
@@ -93,6 +103,11 @@ export default function Baby() {
         visible={approveCreateVisible}
         onCancel={closeApproveCreateModal}
         onFinish={handleApproveCreateFinish}
+      />
+      <ApproveModifyBabyModal
+        visible={approveModifyVisible}
+        onCancel={closeApproveModifyModal}
+        onFinish={handleApproveModifyFinish}
       />
 
       <Card title="负责社区工作者">
@@ -141,6 +156,30 @@ export default function Baby() {
         disableStage={baby.stage === 'BIRTH'}
       />
     </>
+  );
+}
+
+function ApproveModifyBabyModal({ visible, onCancel, onFinish }) {
+  return (
+    <Modal
+      title="您确定要批准修改宝宝信息的申请吗？"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            稍后再说
+          </Button>
+          <Button type="danger" onClick={onFinish}>
+            批准申请
+          </Button>
+        </Space>
+      }
+      visible={visible}
+    >
+      <p>请先核对社区工作者修改的宝宝账户信息。批准申请后，宝宝账户信息将被修改。</p>
+    </Modal>
   );
 }
 
