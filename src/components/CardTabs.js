@@ -32,6 +32,10 @@ const CardTabs = styled(Tabs)`
     color: #fff;
   }
 
+  .ant-tabs-tab-btn:focus {
+    color: inherit;
+  }
+
   > .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active {
     background: none;
     color: #ff9472;
