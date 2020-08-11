@@ -67,10 +67,25 @@ export default function Curriculum() {
     form.submit();
   }
 
-  function onFinish(values) {
-    if (lessons.length === 0) return message.warn('至少添加一个课堂');
-    if (schedules.length === 0) return message.warn('至少添加一个匹配计划');
+  function validate() {
+    if (lessons.length === 0) {
+      message.warn('至少添加一个课堂');
+      return false;
+    }
+    if (schedules.length === 0) {
+      message.warn('至少添加一个匹配计划');
+      return false;
+    }
+    for (const schedule of schedules) {
+      if (!schedule.lesson || schedule.lesson) {
+        message.warn(`匹配计划 ${schedule.name} 至少选择一个课堂`);
+        return false;
+      }
+    }
+  }
 
+  function onFinish(values) {
+    if (!validate()) return;
     Axios.post(submitURL, {
       id,
       ...values,
