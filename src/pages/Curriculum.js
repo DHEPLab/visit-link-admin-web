@@ -391,10 +391,10 @@ function Lessons({
             loading={!!networks['/admin/modules']}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress">
+        <Form.Item label="调查问卷" name="questionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress">
+        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
         </Form.Item>
       </ModalForm>
