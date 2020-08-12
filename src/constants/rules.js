@@ -26,6 +26,6 @@ export default {
       },
     }),
   ],
-  Location: [{ ...Required }, { max: 200 }],
+  Location: [...Required, { max: 200 }],
   Remark: [{ max: 500 }],
 };
