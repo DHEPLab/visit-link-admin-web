@@ -7,7 +7,20 @@ import Pcas from '../constants/pcas-code.json';
 import Rules from '../constants/rules';
 import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
 
+export function useMethods() {
+  return {
+    disabledDateForEDC(date, baseline) {
+      if (!date) return false;
+      const start = moment(baseline).format('YYYY-MM-DD');
+      // days of edc is 280
+      const end = moment(baseline).add(280, 'day').format('YYYY-MM-DD');
+      return !moment(moment(date).format('YYYY-MM-DD')).isBetween(start, end, undefined, '(]');
+    },
+  };
+}
+
 export default function BabyModalForm({ disableStage, ...props }) {
+  const { disabledDateForEDC } = useMethods();
   return (
     <ModalForm {...props}>
       <Form.Item label="真实姓名" name="name" rules={Rules.RealName}>
@@ -40,10 +53,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
           if (stage === 'EDC') {
             return (
               <Form.Item label="待产日期" name="edc" rules={Rules.Required}>
-                <DatePicker
-                  // Can not select days before today and today
-                  disabledDate={(current) => current && current < moment().endOf('day')}
-                />
+                <DatePicker disabledDate={(current) => disabledDateForEDC(current, moment())} />
               </Form.Item>
             );
           } else {
