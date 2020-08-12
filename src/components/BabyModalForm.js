@@ -61,41 +61,14 @@ export default function BabyModalForm({ disableStage, ...props }) {
                     <Radio value={false}>未添加</Radio>
                   </Radio.Group>
                 </Form.Item>
-                <Form.Item
-                  noStyle
-                  shouldUpdate={(old, curr) => old.assistedFood !== curr.assistedFood}
-                >
-                  {({ getFieldValue, setFieldsValue }) => {
-                    // do not select BREAST_MILK, MILE_POWDER if added assisted food
-                    const assistedFood = getFieldValue('assistedFood');
-                    const feedingPattern = getFieldValue('feedingPattern');
-                    function isValid(_assistedFood, _feedingPattern) {
-                      if (!_assistedFood) return true;
-                      return (
-                        _assistedFood &&
-                        _feedingPattern !== 'BREAST_MILK' &&
-                        _feedingPattern !== 'MILK_POWDER'
-                      );
-                    }
-                    if (!isValid(assistedFood, feedingPattern)) {
-                      setFieldsValue({
-                        feedingPattern: '',
-                      });
-                    }
-                    return (
-                      <Form.Item label="喂养方式" name="feedingPattern" rules={Rules.Required}>
-                        <Select>
-                          {Object.keys(FeedingPattern || [])
-                            .filter((key) => isValid(assistedFood, key))
-                            .map((key) => (
-                              <Select.Option key={key} value={key}>
-                                {FeedingPattern[key]}
-                              </Select.Option>
-                            ))}
-                        </Select>
-                      </Form.Item>
-                    );
-                  }}
+                <Form.Item label="喂养方式" name="feedingPattern" rules={Rules.Required}>
+                  <Select>
+                    {Object.keys(FeedingPattern || []).map((key) => (
+                      <Select.Option key={key} value={key}>
+                        {FeedingPattern[key]}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </>
             );
