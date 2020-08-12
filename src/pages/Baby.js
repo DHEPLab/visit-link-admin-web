@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
@@ -23,10 +23,12 @@ import {
 
 export default function Baby() {
   const { id } = useParams();
+  const history = useHistory();
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
   const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
   const [approveModifyVisible, openApproveModifyModal, closeApproveModifyModal] = useBoolState();
+  const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
 
   const { chw, approved, actionFromApp } = baby;
   const initialValues = () => ({
@@ -75,6 +77,12 @@ export default function Baby() {
     });
   }
 
+  function handleCloseAccount() {
+    Axios.delete(`/admin/babies/${id}`).then(() => {
+      history.goBack();
+    });
+  }
+
   if (!baby.id) return null;
 
   return (
@@ -86,11 +94,16 @@ export default function Baby() {
         role={`宝宝ID ${baby.identity || '待核准'}`}
         extra={
           approved && (
-            <Button ghost type="danger">
+            <Button ghost type="danger" onClick={openCloseAccountModal}>
               注销宝宝
             </Button>
           )
         }
+      />
+      <CloseAccountBabyModal
+        visible={closeAccountVisible}
+        onCancel={closeCloseAccountModal}
+        onOk={handleCloseAccount}
       />
 
       {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
@@ -151,6 +164,30 @@ export default function Baby() {
         disableStage={baby.stage === 'BIRTH'}
       />
     </>
+  );
+}
+
+function CloseAccountBabyModal({ visible, onCancel, onOk }) {
+  return (
+    <Modal
+      title="注销宝宝"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            再想想
+          </Button>
+          <Button type="danger" onClick={onOk}>
+            注销
+          </Button>
+        </Space>
+      }
+      visible={visible}
+    >
+      <p>注销后，社区工作者将无法继续查看，修改，拜访该宝宝。是否继续？</p>
+    </Modal>
   );
 }
 
