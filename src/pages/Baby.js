@@ -26,8 +26,10 @@ export default function Baby() {
   const history = useHistory();
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
+
   const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
   const [approveModifyVisible, openApproveModifyModal, closeApproveModifyModal] = useBoolState();
+  const [approveDeleteVisible, openApproveDeleteModal, closeApproveDeleteModal] = useBoolState();
   const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
 
   const { chw, approved, actionFromApp } = baby;
@@ -58,6 +60,9 @@ export default function Baby() {
       case 'MODIFY':
         openApproveModifyModal();
         break;
+      case 'DELETE':
+        openApproveDeleteModal();
+        break;
       default:
       // TODO
     }
@@ -74,6 +79,13 @@ export default function Baby() {
     Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
       closeApproveModifyModal();
       refresh();
+    });
+  }
+
+  function handleApproveDeleteFinish() {
+    Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
+      closeApproveDeleteModal();
+      history.goBack();
     });
   }
 
@@ -116,6 +128,11 @@ export default function Baby() {
         visible={approveModifyVisible}
         onCancel={closeApproveModifyModal}
         onFinish={handleApproveModifyFinish}
+      />
+      <ApproveDeleteBabyModal
+        visible={approveDeleteVisible}
+        onCancel={closeApproveDeleteModal}
+        onFinish={handleApproveDeleteFinish}
       />
 
       <Card title="负责社区工作者">
@@ -187,6 +204,33 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
       visible={visible}
     >
       <p>注销后，社区工作者将无法继续查看，修改，拜访该宝宝。是否继续？</p>
+    </Modal>
+  );
+}
+
+function ApproveDeleteBabyModal({ visible, onCancel, onFinish }) {
+  return (
+    <Modal
+      title="您确定要批准注销宝宝账户的申请吗？"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            稍后再说
+          </Button>
+          <Button type="danger" onClick={onFinish}>
+            批准申请
+          </Button>
+        </Space>
+      }
+      visible={visible}
+    >
+      <p>
+        请先核对社区工作者注销的宝宝账户信息。批准申请后，宝宝账户将从社区工作者 app
+        端移除，不再显示，但宝宝数据将保留在已审核宝宝列表中。
+      </p>
     </Modal>
   );
 }
