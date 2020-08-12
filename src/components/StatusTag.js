@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Published({ value }) {
+export default function StatusTag({ value, trueText = '已发布', falseText = '草稿' }) {
   if (value) {
-    return <PublishedContainer>已发布</PublishedContainer>;
+    return <TrueContainer>{trueText}</TrueContainer>;
   }
-  return <UnpublishContainer>草稿</UnpublishContainer>;
+  return <FalseContainer>{falseText}</FalseContainer>;
 }
 
-const PublishedContainer = styled.div`
+const TrueContainer = styled.div`
   display: inline-block;
   width: 56px;
   height: 20px;
@@ -20,7 +20,7 @@ const PublishedContainer = styled.div`
   text-align: center;
 `;
 
-const UnpublishContainer = styled(PublishedContainer)`
+const FalseContainer = styled(TrueContainer)`
   color: #ff794f;
   background: #ffede2;
 `;

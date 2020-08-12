@@ -16,6 +16,7 @@ import {
   ZebraTable,
   BabyModalForm,
   SearchInput,
+  StatusTag,
 } from '../components/*';
 
 const { TabPane } = Tabs;
@@ -105,7 +106,7 @@ function Unreviewed({ tab, history, loadData, ...props }) {
             return (
               <>
                 {formatDate(h)}
-                <ActionFromAppContainer>{ActionFromApp[baby.actionFromApp]}</ActionFromAppContainer>
+                <Tag>{ActionFromApp[baby.actionFromApp]}</Tag>
               </>
             );
           },
@@ -148,7 +149,7 @@ function Unreviewed({ tab, history, loadData, ...props }) {
   );
 }
 
-const ActionFromAppContainer = styled.span`
+const Tag = styled.span`
   color: #ff794f;
   background: #ffede2;
   border-radius: 4px;
@@ -183,9 +184,15 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
         })}
         columns={[
           {
+            title: '宝宝状态',
+            dataIndex: 'deleted',
+            align: 'center',
+            width: 100,
+            render: (h) => <StatusTag value={!h} trueText="正常" falseText="注销" />,
+          },
+          {
             title: '宝宝姓名',
             dataIndex: 'name',
-            align: 'center',
             width: 120,
           },
           {

@@ -3,7 +3,7 @@ import { Button, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { ModuleTopic } from '../constants/enums';
-import { WithPage, ContentHeader, ZebraTable, SearchInput, Published } from '../components/*';
+import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from '../components/*';
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
@@ -40,7 +40,7 @@ function Components({ loadData, onChangeSearch, ...props }) {
             dataIndex: 'published',
             width: 120,
             align: 'center',
-            render: (h) => <Published value={h} />,
+            render: (h) => <StatusTag value={h} />,
           },
           {
             title: '模块编号',
