@@ -3,7 +3,7 @@ import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
+import { Form, Button, Tabs, Radio, Input } from 'antd';
 import { useQueryParam, StringParam } from 'use-query-params';
 
 import Rules from '../constants/rules';
