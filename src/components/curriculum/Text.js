@@ -30,7 +30,7 @@ class PlainClipboard extends Clipboard {
 Quill.register('modules/clipboard', PlainClipboard, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
-  const types = ['instruction', 'script', 'refrence'];
+  const types = ['instruction', 'script', 'reference'];
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
@@ -102,7 +102,7 @@ const QuillContainer = styled.div`
     content: '提示文本';
     color: #05bfb2;
   }
-  .ql-picker.ql-type [data-value='refrence']::before {
+  .ql-picker.ql-type [data-value='reference']::before {
     content: '参考文本';
     color: #6a2c70;
   }
