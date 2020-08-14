@@ -30,6 +30,10 @@ const CardTabs = styled(Tabs)`
     background: none;
     border-bottom: none;
     color: #fff;
+
+    &:hover {
+      opacity: 0.7;
+    }
   }
 
   .ant-tabs-tab-btn:focus {
@@ -40,6 +44,9 @@ const CardTabs = styled(Tabs)`
     background: none;
     color: #ff9472;
     background: #fff;
+    &:hover {
+      opacity: 1;
+    }
   }
 
   > .ant-tabs-nav {

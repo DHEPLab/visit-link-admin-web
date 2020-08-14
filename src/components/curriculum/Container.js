@@ -69,6 +69,14 @@ const ExtraContainer = styled.div`
 const IconfontButton = styled(Iconfont)`
   cursor: point;
   display: block;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
 `;
 
 const MoveContainer = styled.div`
