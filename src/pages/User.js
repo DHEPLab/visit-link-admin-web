@@ -55,7 +55,7 @@ export default function User() {
         title={user.realName}
         role={role()}
         extra={
-          (roleChw() || roleSupervisor()) && (
+          roleChw() && (
             <Button ghost type="danger" onClick={openCloseAccount}>
               注销账户
             </Button>
