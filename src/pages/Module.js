@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Formik } from 'formik';
 import { Form, Space, Button, Input, message } from 'antd';
+import { useDispatch } from 'react-redux';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { debounce } from 'lodash';
 
@@ -17,12 +18,14 @@ import {
   StaticField,
   DeleteConfirmModal,
 } from '../components/*';
+import { moduleFinishActionOptions } from '../actions';
 
 export default function Module() {
   const { id } = useParams();
   const { pathname } = useLocation();
   const [readonly, setReadonly] = useState();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
@@ -41,6 +44,7 @@ export default function Module() {
 
   useEffect(() => {
     if (readonly == null) return;
+
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
@@ -53,11 +57,19 @@ export default function Module() {
         setDraftDate(headers['x-draft-date']);
       });
     }
+
+    Axios.get('/admin/modules', {
+      params: {
+        size: 1000,
+        published: true,
+      },
+    }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
+
     if (!readonly) {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(687, setStickyTop);
     }
-  }, [id, form, readonly]);
+  }, [id, form, readonly, dispatch]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);

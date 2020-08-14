@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { Button, Cascader, message } from 'antd';
 import { FieldArray } from 'formik';
 
@@ -9,14 +9,9 @@ import { Container, ComponentField } from './*';
 import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
-  const [options, setOptions] = useState([]);
   // temporarily stores the text value，modify the formik value on blur event to improve performance
   const [text, setText] = useState(value.text);
-
-  useEffect(() => {
-    // initial cascader options
-    onPopupVisibleChange(true);
-  }, []);
+  const modules = useSelector((state) => state.modules);
 
   const Name = {
     text: `${name}.text`,
@@ -26,38 +21,6 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
   function onChangeCascader(finishAction) {
     onChange(Name.finishAction)({ target: { value: finishAction } });
-  }
-
-  function onPopupVisibleChange(visible) {
-    if (!visible) return;
-    Axios.get('/admin/modules', {
-      params: {
-        size: 1000,
-        published: true,
-      },
-    }).then(({ data }) => {
-      const modules = data.content.map((module) => ({
-        label: `${module.number} ${module.name}`,
-        value: module.id,
-      }));
-
-      setOptions([
-        {
-          label: '结束选项继续本层级内容',
-          value: 'Continue',
-        },
-        {
-          label: '跳转至其他模块并结束本内容模块',
-          value: 'Redirect_End',
-          children: modules,
-        },
-        {
-          label: '跳转至其他模块并继续本层级内容',
-          value: 'Redirect_Continue',
-          children: modules,
-        },
-      ]);
-    });
   }
 
   return (
@@ -70,10 +33,9 @@ export default function Case({ name, value, index, onChange, ...props }) {
         <StyledCascader
           allowClear={false}
           disabled={props.readonly}
-          options={options}
+          options={modules}
           value={value.finishAction}
           onChange={onChangeCascader}
-          onPopupVisibleChange={onPopupVisibleChange}
           size="small"
           placeholder="请选择选项结束跳转至"
         />

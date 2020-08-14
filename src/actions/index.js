@@ -27,3 +27,30 @@ export function activeComponent(name) {
     payload: name,
   };
 }
+
+export function moduleFinishActionOptions(data) {
+  const modules = data.content.map((module) => ({
+    label: `${module.number} ${module.name}`,
+    value: module.id,
+  }));
+
+  return {
+    type: 'MODULE_FINISH_ACTION_OPTIONS',
+    payload: [
+      {
+        label: '结束选项继续本层级内容',
+        value: 'Continue',
+      },
+      {
+        label: '跳转至其他模块并结束本内容模块',
+        value: 'Redirect_End',
+        children: modules,
+      },
+      {
+        label: '跳转至其他模块并继续本层级内容',
+        value: 'Redirect_Continue',
+        children: modules,
+      },
+    ],
+  };
+}
