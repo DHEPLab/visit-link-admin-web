@@ -1,134 +1,31 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
-import styled from 'styled-components';
-import { Formik, FieldArray } from 'formik';
+import { Formik } from 'formik';
 import { Form, Space, Button, Input, message } from 'antd';
+import { useDispatch } from 'react-redux';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
+import { debounce } from 'lodash';
 
 import Factory from '../components/curriculum/factory';
+import ModuleComponents from '../components/curriculum/ModuleComponents';
 import { Rules } from '../constants/*';
 import { ModuleTopic } from '../constants/enums';
-import { ComponentField } from '../components/curriculum/*';
 import {
   DraftBar,
-  Iconfont,
   Card,
   DetailHeader,
   SelectEnum,
   StaticField,
   DeleteConfirmModal,
 } from '../components/*';
-import { debounce } from 'lodash';
-
-function ModuleComponents({ values, readonly }) {
-  // sticky component tool bar to container
-  const headerHeight = 100;
-  const componentsContainerRef = createRef();
-  const [componentsContainerOffsetTop, setComponentsContainerOffsetTop] = useState();
-  const [stickyTop, setStickyTop] = useState(0);
-
-  useEffect(() => {
-    setComponentsContainerOffsetTop(componentsContainerRef.current.offsetTop);
-  }, [componentsContainerRef]);
-
-  useEffect(() => {
-    if (!componentsContainerOffsetTop) return;
-    const onScroll = debounce((event) => {
-      const diffTop = event.target.scrollTop - componentsContainerOffsetTop + headerHeight;
-      setStickyTop(diffTop > 0 ? diffTop : 0);
-    }, 100);
-    document.getElementById('route-view').addEventListener('scroll', onScroll);
-  }, [componentsContainerOffsetTop]);
-
-  return (
-    <FieldArray name="components">
-      {(helpers) => {
-        function handleMoveUp(index) {
-          if (index === 0) return;
-          helpers.move(index, index - 1);
-        }
-
-        function handleMoveDown(index) {
-          if (index === values.components.length - 1) return;
-          helpers.move(index, index + 1);
-        }
-
-        return (
-          <FieldArrayContainer ref={componentsContainerRef}>
-            <ComponentForm>
-              {values.components.map((component, index) => (
-                <ComponentField
-                  name="components"
-                  index={index}
-                  readonly={readonly}
-                  component={component}
-                  key={component.key}
-                  onRemove={() => helpers.remove(index)}
-                  onMoveUp={() => handleMoveUp(index)}
-                  onMoveDown={() => handleMoveDown(index)}
-                />
-              ))}
-            </ComponentForm>
-
-            {!readonly && (
-              <ComponentToolBar>
-                <StickyContainer top={stickyTop}>
-                  <Card title="添加组件：">
-                    <Space direction="vertical" size="large">
-                      <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
-                        <Iconfont type="icontext" /> 添加文本组件
-                      </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
-                        <Iconfont type="iconmedia" />
-                        添加媒体组件
-                      </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
-                        <Iconfont type="iconswitch" />
-                        添加选择组件
-                      </Button>
-                      <Button
-                        style={{ width: '182px' }}
-                        type="primary"
-                        onClick={() => helpers.push(Factory.createPageFooter())}
-                      >
-                        添加翻页分割组件
-                      </Button>
-                    </Space>
-                  </Card>
-                </StickyContainer>
-              </ComponentToolBar>
-            )}
-          </FieldArrayContainer>
-        );
-      }}
-    </FieldArray>
-  );
-}
-
-const FieldArrayContainer = styled.div`
-  display: flex;
-`;
-
-const ComponentForm = styled.div`
-  flex: 1;
-`;
-
-const ComponentToolBar = styled.div``;
-
-const StickyContainer = styled.div`
-  position: relative;
-  top: ${({ top }) => top}px;
-  height: 360px;
-  margin-left: 40px;
-  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
-  border-radius: 8px;
-`;
+import { moduleFinishActionOptions } from '../actions';
 
 export default function Module() {
   const { id } = useParams();
   const { pathname } = useLocation();
   const [readonly, setReadonly] = useState();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
@@ -136,6 +33,7 @@ export default function Module() {
 
   const [module, setModule] = useState({});
   const [components, setComponents] = useState();
+  const [stickyTop, setStickyTop] = useState(0);
 
   const [draftId, setDraftId] = useState();
   const [draftDate, setDraftDate] = useState();
@@ -146,6 +44,7 @@ export default function Module() {
 
   useEffect(() => {
     if (readonly == null) return;
+
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
@@ -158,7 +57,19 @@ export default function Module() {
         setDraftDate(headers['x-draft-date']);
       });
     }
-  }, [id, form, readonly]);
+
+    Axios.get('/admin/modules', {
+      params: {
+        size: 1000,
+        published: true,
+      },
+    }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
+
+    if (!readonly) {
+      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
+      return stickyScrollListener(687, setStickyTop);
+    }
+  }, [id, form, readonly, dispatch]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -219,7 +130,7 @@ export default function Module() {
                         content="删除后模块内容将无法恢复是否继续？"
                         onConfirm={handleDeleteModule}
                       >
-                        <Button ghost type="primary">
+                        <Button ghost type="danger">
                           删除模块
                         </Button>
                       </DeleteConfirmModal>
@@ -258,18 +169,18 @@ export default function Module() {
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块名称，限20个字符" />
+                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                  <Input placeholder="请输入模块名称，限40个字符" />
                 </Form.Item>
                 <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块名称，限20个字符" />
+                  <Input placeholder="请输入模块编号，限20个字符" />
                 </Form.Item>
                 <Form.Item
                   label="模块描述"
                   name="description"
-                  rules={[...Rules.Required, { max: 50 }]}
+                  rules={[...Rules.Required, { max: 200 }]}
                 >
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限50个字符" />
+                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
                 </Form.Item>
                 <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
                   <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
@@ -279,7 +190,7 @@ export default function Module() {
           </Card>
 
           <Card title="模块内容">
-            <ModuleComponents values={values} readonly={readonly} />
+            <ModuleComponents value={values.components} readonly={readonly} stickyTop={stickyTop} />
           </Card>
         </>
       )}
@@ -296,4 +207,18 @@ function ReadonlyForm({ value }) {
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
     </div>
   );
+}
+
+function stickyScrollListener(offsetTop, onChangeStickyTop) {
+  // console.log('add listener');
+  const onScroll = debounce((event) => {
+    const diffTop = event.target.scrollTop - offsetTop;
+    // console.log('set sticky top, top', diffTop);
+    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
+  }, 100);
+  document.getElementById('route-view').addEventListener('scroll', onScroll);
+  return () => {
+    // console.log('remove listener');
+    document.getElementById('route-view').removeEventListener('scroll', onScroll);
+  };
 }

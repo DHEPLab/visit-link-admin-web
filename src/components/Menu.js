@@ -40,7 +40,7 @@ function ActivableLink({ to, icon, title }) {
 
   return (
     <StyledLink to={to} className={className}>
-      {active && <ActiveBar />}
+      <ActiveBar className="active-bar" />
       <Wrapper>
         {icon && <Iconfont opacity={active ? 1 : 0.5} type={icon} size={20} />}
         {title}
@@ -77,6 +77,7 @@ const ActiveBar = styled.div`
   background: #fff;
   border-radius: 3px;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  display: none;
 `;
 
 const StyledLink = styled(Link)`
@@ -94,12 +95,17 @@ const StyledLink = styled(Link)`
   padding-right: 40px;
   font-weight: 400;
   &.active,
-  &.active:hover {
+  &.active:hover,
+  &:hover {
     opacity: 1;
     color: #fff;
     font-weight: bold;
     background: rgba(247, 247, 247, 0.3);
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    .active-bar {
+      display: block;
+    }
   }
 
   svg {

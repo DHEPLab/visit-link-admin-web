@@ -6,10 +6,9 @@ function offset(stage) {
   return dayOfMonth - dayOfFirstMonthForStageEDC;
 }
 
-export function filterLessons(lessons, stage, startMonth, endMonth) {
+function filterLessons(lessons, stage, startMonth, endMonth) {
   if (!stage || startMonth == null || startMonth === '' || endMonth == null || endMonth === '')
     return [];
-  if (!lessons || lessons.length === 0) return [];
   return lessons.filter((lesson) => {
     return (
       lesson.stage === stage &&
@@ -19,7 +18,41 @@ export function filterLessons(lessons, stage, startMonth, endMonth) {
   });
 }
 
-export function validateLessonNumberUnique(lessons, number, id) {
-  if (!lessons || lessons.length === 0) return true;
-  return !lessons.find((lesson) => lesson.number === number && lesson.id !== id);
+function validateLessonNumber(lessons, number, exclude) {
+  return !lessons.filter((item) => item.number !== exclude).find((item) => item.number === number);
 }
+
+function validateLessonDateRange(lessons, lesson) {
+  return !lessons
+    .filter((item) => item.id !== lesson.id && item.stage === lesson.stage)
+    .find(
+      (item) =>
+        (item.startOfApplicableDays <= lesson.startOfApplicableDays &&
+          item.endOfApplicableDays >= lesson.startOfApplicableDays) ||
+        (item.startOfApplicableDays <= lesson.endOfApplicableDays &&
+          item.endOfApplicableDays >= lesson.endOfApplicableDays) ||
+        (lesson.startOfApplicableDays <= item.startOfApplicableDays &&
+          lesson.endOfApplicableDays >= item.endOfApplicableDays)
+    );
+}
+
+function cleanInvalidLessons(schedules, lessons) {
+  return schedules.map((schedule) => ({
+    ...schedule,
+    lessons: schedule.lessons.filter((domain) =>
+      filterLessons(
+        lessons,
+        schedule.stage,
+        schedule.startOfApplicableMonths,
+        schedule.endOfApplicableMonths
+      ).find((lesson) => domain.label === lesson.number)
+    ),
+  }));
+}
+
+export default {
+  filterLessons,
+  validateLessonNumber,
+  validateLessonDateRange,
+  cleanInvalidLessons,
+};

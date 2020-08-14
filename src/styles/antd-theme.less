@@ -139,6 +139,18 @@ textarea.ant-input {
   border-width: 2px;
 }
 
+// remove button focus style
+.ant-btn-primary:focus {
+  background: @primary-color;
+}
+.ant-btn-link:focus {
+  color: @primary-color !important;
+}
+.ant-btn-background-ghost.ant-btn-danger:focus {
+  color: @btn-danger-bg;
+  background: @btn-danger-bg;
+}
+
 // Table
 // --
 @table-header-bg: #fff;

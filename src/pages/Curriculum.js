@@ -7,9 +7,9 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
 
 import Rules from '../constants/rules';
+import CurriculumUtils from '../utils/curriculum';
 import { CurriculumBabyStage } from '../constants/enums';
 import { useBoolState } from '../utils';
-import { filterLessons, validateLessonNumberUnique } from '../utils/curriculum';
 import {
   StaticField,
   RadioEnum,
@@ -18,6 +18,7 @@ import {
   DraftBar,
   ZebraTable,
   ModalForm,
+  DeleteConfirmModal,
 } from '../components/*';
 
 export default function Curriculum() {
@@ -66,10 +67,26 @@ export default function Curriculum() {
     form.submit();
   }
 
-  function onFinish(values) {
-    if (lessons.length === 0) return message.warn('至少添加一个课堂');
-    if (schedules.length === 0) return message.warn('至少添加一个匹配计划');
+  function validate() {
+    if (lessons.length === 0) {
+      message.warn('至少添加一个课堂');
+      return false;
+    }
+    if (schedules.length === 0) {
+      message.warn('至少添加一个匹配计划');
+      return false;
+    }
+    for (const schedule of schedules) {
+      if (!schedule.lessons || schedule.lessons.length === 0) {
+        message.warn(`匹配计划 ${schedule.name} 至少选择一个课堂`);
+        return false;
+      }
+    }
+    return true;
+  }
 
+  function onFinish(values) {
+    if (!validate()) return;
     Axios.post(submitURL, {
       id,
       ...values,
@@ -82,6 +99,11 @@ export default function Curriculum() {
     Axios.delete(`/admin/curriculums/${draftId}`).then(() => {
       setDraftId('');
     });
+  }
+
+  function onChangeLessons(_lessons) {
+    setLessons(_lessons);
+    setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
   }
 
   // fix page flash
@@ -141,7 +163,7 @@ export default function Curriculum() {
         )}
       </Card>
 
-      <EnhancedLessons disabled={readonly} value={lessons} onChange={setLessons} />
+      <EnhancedLessons disabled={readonly} value={lessons} onChange={onChangeLessons} />
       <EnhancedSchedules
         disabled={readonly}
         value={schedules}
@@ -230,8 +252,7 @@ function Lessons({
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
-      // create lesson generate temp id to identity unique lesson
-      onChange(Arrays.concat(value, { ...formValues, id: Date.now() }));
+      onChange(Arrays.concat(value, formValues));
     } else {
       onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
     }
@@ -249,7 +270,7 @@ function Lessons({
         published: true,
       },
     }).then(({ data }) => {
-      setModuleOptions(data.content.map((module) => ({ label: module.number, value: module.id })));
+      setModuleOptions(data.content.map(({ number, id }) => ({ label: number, value: id })));
     });
   }
 
@@ -257,6 +278,15 @@ function Lessons({
     <Card
       noPadding
       title="课堂列表"
+      tooltip={
+        !disabled && (
+          <>
+            <p>请注意</p>
+            <p>1.课堂适用时间不符合已添加匹配规则的时间范围会导致匹配规则内已添加的课堂丢失</p>
+            <p>2.修改适用时间可能会导致一些拜访计划不可用，请及时通知社区工作者</p>
+          </>
+        )
+      }
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
@@ -279,7 +309,15 @@ function Lessons({
             ...Rules.Required,
             () => ({
               validator(_, number) {
-                if (!number || validateLessonNumberUnique(value, number, currentEditValue.id)) {
+                if (
+                  !number ||
+                  CurriculumUtils.validateLessonNumber(
+                    value,
+                    number,
+                    // exclude origin number
+                    currentEditIndex === -1 ? null : value[currentEditIndex].number
+                  )
+                ) {
                   return Promise.resolve();
                 }
                 return Promise.reject('课堂序号不能重复');
@@ -331,6 +369,25 @@ function Lessons({
                   return Promise.reject('必须大于起始天数');
                 },
               }),
+              ({ getFieldValue }) => ({
+                validator(_, endOfApplicableDays) {
+                  const stage = getFieldValue('stage');
+                  const startOfApplicableDays = Number(getFieldValue('startOfApplicableDays'));
+                  endOfApplicableDays = Number(endOfApplicableDays);
+                  if (
+                    !endOfApplicableDays ||
+                    CurriculumUtils.validateLessonDateRange(value, {
+                      id: currentEditValue.id,
+                      stage,
+                      startOfApplicableDays,
+                      endOfApplicableDays,
+                    })
+                  ) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('适用天数不能重叠');
+                },
+              }),
             ]}
           >
             <InputNumber
@@ -348,13 +405,13 @@ function Lessons({
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
-            loading={networks['/admin/modules' > 0]}
+            loading={!!networks['/admin/modules']}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress">
+        <Form.Item label="调查问卷" name="questionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress">
+        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
         </Form.Item>
       </ModalForm>
@@ -526,12 +583,15 @@ function Schedules({
                 <Select
                   mode="multiple"
                   labelInValue
-                  options={filterLessons(lessonOptions, stage, startMonths, endMonths).map(
-                    (lesson) => ({
-                      label: lesson.number,
-                      value: lesson.number,
-                    })
-                  )}
+                  options={CurriculumUtils.filterLessons(
+                    lessonOptions,
+                    stage,
+                    startMonths,
+                    endMonths
+                  ).map((lesson) => ({
+                    label: lesson.number,
+                    value: lesson.number,
+                  }))}
                 ></Select>
               </Form.Item>
             );
@@ -582,9 +642,11 @@ const operation = (disabled, handleDelete, openEditModal) => {
       if (disabled) return null;
       return (
         <Space size="large">
-          <Button size="small" type="link" onClick={() => handleDelete(index)}>
-            删除
-          </Button>
+          <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
+            <Button size="small" type="link">
+              删除
+            </Button>
+          </DeleteConfirmModal>
           <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
             编辑
           </Button>

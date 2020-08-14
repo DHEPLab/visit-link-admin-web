@@ -11,8 +11,8 @@ export const Gender = {
 };
 
 export const BabyStage = {
-  EDC: '预产期',
-  BIRTH: '婴幼期',
+  EDC: '待产期',
+  BIRTH: '已出生',
 };
 
 export const CurriculumBabyStage = {
@@ -42,4 +42,23 @@ export const ModuleTopic = {
   INFANT_INJURY_AND_PREVENTION: '婴儿伤病和预防',
   CAREGIVER_MENTAL_HEALTH: '照料人心理健康',
   GOVERNMENT_SERVICES: '政府服务',
+};
+
+export const ActionFromApp = {
+  CREATE: '待审创建',
+  MODIFY: '待审修改',
+  DELETE: '待审注销',
+};
+
+export const ReviewActionFromApp = {
+  CREATE: '创建新宝宝账户',
+  MODIFY: '修改宝宝信息',
+  DELETE: '注销宝宝账户',
+};
+
+export const VisitStatus = {
+  NOT_STARTED: '待开始',
+  UNDONE: '未完成',
+  EXPIRED: '已过期',
+  DONE: '已完成',
 };

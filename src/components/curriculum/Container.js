@@ -43,7 +43,7 @@ export default function Container({
           {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
           <TitleContainer>
             <Title>
-              <Iconfont type={icon} style={{ marginRight: '8px' }} />
+              {icon && <Iconfont type={icon} style={{ marginRight: '8px' }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
             </Title>
@@ -69,6 +69,14 @@ const ExtraContainer = styled.div`
 const IconfontButton = styled(Iconfont)`
   cursor: point;
   display: block;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
 `;
 
 const MoveContainer = styled.div`

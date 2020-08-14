@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Upload } from 'antd';
@@ -9,6 +9,9 @@ import { fileFormat } from '../../utils';
 import { OSS_HOST } from '../../constants';
 
 export default function Media({ name, value, onChange, ...props }) {
+  // temporarily stores the text value，modify the formik value on blur event to improve performance
+  const [text, setText] = useState(value.text);
+
   const Name = {
     type: `${name}.type`,
     file: `${name}.file`,
@@ -61,7 +64,7 @@ export default function Media({ name, value, onChange, ...props }) {
   return (
     <Container icon="iconmedia-gray" title="媒体组件" {...props}>
       <Flex>
-        {value.file ? (
+        {value.file || props.readonly ? (
           <Preview type={value.type} file={value.file} />
         ) : (
           <>
@@ -91,10 +94,13 @@ export default function Media({ name, value, onChange, ...props }) {
       </Flex>
       <GhostInput
         name={Name.text}
-        value={value.text}
-        onChange={onChange}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={() => onChange(Name.text)(text)}
+        disabled={props.readonly}
         placeholder="请输入媒体描述文本"
       />
+      {/* <pre>{JSON.stringify(value)}</pre> */}
     </Container>
   );
 }
@@ -126,10 +132,13 @@ const PreviewVideo = styled.div`
   border-radius: 8px;
   background: #000;
   align-items: center;
+  justify-content: center;
+  overflow: hidden;
   display: flex;
 
   video {
-    width: 400px;
+    /* width: 400px; */
+    height: 250px;
   }
 `;
 

@@ -9,7 +9,7 @@ import { debounce } from 'lodash';
 import { Gender } from '../constants/enums';
 import { useManualFetch, useBoolState } from '../utils';
 import {
-  Published,
+  StatusTag,
   WithPage,
   ContentHeader,
   ZebraTable,
@@ -62,7 +62,7 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
             dataIndex: 'published',
             width: 120,
             align: 'center',
-            render: (h) => <Published value={h} />,
+            render: (h) => <StatusTag value={h} />,
           },
           {
             title: '大纲名称',

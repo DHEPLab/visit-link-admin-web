@@ -1,13 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
+import { debounce } from 'lodash';
 
 import Container from './Container';
+
+const container = [
+  ['bold', 'italic'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+];
+
+// https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
+const Clipboard = Quill.import('modules/clipboard');
+const Delta = Quill.import('delta');
+
+class PlainClipboard extends Clipboard {
+  onPaste(e) {
+    e.preventDefault();
+    const range = this.quill.getSelection();
+    const text = e.clipboardData.getData('text/plain');
+    const delta = new Delta().retain(range.index).delete(range.length).insert(text);
+    const index = text.length + range.index;
+    const length = 0;
+    this.quill.updateContents(delta, 'silent');
+    this.quill.setSelection(index, length, 'silent');
+    this.quill.scrollIntoView();
+  }
+}
+Quill.register('modules/clipboard', PlainClipboard, true);
+
 export default function Text({ name, onBlur, onChange, value, ...props }) {
+  const types = ['instruction', 'script', 'reference'];
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
-    toolbar: `toolbar-${name.split('.').join('')}`,
   };
 
   function type(args) {
@@ -15,27 +41,31 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     onChange(Name.type)(args);
   }
 
+  function toolbarContainer() {
+    return props.readonly
+      ? []
+      : // use quill toolbar default value echo type, put current type to first item
+        [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
+  }
+
   return (
     <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
       <QuillContainer className="text-editor" readonly={props.readonly}>
-        <CustomToolbar id={Name.toolbar} value={value.type} readonly={props.readonly} />
         <ReactQuill
           readOnly={props.readonly}
           theme="snow"
           modules={{
             toolbar: {
-              container: `#${Name.toolbar}`,
+              container: toolbarContainer(),
               handlers: {
                 type,
               },
             },
           }}
           defaultValue={value.html}
-          // On quill blur trigger that formik on change event
+          // Debounce trigger that formik on change event
           // fix typing Chinese always automatically triggers onChange
-          onBlur={(_, __, editor) => {
-            onChange(Name.html)(editor.getHTML());
-          }}
+          onChange={debounce(onChange(Name.html), 1000)}
           placeholder="请输入文本内容"
         />
       </QuillContainer>
@@ -44,33 +74,13 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   );
 }
 
-/*
- * Custom toolbar component including insertStar button and dropdowns
- */
-const CustomToolbar = ({ id, value, readonly }) => (
-  <div id={id}>
-    {!readonly && (
-      <>
-        <select className="ql-type" defaultValue={value}>
-          <option value="script">One</option>
-          <option value="instruction">Two</option>
-          <option value="refrence">Three</option>
-        </select>
-        <button className="ql-bold"></button>
-        <button className="ql-italic"></button>
-        <button className="ql-list" value="ordered"></button>
-        <button className="ql-list" value="bullet"></button>
-      </>
-    )}
-  </div>
-);
-
 const QuillContainer = styled.div`
   ${({ readonly }) =>
     readonly &&
     `
   .ql-toolbar.ql-snow {
     padding: 0;
+    height: 0;
   }
   `}
 
@@ -92,7 +102,7 @@ const QuillContainer = styled.div`
     content: '提示文本';
     color: #05bfb2;
   }
-  .ql-picker.ql-type [data-value='refrence']::before {
+  .ql-picker.ql-type [data-value='reference']::before {
     content: '参考文本';
     color: #6a2c70;
   }

@@ -30,12 +30,23 @@ const CardTabs = styled(Tabs)`
     background: none;
     border-bottom: none;
     color: #fff;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .ant-tabs-tab-btn:focus {
+    color: inherit;
   }
 
   > .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active {
     background: none;
     color: #ff9472;
     background: #fff;
+    &:hover {
+      opacity: 1;
+    }
   }
 
   > .ant-tabs-nav {

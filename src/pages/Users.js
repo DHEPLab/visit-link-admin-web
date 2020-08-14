@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Select, Form, Button, Tabs, Radio, Input } from 'antd';
+import { Form, Button, Tabs, Radio, Input } from 'antd';
+import { useQueryParam, StringParam } from 'use-query-params';
 
+import Rules from '../constants/rules';
 import { useBoolState } from '../utils';
 import { Role } from '../constants/enums';
-import { Required } from '../constants';
 import {
   ModalForm,
   WithPage,
@@ -15,15 +16,20 @@ import {
   CardTabs,
   ZebraTable,
   SearchInput,
+  TagSelect,
 } from '../components/*';
 
 const { TabPane } = Tabs;
 export default function Users() {
   const history = useHistory();
-  const [tab, setTab] = useState('chw');
+  const [tab, setTab] = useQueryParam('tab', StringParam);
   const [visible, openUser, closeUser] = useBoolState();
   const { user } = useSelector((state) => state.users);
   const isAdmin = user?.role === 'ROLE_ADMIN';
+
+  useEffect(() => {
+    if (!tab) setTab('chw');
+  }, [tab, setTab]);
 
   // change tab to refresh table
   function refresh() {
@@ -49,21 +55,23 @@ export default function Users() {
         )}
       </ContentHeader>
 
-      <CardTabs onChange={setTab}>
-        <TabPane tab="社区工作者" key="chw">
-          <PageCHW tab={tab} history={history} />
-        </TabPane>
-        {isAdmin && (
-          <>
-            <TabPane tab="督导员" key="supervisor">
-              <PageSupervisor tab={tab} history={history} />
-            </TabPane>
-            <TabPane tab="管理员" key="admin">
-              <PageAdmin tab={tab} history={history} />
-            </TabPane>
-          </>
-        )}
-      </CardTabs>
+      {user.id && (
+        <CardTabs onChange={setTab} defaultActiveKey={tab}>
+          <TabPane tab="社区工作者" key="chw">
+            <PageCHW tab={tab} history={history} />
+          </TabPane>
+          {isAdmin && (
+            <>
+              <TabPane tab="督导员" key="supervisor">
+                <PageSupervisor tab={tab} history={history} />
+              </TabPane>
+              <TabPane tab="管理员" key="admin">
+                <PageAdmin tab={tab} history={history} />
+              </TabPane>
+            </>
+          )}
+        </CardTabs>
+      )}
 
       <ModalForm
         title="创建新用户"
@@ -73,7 +81,7 @@ export default function Users() {
         initialValues={{ role: 'ROLE_CHW' }}
       >
         <h3>用户信息</h3>
-        <Form.Item label="权限" name="role" rules={Required}>
+        <Form.Item label="权限" name="role" rules={Rules.Required}>
           <Radio.Group>
             {Object.keys(Role).map((key) => (
               <Radio key={key} value={key}>
@@ -82,7 +90,7 @@ export default function Users() {
             ))}
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="realName" rules={Required}>
+        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
@@ -90,25 +98,25 @@ export default function Users() {
             <>
               {getFieldValue('role') === 'ROLE_CHW' && (
                 <>
-                  <Form.Item label="ID" name={['chw', 'identity']} rules={Required}>
+                  <Form.Item label="ID" name={['chw', 'identity']} rules={Rules.Required}>
                     <Input />
                   </Form.Item>
-                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Required}>
-                    <Select mode="tags" />
+                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
+                    <TagSelect />
                   </Form.Item>
                 </>
               )}
             </>
           )}
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={[{ required: true, min: 11, max: 11 }]}>
+        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
         <h3>账户信息</h3>
-        <Form.Item label="账户名称" name="username" rules={Required}>
+        <Form.Item label="账户名称" name="username" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="账户密码" name="password" rules={[{ required: true, min: 6 }]}>
+        <Form.Item label="账户密码" name="password" rules={Rules.Password}>
           <Input.Password />
         </Form.Item>
       </ModalForm>
@@ -129,6 +137,7 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
     <div>
       <ChwBar>
         <SearchInput
+          style={{ width: '420px' }}
           onChange={(e) => onChangeSearch('search', e.target.value)}
           placeholder="请输入社区工作者姓名、ID或所在区域搜索"
         />
@@ -145,24 +154,24 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
           realName,
           {
             title: 'ID',
-            width: 200,
+            width: 150,
             dataIndex: ['user', 'chw', 'identity'],
           },
           {
             title: '所在区域',
-            width: 500,
+            width: 350,
             dataIndex: ['user', 'chw', 'tags'],
             render: (tags) => tags && tags.join(', '),
           },
           phone,
           {
             title: '督导员',
-            width: 200,
+            width: 120,
             dataIndex: ['user', 'chw', 'supervisor', 'realName'],
           },
           {
             title: '负责宝宝',
-            width: 200,
+            width: 100,
             dataIndex: 'babyCount',
             render: (h) => `${h} 位`,
           },
@@ -250,6 +259,7 @@ const phone = {
 const username = {
   title: '账户名称',
   dataIndex: ['user', 'username'],
+  width: 200,
 };
 
 const onRow = (history, id) => {

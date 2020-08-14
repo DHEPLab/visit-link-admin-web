@@ -6,17 +6,24 @@ import Container from './Container';
 import { Iconfont } from '../*';
 
 export default function PageFooter(props) {
-  return <Container component={<PageFooterTitle onRemove={props.onRemove} />} {...props} />;
+  return (
+    <Container
+      component={<PageFooterTitle onRemove={props.onRemove} readonly={props.readonly} />}
+      {...props}
+    />
+  );
 }
 
-function PageFooterTitle({ onRemove }) {
+function PageFooterTitle({ onRemove, readonly }) {
   return (
     <TitleContainer>
       <Title>翻页分割线</Title>
       <SplitLine />
-      <Button size="small" type="link" onClick={onRemove}>
-        <Iconfont type="icontrash-orange" size={14} /> 移除
-      </Button>
+      {!readonly && (
+        <Button size="small" type="link" onClick={onRemove}>
+          <Iconfont type="icontrash-orange" size={14} /> 移除
+        </Button>
+      )}
     </TitleContainer>
   );
 }
@@ -40,7 +47,7 @@ const TitleContainer = styled.div`
   flex: 1;
   height: 52px;
   border-radius: 8px;
-  border: 2px solid #eee;
+  border: 1px solid #eee;
   display: flex;
   margin-bottom: 20px;
   align-items: center;

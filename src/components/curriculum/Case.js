@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
 import styled from 'styled-components';
-import { Button, Cascader } from 'antd';
+import { useSelector } from 'react-redux';
+import { Button, Cascader, message } from 'antd';
 import { FieldArray } from 'formik';
 
 import Factory from './factory';
@@ -9,7 +9,9 @@ import { Container, ComponentField } from './*';
 import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
-  const [options, setOptions] = useState([]);
+  // temporarily stores the text value，modify the formik value on blur event to improve performance
+  const [text, setText] = useState(value.text);
+  const modules = useSelector((state) => state.modules);
 
   const Name = {
     text: `${name}.text`,
@@ -18,41 +20,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
   };
 
   function onChangeCascader(finishAction) {
-    console.log(finishAction);
     onChange(Name.finishAction)({ target: { value: finishAction } });
-  }
-
-  function onPopupVisibleChange(visible) {
-    if (visible) {
-      Axios.get('/admin/modules', {
-        params: {
-          size: 1000,
-          published: true,
-        },
-      }).then(({ data }) => {
-        const modules = data.content.map((module) => ({
-          label: `${module.number} ${module.name}`,
-          value: module.id,
-        }));
-
-        setOptions([
-          {
-            label: '结束选项继续本层级内容',
-            value: 'Continue',
-          },
-          {
-            label: '跳转至其他模块并结束本内容模块',
-            value: 'Redirect_End',
-            children: modules,
-          },
-          {
-            label: '跳转至其他模块并继续本层级内容',
-            value: 'Redirect_Continue',
-            children: modules,
-          },
-        ]);
-      });
-    }
   }
 
   return (
@@ -64,20 +32,25 @@ export default function Case({ name, value, index, onChange, ...props }) {
       extra={
         <StyledCascader
           allowClear={false}
-          options={options}
+          disabled={props.readonly}
+          options={modules}
+          value={value.finishAction}
           onChange={onChangeCascader}
-          onPopupVisibleChange={onPopupVisibleChange}
           size="small"
           placeholder="请选择选项结束跳转至"
         />
       }
     >
-      <GhostInput
-        name={Name.text}
-        value={value.text}
-        onChange={onChange}
-        placeholder="请输入选项文本，限20个字符"
-      />
+      <GhostInputContainer>
+        <GhostInput
+          disabled={props.readonly}
+          name={Name.text}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={() => onChange(Name.text)(text)}
+          placeholder="请输入选项文本，限20个字符"
+        />
+      </GhostInputContainer>
       <FieldArray name={Name.components}>
         {(helpers) => {
           function handleMoveUp(index) {
@@ -90,22 +63,16 @@ export default function Case({ name, value, index, onChange, ...props }) {
             helpers.move(index, index + 1);
           }
 
+          function handleAddSwitch() {
+            if (name.split('.cases').length > 2) {
+              message.warn('选项组件嵌套层级最多为3级');
+              return;
+            }
+            helpers.push(Factory.createSwitch());
+          }
+
           return (
             <>
-              <div>
-                <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                  添加文本
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                  添加媒体
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createSwitch())}>
-                  添加选择
-                </Button>
-                <Button type="link" onClick={() => helpers.push(Factory.createPageFooter())}>
-                  添加翻页分割组件
-                </Button>
-              </div>
               {value.components.map((component, index) => (
                 <ComponentField
                   {...props}
@@ -118,6 +85,19 @@ export default function Case({ name, value, index, onChange, ...props }) {
                   onMoveDown={() => handleMoveDown(index)}
                 />
               ))}
+              {!props.readonly && (
+                <div>
+                  <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                    添加文本
+                  </Button>
+                  <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                    添加媒体
+                  </Button>
+                  <Button type="link" onClick={handleAddSwitch}>
+                    添加选择
+                  </Button>
+                </div>
+              )}
             </>
           );
         }}
@@ -130,4 +110,8 @@ const StyledCascader = styled(Cascader)`
   .ant-input {
     border-radius: 8px;
   }
+`;
+
+const GhostInputContainer = styled.div`
+  padding: 20px;
 `;

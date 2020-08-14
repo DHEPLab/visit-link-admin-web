@@ -5,24 +5,24 @@ import { Form, Input, Button } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Rules from '../constants/rules';
 import { applyToken } from '../utils/token';
 import { apiAccountProfile } from '../actions';
 import SignInBg from '../assets/signin-bg.png';
 import { Message } from '../components/*';
 
-export default function () {
+export default function SignIn() {
   const history = useHistory();
   const dispatch = useDispatch();
   const networks = useSelector((state) => state.networks);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [form] = Form.useForm();
   const [error, setError] = useState(false);
 
-  async function handleSignIn() {
+  async function handleSignIn(values) {
     setError(false);
     try {
-      const auth = await Axios.post('/admin/authenticate', { username, password });
+      const auth = await Axios.post('/admin/authenticate', values);
       applyToken(auth.data.idToken);
 
       const profile = await Axios.get('/api/account/profile');
@@ -37,27 +37,18 @@ export default function () {
 
   return (
     <AbsoluteContainer>
-      <SignIn>
+      <Container>
         <Logo src={require('../assets/logo.png')} />
-        <Form>
-          <Form.Item>
-            <Input
-              className="master"
-              size="large"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="请输入账户名"
-              autoFocus
-            />
+        <Form form={form} onFinish={handleSignIn}>
+          <Form.Item label="账户名" name="username" rules={Rules.Required} labelCol={{ span: 0 }}>
+            <Input className="master" size="large" placeholder="请输入账户名" autoFocus />
           </Form.Item>
-          <Form.Item>
+          <Form.Item label="账户密码" name="password" rules={Rules.Required} labelCol={{ span: 0 }}>
             <Input.Password
               className="master"
               size="large"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               placeholder="请输入账户密码"
-              onPressEnter={handleSignIn}
+              onPressEnter={form.submit}
             />
           </Form.Item>
         </Form>
@@ -70,12 +61,12 @@ export default function () {
         <Button
           size="large"
           type="shade"
-          onClick={handleSignIn}
+          onClick={form.submit}
           loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
         >
           登录
         </Button>
-      </SignIn>
+      </Container>
     </AbsoluteContainer>
   );
 }
@@ -109,7 +100,7 @@ const Logo = styled.img`
   margin-bottom: 60px;
 `;
 
-const SignIn = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
