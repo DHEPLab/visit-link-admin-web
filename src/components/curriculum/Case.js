@@ -10,6 +10,8 @@ import { GhostInput } from '../*';
 
 export default function Case({ name, value, index, onChange, ...props }) {
   const [options, setOptions] = useState([]);
+  // temporarily stores the text value，modify the formik value on blur event to improve performance
+  const [text, setText] = useState(value.text);
 
   useEffect(() => {
     // initial cascader options
@@ -81,8 +83,9 @@ export default function Case({ name, value, index, onChange, ...props }) {
         <GhostInput
           disabled={props.readonly}
           name={Name.text}
-          value={value.text}
-          onChange={onChange}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={() => onChange(Name.text)(text)}
           placeholder="请输入选项文本，限20个字符"
         />
       </GhostInputContainer>

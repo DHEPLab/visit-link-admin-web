@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { Upload } from 'antd';
@@ -9,6 +9,9 @@ import { fileFormat } from '../../utils';
 import { OSS_HOST } from '../../constants';
 
 export default function Media({ name, value, onChange, ...props }) {
+  // temporarily stores the text value，modify the formik value on blur event to improve performance
+  const [text, setText] = useState(value.text);
+
   const Name = {
     type: `${name}.type`,
     file: `${name}.file`,
@@ -91,11 +94,13 @@ export default function Media({ name, value, onChange, ...props }) {
       </Flex>
       <GhostInput
         name={Name.text}
-        value={value.text}
-        onChange={onChange}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={() => onChange(Name.text)(text)}
         disabled={props.readonly}
         placeholder="请输入媒体描述文本"
       />
+      {/* <pre>{JSON.stringify(value)}</pre> */}
     </Container>
   );
 }
