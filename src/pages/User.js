@@ -15,6 +15,7 @@ import {
   DetailHeader,
   AssignModalTable,
   DeleteConfirmModal,
+  TagSelect,
 } from '../components/*';
 
 export default function User() {
@@ -113,7 +114,7 @@ export default function User() {
         </Form.Item>
         {roleChw() && (
           <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
-            <Select mode="tags" />
+            <TagSelect />
           </Form.Item>
         )}
       </ModalForm>

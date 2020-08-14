@@ -16,6 +16,7 @@ import {
   CardTabs,
   ZebraTable,
   SearchInput,
+  TagSelect,
 } from '../components/*';
 
 const { TabPane } = Tabs;
@@ -101,7 +102,7 @@ export default function Users() {
                     <Input />
                   </Form.Item>
                   <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
-                    <Select mode="tags" />
+                    <TagSelect />
                   </Form.Item>
                 </>
               )}
