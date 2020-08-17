@@ -34,7 +34,7 @@ export default function Baby() {
   const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
 
-  const { chw, approved, actionFromApp } = baby;
+  const { chw, approved, actionFromApp, deleted } = baby;
   const initialValues = () => ({
     ...baby,
     chw: null,
@@ -114,7 +114,8 @@ export default function Baby() {
         title={baby.name}
         role={`宝宝ID ${baby.identity || '待核准'}`}
         extra={
-          approved && (
+          approved &&
+          !deleted && (
             <Button ghost type="danger" onClick={openCloseAccountModal}>
               注销宝宝
             </Button>
@@ -147,9 +148,11 @@ export default function Baby() {
       <Card
         title="负责社区工作者"
         extra={
-          <Button type="shade" onClick={openChangeChwModal}>
-            {chw?.id ? '更改' : '分配'}人员
-          </Button>
+          !deleted && (
+            <Button type="shade" onClick={openChangeChwModal}>
+              {chw?.id ? '更改' : '分配'}人员
+            </Button>
+          )
         }
       >
         <StaticField label="社区工作者ID">{chw?.chw?.identity}</StaticField>
@@ -166,9 +169,11 @@ export default function Baby() {
       <Card
         title="宝宝信息"
         extra={
-          <Button type="shade" onClick={openModal}>
-            编辑资料
-          </Button>
+          !deleted && (
+            <Button type="shade" onClick={openModal}>
+              编辑资料
+            </Button>
+          )
         }
       >
         <StaticField label="真实姓名">{baby.name}</StaticField>
@@ -190,7 +195,7 @@ export default function Baby() {
         <StaticField label="备注信息">{baby.remark}</StaticField>
       </Card>
 
-      <Carers babyId={id} />
+      <Carers babyId={id} deleted={deleted} />
       <Visits babyId={id} />
 
       <BabyModalForm
@@ -416,7 +421,7 @@ function Visits({ babyId }) {
   );
 }
 
-function Carers({ babyId }) {
+function Carers({ babyId, deleted }) {
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carers`, {}, []);
@@ -473,19 +478,21 @@ function Carers({ babyId }) {
       title="看护人列表"
       noPadding
       extra={
-        <>
-          {dataSource.length > 3 ? (
-            <Tooltip title="看护人最多可添加4人">
-              <Button disabled={true} type="shade">
+        !deleted && (
+          <>
+            {dataSource.length > 3 ? (
+              <Tooltip title="看护人最多可添加4人">
+                <Button disabled={true} type="shade">
+                  新增看护人
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button onClick={openModal} type="shade" data-testid="add-carer">
                 新增看护人
               </Button>
-            </Tooltip>
-          ) : (
-            <Button onClick={openModal} type="shade" data-testid="add-carer">
-              新增看护人
-            </Button>
-          )}
-        </>
+            )}
+          </>
+        )
       }
     >
       <ModalForm
@@ -571,22 +578,24 @@ function Carers({ babyId }) {
             dataIndex: 'id',
             width: 200,
             align: 'center',
-            render(id, record) {
+            render(_, record) {
               return (
-                <Space>
-                  <DeleteConfirmModal
-                    title="删除看护人"
-                    content="确认要删除此看护人？"
-                    onConfirm={() => handleDelete(record)}
-                  >
-                    <Button size="small" type="link">
-                      删除
+                !deleted && (
+                  <Space>
+                    <DeleteConfirmModal
+                      title="删除看护人"
+                      content="确认要删除此看护人？"
+                      onConfirm={() => handleDelete(record)}
+                    >
+                      <Button size="small" type="link">
+                        删除
+                      </Button>
+                    </DeleteConfirmModal>
+                    <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
+                      编辑
                     </Button>
-                  </DeleteConfirmModal>
-                  <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
-                    编辑
-                  </Button>
-                </Space>
+                  </Space>
+                )
               );
             },
           },
