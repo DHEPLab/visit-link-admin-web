@@ -93,6 +93,7 @@ const StyledLink = styled(Link)`
   width: 100%;
   padding-left: 40px;
   padding-right: 40px;
+  margin: 2px 0;
   font-weight: 400;
   &.active,
   &.active:hover,
