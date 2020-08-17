@@ -27,7 +27,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
         <Input autoFocus />
       </Form.Item>
       <Form.Item label="ID" name="identity" rules={Rules.Required}>
-        <Input />
+        <Input disabled={props.initialValues.id} />
       </Form.Item>
       <Form.Item label="性别" name="gender" rules={Rules.Required}>
         <Radio.Group>
