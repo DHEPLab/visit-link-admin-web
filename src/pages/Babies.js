@@ -82,70 +82,82 @@ export default function Babies() {
 const PageApproved = WithPage(Approved, '/admin/babies/approved', {}, false);
 const PageUnreviewed = WithPage(Unreviewed, '/admin/babies/unreviewed', {}, false);
 
-function Unreviewed({ tab, history, loadData, ...props }) {
+function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
   useEffect(() => {
     tab === 'unreviewed' && loadData();
   }, [tab, loadData]);
+
   return (
-    <ZebraTable
-      {...props}
-      rowKey="id"
-      className="clickable"
-      onRow={(record) => ({
-        onClick: () => {
-          history.push(`/babies/${record.id}`);
-        },
-      })}
-      columns={[
-        {
-          title: '修改日期',
-          dataIndex: 'lastModifiedAt',
-          align: 'center',
-          width: 220,
-          render: (h, baby) => {
-            return (
-              <>
-                {formatDate(h)}
-                <Tag>{ActionFromApp[baby.actionFromApp]}</Tag>
-              </>
-            );
+    <>
+      <SearchBar>
+        <Space size="large">
+          <SearchInput
+            className="master"
+            placeholder="请输入宝宝姓名、ID或所在区域搜索"
+            onChange={(e) => onChangeSearch('search', e.target.value)}
+          />
+        </Space>
+      </SearchBar>
+      <ZebraTable
+        {...props}
+        rowKey="id"
+        className="clickable"
+        onRow={(record) => ({
+          onClick: () => {
+            history.push(`/babies/${record.id}`);
           },
-        },
-        {
-          title: '宝宝姓名',
-          dataIndex: 'name',
-          width: 120,
-        },
-        {
-          title: 'ID',
-          width: 200,
-          dataIndex: 'identity',
-          render: (h) => h || '待核准',
-        },
-        {
-          title: '性别',
-          width: 80,
-          dataIndex: 'gender',
-          render: (h) => Gender[h],
-        },
-        {
-          title: '所在区域',
-          dataIndex: 'area',
-          width: 300,
-        },
-        {
-          title: '负责社区工作者',
-          dataIndex: 'chw',
-          width: 150,
-        },
-        {
-          title: '已上课堂',
-          dataIndex: 'visitCount',
-          width: 150,
-          render: (h) => `${h} 节课堂`,
-        },
-      ]}
-    />
+        })}
+        columns={[
+          {
+            title: '修改日期',
+            dataIndex: 'lastModifiedAt',
+            align: 'center',
+            width: 220,
+            render: (h, baby) => {
+              return (
+                <>
+                  {formatDate(h)}
+                  <Tag>{ActionFromApp[baby.actionFromApp]}</Tag>
+                </>
+              );
+            },
+          },
+          {
+            title: '宝宝姓名',
+            dataIndex: 'name',
+            width: 120,
+          },
+          {
+            title: 'ID',
+            width: 200,
+            dataIndex: 'identity',
+            render: (h) => h || '待核准',
+          },
+          {
+            title: '性别',
+            width: 80,
+            dataIndex: 'gender',
+            render: (h) => Gender[h],
+          },
+          {
+            title: '所在区域',
+            dataIndex: 'area',
+            width: 300,
+          },
+          {
+            title: '负责社区工作者',
+            dataIndex: 'chw',
+            width: 150,
+          },
+          {
+            title: '已上课堂',
+            dataIndex: 'visitCount',
+            width: 150,
+            render: (h) => `${h} 节课堂`,
+          },
+        ]}
+      />
+    </>
   );
 }
 
@@ -164,7 +176,7 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
 
   return (
     <>
-      <ApprovedBar>
+      <SearchBar>
         <Space size="large">
           <SearchInput
             className="master"
@@ -172,7 +184,7 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
             onChange={(e) => onChangeSearch('search', e.target.value)}
           />
         </Space>
-      </ApprovedBar>
+      </SearchBar>
       <ZebraTable
         {...props}
         rowKey="id"
@@ -233,7 +245,7 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
   );
 }
 
-const ApprovedBar = styled.div`
+const SearchBar = styled.div`
   height: 76px;
   padding-left: 30px;
   padding-right: 20px;
