@@ -4,7 +4,8 @@ import Arrays from 'lodash/array';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
+import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
+import { InfoCircleFilled } from '@ant-design/icons';
 
 import Rules from '../constants/rules';
 import CurriculumUtils from '../utils/curriculum';
@@ -441,7 +442,7 @@ function Lessons({
             dataIndex: 'modules',
             render: renderDomain,
           },
-          operation(disabled, handleDelete, openEditModal),
+          lessonOperation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
@@ -624,7 +625,7 @@ function Schedules({
             dataIndex: 'lessons',
             render: renderDomain,
           },
-          operation(disabled, handleDelete, openEditModal),
+          scheduleOperation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
@@ -633,9 +634,39 @@ function Schedules({
 
 const renderDomain = (h) => h.map((v) => v.label).join('、');
 
-const operation = (disabled, handleDelete, openEditModal) => {
+const lessonOperation = (disabled, handleDelete, openEditModal) => {
   return {
-    title: '操作',
+    title: (
+      <>
+        操作 &nbsp;
+        <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
+          <InfoCircleFilled style={{ color: '#000' }} />
+        </Tooltip>
+      </>
+    ),
+    width: 200,
+    align: 'center',
+    render(_, record, index) {
+      if (disabled) return null;
+      return (
+        <Space size="large">
+          <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
+            <Button size="small" type="link">
+              删除
+            </Button>
+          </DeleteConfirmModal>
+          <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
+            编辑
+          </Button>
+        </Space>
+      );
+    },
+  };
+};
+
+const scheduleOperation = (disabled, handleDelete, openEditModal) => {
+  return {
+    title: <>操作</>,
     width: 200,
     align: 'center',
     render(_, record, index) {
