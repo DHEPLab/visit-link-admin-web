@@ -10,6 +10,18 @@ const container = [
   [{ list: 'ordered' }, { list: 'bullet' }],
 ];
 
+const colors = {
+  script: '#3490de',
+  instruction: '#05bfb2',
+  reference: '#6a2c70',
+};
+
+const typeLabels = {
+  script: '叙述文本',
+  instruction: '提示文本',
+  reference: '参考文本',
+};
+
 // https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
 const Clipboard = Quill.import('modules/clipboard');
 const Delta = Quill.import('delta');
@@ -49,7 +61,16 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   }
 
   return (
-    <Container icon="icontext-gray" title="文本组件" name={name} {...props} noPadding>
+    <Container
+      right={
+        props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>
+      }
+      icon="icontext-gray"
+      title="文本组件"
+      name={name}
+      noPadding
+      {...props}
+    >
       <QuillContainer className="text-editor" readonly={props.readonly}>
         <ReactQuill
           readOnly={props.readonly}
@@ -74,6 +95,12 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   );
 }
 
+const TextType = styled.div`
+  font-weight: bold;
+  font-size: 16px;
+  color: ${({ color }) => color};
+`;
+
 const QuillContainer = styled.div`
   ${({ readonly }) =>
     readonly &&
@@ -94,17 +121,18 @@ const QuillContainer = styled.div`
   }
 
   .ql-picker.ql-type [data-value='script']::before {
-    content: '叙述文本';
-    color: #3490de;
+    content: '${typeLabels['script']}';
+    color: ${colors['script']};
   }
 
   .ql-picker.ql-type [data-value='instruction']::before {
-    content: '提示文本';
-    color: #05bfb2;
+    content: '${typeLabels['instruction']}';
+    color: ${colors['instruction']};
   }
+
   .ql-picker.ql-type [data-value='reference']::before {
-    content: '参考文本';
-    color: #6a2c70;
+    content: '${typeLabels['reference']}';
+    color: ${colors['reference']};
   }
 
   .ql-container.ql-snow,
