@@ -102,6 +102,12 @@ export default function Curriculum() {
     });
   }
 
+  function handleDeleteCurriculum() {
+    Axios.delete(`/admin/curriculums/${id}`).then(() => {
+      history.goBack();
+    });
+  }
+
   function onChangeLessons(_lessons) {
     setLessons(_lessons);
     setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
@@ -120,6 +126,16 @@ export default function Curriculum() {
           <Space size="large">
             {readonly ? (
               <>
+                <DeleteConfirmModal
+                  title="删除大纲"
+                  content="删除大纲后，会将大纲分配的所有宝宝的待开始家访清除，这些宝宝安排家访时将找不到匹配的课堂是否继续？"
+                  onConfirm={handleDeleteCurriculum}
+                >
+                  <Button ghost type="danger">
+                    删除大纲
+                  </Button>
+                </DeleteConfirmModal>
+
                 {!draftId && (
                   <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
                     编辑大纲
