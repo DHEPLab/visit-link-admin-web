@@ -53,9 +53,9 @@ export default function SignIn() {
           </Form.Item>
         </Form>
         <ForgetPassword>
-          <Button size="small" type="link">
+          {/* <Button size="small" type="link">
             忘记密码？
-          </Button>
+          </Button> */}
         </ForgetPassword>
         {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
         <Button
