@@ -2,25 +2,23 @@ import React, { useEffect, useCallback } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import zhCN from 'antd/es/locale/zh_CN';
-import { message, ConfigProvider } from 'antd';
+import { ConfigProvider } from 'antd';
+import { QueryParamProvider } from 'use-query-params';
 import 'moment/locale/zh-cn';
 
 import RouteView from './Router';
 import { Role } from './constants/enums';
 import { Header, Menu, Message } from './components/*';
 import { BrowserRouter, useHistory, Route } from 'react-router-dom';
-import { QueryParamProvider } from 'use-query-params';
 import { applyToken, getToken, clearToken } from './utils/token';
 
-import rootReducer from './reducers';
-import { createStore } from 'redux';
 import { Provider, useSelector } from 'react-redux';
-import { apiAccountProfile, httpRequestStart, httpRequestEnd } from './actions';
+import { apiAccountProfile } from './actions';
 
-const store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+import store from './store';
+import './config';
+
+applyToken(getToken());
 
 export default function () {
   return (
@@ -84,43 +82,3 @@ const RouteContainer = styled.div`
   display: flex;
   flex: 1;
 `;
-
-applyToken(getToken());
-
-Axios.interceptors.request.use((config) => {
-  store.dispatch(httpRequestStart(config));
-  return config;
-});
-
-Axios.interceptors.response.use(
-  (response) => {
-    store.dispatch(httpRequestEnd(response.config));
-    return response;
-  },
-  (error) => {
-    const { response } = error;
-    if (!response) return Promise.reject(error);
-    store.dispatch(httpRequestEnd(response.config));
-
-    let msg = '服务异常，请稍后重试';
-    switch (response.status) {
-      case 502:
-        msg = '网络异常，请稍后重试';
-        break;
-      case 500:
-        break;
-      case 401:
-        return Promise.reject(error);
-      default:
-        const { data } = response;
-        if (data.violations) {
-          // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
-          msg = '表单校验失败';
-        } else if (data.detail) {
-          msg = data.detail;
-        }
-    }
-    message.error(msg);
-    return Promise.reject(error);
-  }
-);

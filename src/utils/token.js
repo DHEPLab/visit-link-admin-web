@@ -15,4 +15,5 @@ export function getToken() {
 
 export function clearToken() {
   localStorage.setItem(KEY, '');
+  axios.defaults.headers['Authorization'] = '';
 }
