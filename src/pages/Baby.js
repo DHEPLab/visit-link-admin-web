@@ -509,7 +509,7 @@ function Carers({ babyId, deleted }) {
             <Radio value={false}>否</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="name" rules={Rules.Required}>
+        <Form.Item label="真实姓名" name="name" rules={Rules.RealName}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item
