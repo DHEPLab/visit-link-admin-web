@@ -32,6 +32,8 @@ export const FamilyTies = {
   FATHER: '父亲',
   GRANDMOTHER: '(外)祖母',
   GRANDFATHER: '(外)祖父',
+  SISTER: '亲姐妹',
+  BROTHER: '亲兄弟',
   OTHER: '其他',
 };
 

@@ -4,7 +4,8 @@ import Arrays from 'lodash/array';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
+import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
+import { InfoCircleFilled } from '@ant-design/icons';
 
 import Rules from '../constants/rules';
 import CurriculumUtils from '../utils/curriculum';
@@ -101,6 +102,12 @@ export default function Curriculum() {
     });
   }
 
+  function handleDeleteCurriculum() {
+    Axios.delete(`/admin/curriculums/${id}`).then(() => {
+      history.goBack();
+    });
+  }
+
   function onChangeLessons(_lessons) {
     setLessons(_lessons);
     setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
@@ -119,6 +126,16 @@ export default function Curriculum() {
           <Space size="large">
             {readonly ? (
               <>
+                <DeleteConfirmModal
+                  title="删除大纲"
+                  content="删除大纲后，会将大纲分配的所有宝宝的待开始家访清除，这些宝宝安排家访时将找不到匹配的课堂是否继续？"
+                  onConfirm={handleDeleteCurriculum}
+                >
+                  <Button ghost type="danger">
+                    删除大纲
+                  </Button>
+                </DeleteConfirmModal>
+
                 {!draftId && (
                   <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
                     编辑大纲
@@ -441,7 +458,7 @@ function Lessons({
             dataIndex: 'modules',
             render: renderDomain,
           },
-          operation(disabled, handleDelete, openEditModal),
+          lessonOperation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
@@ -624,7 +641,7 @@ function Schedules({
             dataIndex: 'lessons',
             render: renderDomain,
           },
-          operation(disabled, handleDelete, openEditModal),
+          scheduleOperation(disabled, handleDelete, openEditModal),
         ]}
       />
     </Card>
@@ -633,9 +650,39 @@ function Schedules({
 
 const renderDomain = (h) => h.map((v) => v.label).join('、');
 
-const operation = (disabled, handleDelete, openEditModal) => {
+const lessonOperation = (disabled, handleDelete, openEditModal) => {
   return {
-    title: '操作',
+    title: (
+      <>
+        操作 &nbsp;
+        <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
+          <InfoCircleFilled style={{ color: '#000' }} />
+        </Tooltip>
+      </>
+    ),
+    width: 200,
+    align: 'center',
+    render(_, record, index) {
+      if (disabled) return null;
+      return (
+        <Space size="large">
+          <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
+            <Button size="small" type="link">
+              删除
+            </Button>
+          </DeleteConfirmModal>
+          <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
+            编辑
+          </Button>
+        </Space>
+      );
+    },
+  };
+};
+
+const scheduleOperation = (disabled, handleDelete, openEditModal) => {
+  return {
+    title: <>操作</>,
     width: 200,
     align: 'center',
     render(_, record, index) {

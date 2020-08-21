@@ -26,6 +26,10 @@
     color: #ffc3a0;
   }
 
+  &:hover {
+    border-color: #ff9c78 !important;
+  }
+
   color: #4a4a4a;
   background: #fff9f5;
   border-color: #ffc3a0;
@@ -130,6 +134,7 @@ textarea.ant-input {
 
 .ant-btn.ant-btn-shade[disabled] {
   opacity: 0.5;
+
   &:hover {
     opacity: 0.5;
   }
@@ -143,9 +148,11 @@ textarea.ant-input {
 .ant-btn-primary:focus {
   background: @primary-color;
 }
+
 .ant-btn-link:focus {
-  color: @primary-color !important;
+  color: @primary-color  !important;
 }
+
 .ant-btn-background-ghost.ant-btn-danger:focus {
   color: @btn-danger-bg;
   background: @btn-danger-bg;
@@ -160,11 +167,11 @@ textarea.ant-input {
 @table-padding-horizontal: 19px;
 
 .ant-table-wrapper.small {
-  .ant-table-thead > tr > th {
+  .ant-table-thead>tr>th {
     padding-top: 15px;
   }
 
-  .ant-table-tbody > tr > td {
+  .ant-table-tbody>tr>td {
     padding: 10px;
   }
 }
@@ -173,8 +180,8 @@ textarea.ant-input {
   font-size: @table-font-size;
 }
 
-.ant-table-container table > thead > tr:first-child th:first-child,
-.ant-table-container table > thead > tr:first-child th:last-child,
+.ant-table-container table>thead>tr:first-child th:first-child,
+.ant-table-container table>thead>tr:first-child th:last-child,
 .ant-table table,
 .ant-table {
   border-radius: 0 !important;
@@ -189,12 +196,12 @@ textarea.ant-input {
 }
 
 // zebra crossing
-.ant-table-tbody > tr.ant-table-row.even-row {
+.ant-table-tbody>tr.ant-table-row.even-row {
   td {
     background: #fff9f5;
   }
 
-  &:hover > td {
+  &:hover>td {
     background: #fff6f0;
   }
 }
@@ -203,7 +210,7 @@ textarea.ant-input {
   background: #fff;
 }
 
-.ant-table-thead > tr > th {
+.ant-table-thead>tr>th {
   padding-top: 30px;
   padding-bottom: 12px;
   font-weight: 400;

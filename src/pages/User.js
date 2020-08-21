@@ -141,7 +141,7 @@ function CloseAccountModal({ id, visible, onCancel, onFinish }) {
 
   return (
     <Modal
-      title="注销用户"
+      title="注销社区工作者"
       closable={false}
       destroyOnClose
       onCancel={onCancel}
@@ -152,13 +152,13 @@ function CloseAccountModal({ id, visible, onCancel, onFinish }) {
             再想想
           </Button>
           <Button type="danger" onClick={form.submit}>
-            注销用户
+            注销账户
           </Button>
         </Space>
       }
     >
       <p>
-        移除社区工作者将使该社区工作者处于未分配状态，同时督导员无法对该社区工作者进行查看、修改信息和分配宝宝是否要继续？
+        注意！注销后，该账户将不可用且不可恢复。请先将其负责的宝宝移交至其他社区工作者后再进行注销
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>

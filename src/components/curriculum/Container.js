@@ -2,12 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button, Space } from 'antd';
 import { Iconfont } from '../*';
-// import { useSelector, useDispatch } from 'react-redux';
-
-// import { activeComponent } from '../../actions';
 
 export default function Container({
-  // name,
   readonly,
   icon,
   title,
@@ -21,10 +17,8 @@ export default function Container({
   onMoveDown,
   noPadding,
   component,
+  right,
 }) {
-  // const dispatch = useDispatch();
-  // const { activeName } = useSelector((state) => state.components);
-
   return (
     <Flex>
       {!readonly && !hideMove && (
@@ -39,8 +33,6 @@ export default function Container({
         component
       ) : (
         <StyledContainer nested={nested}>
-          {/* <StyledContainer active={name === activeName}> */}
-          {/* <TitleContainer onClick={() => dispatch(activeComponent(name))}> */}
           <TitleContainer>
             <Title>
               {icon && <Iconfont type={icon} style={{ marginRight: '8px' }} />}
@@ -52,6 +44,7 @@ export default function Container({
                 <Iconfont type="icontrash-orange" size={14} /> 移除
               </Button>
             )}
+            {right}
           </TitleContainer>
           <Body nested={nested} noPadding={noPadding}>
             {children}
