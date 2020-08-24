@@ -48,11 +48,9 @@ export default function Users() {
   return (
     <>
       <ContentHeader title="账户管理">
-        {isAdmin && (
-          <Button type="primary" onClick={openUser}>
-            创建新用户
-          </Button>
-        )}
+        <Button type="primary" onClick={openUser}>
+          创建新用户
+        </Button>
       </ContentHeader>
 
       {user.id && (
@@ -83,11 +81,16 @@ export default function Users() {
         <h3>用户信息</h3>
         <Form.Item label="权限" name="role" rules={Rules.Required}>
           <Radio.Group>
-            {Object.keys(Role).map((key) => (
-              <Radio key={key} value={key}>
-                {Role[key]}
-              </Radio>
-            ))}
+            {Object.keys(Role)
+              .filter((key) => {
+                if (isAdmin) return true;
+                return key === 'ROLE_CHW';
+              })
+              .map((key) => (
+                <Radio key={key} value={key}>
+                  {Role[key]}
+                </Radio>
+              ))}
           </Radio.Group>
         </Form.Item>
         <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
