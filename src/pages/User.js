@@ -22,9 +22,10 @@ export default function User() {
   const { id } = useParams();
   const history = useHistory();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
+
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
-  const [closeAccountVisible, openCloseAccount, closeCloseAccount] = useBoolState();
+  const [closeChwAccountVisible, openCloseAccount, closeCloseChwAccount] = useBoolState();
 
   const roleChw = () => user.role === 'ROLE_CHW';
   const roleSupervisor = () => user.role === 'ROLE_SUPERVISOR';
@@ -43,7 +44,7 @@ export default function User() {
     return Role[user.role];
   }
 
-  function handleCloseAccount(data) {
+  function handleCloseChwAccount(data) {
     Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => history.goBack());
   }
 
@@ -92,11 +93,11 @@ export default function User() {
       {roleChw() && <AssignBaby id={id} />}
 
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
-      <CloseAccountModal
+      <CloseChwAccountModal
         id={id}
-        visible={closeAccountVisible}
-        onCancel={closeCloseAccount}
-        onFinish={handleCloseAccount}
+        visible={closeChwAccountVisible}
+        onCancel={closeCloseChwAccount}
+        onFinish={handleCloseChwAccount}
       />
 
       <ModalForm
@@ -122,7 +123,7 @@ export default function User() {
   );
 }
 
-function CloseAccountModal({ id, visible, onCancel, onFinish }) {
+function CloseChwAccountModal({ id, visible, onCancel, onFinish }) {
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
 
