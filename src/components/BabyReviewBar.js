@@ -9,7 +9,7 @@ export default function BabyReviewBar({ baby, onApprove }) {
     <Container>
       <Title>审核类型：{ReviewActionFromApp[baby.actionFromApp]} </Title>
       <Flex>
-        <Label>注销原因：</Label>
+        {baby.closeAccountReason && <Label>注销原因：</Label>}
         <Value>{baby.closeAccountReason}</Value>
         <Label>修改日期：</Label>
         {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format('YYYY/MM/DD')}</Value>}
