@@ -162,27 +162,33 @@ function CurriculumBabiesModal({
           {
             title: '宝宝姓名',
             dataIndex: 'name',
+            width: 100,
           },
           {
             title: 'ID',
             dataIndex: 'identity',
+            width: 120,
           },
           {
             title: '性别',
             dataIndex: 'gender',
             render: (h) => Gender[h],
+            width: 80,
           },
           {
             title: '所在区域',
             dataIndex: 'area',
+            width: 300,
           },
           {
             title: '主照料人',
             dataIndex: 'masterCarerName',
+            width: 120,
           },
           {
             title: '联系电话',
             dataIndex: 'masterCarerPhone',
+            width: 120,
           },
           {
             title: '操作',
