@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import Arrays from 'lodash/array';
 import styled from 'styled-components';
+import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
@@ -122,6 +123,7 @@ export default function Curriculum() {
         icon="iconcurriculum-primary"
         menu="大纲管理"
         title={title}
+        role={readonly && moment(curriculum.lastPublishedAt).format('YYYY/MM/DD HH:mm')}
         extra={
           <Space size="large">
             {readonly ? (
