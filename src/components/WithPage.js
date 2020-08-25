@@ -21,11 +21,13 @@ export default function (
       page,
       size,
     });
+    const [requestURL, setRequestURL] = useState(url);
     const [totalElements, setTotalElements] = useState(0);
     const [content, setContent] = useState([]);
 
     const loadData = useCallback(() => {
-      Axios.get(url, {
+      if (!requestURL) return;
+      Axios.get(requestURL, {
         params: {
           ...search,
           ...params,
@@ -34,7 +36,7 @@ export default function (
         setTotalElements(data.totalElements);
         setContent(data.content);
       });
-    }, [search]);
+    }, [search, requestURL]);
 
     useEffect(() => {
       if (loadOnMount) {
@@ -62,11 +64,19 @@ export default function (
       }));
     }, 400);
 
-    function onChangePage({ current }) {
+    function handleChangePage({ current }) {
       setSearch((s) => ({
         ...s,
         page: current - 1,
       }));
+    }
+
+    function handleChangeLoadURL(url) {
+      setRequestURL(url);
+      setSearch({
+        page,
+        size,
+      });
     }
 
     return (
@@ -74,9 +84,10 @@ export default function (
         pagination={pagination()}
         dataSource={content}
         loadData={loadData}
+        onChangeLoadURL={handleChangeLoadURL}
         onChangeSearch={debounceChangeSearch}
-        onChangePage={onChangePage}
-        onChange={onChangePage}
+        onChangePage={handleChangePage}
+        onChange={handleChangePage}
         {...props}
       />
     );

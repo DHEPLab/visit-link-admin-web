@@ -84,19 +84,27 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         ]}
       />
 
-      <CurriculumBabiesModal curriculumId={curriculumId} visible={visible} onCancel={closeModal} />
+      <PageCurriculumBabiesModal
+        curriculumId={curriculumId}
+        visible={visible}
+        onCancel={closeModal}
+      />
     </>
   );
 }
 
-function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
-  const [assign, openModal, closeModal] = useBoolState();
-  const [assignedDataSource, refreshAssigned] = useManualFetch(
-    `/admin/curriculums/${curriculumId}/babies`,
-    {},
-    []
-  );
+const PageCurriculumBabiesModal = WithPage(CurriculumBabiesModal);
 
+function CurriculumBabiesModal({
+  curriculumId,
+  visible,
+  onCancel,
+  loadData,
+  onChangeLoadURL,
+  onChangeSearch,
+  ...props
+}) {
+  const [assign, openModal, closeModal] = useBoolState();
   const [notAssignedDataSource, refreshNotAssigned] = useManualFetch(
     `/admin/curriculums/not_assigned/babies`,
     {},
@@ -104,7 +112,7 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
   );
 
   useEffect(() => {
-    if (curriculumId) refreshAssigned();
+    if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/babies`);
     // eslint-disable-next-line
   }, [curriculumId]);
 
@@ -115,13 +123,13 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
 
   function handleAssign(babyIds) {
     Axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
-      refreshAssigned();
+      loadData();
       closeModal();
     });
   }
 
   function handleReleaseBaby(id) {
-    Axios.delete(`/admin/babies/${id}/curriculum`).then(() => refreshAssigned());
+    Axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
   }
 
   const debounceRefresh = debounce((search) => refreshNotAssigned({ search }), 400);
@@ -148,9 +156,8 @@ function CurriculumBabiesModal({ curriculumId, visible, onCancel }) {
       </ModalHeader>
 
       <ZebraTable
+        {...props}
         rowKey="id"
-        dataSource={assignedDataSource}
-        pagination={false}
         columns={[
           {
             title: '宝宝姓名',
