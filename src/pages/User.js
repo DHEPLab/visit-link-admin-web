@@ -382,14 +382,17 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
         {
           title: '宝宝姓名',
           dataIndex: 'name',
+          width: 100,
         },
         {
           title: 'ID',
           dataIndex: 'identity',
+          width: 120,
         },
         {
           title: '所在区域',
           dataIndex: 'area',
+          width: 300,
         },
       ]}
     />
