@@ -657,9 +657,11 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
     title: (
       <>
         操作 &nbsp;
-        <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
-          <InfoCircleFilled style={{ color: '#000' }} />
-        </Tooltip>
+        {!disabled && (
+          <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
+            <InfoCircleFilled style={{ color: '#000' }} />
+          </Tooltip>
+        )}
       </>
     ),
     width: 200,
