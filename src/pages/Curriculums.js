@@ -4,10 +4,9 @@ import Axios from 'axios';
 import { Modal, Button, Space, Tooltip } from 'antd';
 import { InfoCircleFilled } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
-import { debounce } from 'lodash';
 
 import { Gender } from '../constants/enums';
-import { useManualFetch, useBoolState } from '../utils';
+import { useBoolState } from '../utils';
 import {
   StatusTag,
   WithPage,
@@ -105,21 +104,11 @@ function CurriculumBabiesModal({
   ...props
 }) {
   const [assign, openModal, closeModal] = useBoolState();
-  const [notAssignedDataSource, refreshNotAssigned] = useManualFetch(
-    `/admin/curriculums/not_assigned/babies`,
-    {},
-    []
-  );
 
   useEffect(() => {
     if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/babies`);
     // eslint-disable-next-line
   }, [curriculumId]);
-
-  useEffect(() => {
-    if (assign) refreshNotAssigned();
-    // eslint-disable-next-line
-  }, [assign]);
 
   function handleAssign(babyIds) {
     Axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
@@ -132,8 +121,6 @@ function CurriculumBabiesModal({
     Axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
   }
 
-  const debounceRefresh = debounce((search) => refreshNotAssigned({ search }), 400);
-
   return (
     <Modal
       title="宝宝列表"
@@ -142,6 +129,7 @@ function CurriculumBabiesModal({
       width={1152}
       footer={null}
       bodyStyle={{ padding: 0 }}
+      style={{ top: 20 }}
     >
       <ModalHeader>
         <Title>
@@ -206,31 +194,34 @@ function CurriculumBabiesModal({
         ]}
       />
 
-      <AssignModalTable
+      <PageAssignModalTable
         title="添加新宝宝"
         visible={assign}
-        onChangeSearch={(e) => debounceRefresh(e.target.value)}
         onCancel={closeModal}
-        dataSource={notAssignedDataSource}
         onFinish={handleAssign}
         columns={[
           {
             title: '宝宝姓名',
             dataIndex: 'name',
+            width: 120,
           },
           {
             title: 'ID',
             dataIndex: 'identity',
+            width: 100,
           },
           {
             title: '所在区域',
             dataIndex: 'area',
+            width: 300,
           },
         ]}
       />
     </Modal>
   );
 }
+
+const PageAssignModalTable = WithPage(AssignModalTable, '/admin/curriculums/babies');
 
 const ModalHeader = styled.div`
   display: flex;
