@@ -29,7 +29,7 @@ export default function TagSelect({ onChange, ...props }) {
       {options.map((option) => (
         <Select.Option key={option.id} value={option.name}>
           <Option>
-            {option.name}
+            <label>{option.name}</label>
             {!props.value?.includes(option.name) && (
               <Button size="small" type="link" onClick={() => handleDelete(option)}>
                 删除
@@ -45,4 +45,11 @@ export default function TagSelect({ onChange, ...props }) {
 const Option = styled.div`
   display: flex;
   justify-content: space-between;
+
+  label {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
