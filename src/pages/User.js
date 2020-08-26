@@ -16,6 +16,7 @@ import {
   AssignModalTable,
   DeleteConfirmModal,
   ChwTagSelector,
+  WithPage,
 } from '../components/*';
 
 export default function User() {
@@ -347,36 +348,41 @@ function AssignBaby({ id }) {
           },
         ]}
       />
-      <NotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
+      <PageNotAssignedBabyModal
+        id={id}
+        onFinish={refresh}
+        visible={visible}
+        onCancel={closeModal}
+      />
     </Card>
   );
 }
 
-// open a new modal, assign chw to supervisor
-function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
-  const [dataSource, refresh] = useFetch(`/admin/users/chw/not_assigned/babies`, {}, []);
+const PageNotAssignedBabyModal = WithPage(
+  NotAssignedBabyModal,
+  '/admin/users/chw/not_assigned/babies'
+);
 
+// open a new modal, assign chw to supervisor
+function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...props }) {
   useEffect(() => {
-    if (visible) refresh();
+    if (visible) loadData();
     // eslint-disable-next-line
   }, [visible]);
 
   async function handleAssign(babyIds) {
     await Axios.post(`/admin/users/chw/${id}/babies`, babyIds);
-    refresh();
+    loadData();
     onFinish();
     onCancel();
   }
 
-  const debounceRefresh = debounce((search) => refresh({ search }), 400);
-
   return (
     <AssignModalTable
+      {...props}
       title="分配新宝宝"
       visible={visible}
-      onChangeSearch={(e) => debounceRefresh(e.target.value)}
       onCancel={onCancel}
-      dataSource={dataSource}
       onFinish={handleAssign}
       columns={[
         {
