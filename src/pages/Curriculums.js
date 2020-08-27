@@ -221,7 +221,15 @@ function CurriculumBabiesModal({
   );
 }
 
-const PageAssignModalTable = WithPage(AssignModalTable, '/admin/curriculums/babies');
+function AssignModalTableWrapper(props) {
+  // refresh when open modal
+  useEffect(() => {
+    if (props.visible) props.onChangeSearch('search', '');
+  }, [props.visible]);
+  return <AssignModalTable {...props} />;
+}
+
+const PageAssignModalTable = WithPage(AssignModalTableWrapper, '/admin/curriculums/babies');
 
 const ModalHeader = styled.div`
   display: flex;
