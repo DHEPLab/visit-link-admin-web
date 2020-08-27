@@ -4,13 +4,15 @@ import { Modal, Space, Button, Table } from 'antd';
 
 import SearchInput from './SearchInput';
 
-export default function ({
+export default function AssignModalTable({
   title,
   columns,
   visible,
   onCancel,
   onFinish,
   onChangeSearch,
+  rowSelectionType,
+  refreshOnVisible,
   ...props
 }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -18,7 +20,9 @@ export default function ({
   useEffect(() => {
     if (visible) {
       setSelectedRowKeys([]);
+      if (refreshOnVisible) onChangeSearch('search', '');
     }
+    // eslint-disable-next-line
   }, [visible]);
 
   return (
@@ -51,14 +55,15 @@ export default function ({
       </SearchBar>
 
       <Table
-        {...props}
         rowKey="id"
         className="small"
         rowSelection={{
+          type: rowSelectionType,
           selectedRowKeys,
           onChange: (keys) => setSelectedRowKeys(keys),
         }}
         columns={columns}
+        {...props}
       />
     </Modal>
   );

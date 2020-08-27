@@ -196,6 +196,7 @@ function CurriculumBabiesModal({
 
       <PageAssignModalTable
         title="添加新宝宝"
+        refreshOnVisible
         visible={assign}
         onCancel={closeModal}
         onFinish={handleAssign}
@@ -221,15 +222,7 @@ function CurriculumBabiesModal({
   );
 }
 
-function AssignModalTableWrapper(props) {
-  // refresh when open modal
-  useEffect(() => {
-    if (props.visible) props.onChangeSearch('search', '');
-  }, [props.visible]);
-  return <AssignModalTable {...props} />;
-}
-
-const PageAssignModalTable = WithPage(AssignModalTableWrapper, '/admin/curriculums/babies');
+const PageAssignModalTable = WithPage(AssignModalTable, '/admin/curriculums/babies');
 
 const ModalHeader = styled.div`
   display: flex;

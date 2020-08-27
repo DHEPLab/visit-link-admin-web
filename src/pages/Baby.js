@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import { useParams, useHistory } from 'react-router-dom';
-import { Modal, Form, Button, Space, Input, Select, Radio, message, Tooltip } from 'antd';
+import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import debounce from 'lodash/debounce';
 
 import Rules from '../constants/rules';
 import Visit from '../utils/visit';
@@ -20,6 +19,8 @@ import {
   DeleteConfirmModal,
   SelectEnum,
   BabyReviewBar,
+  AssignModalTable,
+  WithPage,
 } from '../components/*';
 
 export default function Baby() {
@@ -97,7 +98,9 @@ export default function Baby() {
     });
   }
 
-  function handleChangeChw({ userId }) {
+  function handleChangeChw(selected) {
+    if (selected.length === 0) message.warning('请选择一个社区工作者');
+    const [userId] = selected;
     Axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
       closeChangeChwModal();
       refresh();
@@ -159,11 +162,34 @@ export default function Baby() {
         <StaticField label="真实姓名">{chw?.realName}</StaticField>
         <StaticField label="联系电话">{chw?.phone}</StaticField>
       </Card>
-      <ChangeChwModal
+
+      <PageAssignChwModalTable
         id={chw?.id}
         visible={changeChwVisible}
         onCancel={closeChangeChwModal}
         onFinish={handleChangeChw}
+        refreshOnVisible
+        rowSelectionType="radio"
+        rowKey={(record) => record.user?.id}
+        title="选择社区工作者"
+        columns={[
+          {
+            title: '姓名',
+            dataIndex: ['user', 'realName'],
+            width: 120,
+          },
+          {
+            title: 'ID',
+            dataIndex: ['user', 'chw', 'identity'],
+            width: 100,
+          },
+          {
+            title: '所在区域',
+            dataIndex: ['user', 'chw', 'tags'],
+            render: (tags) => tags && tags.join(', '),
+            width: 300,
+          },
+        ]}
       />
 
       <Card
@@ -211,64 +237,7 @@ export default function Baby() {
   );
 }
 
-function ChangeChwModal({ id, visible, onCancel, onFinish }) {
-  const [form] = Form.useForm();
-  const [options, setOptions] = useState([]);
-
-  useEffect(() => {
-    visible && form.resetFields();
-  }, [visible, form]);
-
-  const debounceSearch = debounce((search) => {
-    Axios.get('/admin/users/chw', {
-      params: {
-        search,
-        size: 10,
-      },
-    }).then((response) => setOptions(response.data.content));
-  }, 400);
-
-  return (
-    <Modal
-      title="选择社区工作者"
-      closable={false}
-      destroyOnClose
-      onCancel={onCancel}
-      visible={visible}
-      footer={
-        <Space size="large">
-          <Button ghost type="danger" onClick={onCancel}>
-            取消
-          </Button>
-          <Button type="danger" onClick={form.submit}>
-            保存
-          </Button>
-        </Space>
-      }
-    >
-      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item noStyle label="社区工作者" name="userId" rules={Rules.Required}>
-          <Select
-            showSearch
-            filterOption={false}
-            onFocus={() => debounceSearch()}
-            onSearch={debounceSearch}
-            style={{ width: '100%' }}
-            placeholder="输入关键字搜索"
-          >
-            {options
-              .filter((o) => o.user.id !== Number(id))
-              .map((o) => (
-                <Select.Option key={o.user.id}>
-                  {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
-                </Select.Option>
-              ))}
-          </Select>
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-}
+const PageAssignChwModalTable = WithPage(AssignModalTable, '/admin/users/chw');
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
   return (
