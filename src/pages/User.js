@@ -23,6 +23,7 @@ export default function User() {
   const { id } = useParams();
   const history = useHistory();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
+  const [isBabiesEmpty, setIsBabiesEmpty] = useState(true);
 
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
@@ -107,12 +108,15 @@ export default function User() {
       </Card>
 
       {roleSupervisor && <AssignChw id={id} />}
-      {roleChw && <AssignBaby id={id} />}
+      {roleChw && (
+        <AssignBaby id={id} onChange={(babies) => setIsBabiesEmpty(babies?.length === 0)} />
+      )}
 
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
       <CloseChwAccountModal
         id={id}
         visible={closeChwAccountVisible}
+        isBabiesEmpty={isBabiesEmpty}
         onCancel={closeCloseChwAccount}
         onFinish={handleCloseChwAccount}
       />
@@ -169,7 +173,7 @@ function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
   );
 }
 
-function CloseChwAccountModal({ id, visible, onCancel, onFinish }) {
+function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }) {
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
 
@@ -205,27 +209,30 @@ function CloseChwAccountModal({ id, visible, onCancel, onFinish }) {
       }
     >
       <p>
-        注意！注销后，该账户将不可用且不可恢复。请先将其负责的宝宝移交至其他社区工作者后再进行注销
+        注意！注销后，该账户将不可用且不可恢复。
+        {!isBabiesEmpty && '请先将其负责的宝宝移交至其他社区工作者后再进行注销'}
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
-          <Select
-            showSearch
-            filterOption={false}
-            onFocus={() => debounceSearch()}
-            onSearch={debounceSearch}
-            style={{ width: '100%' }}
-            placeholder="请选择移交宝宝的社区工作者"
-          >
-            {options
-              .filter((o) => o.user.id !== Number(id))
-              .map((o) => (
-                <Select.Option key={o.user.id}>
-                  {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
-                </Select.Option>
-              ))}
-          </Select>
-        </Form.Item>
+        {!isBabiesEmpty && (
+          <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
+            <Select
+              showSearch
+              filterOption={false}
+              onFocus={() => debounceSearch()}
+              onSearch={debounceSearch}
+              style={{ width: '100%' }}
+              placeholder="请选择移交宝宝的社区工作者"
+            >
+              {options
+                .filter((o) => o.user.id !== Number(id))
+                .map((o) => (
+                  <Select.Option key={o.user.id}>
+                    {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );
@@ -269,7 +276,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
   );
 }
 
-function AssignBaby({ id }) {
+function AssignBaby({ id, onChange }) {
   const history = useHistory();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/users/chw/${id}/babies`, {}, []);
@@ -278,6 +285,10 @@ function AssignBaby({ id }) {
   function handleRelease(babyId) {
     Axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
   }
+
+  useEffect(() => {
+    onChange(dataSource);
+  }, [dataSource, onChange]);
 
   return (
     <Card
