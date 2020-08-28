@@ -360,7 +360,7 @@ function Lessons({
             label="适用天数"
             labelCol={{ span: 0 }}
             name="startOfApplicableDays"
-            rules={Rules.Required}
+            rules={[...Rules.Required]}
           >
             <InputNumber
               min={1}
@@ -371,7 +371,7 @@ function Lessons({
             />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
-          <Form.Item
+          <EndOfApplicableDaysFormItem
             label="适用天数"
             labelCol={{ span: 0 }}
             name="endOfApplicableDays"
@@ -416,7 +416,7 @@ function Lessons({
               formatter={(value) => `${value}天`}
               parser={(value) => value.replace('天', '')}
             />
-          </Form.Item>
+          </EndOfApplicableDaysFormItem>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
           <Select
@@ -466,6 +466,13 @@ function Lessons({
     </Card>
   );
 }
+
+const EndOfApplicableDaysFormItem = styled(Form.Item)`
+  .ant-form-item-explain,
+  .ant-form-item-extra {
+    margin-left: -80px;
+  }
+`;
 
 const ApplicableDaysContainer = styled.div`
   display: flex;
