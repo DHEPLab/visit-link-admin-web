@@ -6,7 +6,6 @@ import { Upload } from 'antd';
 import Container from './Container';
 import { GhostInput, UploadButton } from '../*';
 import { fileFormat } from '../../utils';
-import { OSS_HOST } from '../../constants';
 
 export default function Media({ name, value, onChange, ...props }) {
   // temporarily stores the text value，modify the formik value on blur event to improve performance
@@ -107,11 +106,11 @@ export default function Media({ name, value, onChange, ...props }) {
 
 function Preview({ type, file }) {
   if (type === 'PICTURE') {
-    return <PreviewImage url={`${OSS_HOST}${file}`} />;
+    return <PreviewImage url={`/api/files${file}`} />;
   }
   return (
     <PreviewVideo>
-      <video src={`${OSS_HOST}${file}`} controls />
+      <video src={`/api/files${file}`} controls />
     </PreviewVideo>
   );
 }
