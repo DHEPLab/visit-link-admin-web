@@ -24,3 +24,5 @@ yarn-error.log*
 
 service.conf
 *.tar.gz
+
+.scannerwork/**/*

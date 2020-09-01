@@ -4,27 +4,32 @@ import { Modal, Space, Button, Table } from 'antd';
 
 import SearchInput from './SearchInput';
 
-export default function ({
+export default function AssignModalTable({
   title,
-  dataSource,
   columns,
   visible,
   onCancel,
   onFinish,
   onChangeSearch,
+  rowSelectionType,
+  refreshOnVisible,
+  ...props
 }) {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     if (visible) {
       setSelectedRowKeys([]);
+      if (refreshOnVisible) onChangeSearch('search', '');
     }
+    // eslint-disable-next-line
   }, [visible]);
 
   return (
     <Modal
       title={title}
       visible={visible}
+      style={{ top: 20 }}
       width={600}
       footer={
         <Space size="large" style={{ marginTop: '30px' }}>
@@ -44,7 +49,7 @@ export default function ({
       <SearchBar>
         <SearchInput
           style={{ width: '100%' }}
-          onChange={onChangeSearch}
+          onChange={(e) => onChangeSearch('search', e.target.value)}
           placeholder="请输入姓名、ID或所在区域搜索"
         />
       </SearchBar>
@@ -52,13 +57,13 @@ export default function ({
       <Table
         rowKey="id"
         className="small"
-        pagination={false}
-        dataSource={dataSource}
         rowSelection={{
+          type: rowSelectionType,
           selectedRowKeys,
           onChange: (keys) => setSelectedRowKeys(keys),
         }}
         columns={columns}
+        {...props}
       />
     </Modal>
   );

@@ -15,19 +15,27 @@ import {
   DetailHeader,
   AssignModalTable,
   DeleteConfirmModal,
-  TagSelect,
+  ChwTagSelector,
+  WithPage,
 } from '../components/*';
 
 export default function User() {
   const { id } = useParams();
   const history = useHistory();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
+  const [isBabiesEmpty, setIsBabiesEmpty] = useState(true);
+
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
-  const [closeAccountVisible, openCloseAccount, closeCloseAccount] = useBoolState();
+  const [closeChwAccountVisible, openCloseChwAccount, closeCloseChwAccount] = useBoolState();
+  const [
+    closeSupervisorAccountVisible,
+    openCloseSupervisorAccount,
+    closeCloseSupervisorAccount,
+  ] = useBoolState();
 
-  const roleChw = () => user.role === 'ROLE_CHW';
-  const roleSupervisor = () => user.role === 'ROLE_SUPERVISOR';
+  const roleChw = user?.role === 'ROLE_CHW';
+  const roleSupervisor = user?.role === 'ROLE_SUPERVISOR';
 
   function handleChangeProfile(values) {
     Axios.put(`/admin/users/${id}`, values).then(() => {
@@ -37,14 +45,18 @@ export default function User() {
   }
 
   function role() {
-    if (roleChw()) {
+    if (roleChw) {
       return `${Role[user.role]}ID ${user.chw.identity}`;
     }
     return Role[user.role];
   }
 
-  function handleCloseAccount(data) {
+  function handleCloseChwAccount(data) {
     Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => history.goBack());
+  }
+
+  function handleCloseSupervisorAccount() {
+    Axios.delete(`/admin/users/supervisor/${id}`).then(() => history.goBack());
   }
 
   return (
@@ -55,11 +67,18 @@ export default function User() {
         title={user.realName}
         role={role()}
         extra={
-          roleChw() && (
-            <Button ghost type="danger" onClick={openCloseAccount}>
-              注销账户
-            </Button>
-          )
+          <>
+            {roleChw && (
+              <Button ghost type="danger" onClick={openCloseChwAccount}>
+                注销账户
+              </Button>
+            )}
+            {roleSupervisor && (
+              <Button ghost type="danger" onClick={openCloseSupervisorAccount}>
+                注销账户
+              </Button>
+            )}
+          </>
         }
       />
       <Card
@@ -72,7 +91,7 @@ export default function User() {
       >
         <StaticField label="真实姓名">{user.realName}</StaticField>
         <StaticField label="联系电话">{user.phone}</StaticField>
-        {roleChw() && (
+        {roleChw && (
           <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
         )}
       </Card>
@@ -88,15 +107,23 @@ export default function User() {
         <StaticField label="账户密码">******</StaticField>
       </Card>
 
-      {roleSupervisor() && <AssignChw id={id} />}
-      {roleChw() && <AssignBaby id={id} />}
+      {roleSupervisor && <AssignChw id={id} />}
+      {roleChw && (
+        <AssignBaby id={id} onChange={(babies) => setIsBabiesEmpty(babies?.length === 0)} />
+      )}
 
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
-      <CloseAccountModal
+      <CloseChwAccountModal
         id={id}
-        visible={closeAccountVisible}
-        onCancel={closeCloseAccount}
-        onFinish={handleCloseAccount}
+        visible={closeChwAccountVisible}
+        isBabiesEmpty={isBabiesEmpty}
+        onCancel={closeCloseChwAccount}
+        onFinish={handleCloseChwAccount}
+      />
+      <CloseSupervisorAccountModal
+        visible={closeSupervisorAccountVisible}
+        onCancel={closeCloseSupervisorAccount}
+        onFinish={handleCloseSupervisorAccount}
       />
 
       <ModalForm
@@ -112,9 +139,9 @@ export default function User() {
         <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
-        {roleChw() && (
+        {roleChw && (
           <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
-            <TagSelect />
+            <ChwTagSelector />
           </Form.Item>
         )}
       </ModalForm>
@@ -122,7 +149,31 @@ export default function User() {
   );
 }
 
-function CloseAccountModal({ id, visible, onCancel, onFinish }) {
+function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
+  return (
+    <Modal
+      title="注销督导员"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      visible={visible}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            再想想
+          </Button>
+          <Button type="danger" onClick={onFinish}>
+            注销账户
+          </Button>
+        </Space>
+      }
+    >
+      <p>注意！注销后，该账户将不可用且不可恢复，所有该督导员负责的社区工作者将处于未分配状态</p>
+    </Modal>
+  );
+}
+
+function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }) {
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
 
@@ -158,27 +209,30 @@ function CloseAccountModal({ id, visible, onCancel, onFinish }) {
       }
     >
       <p>
-        注意！注销后，该账户将不可用且不可恢复。请先将其负责的宝宝移交至其他社区工作者后再进行注销
+        注意！注销后，该账户将不可用且不可恢复。
+        {!isBabiesEmpty && '请先将其负责的宝宝移交至其他社区工作者后再进行注销'}
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
-          <Select
-            showSearch
-            filterOption={false}
-            onFocus={() => debounceSearch()}
-            onSearch={debounceSearch}
-            style={{ width: '100%' }}
-            placeholder="请选择移交宝宝的社区工作者"
-          >
-            {options
-              .filter((o) => o.user.id !== Number(id))
-              .map((o) => (
-                <Select.Option key={o.user.id}>
-                  {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
-                </Select.Option>
-              ))}
-          </Select>
-        </Form.Item>
+        {!isBabiesEmpty && (
+          <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
+            <Select
+              showSearch
+              filterOption={false}
+              onFocus={() => debounceSearch()}
+              onSearch={debounceSearch}
+              style={{ width: '100%' }}
+              placeholder="请选择移交宝宝的社区工作者"
+            >
+              {options
+                .filter((o) => o.user.id !== Number(id))
+                .map((o) => (
+                  <Select.Option key={o.user.id}>
+                    {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
+                  </Select.Option>
+                ))}
+            </Select>
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );
@@ -222,7 +276,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
   );
 }
 
-function AssignBaby({ id }) {
+function AssignBaby({ id, onChange }) {
   const history = useHistory();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/users/chw/${id}/babies`, {}, []);
@@ -231,6 +285,10 @@ function AssignBaby({ id }) {
   function handleRelease(babyId) {
     Axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
   }
+
+  useEffect(() => {
+    onChange(dataSource);
+  }, [dataSource, onChange]);
 
   return (
     <Card
@@ -301,49 +359,57 @@ function AssignBaby({ id }) {
           },
         ]}
       />
-      <NotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
+      <PageNotAssignedBabyModal
+        id={id}
+        onFinish={refresh}
+        visible={visible}
+        onCancel={closeModal}
+      />
     </Card>
   );
 }
 
-// open a new modal, assign chw to supervisor
-function NotAssignedBabyModal({ id, onFinish, onCancel, visible }) {
-  const [dataSource, refresh] = useFetch(`/admin/users/chw/not_assigned/babies`, {}, []);
+const PageNotAssignedBabyModal = WithPage(
+  NotAssignedBabyModal,
+  '/admin/users/chw/not_assigned/babies'
+);
 
+// open a new modal, assign chw to supervisor
+function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...props }) {
   useEffect(() => {
-    if (visible) refresh();
+    if (visible) loadData();
     // eslint-disable-next-line
   }, [visible]);
 
   async function handleAssign(babyIds) {
     await Axios.post(`/admin/users/chw/${id}/babies`, babyIds);
-    refresh();
+    loadData();
     onFinish();
     onCancel();
   }
 
-  const debounceRefresh = debounce((search) => refresh({ search }), 400);
-
   return (
     <AssignModalTable
+      {...props}
       title="分配新宝宝"
       visible={visible}
-      onChangeSearch={(e) => debounceRefresh(e.target.value)}
       onCancel={onCancel}
-      dataSource={dataSource}
       onFinish={handleAssign}
       columns={[
         {
           title: '宝宝姓名',
           dataIndex: 'name',
+          width: 100,
         },
         {
           title: 'ID',
           dataIndex: 'identity',
+          width: 120,
         },
         {
           title: '所在区域',
           dataIndex: 'area',
+          width: 300,
         },
       ]}
     />

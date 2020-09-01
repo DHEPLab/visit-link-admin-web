@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import Arrays from 'lodash/array';
 import styled from 'styled-components';
+import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
@@ -122,6 +123,7 @@ export default function Curriculum() {
         icon="iconcurriculum-primary"
         menu="大纲管理"
         title={title}
+        role={readonly && moment(curriculum.lastPublishedAt).format('YYYY/MM/DD HH:mm')}
         extra={
           <Space size="large">
             {readonly ? (
@@ -358,7 +360,7 @@ function Lessons({
             label="适用天数"
             labelCol={{ span: 0 }}
             name="startOfApplicableDays"
-            rules={Rules.Required}
+            rules={[...Rules.Required]}
           >
             <InputNumber
               min={1}
@@ -369,7 +371,7 @@ function Lessons({
             />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
-          <Form.Item
+          <EndOfApplicableDaysFormItem
             label="适用天数"
             labelCol={{ span: 0 }}
             name="endOfApplicableDays"
@@ -414,7 +416,7 @@ function Lessons({
               formatter={(value) => `${value}天`}
               parser={(value) => value.replace('天', '')}
             />
-          </Form.Item>
+          </EndOfApplicableDaysFormItem>
         </ApplicableDaysContainer>
         <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
           <Select
@@ -464,6 +466,13 @@ function Lessons({
     </Card>
   );
 }
+
+const EndOfApplicableDaysFormItem = styled(Form.Item)`
+  .ant-form-item-explain,
+  .ant-form-item-extra {
+    margin-left: -80px;
+  }
+`;
 
 const ApplicableDaysContainer = styled.div`
   display: flex;
@@ -655,9 +664,11 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
     title: (
       <>
         操作 &nbsp;
-        <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
-          <InfoCircleFilled style={{ color: '#000' }} />
-        </Tooltip>
+        {!disabled && (
+          <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
+            <InfoCircleFilled style={{ color: '#000' }} />
+          </Tooltip>
+        )}
       </>
     ),
     width: 200,
