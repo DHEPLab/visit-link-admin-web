@@ -25,6 +25,17 @@ export default {
         return Promise.reject('最多只能添加3个区域');
       },
     }),
+    () => ({
+      validator(_, tags) {
+        if (!tags) return;
+        for (let tag of tags) {
+          if (tag && tag.length > 50) {
+            return Promise.reject('自定义标签不能超过50个字');
+          }
+        }
+        return Promise.resolve();
+      },
+    }),
   ],
   Location: [...Required, { max: 200 }],
   Remark: [{ max: 500 }],
