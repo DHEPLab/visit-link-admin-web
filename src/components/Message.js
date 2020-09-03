@@ -5,9 +5,9 @@ import { message as AntdMessage } from 'antd';
 import Iconfont from './Iconfont';
 
 export default {
-  success: (title, message) => {
+  success: (title, message,duration) => {
     AntdMessage.success({
-      duration: 1,
+      duration: duration||1,
       content: <MessageContent {...{ title, message }} />,
       icon: <i />,
       style: {

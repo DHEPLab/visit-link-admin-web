@@ -28,7 +28,7 @@ export default function SignIn() {
       const profile = await Axios.get('/api/account/profile');
       dispatch(apiAccountProfile(profile));
 
-      Message.success('登录成功', '您已成功登录系统');
+      Message.success('登录成功', '您已成功登录系统',1);
       history.push('/');
     } catch {
       setError(true);
