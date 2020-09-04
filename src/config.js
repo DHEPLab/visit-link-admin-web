@@ -16,6 +16,8 @@ const urlInfo = {
   ],
   put: [
     { url: "/admin/curriculums/draft", isequals: true, title: "操作成功", context: "草稿保存成功" },
+    { url: "/admin/users/", isequals: false, title: "操作成功", context: "密码修改成功", endsWith: "/password" },
+    { url: "/admin/users/", isequals: false, title: "操作成功", context: "保存成功", endsWith: "" },
     { url: "/admin/modules/draft", isequals: true, title: "操作成功", context: "草稿保存成功" },
     { url: "/admin/curriculums", isequals: true, title: "发布成功", context: "大纲已发布，可以添加宝宝后在app端查看" },
     { url: "/admin/modules", isequals: true, title: "发布成功", context: "模块已发布，可在课堂编辑时关联此模块" },
@@ -76,10 +78,12 @@ Axios.interceptors.response.use(
 function overallSituationTips(method, url) {
   let infoArray = urlInfo[method]
   let result = infoArray.filter(e => (e["isequals"] && url === e.url) || (!e["isequals"] && url.includes(e.url)));
+  console.log("拿到头结果", result)
   if (result && result.length === 1) {
     Message.success(result[0].title, result[0].context);
   } else if (result && result.length > 1) {
     let res = result.filter(e => (!e["isequals"] && url.endsWith(e["endsWith"])) || e["isequals"] === true);
+    console.log(res, 88888)
     if (res && res.length > 0) {
       Message.success(res[0].title, res[0].context);
     }
