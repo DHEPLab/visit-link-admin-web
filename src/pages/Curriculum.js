@@ -125,11 +125,11 @@ export default function Curriculum() {
       <Prompt
         when={isPrompt}
         message={(location) => {
-          let isstop = location.pathname.startsWith("/curriculums/edit/")
+          let isstop = location.pathname.startsWith('/curriculums/edit/');
           if (isstop || readonly) {
             return true;
           } else {
-            return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
+            return '当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?';
           }
         }}
       />
@@ -159,15 +159,15 @@ export default function Curriculum() {
                 )}
               </>
             ) : (
-                <>
-                  <Button ghost type="danger" onClick={submitDraft}>
-                    保存至草稿
+              <>
+                <Button ghost type="danger" onClick={submitDraft}>
+                  保存至草稿
                 </Button>
-                  <Button type="danger" onClick={submitPublish}>
-                    保存并发布
+                <Button type="danger" onClick={submitPublish}>
+                  保存并发布
                 </Button>
-                </>
-              )}
+              </>
+            )}
           </Space>
         }
       />
@@ -185,15 +185,15 @@ export default function Curriculum() {
         {readonly ? (
           <ReadonlyForm value={curriculum} />
         ) : (
-            <Form data-testid="basic-form" form={form} onFinish={onFinish}>
-              <Form.Item label="大纲名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
-                <Input placeholder="请输入大纲名称，限20个汉字" />
-              </Form.Item>
-              <Form.Item label="大纲描述" name="description" rules={[...Rules.Required, { max: 50 }]}>
-                <Input.TextArea rows={5} placeholder="请输入大纲描述，限50个汉字" />
-              </Form.Item>
-            </Form>
-          )}
+          <Form data-testid="basic-form" form={form} onFinish={onFinish}>
+            <Form.Item label="大纲名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
+              <Input placeholder="请输入大纲名称，限20个汉字" />
+            </Form.Item>
+            <Form.Item label="大纲描述" name="description" rules={[...Rules.Required, { max: 50 }]}>
+              <Input.TextArea rows={5} placeholder="请输入大纲描述，限50个汉字" />
+            </Form.Item>
+          </Form>
+        )}
       </Card>
 
       <EnhancedLessons disabled={readonly} value={lessons} onChange={onChangeLessons} />
@@ -466,7 +466,7 @@ function Lessons({
             render: (_, record) => {
               return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
                 record.endOfApplicableDays
-                }天`;
+              }天`;
             },
           },
           {
@@ -583,7 +583,7 @@ function Schedules({
                   if (
                     !endOfApplicableMonths ||
                     Number(endOfApplicableMonths) >=
-                    Number(getFieldValue('startOfApplicableMonths'))
+                      Number(getFieldValue('startOfApplicableMonths'))
                   ) {
                     return Promise.resolve();
                   }
@@ -656,7 +656,7 @@ function Schedules({
             render: (_, record) => {
               return `${CurriculumBabyStage[record.stage]} ${
                 record.startOfApplicableMonths
-                }个月 - ${record.endOfApplicableMonths}个月`;
+              }个月 - ${record.endOfApplicableMonths}个月`;
             },
           },
           {

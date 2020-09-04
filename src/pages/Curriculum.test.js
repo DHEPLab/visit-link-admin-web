@@ -9,6 +9,7 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
   useParams: jest.fn(),
   useLocation: jest.fn(),
+  Prompt: () => <div />,
 }));
 
 jest.mock('react-redux', () => ({
