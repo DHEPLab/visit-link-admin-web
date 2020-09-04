@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { Formik } from 'formik';
 import { Form, Space, Button, Input, message } from 'antd';
 import { useDispatch } from 'react-redux';
-import { useLocation, useHistory, useParams } from 'react-router-dom';
+import { useLocation, useHistory, useParams, Prompt } from 'react-router-dom';
 import { debounce } from 'lodash';
 
 import Factory from '../components/curriculum/factory';
@@ -27,6 +27,7 @@ export default function Module() {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
   const [title, setTitle] = useState('创建新模块');
   const [submitURL, setSubmitURL] = useState();
@@ -79,11 +80,13 @@ export default function Module() {
   function submitDraft(submit) {
     setSubmitURL('/admin/modules/draft');
     submit();
+    setIsPrompt(false);
   }
 
   function submitPublish(submit) {
     setSubmitURL('/admin/modules');
     submit();
+    setIsPrompt(false);
   }
 
   function onSubmit(values) {
@@ -116,6 +119,17 @@ export default function Module() {
     <Formik initialValues={{ components }} onSubmit={onSubmitFormik}>
       {({ values, handleSubmit }) => (
         <>
+          <Prompt
+            when={isPrompt}
+            message={(location) => {
+              let isstop = location.pathname.startsWith("/modules/edit/")
+              if (isstop || readonly) {
+                return true;
+              } else {
+                return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
+              }
+            }}
+          />
           <DetailHeader
             icon="iconmodule-primary"
             menu="模块管理"
@@ -142,15 +156,15 @@ export default function Module() {
                     )}
                   </>
                 ) : (
-                  <>
-                    <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
-                      保存至草稿
+                    <>
+                      <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
+                        保存至草稿
                     </Button>
-                    <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
-                      保存并发布
+                      <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
+                        保存并发布
                     </Button>
-                  </>
-                )}
+                    </>
+                  )}
               </Space>
             }
           ></DetailHeader>
@@ -168,25 +182,25 @@ export default function Module() {
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder="请输入模块名称，限40个字符" />
-                </Form.Item>
-                <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块编号，限20个字符" />
-                </Form.Item>
-                <Form.Item
-                  label="模块描述"
-                  name="description"
-                  rules={[...Rules.Required, { max: 200 }]}
-                >
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
-                </Form.Item>
-                <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                  <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
-                </Form.Item>
-              </Form>
-            )}
+                <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+                  <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                    <Input placeholder="请输入模块名称，限40个字符" />
+                  </Form.Item>
+                  <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
+                    <Input placeholder="请输入模块编号，限20个字符" />
+                  </Form.Item>
+                  <Form.Item
+                    label="模块描述"
+                    name="description"
+                    rules={[...Rules.Required, { max: 200 }]}
+                  >
+                    <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
+                  </Form.Item>
+                  <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
+                    <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
+                  </Form.Item>
+                </Form>
+              )}
           </Card>
 
           <Card title="模块内容">
