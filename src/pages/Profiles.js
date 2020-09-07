@@ -27,7 +27,7 @@ export default function Profiles() {
 
   async function handleChangePassword(values) {
     await Axios.put('/api/account/password', values);
-    Message.success('密码修改成功', '请您重新登录',1);
+    Message.success('密码修改成功', '请您重新登录', 1);
     clearToken();
     history.push('/sign_in');
   }
@@ -68,7 +68,7 @@ export default function Profiles() {
         onFinish={handleChangeProfile}
         onCancel={closeProfileModal}
       >
-        <Form.Item label="真实姓名" name="realName" rules={Rules.Required}>
+        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
           <Input />
         </Form.Item>
         <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
