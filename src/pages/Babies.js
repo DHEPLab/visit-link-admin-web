@@ -117,7 +117,7 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
               return (
                 <>
                   {formatDate(h)}
-                  {Tag(baby)}
+                  <Tag actionFromApp={baby.actionFromApp}>{ActionFromApp[baby.actionFromApp]}</Tag>
                 </>
               );
             },
@@ -161,22 +161,24 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
   );
 }
 
-const baseTagStyle = {
-  borderRadius: '4px',
-  padding: '3px 6px',
-  marginLeft: '20px',
-  fontWeight: 'bold'
-};
 
-const colorStyle = {
-  CREATE: { color: "#ff794f", background: "#ffede2" },
-  MODIFY: { color: "#FF5555", background: "#fff1f0" },
-  DELETE: { color: "#97979C", background: "#EEEEEE" }
-}
+const Tag = styled.span`
+  ${props => {
+    switch (props.actionFromApp) {
+      case "CREATE":
+        return `color: #ff794f; background: #ffede2`
+      case "MODIFY":
+        return `color: #FF5555; background: #fff1f0`
+      default:
+        return `color: #97979C; background: #EEEEEE`
+    }
+  }};
+  border-radius: 4px;
+  padding: 3px 6px;
+  margin-left: 20px;
+  font-weight: bold;
+`;
 
-function Tag(baby) {
-  return <span style={{ ...baseTagStyle, ...colorStyle[baby.actionFromApp] }}>{ActionFromApp[baby.actionFromApp]}</span>;
-}
 
 function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
