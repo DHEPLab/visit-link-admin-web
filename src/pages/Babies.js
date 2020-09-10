@@ -177,6 +177,7 @@ const Tag = styled.span`
   padding: 3px 6px;
   margin-left: 20px;
   font-weight: bold;
+  display: inline-block;
 `;
 
 
