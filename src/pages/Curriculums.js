@@ -196,7 +196,7 @@ function CurriculumBabiesModal({
 
       <PageAssignModalTable
         title="添加新宝宝"
-        refreshOnVisible
+        curriculumId={curriculumId}
         visible={assign}
         onCancel={closeModal}
         onFinish={handleAssign}
@@ -222,7 +222,16 @@ function CurriculumBabiesModal({
   );
 }
 
-const PageAssignModalTable = WithPage(AssignModalTable, '/admin/curriculums/babies');
+function AssignModalTableContainer({ curriculumId, onChangeLoadURL, ...props }) {
+  useEffect(() => {
+    if (!props.visible) return;
+    if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/not_assigned_babies`);
+    // eslint-disable-next-line
+  }, [curriculumId, props.visible]);
+  return <AssignModalTable {...props} />;
+}
+
+const PageAssignModalTable = WithPage(AssignModalTableContainer);
 
 const ModalHeader = styled.div`
   display: flex;
