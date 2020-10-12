@@ -504,7 +504,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
     onCancel();
   }
 
-  const debounceRefresh = debounce((search) => refresh({ search }), 400);
+  const debounceRefresh = debounce((_, search) => refresh({ search }), 400);
 
   return (
     <AssignModalTable
@@ -513,7 +513,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
       onFinish={handleAssign}
       dataSource={dataSource}
       title="分配新社区工作者"
-      onChangeSearch={(e) => debounceRefresh(e.target.value)}
+      onChangeSearch={debounceRefresh}
       columns={[
         {
           title: '社区工作者姓名',
