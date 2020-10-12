@@ -674,6 +674,7 @@ function Schedules({
 const renderDomain = (h) => h.map((v) => v.label).join('、');
 
 const lessonOperation = (disabled, handleDelete, openEditModal) => {
+  if (disabled) return {};
   return {
     title: (
       <>
@@ -706,6 +707,7 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
 };
 
 const scheduleOperation = (disabled, handleDelete, openEditModal) => {
+  if (disabled) return {};
   return {
     title: <>操作</>,
     width: 200,
