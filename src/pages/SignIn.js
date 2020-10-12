@@ -28,7 +28,7 @@ export default function SignIn() {
       const profile = await Axios.get('/api/account/profile');
       dispatch(apiAccountProfile(profile));
 
-      Message.success('登录成功', '您已成功登录系统',1);
+      Message.success('登录成功', '您已成功登录系统', 1);
       history.push('/');
     } catch {
       setError(true);
@@ -107,4 +107,9 @@ const Container = styled.div`
   margin-top: 23vh;
   margin-left: auto;
   width: 760px;
+
+  .ant-form-item-has-error .ant-form-item-explain,
+  .ant-form-item-has-error .ant-form-item-split {
+    padding-left: 30px;
+  }
 `;
