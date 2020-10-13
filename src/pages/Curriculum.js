@@ -558,46 +558,43 @@ function Schedules({
         </Form.Item>
         <ApplicableDaysContainer>
           <Form.Item
-            label="适用月数"
+            label="适用天数"
             labelCol={{ span: 0 }}
-            name="startOfApplicableMonths"
+            name="startOfApplicableDays"
             rules={Rules.Required}
           >
             <InputNumber
               min={1}
-              max={9}
               precision={0}
-              formatter={(value) => `${value}月`}
-              parser={(value) => value.replace('月', '')}
+              formatter={(value) => `${value}天`}
+              parser={(value) => value.replace('天', '')}
             />
           </Form.Item>
           <ApplicableDaysConnector>至</ApplicableDaysConnector>
           <Form.Item
-            label="适用月数"
+            label="适用天数"
             labelCol={{ span: 0 }}
-            name="endOfApplicableMonths"
+            name="endOfApplicableDays"
             rules={[
               ...Rules.Required,
               ({ getFieldValue }) => ({
-                validator(_, endOfApplicableMonths) {
+                validator(_, endOfApplicableDays) {
                   if (
-                    !endOfApplicableMonths ||
-                    Number(endOfApplicableMonths) >=
-                      Number(getFieldValue('startOfApplicableMonths'))
+                    !endOfApplicableDays ||
+                    Number(endOfApplicableDays) >= Number(getFieldValue('startOfApplicableDays'))
                   ) {
                     return Promise.resolve();
                   }
-                  return Promise.reject('必须大于等于起始月');
+                  return Promise.reject('必须大于等于起始天');
                 },
               }),
             ]}
           >
             <InputNumber
               min={1}
-              max={10}
               precision={0}
-              formatter={(value) => `${value}月`}
-              parser={(value) => value.replace('月', '')}
+              formatter={(value) => `${value}天`}
+              parser={(value) => value.replace('天', '')}
             />
           </Form.Item>
         </ApplicableDaysContainer>
@@ -605,8 +602,8 @@ function Schedules({
           noStyle
           shouldUpdate={(pre, cur) =>
             pre.stage !== cur.stage ||
-            pre.startOfApplicableMonths !== cur.startOfApplicableMonths ||
-            pre.endOfApplicableMonths !== cur.endOfApplicableMonths
+            pre.startOfApplicableDays !== cur.startOfApplicableDays ||
+            pre.endOfApplicableDays !== cur.endOfApplicableDays
           }
         >
           {({ getFieldValue, setFieldsValue }) => {
@@ -616,8 +613,8 @@ function Schedules({
               lessons: [],
             });
             const stage = getFieldValue('stage');
-            const startMonths = getFieldValue('startOfApplicableMonths');
-            const endMonths = getFieldValue('endOfApplicableMonths');
+            const startMonths = getFieldValue('startOfApplicableDays');
+            const endMonths = getFieldValue('endOfApplicableDays');
             return (
               <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
                 <Select
@@ -654,9 +651,9 @@ function Schedules({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${CurriculumBabyStage[record.stage]} ${
-                record.startOfApplicableMonths
-              }个月 - ${record.endOfApplicableMonths}个月`;
+              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays} 天 - ${
+                record.endOfApplicableDays
+              } 天`;
             },
           },
           {

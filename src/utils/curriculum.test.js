@@ -13,9 +13,9 @@ it('should filter lesson by stage, start months, end months', () => {
       endOfApplicableDays: 30,
     },
   ];
-  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 1).length).toBe(0);
-  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 2).length).toBe(1);
-  expect(Curriculum.filterLessons(lessons, 'BIRTH', 1, 1).length).toBe(1);
+  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 10).length).toBe(0);
+  expect(Curriculum.filterLessons(lessons, 'EDC', 1, 40).length).toBe(1);
+  expect(Curriculum.filterLessons(lessons, 'BIRTH', 1, 30).length).toBe(1);
 });
 
 it('should validate lesson number to keep unique', () => {
@@ -88,8 +88,8 @@ it('should clean invalid lessons from schedule', () => {
   const schedules = [
     {
       stage: 'EDC',
-      startOfApplicableMonths: 2,
-      endOfApplicableMonths: 3,
+      startOfApplicableDays: 11,
+      endOfApplicableDays: 90,
       lessons: [
         {
           label: 'L1',
@@ -100,8 +100,8 @@ it('should clean invalid lessons from schedule', () => {
   const cleaned = [
     {
       stage: 'EDC',
-      startOfApplicableMonths: 2,
-      endOfApplicableMonths: 3,
+      startOfApplicableDays: 11,
+      endOfApplicableDays: 90,
       lessons: [],
     },
   ];

@@ -1,19 +1,11 @@
-const dayOfMonth = 30;
-const dayOfFirstMonthForStageEDC = 10;
-
-function offset(stage) {
-  if (stage !== 'EDC') return 0;
-  return dayOfMonth - dayOfFirstMonthForStageEDC;
-}
-
-function filterLessons(lessons, stage, startMonth, endMonth) {
-  if (!stage || startMonth == null || startMonth === '' || endMonth == null || endMonth === '')
+function filterLessons(lessons, stage, startDays, endDays) {
+  if (!stage || startDays == null || startDays === '' || endDays == null || endDays === '')
     return [];
   return lessons.filter((lesson) => {
     return (
       lesson.stage === stage &&
-      lesson.startOfApplicableDays > (startMonth - 1) * dayOfMonth - offset(stage) &&
-      lesson.endOfApplicableDays <= endMonth * dayOfMonth - offset(stage)
+      lesson.startOfApplicableDays >= startDays &&
+      lesson.endOfApplicableDays <= endDays
     );
   });
 }
@@ -43,8 +35,8 @@ function cleanInvalidLessons(schedules, lessons) {
       filterLessons(
         lessons,
         schedule.stage,
-        schedule.startOfApplicableMonths,
-        schedule.endOfApplicableMonths
+        schedule.startOfApplicableDays,
+        schedule.endOfApplicableDays
       ).find((lesson) => domain.label === lesson.number)
     ),
   }));
