@@ -628,9 +628,9 @@ function Schedules({
             dataIndex: 'stage',
             width: 400,
             render: (_, record) => {
-              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays} 天 - ${
+              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
                 record.endOfApplicableDays
-              } 天`;
+              }天`;
             },
           },
           {

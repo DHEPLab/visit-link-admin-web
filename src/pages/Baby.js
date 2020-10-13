@@ -205,7 +205,7 @@ export default function Baby() {
         <StaticField label="真实姓名">{baby.name}</StaticField>
         <StaticField label="性别">{Gender[baby.gender]}</StaticField>
         <StaticField label="成长阶段">
-          {BabyStage[baby.stage]} {baby.days} 天
+          {BabyStage[baby.stage]} {baby.days}天
         </StaticField>
         {baby.stage === 'EDC' ? (
           <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
