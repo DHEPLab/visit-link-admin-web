@@ -1,17 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { message as AntdMessage } from 'antd';
+import React from "react";
+import styled from "styled-components";
+import { message as AntdMessage } from "antd";
 
-import Iconfont from './Iconfont';
+import Iconfont from "./Iconfont";
 
 export default {
-  success: (title, message,duration) => {
+  success: (title, message, duration) => {
     AntdMessage.success({
-      duration: duration||1,
+      duration: duration || 1,
       content: <MessageContent {...{ title, message }} />,
       icon: <i />,
       style: {
-        marginTop: '10%',
+        marginTop: "10%",
       },
     });
   },

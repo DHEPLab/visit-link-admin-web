@@ -1,16 +1,16 @@
-import React from 'react';
-import Axios from 'axios';
-import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import React from "react";
+import Axios from "axios";
+import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { Button, Form, Input } from "antd";
 
-import Rules from '../constants/rules';
-import { useBoolState } from '../utils';
-import { Role } from '../constants/enums';
-import { clearToken } from '../utils/token';
-import { Card, StaticField, ModalForm, Message } from '../components/*';
-import { apiAccountProfile } from '../actions';
+import Rules from "../constants/rules";
+import { useBoolState } from "../utils";
+import { Role } from "../constants/enums";
+import { clearToken } from "../utils/token";
+import { Card, StaticField, ModalForm, Message } from "../components/*";
+import { apiAccountProfile } from "../actions";
 
 export default function Profiles() {
   const history = useHistory();
@@ -20,16 +20,16 @@ export default function Profiles() {
   const [visibleProfile, openProfileModal, closeProfileModal] = useBoolState(false);
 
   async function handleChangeProfile(values) {
-    await Axios.put('/api/account/profile', values);
-    dispatch(apiAccountProfile(await Axios.get('/api/account/profile')));
+    await Axios.put("/api/account/profile", values);
+    dispatch(apiAccountProfile(await Axios.get("/api/account/profile")));
     closeProfileModal();
   }
 
   async function handleChangePassword(values) {
-    await Axios.put('/api/account/password', values);
-    Message.success('密码修改成功', '请您重新登录', 1);
+    await Axios.put("/api/account/password", values);
+    Message.success("密码修改成功", "请您重新登录", 1);
     clearToken();
-    history.push('/sign_in');
+    history.push("/sign_in");
   }
 
   return (
@@ -76,12 +76,7 @@ export default function Profiles() {
         </Form.Item>
       </ModalForm>
 
-      <ModalForm
-        title="修改密码"
-        visible={visible}
-        onFinish={handleChangePassword}
-        onCancel={closePasswordModal}
-      >
+      <ModalForm title="修改密码" visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
         <Form.Item label="旧密码" name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
         </Form.Item>
@@ -95,10 +90,10 @@ export default function Profiles() {
             ...Rules.Required,
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
+                if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject('两次密码输入不一致');
+                return Promise.reject("两次密码输入不一致");
               },
             }),
           ]}

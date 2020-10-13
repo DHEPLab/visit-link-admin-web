@@ -1,6 +1,6 @@
-import { useMethods } from './BabyModalForm';
+import { useMethods } from "./BabyModalForm";
 
-it('should disable invalid edc date', () => {
+it("should disable invalid edc date", () => {
   const { disabledDateForEDC } = useMethods();
   const baseline = new Date(2020, 1, 4);
   expect(disabledDateForEDC(new Date(2020, 1, 5), baseline)).toBeFalsy();

@@ -1,8 +1,8 @@
-import React from 'react';
-import moment from 'moment';
-import styled from 'styled-components';
-import { Space, Button } from 'antd';
-import { ReviewActionFromApp } from '../constants/enums';
+import React from "react";
+import moment from "moment";
+import styled from "styled-components";
+import { Space, Button } from "antd";
+import { ReviewActionFromApp } from "../constants/enums";
 
 export default function BabyReviewBar({ baby, onApprove }) {
   return (
@@ -12,7 +12,7 @@ export default function BabyReviewBar({ baby, onApprove }) {
         {baby.closeAccountReason && <Label>注销原因：</Label>}
         <Value>{baby.closeAccountReason}</Value>
         <Label>修改日期：</Label>
-        {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format('YYYY/MM/DD')}</Value>}
+        {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format("YYYY/MM/DD")}</Value>}
         <Space size="large">
           <EditButton ghost type="primary" onClick={onApprove}>
             批准申请

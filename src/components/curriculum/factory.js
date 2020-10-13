@@ -5,31 +5,31 @@ function generateKey() {
 
 function createMedia() {
   return {
-    type: 'Media',
+    type: "Media",
     key: generateKey(),
     value: {
-      type: '',
-      file: '',
-      text: '',
+      type: "",
+      file: "",
+      text: "",
     },
   };
 }
 
 function createText() {
   return {
-    type: 'Text',
+    type: "Text",
     key: generateKey(),
     value: {
       // script, instruction, refrence
-      type: 'script',
-      html: '',
+      type: "script",
+      html: "",
     },
   };
 }
 
 function createSwitch() {
   return {
-    type: 'Switch',
+    type: "Switch",
     key: generateKey(),
     value: {
       question: createText().value,
@@ -40,13 +40,24 @@ function createSwitch() {
 
 function createPageFooter() {
   return {
-    type: 'PageFooter',
+    type: "PageFooter",
     key: generateKey(),
   };
 }
 
 function createCase() {
-  return { key: generateKey(), text: '', finishAction: [], components: [createText()] };
+  return {
+    key: generateKey(),
+    text: "",
+    finishAction: [],
+    components: [createText()],
+  };
 }
 
-export default { createText, createMedia, createSwitch, createCase, createPageFooter };
+export default {
+  createText,
+  createMedia,
+  createSwitch,
+  createCase,
+  createPageFooter,
+};

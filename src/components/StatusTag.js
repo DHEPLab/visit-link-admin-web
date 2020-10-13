@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-export default function StatusTag({ value, trueText = '已发布', falseText = '草稿' }) {
+export default function StatusTag({ value, trueText = "已发布", falseText = "草稿" }) {
   if (value) {
     return <TrueContainer>{trueText}</TrueContainer>;
   }

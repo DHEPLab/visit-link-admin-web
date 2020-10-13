@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
-const KEY = 'HEALTHY_FUTURE_JWT';
+const KEY = "HEALTHY_FUTURE_JWT";
 
 export function applyToken(token) {
   if (token) {
     localStorage.setItem(KEY, token);
-    axios.defaults.headers['Authorization'] = 'Bearer ' + token;
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
   }
 }
 
@@ -14,6 +14,6 @@ export function getToken() {
 }
 
 export function clearToken() {
-  localStorage.setItem(KEY, '');
-  axios.defaults.headers['Authorization'] = '';
+  localStorage.setItem(KEY, "");
+  axios.defaults.headers["Authorization"] = "";
 }

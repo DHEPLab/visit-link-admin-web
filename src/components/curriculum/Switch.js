@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from 'antd';
-import { FieldArray } from 'formik';
-import styled from 'styled-components';
+import React from "react";
+import { Button } from "antd";
+import { FieldArray } from "formik";
+import styled from "styled-components";
 
-import Factory from './factory';
-import { Text, Container, Case } from './*';
+import Factory from "./factory";
+import { Text, Container, Case } from "./*";
 
 export default function Switch({ name, value, onChange, ...props }) {
   const Name = {
@@ -15,14 +15,7 @@ export default function Switch({ name, value, onChange, ...props }) {
 
   return (
     <Container icon="iconswitch-gray" title="选择组件" name={name} {...props}>
-      <Text
-        {...props}
-        name={Name.question}
-        value={value.question}
-        onChange={onChange}
-        hideMove
-        hideRemove
-      />
+      <Text {...props} name={Name.question} value={value.question} onChange={onChange} hideMove hideRemove />
       <FieldArray name={Name.cases}>
         {(helpers) => (
           <>

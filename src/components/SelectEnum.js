@@ -1,7 +1,7 @@
-import React from 'react';
-import { Select } from 'antd';
+import React from "react";
+import { Select } from "antd";
 
-import * as Enums from '../constants/enums';
+import * as Enums from "../constants/enums";
 
 export default function ({ name, ...props }) {
   return (

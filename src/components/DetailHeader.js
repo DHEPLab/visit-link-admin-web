@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
-import { Iconfont } from '../components/*';
+import { Iconfont } from "../components/*";
 
 export default function ({ icon, menu, title, role, extra }) {
   const history = useHistory();

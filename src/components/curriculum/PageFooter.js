@@ -1,17 +1,12 @@
-import React from 'react';
-import { Button } from 'antd';
-import styled from 'styled-components';
+import React from "react";
+import { Button } from "antd";
+import styled from "styled-components";
 
-import Container from './Container';
-import { Iconfont } from '../*';
+import Container from "./Container";
+import { Iconfont } from "../*";
 
 export default function PageFooter(props) {
-  return (
-    <Container
-      component={<PageFooterTitle onRemove={props.onRemove} readonly={props.readonly} />}
-      {...props}
-    />
-  );
+  return <Container component={<PageFooterTitle onRemove={props.onRemove} readonly={props.readonly} />} {...props} />;
 }
 
 function PageFooterTitle({ onRemove, readonly }) {

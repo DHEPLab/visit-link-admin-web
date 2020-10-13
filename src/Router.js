@@ -1,76 +1,65 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import { getToken } from './utils/token';
+import React from "react";
+import styled from "styled-components";
+import { Switch, Route, Redirect, useLocation } from "react-router-dom";
+import { getToken } from "./utils/token";
 
-import {
-  SignIn,
-  Profiles,
-  User,
-  Users,
-  Babies,
-  Baby,
-  Modules,
-  Module,
-  Curriculums,
-  Curriculum,
-} from './pages/*';
+import { SignIn, Profiles, User, Users, Babies, Baby, Modules, Module, Curriculums, Curriculum } from "./pages/*";
 
 const routes = [
   {
-    path: '/profiles',
+    path: "/profiles",
     component: Profiles,
   },
   {
-    path: '/curriculums/create',
+    path: "/curriculums/create",
     component: Curriculum,
   },
   {
-    path: '/curriculums/edit/:id',
+    path: "/curriculums/edit/:id",
     component: Curriculum,
   },
   {
-    path: '/curriculums/:id',
+    path: "/curriculums/:id",
     component: Curriculum,
   },
   {
-    path: '/curriculums',
+    path: "/curriculums",
     component: Curriculums,
   },
   {
-    path: '/users/:id',
+    path: "/users/:id",
     component: User,
   },
   {
-    path: '/users',
+    path: "/users",
     component: Users,
   },
   {
-    path: '/babies/:id',
+    path: "/babies/:id",
     component: Baby,
   },
   {
-    path: '/babies',
+    path: "/babies",
     component: Babies,
   },
   {
-    path: '/modules/edit/:id',
+    path: "/modules/edit/:id",
     component: Module,
   },
   {
-    path: '/modules/create',
+    path: "/modules/create",
     component: Module,
   },
   {
-    path: '/modules/:id',
+    path: "/modules/:id",
     component: Module,
   },
   {
-    path: '/modules',
+    path: "/modules",
     component: Modules,
   },
   {
-    path: '*',
+    path: "*",
     component: NoMatch,
   },
 ];
@@ -121,7 +110,7 @@ function PrivateRoute({ render, ...rest }) {
         ) : (
           <Redirect
             to={{
-              pathname: '/sign_in',
+              pathname: "/sign_in",
               state: { from: location },
             }}
           />

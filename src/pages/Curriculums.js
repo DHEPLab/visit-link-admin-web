@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Axios from 'axios';
-import { Modal, Button, Space, Tooltip } from 'antd';
-import { InfoCircleFilled } from '@ant-design/icons';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Axios from "axios";
+import { Modal, Button, Space, Tooltip } from "antd";
+import { InfoCircleFilled } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 
-import { Gender } from '../constants/enums';
-import { useBoolState } from '../utils';
-import {
-  StatusTag,
-  WithPage,
-  ContentHeader,
-  ZebraTable,
-  SearchInput,
-  AssignModalTable,
-} from '../components/*';
+import { Gender } from "../constants/enums";
+import { useBoolState } from "../utils";
+import { StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModalTable } from "../components/*";
 
 function Curriculums({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
@@ -31,11 +24,11 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
       <ContentHeader title="大纲管理">
         <Space size="large">
           <SearchInput
-            onChange={(e) => onChangeSearch('search', e.target.value)}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
             className="master"
             placeholder="请输入大纲名称搜索"
           />
-          <Button type="primary" onClick={() => history.push('/curriculums/create')}>
+          <Button type="primary" onClick={() => history.push("/curriculums/create")}>
             创建新大纲
           </Button>
         </Space>
@@ -49,7 +42,7 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
           return {
             onClick: (event) => {
               // do noting when click other target
-              if (event.target.tagName === 'TD') {
+              if (event.target.tagName === "TD") {
                 history.push(`/curriculums/${record.id}`);
               }
             },
@@ -57,21 +50,21 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         }}
         columns={[
           {
-            title: '大纲状态',
-            dataIndex: 'published',
+            title: "大纲状态",
+            dataIndex: "published",
             width: 120,
-            align: 'center',
+            align: "center",
             render: (h) => <StatusTag value={h} />,
           },
           {
-            title: '大纲名称',
-            dataIndex: 'name',
+            title: "大纲名称",
+            dataIndex: "name",
           },
           {
-            title: '操作',
-            dataIndex: 'id',
+            title: "操作",
+            dataIndex: "id",
             width: 200,
-            align: 'center',
+            align: "center",
             render(id) {
               return (
                 <Button type="link" size="small" onClick={() => openBabiesModal(id)}>
@@ -83,11 +76,7 @@ function Curriculums({ loadData, onChangeSearch, ...props }) {
         ]}
       />
 
-      <PageCurriculumBabiesModal
-        curriculumId={curriculumId}
-        visible={visible}
-        onCancel={closeModal}
-      />
+      <PageCurriculumBabiesModal curriculumId={curriculumId} visible={visible} onCancel={closeModal} />
     </>
   );
 }
@@ -148,41 +137,41 @@ function CurriculumBabiesModal({
         rowKey="id"
         columns={[
           {
-            title: '宝宝姓名',
-            dataIndex: 'name',
+            title: "宝宝姓名",
+            dataIndex: "name",
             width: 100,
           },
           {
-            title: 'ID',
-            dataIndex: 'identity',
+            title: "ID",
+            dataIndex: "identity",
             width: 120,
           },
           {
-            title: '性别',
-            dataIndex: 'gender',
+            title: "性别",
+            dataIndex: "gender",
             render: (h) => Gender[h],
             width: 80,
           },
           {
-            title: '所在区域',
-            dataIndex: 'area',
+            title: "所在区域",
+            dataIndex: "area",
             width: 300,
           },
           {
-            title: '主照料人',
-            dataIndex: 'masterCarerName',
+            title: "主照料人",
+            dataIndex: "masterCarerName",
             width: 120,
           },
           {
-            title: '联系电话',
-            dataIndex: 'masterCarerPhone',
+            title: "联系电话",
+            dataIndex: "masterCarerPhone",
             width: 120,
           },
           {
-            title: '操作',
-            dataIndex: 'id',
+            title: "操作",
+            dataIndex: "id",
             width: 100,
-            align: 'center',
+            align: "center",
             render(id) {
               return (
                 <Button type="link" size="small" onClick={() => handleReleaseBaby(id)}>
@@ -202,18 +191,18 @@ function CurriculumBabiesModal({
         onFinish={handleAssign}
         columns={[
           {
-            title: '宝宝姓名',
-            dataIndex: 'name',
+            title: "宝宝姓名",
+            dataIndex: "name",
             width: 120,
           },
           {
-            title: 'ID',
-            dataIndex: 'identity',
+            title: "ID",
+            dataIndex: "identity",
             width: 100,
           },
           {
-            title: '所在区域',
-            dataIndex: 'area',
+            title: "所在区域",
+            dataIndex: "area",
             width: 300,
           },
         ]}
@@ -253,4 +242,4 @@ const Title = styled.div`
   }
 `;
 
-export default WithPage(Curriculums, '/admin/curriculums?sort=id,desc');
+export default WithPage(Curriculums, "/admin/curriculums?sort=id,desc");

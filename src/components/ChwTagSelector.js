@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Cascader } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Cascader } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
-import Pcas from '../constants/pcas-code.json';
-import TagSelect from './TagSelect';
+import Pcas from "../constants/pcas-code.json";
+import TagSelect from "./TagSelect";
 
 export default function ChwTagSelector({ onChange, ...props }) {
   // tmp cascader value
@@ -27,9 +27,9 @@ export default function ChwTagSelector({ onChange, ...props }) {
           options={Pcas}
           value={value}
           onChange={onChangeCascader}
-          fieldNames={{ label: 'name', value: 'name', children: 'children' }}
+          fieldNames={{ label: "name", value: "name", children: "children" }}
         >
-          <PlusCircleOutlined style={{ color: '#ff794f', outline: 'none' }} />
+          <PlusCircleOutlined style={{ color: "#ff794f", outline: "none" }} />
         </Cascader>
       </CascaderContainer>
     </Container>

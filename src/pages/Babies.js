@@ -1,44 +1,36 @@
-import React, { useEffect } from 'react';
-import Axios from 'axios';
-import moment from 'moment';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { useQueryParam, StringParam } from 'use-query-params';
+import React, { useEffect } from "react";
+import Axios from "axios";
+import moment from "moment";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import { useQueryParam, StringParam } from "use-query-params";
 
-import { Button, Space, Tabs } from 'antd';
+import { Button, Space, Tabs } from "antd";
 
-import { useBoolState } from '../utils';
-import { Gender, ActionFromApp } from '../constants/enums';
-import {
-  WithPage,
-  ContentHeader,
-  CardTabs,
-  ZebraTable,
-  BabyModalForm,
-  SearchInput,
-  StatusTag,
-} from '../components/*';
+import { useBoolState } from "../utils";
+import { Gender, ActionFromApp } from "../constants/enums";
+import { WithPage, ContentHeader, CardTabs, ZebraTable, BabyModalForm, SearchInput, StatusTag } from "../components/*";
 
 const { TabPane } = Tabs;
 
 function formatDate(datetime) {
-  return moment(datetime).format('YYYY-MM-DD');
+  return moment(datetime).format("YYYY-MM-DD");
 }
 
 export default function Babies() {
   const history = useHistory();
-  const [tab, setTab] = useQueryParam('tab', StringParam);
+  const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
 
   useEffect(() => {
-    if (!tab) setTab('approved');
+    if (!tab) setTab("approved");
   }, [tab, setTab]);
 
   function handleCreateBaby(values) {
-    values.area = values.area.join('/');
+    values.area = values.area.join("/");
     values.birthday = values.birthday && formatDate(values.birthday);
     values.edc = values.edc && formatDate(values.edc);
-    Axios.post('/admin/babies', values).then(() => {
+    Axios.post("/admin/babies", values).then(() => {
       refresh();
       closeBaby();
     });
@@ -73,18 +65,18 @@ export default function Babies() {
         visible={visible}
         onFinish={handleCreateBaby}
         onCancel={closeBaby}
-        initialValues={{ stage: 'EDC', gender: 'UNKNOWN' }}
+        initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
       />
     </>
   );
 }
 
-const PageApproved = WithPage(Approved, '/admin/babies/approved', {}, false);
-const PageUnreviewed = WithPage(Unreviewed, '/admin/babies/unreviewed', {}, false);
+const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);
+const PageUnreviewed = WithPage(Unreviewed, "/admin/babies/unreviewed", {}, false);
 
 function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
   useEffect(() => {
-    tab === 'unreviewed' && loadData();
+    tab === "unreviewed" && loadData();
   }, [tab, loadData]);
 
   return (
@@ -94,7 +86,7 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
           <SearchInput
             className="master"
             placeholder="请输入宝宝姓名、ID或所在区域搜索"
-            onChange={(e) => onChangeSearch('search', e.target.value)}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
           />
         </Space>
       </SearchBar>
@@ -109,9 +101,9 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
         })}
         columns={[
           {
-            title: '修改日期',
-            dataIndex: 'lastModifiedAt',
-            align: 'center',
+            title: "修改日期",
+            dataIndex: "lastModifiedAt",
+            align: "center",
             width: 220,
             render: (h, baby) => {
               return (
@@ -123,35 +115,35 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
             },
           },
           {
-            title: '宝宝姓名',
-            dataIndex: 'name',
+            title: "宝宝姓名",
+            dataIndex: "name",
             width: 120,
           },
           {
-            title: 'ID',
+            title: "ID",
             width: 200,
-            dataIndex: 'identity',
-            render: (h) => h || '待核准',
+            dataIndex: "identity",
+            render: (h) => h || "待核准",
           },
           {
-            title: '性别',
+            title: "性别",
             width: 80,
-            dataIndex: 'gender',
+            dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: '所在区域',
-            dataIndex: 'area',
+            title: "所在区域",
+            dataIndex: "area",
             width: 300,
           },
           {
-            title: '负责社区工作者',
-            dataIndex: 'chw',
+            title: "负责社区工作者",
+            dataIndex: "chw",
             width: 150,
           },
           {
-            title: '已上课堂',
-            dataIndex: 'visitCount',
+            title: "已上课堂",
+            dataIndex: "visitCount",
             width: 150,
             render: (h) => `${h} 节课堂`,
           },
@@ -161,16 +153,15 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
   );
 }
 
-
 const Tag = styled.span`
-  ${props => {
+  ${(props) => {
     switch (props.actionFromApp) {
       case "CREATE":
-        return `color: #ff794f; background: #ffede2`
+        return `color: #ff794f; background: #ffede2`;
       case "MODIFY":
-        return `color: #FF5555; background: #fff1f0`
+        return `color: #FF5555; background: #fff1f0`;
       default:
-        return `color: #97979C; background: #EEEEEE`
+        return `color: #97979C; background: #EEEEEE`;
     }
   }};
   border-radius: 4px;
@@ -180,10 +171,9 @@ const Tag = styled.span`
   display: inline-block;
 `;
 
-
 function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
-    tab === 'approved' && loadData();
+    tab === "approved" && loadData();
   }, [tab, loadData]);
 
   return (
@@ -193,7 +183,7 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
           <SearchInput
             className="master"
             placeholder="请输入宝宝姓名、ID或所在区域搜索"
-            onChange={(e) => onChangeSearch('search', e.target.value)}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
           />
         </Space>
       </SearchBar>
@@ -208,47 +198,47 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
         })}
         columns={[
           {
-            title: '宝宝状态',
-            dataIndex: 'deleted',
-            align: 'center',
+            title: "宝宝状态",
+            dataIndex: "deleted",
+            align: "center",
             width: 100,
             render: (h) => <StatusTag value={!h} trueText="正常" falseText="注销" />,
           },
           {
-            title: '宝宝姓名',
-            dataIndex: 'name',
+            title: "宝宝姓名",
+            dataIndex: "name",
             width: 120,
           },
           {
-            title: 'ID',
+            title: "ID",
             width: 200,
-            dataIndex: 'identity',
+            dataIndex: "identity",
           },
           {
-            title: '性别',
+            title: "性别",
             width: 80,
-            dataIndex: 'gender',
+            dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: '所在区域',
-            dataIndex: 'area',
+            title: "所在区域",
+            dataIndex: "area",
             width: 300,
           },
           {
-            title: '负责社区工作者',
-            dataIndex: 'chw',
+            title: "负责社区工作者",
+            dataIndex: "chw",
             width: 150,
           },
           {
-            title: '已上课堂',
-            dataIndex: 'visitCount',
+            title: "已上课堂",
+            dataIndex: "visitCount",
             width: 150,
             render: (h) => `${h} 节课堂`,
           },
           {
-            title: '当前进度',
-            dataIndex: 'currentLessonName',
+            title: "当前进度",
+            dataIndex: "currentLessonName",
             width: 200,
           },
         ]}

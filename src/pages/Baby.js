@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import Axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
-import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from "react";
+import moment from "moment";
+import Axios from "axios";
+import { useParams, useHistory } from "react-router-dom";
+import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
-import Rules from '../constants/rules';
-import Visit from '../utils/visit';
-import { useFetch, useBoolState } from '../utils';
-import { Gender, BabyStage, FamilyTies, FeedingPattern, VisitStatus } from '../constants/enums';
+import Rules from "../constants/rules";
+import Visit from "../utils/visit";
+import { useFetch, useBoolState } from "../utils";
+import { Gender, BabyStage, FamilyTies, FeedingPattern, VisitStatus } from "../constants/enums";
 import {
   Card,
   ZebraTable,
@@ -21,7 +21,7 @@ import {
   BabyReviewBar,
   AssignModalTable,
   WithPage,
-} from '../components/*';
+} from "../components/*";
 
 export default function Baby() {
   const { id } = useParams();
@@ -39,16 +39,16 @@ export default function Baby() {
   const initialValues = () => ({
     ...baby,
     chw: null,
-    area: (baby.area && baby.area.split('/')) || [],
+    area: (baby.area && baby.area.split("/")) || [],
     edc: baby.edc && moment(baby.edc),
     birthday: baby.birthday && moment(baby.birthday),
   });
 
   function handleChangeBaby(values) {
-    values.area = values.area.join('/');
+    values.area = values.area.join("/");
     // format birthday and edc to string date
-    values.birthday = values.birthday && moment(values.birthday).format('YYYY-MM-DD');
-    values.edc = values.edc && moment(values.edc).format('YYYY-MM-DD');
+    values.birthday = values.birthday && moment(values.birthday).format("YYYY-MM-DD");
+    values.edc = values.edc && moment(values.edc).format("YYYY-MM-DD");
     Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
@@ -57,13 +57,13 @@ export default function Baby() {
 
   function handleApprove() {
     switch (actionFromApp) {
-      case 'CREATE':
+      case "CREATE":
         openApproveCreateModal();
         break;
-      case 'MODIFY':
+      case "MODIFY":
         openApproveModifyModal();
         break;
-      case 'DELETE':
+      case "DELETE":
         openApproveDeleteModal();
         break;
       default:
@@ -99,7 +99,7 @@ export default function Baby() {
   }
 
   function handleChangeChw(selected) {
-    if (selected.length === 0) message.warning('请选择一个社区工作者');
+    if (selected.length === 0) message.warning("请选择一个社区工作者");
     const [userId] = selected;
     Axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
       closeChangeChwModal();
@@ -115,7 +115,7 @@ export default function Baby() {
         icon="iconbaby-primary"
         menu="宝宝管理"
         title={baby.name}
-        role={`宝宝ID ${baby.identity || '待核准'}`}
+        role={`宝宝ID ${baby.identity || "待核准"}`}
         extra={
           approved &&
           !deleted && (
@@ -153,7 +153,7 @@ export default function Baby() {
         extra={
           !deleted && (
             <Button type="shade" onClick={openChangeChwModal}>
-              {chw?.id ? '更改' : '分配'}人员
+              {chw?.id ? "更改" : "分配"}人员
             </Button>
           )
         }
@@ -174,19 +174,19 @@ export default function Baby() {
         title="选择社区工作者"
         columns={[
           {
-            title: '姓名',
-            dataIndex: ['user', 'realName'],
+            title: "姓名",
+            dataIndex: ["user", "realName"],
             width: 120,
           },
           {
-            title: 'ID',
-            dataIndex: ['user', 'chw', 'identity'],
+            title: "ID",
+            dataIndex: ["user", "chw", "identity"],
             width: 100,
           },
           {
-            title: '所在区域',
-            dataIndex: ['user', 'chw', 'tags'],
-            render: (tags) => tags && tags.join(', '),
+            title: "所在区域",
+            dataIndex: ["user", "chw", "tags"],
+            render: (tags) => tags && tags.join(", "),
             width: 300,
           },
         ]}
@@ -207,12 +207,12 @@ export default function Baby() {
         <StaticField label="成长阶段">
           {BabyStage[baby.stage]} {baby.days}天
         </StaticField>
-        {baby.stage === 'EDC' ? (
-          <StaticField label="预产期">{moment(baby.edc).format('YYYY-MM-DD')}</StaticField>
+        {baby.stage === "EDC" ? (
+          <StaticField label="预产期">{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
         ) : (
           <>
-            <StaticField label="出生日期">{moment(baby.birthday).format('YYYY-MM-DD')}</StaticField>
-            <StaticField label="辅食">{baby.assistedFood ? '已添加' : '未添加'}</StaticField>
+            <StaticField label="出生日期">{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
+            <StaticField label="辅食">{baby.assistedFood ? "已添加" : "未添加"}</StaticField>
             <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
           </>
         )}
@@ -231,13 +231,13 @@ export default function Baby() {
         onFinish={handleChangeBaby}
         initialValues={initialValues()}
         // 一旦进入婴幼期则不可修改回待产期
-        disableStage={baby.stage === 'BIRTH'}
+        disableStage={baby.stage === "BIRTH"}
       />
     </>
   );
 }
 
-const PageAssignChwModalTable = WithPage(AssignModalTable, '/admin/users/chw');
+const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
   return (
@@ -344,7 +344,7 @@ function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label="宝宝ID" name="identity" rules={Rules.Required}>
-          <Input autoFocus style={{ width: '100%' }} placeholder="请输入宝宝的ID" />
+          <Input autoFocus style={{ width: "100%" }} placeholder="请输入宝宝的ID" />
         </Form.Item>
       </Form>
     </Modal>
@@ -362,27 +362,27 @@ function Visits({ babyId }) {
         pagination={false}
         columns={[
           {
-            title: '家访状态',
-            dataIndex: 'status',
+            title: "家访状态",
+            dataIndex: "status",
             width: 140,
-            align: 'center',
+            align: "center",
             render: (h) => VisitStatus[h],
           },
           {
-            title: '家访时间',
-            dataIndex: 'visitTime',
+            title: "家访时间",
+            dataIndex: "visitTime",
             width: 280,
             render: (h) => Visit.formatDateTimeCN(h),
           },
           {
-            title: '课堂内容',
-            dataIndex: 'lesson',
+            title: "课堂内容",
+            dataIndex: "lesson",
             width: 300,
-            render: (h) => h?.modules?.map((m) => m.label).join(', '),
+            render: (h) => h?.modules?.map((m) => m.label).join(", "),
           },
           {
-            title: '过期/未完成原因',
-            dataIndex: 'remark',
+            title: "过期/未完成原因",
+            dataIndex: "remark",
           },
         ]}
       />
@@ -406,15 +406,15 @@ function Carers({ babyId, deleted }) {
   };
 
   async function handleDelete({ id, master }) {
-    if (master) return message.warn('主看护人不可删除，请更换主看护人后进行此操作');
+    if (master) return message.warn("主看护人不可删除，请更换主看护人后进行此操作");
     await Axios.delete(`/admin/carers/${id}`);
     refresh();
   }
 
   async function submit(values) {
     const { id } = carer;
-    const method = id ? 'put' : 'post';
-    await Axios[method](`/admin/carers${id ? `/${id}` : ''}`, {
+    const method = id ? "put" : "post";
+    await Axios[method](`/admin/carers${id ? `/${id}` : ""}`, {
       baby: {
         id: babyId,
       },
@@ -425,16 +425,13 @@ function Carers({ babyId, deleted }) {
   }
 
   function onFinish(values) {
-    if (
-      values.master &&
-      dataSource.filter((item) => item.id !== carer.id).find((item) => item.master)
-    ) {
+    if (values.master && dataSource.filter((item) => item.id !== carer.id).find((item) => item.master)) {
       Modal.confirm({
-        title: '确认',
+        title: "确认",
         icon: <ExclamationCircleOutlined />,
-        content: '设置当前看护人为主看护人时会替换原来的看护人，是否继续？',
-        cancelText: '再想想',
-        okText: '继续',
+        content: "设置当前看护人为主看护人时会替换原来的看护人，是否继续？",
+        cancelText: "再想想",
+        okText: "继续",
         onOk: () => submit(values),
       });
       return;
@@ -466,7 +463,7 @@ function Carers({ babyId, deleted }) {
     >
       <ModalForm
         labelWidth={120}
-        title={`${carer.id ? '编辑' : '新增'}看护人`}
+        title={`${carer.id ? "编辑" : "新增"}看护人`}
         initialValues={carer}
         visible={visible}
         onCancel={safeCloseCarer}
@@ -490,13 +487,11 @@ function Carers({ babyId, deleted }) {
               validator: (_, value) => {
                 if (
                   !value ||
-                  !dataSource
-                    .filter((item) => item.id !== carer.id)
-                    .find((item) => item.familyTies === value)
+                  !dataSource.filter((item) => item.id !== carer.id).find((item) => item.familyTies === value)
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject('亲属关系不能重复选择');
+                return Promise.reject("亲属关系不能重复选择");
               },
             }),
           ]}
@@ -517,36 +512,36 @@ function Carers({ babyId, deleted }) {
         pagination={false}
         columns={[
           {
-            title: '主看护人',
-            dataIndex: 'master',
+            title: "主看护人",
+            dataIndex: "master",
             width: 140,
-            align: 'center',
+            align: "center",
             render(h) {
-              return h ? '是' : '否';
+              return h ? "是" : "否";
             },
           },
           {
-            title: '看护人姓名',
-            dataIndex: 'name',
+            title: "看护人姓名",
+            dataIndex: "name",
           },
           {
-            title: '亲属关系',
-            dataIndex: 'familyTies',
+            title: "亲属关系",
+            dataIndex: "familyTies",
             render: (h) => FamilyTies[h],
           },
           {
-            title: '联系电话',
-            dataIndex: 'phone',
+            title: "联系电话",
+            dataIndex: "phone",
           },
           {
-            title: '微信号',
-            dataIndex: 'wechat',
+            title: "微信号",
+            dataIndex: "wechat",
           },
           {
-            title: '操作',
-            dataIndex: 'id',
+            title: "操作",
+            dataIndex: "id",
             width: 200,
-            align: 'center',
+            align: "center",
             render(_, record) {
               return (
                 !deleted && (

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Modal, Space, Button, Table } from 'antd';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Modal, Space, Button, Table } from "antd";
 
-import SearchInput from './SearchInput';
+import SearchInput from "./SearchInput";
 
 export default function AssignModalTable({
   title,
@@ -20,7 +20,7 @@ export default function AssignModalTable({
   useEffect(() => {
     if (visible) {
       setSelectedRowKeys([]);
-      if (refreshOnVisible) onChangeSearch('search', '');
+      if (refreshOnVisible) onChangeSearch("search", "");
     }
     // eslint-disable-next-line
   }, [visible]);
@@ -32,7 +32,7 @@ export default function AssignModalTable({
       style={{ top: 20 }}
       width={600}
       footer={
-        <Space size="large" style={{ marginTop: '30px' }}>
+        <Space size="large" style={{ marginTop: "30px" }}>
           <Button ghost type="primary" size="large" onClick={onCancel}>
             放弃
           </Button>
@@ -48,8 +48,8 @@ export default function AssignModalTable({
     >
       <SearchBar>
         <SearchInput
-          style={{ width: '100%' }}
-          onChange={(e) => onChangeSearch('search', e.target.value)}
+          style={{ width: "100%" }}
+          onChange={(e) => onChangeSearch("search", e.target.value)}
           placeholder="请输入姓名、ID或所在区域搜索"
         />
       </SearchBar>

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Button, Space } from 'antd';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import { Button, Space } from "antd";
+import { useHistory } from "react-router-dom";
 
-import { ModuleTopic } from '../constants/enums';
-import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from '../components/*';
+import { ModuleTopic } from "../constants/enums";
+import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components/*";
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
@@ -13,11 +13,11 @@ function Components({ loadData, onChangeSearch, ...props }) {
       <ContentHeader title="模块管理">
         <Space size="large">
           <SearchInput
-            onChange={(e) => onChangeSearch('search', e.target.value)}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
             className="master"
             placeholder="请输入模块名称搜索"
           />
-          <Button type="primary" onClick={() => history.push('/modules/create')}>
+          <Button type="primary" onClick={() => history.push("/modules/create")}>
             创建新模块
           </Button>
         </Space>
@@ -36,24 +36,24 @@ function Components({ loadData, onChangeSearch, ...props }) {
         }}
         columns={[
           {
-            title: '模块状态',
-            dataIndex: 'published',
+            title: "模块状态",
+            dataIndex: "published",
             width: 120,
-            align: 'center',
+            align: "center",
             render: (h) => <StatusTag value={h} />,
           },
           {
-            title: '模块编号',
-            dataIndex: 'number',
+            title: "模块编号",
+            dataIndex: "number",
             width: 150,
           },
           {
-            title: '模块名称',
-            dataIndex: 'name',
+            title: "模块名称",
+            dataIndex: "name",
           },
           {
-            title: '模块主题',
-            dataIndex: 'topic',
+            title: "模块主题",
+            dataIndex: "topic",
             render: (h) => ModuleTopic[h],
           },
         ]}
@@ -62,4 +62,4 @@ function Components({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Components, '/admin/modules');
+export default WithPage(Components, "/admin/modules");

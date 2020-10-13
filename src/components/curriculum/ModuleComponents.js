@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { FieldArray } from 'formik';
-import { Space, Button } from 'antd';
+import { FieldArray } from "formik";
+import { Space, Button } from "antd";
 
-import Factory from './factory';
-import { ComponentField } from './*';
-import { Iconfont, Card } from '../*';
+import Factory from "./factory";
+import { ComponentField } from "./*";
+import { Iconfont, Card } from "../*";
 
 export default function ModuleComponents({ value, readonly, stickyTop }) {
   return (
@@ -52,10 +52,7 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
                         <Iconfont type="iconswitch" />
                         添加选择组件
                       </Button>
-                      <PageButton
-                        type="primary"
-                        onClick={() => helpers.push(Factory.createPageFooter())}
-                      >
+                      <PageButton type="primary" onClick={() => helpers.push(Factory.createPageFooter())}>
                         添加翻页分割组件
                       </PageButton>
                     </Space>

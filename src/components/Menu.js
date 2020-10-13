@@ -1,13 +1,13 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
 
-import Iconfont from './Iconfont';
+import Iconfont from "./Iconfont";
 
 export default function Menu() {
   const { user } = useSelector((state) => state.users);
-  const isAdmin = user?.role === 'ROLE_ADMIN';
+  const isAdmin = user?.role === "ROLE_ADMIN";
 
   return (
     <Container>
@@ -36,7 +36,7 @@ export default function Menu() {
 function ActivableLink({ to, icon, title }) {
   const location = useLocation();
   const active = location.pathname.includes(to);
-  const className = active && 'active';
+  const className = active && "active";
 
   return (
     <StyledLink to={to} className={className}>

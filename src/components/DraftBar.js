@@ -1,9 +1,9 @@
-import React from 'react';
-import moment from 'moment';
-import styled from 'styled-components';
-import { Space, Button } from 'antd';
+import React from "react";
+import moment from "moment";
+import styled from "styled-components";
+import { Space, Button } from "antd";
 
-import { DeleteConfirmModal } from './*';
+import { DeleteConfirmModal } from "./*";
 
 export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt }) {
   return (
@@ -11,13 +11,9 @@ export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt
       <Title>{title}</Title>
       <Flex>
         <Label>编辑日期：</Label>
-        <Date>{moment(lastModifiedDraftAt).format('YYYY/MM/DD')}</Date>
+        <Date>{moment(lastModifiedDraftAt).format("YYYY/MM/DD")}</Date>
         <Space size="large">
-          <DeleteConfirmModal
-            title="删除草稿"
-            content="删除草稿后将无法恢复是否继续？"
-            onConfirm={onRemove}
-          >
+          <DeleteConfirmModal title="删除草稿" content="删除草稿后将无法恢复是否继续？" onConfirm={onRemove}>
             <DeleteButton ghost>删除草稿</DeleteButton>
           </DeleteConfirmModal>
           <EditButton ghost type="primary" onClick={onClick}>

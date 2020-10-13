@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
-import styled from 'styled-components';
-import { Form, Input, Button } from 'antd';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import Axios from "axios";
+import styled from "styled-components";
+import { Form, Input, Button } from "antd";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import Rules from '../constants/rules';
-import { applyToken } from '../utils/token';
-import { apiAccountProfile } from '../actions';
-import SignInBg from '../assets/signin-bg.png';
-import { Message } from '../components/*';
+import Rules from "../constants/rules";
+import { applyToken } from "../utils/token";
+import { apiAccountProfile } from "../actions";
+import SignInBg from "../assets/signin-bg.png";
+import { Message } from "../components/*";
 
 export default function SignIn() {
   const history = useHistory();
@@ -22,14 +22,14 @@ export default function SignIn() {
   async function handleSignIn(values) {
     setError(false);
     try {
-      const auth = await Axios.post('/admin/authenticate', values);
+      const auth = await Axios.post("/admin/authenticate", values);
       applyToken(auth.data.idToken);
 
-      const profile = await Axios.get('/api/account/profile');
+      const profile = await Axios.get("/api/account/profile");
       dispatch(apiAccountProfile(profile));
 
-      Message.success('登录成功', '您已成功登录系统', 1);
-      history.push('/');
+      Message.success("登录成功", "您已成功登录系统", 1);
+      history.push("/");
     } catch {
       setError(true);
     }
@@ -38,18 +38,13 @@ export default function SignIn() {
   return (
     <AbsoluteContainer>
       <Container>
-        <Logo src={require('../assets/logo.png')} />
+        <Logo src={require("../assets/logo.png")} />
         <Form form={form} onFinish={handleSignIn}>
           <Form.Item label="账户名" name="username" rules={Rules.Required} labelCol={{ span: 0 }}>
             <Input className="master" size="large" placeholder="请输入账户名" autoFocus />
           </Form.Item>
           <Form.Item label="账户密码" name="password" rules={Rules.Required} labelCol={{ span: 0 }}>
-            <Input.Password
-              className="master"
-              size="large"
-              placeholder="请输入账户密码"
-              onPressEnter={form.submit}
-            />
+            <Input.Password className="master" size="large" placeholder="请输入账户密码" onPressEnter={form.submit} />
           </Form.Item>
         </Form>
         <ForgetPassword>
@@ -62,7 +57,7 @@ export default function SignIn() {
           size="large"
           type="shade"
           onClick={form.submit}
-          loading={networks['/admin/authenticate'] > 0 || networks['/api/account/profile'] > 0}
+          loading={networks["/admin/authenticate"] > 0 || networks["/api/account/profile"] > 0}
         >
           登录
         </Button>

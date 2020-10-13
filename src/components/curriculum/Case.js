@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { Button, Cascader, message } from 'antd';
-import { FieldArray } from 'formik';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { Button, Cascader, message } from "antd";
+import { FieldArray } from "formik";
 
-import Factory from './factory';
-import { Container, ComponentField } from './*';
-import { GhostInput } from '../*';
+import Factory from "./factory";
+import { Container, ComponentField } from "./*";
+import { GhostInput } from "../*";
 
 export default function Case({ name, value, index, onChange, ...props }) {
   // temporarily stores the text value，modify the formik value on blur event to improve performance
@@ -64,8 +64,8 @@ export default function Case({ name, value, index, onChange, ...props }) {
           }
 
           function handleAddSwitch() {
-            if (name.split('.cases').length > 2) {
-              message.warn('选项组件嵌套层级最多为3级');
+            if (name.split(".cases").length > 2) {
+              message.warn("选项组件嵌套层级最多为3级");
               return;
             }
             helpers.push(Factory.createSwitch());

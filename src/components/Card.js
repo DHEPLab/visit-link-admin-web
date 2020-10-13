@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tooltip } from 'antd';
-import { InfoCircleFilled } from '@ant-design/icons';
+import React from "react";
+import styled from "styled-components";
+import { Tooltip } from "antd";
+import { InfoCircleFilled } from "@ant-design/icons";
 
 export default function ({ title, tooltip, children, extra, noPadding }) {
   return (
@@ -49,5 +49,5 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
-  ${({ noPadding }) => !noPadding && 'padding: 30px;'}
+  ${({ noPadding }) => !noPadding && "padding: 30px;"}
 `;

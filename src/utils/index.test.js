@@ -1,15 +1,15 @@
-import Axios from 'axios';
-import * as utils from './index';
-import { wait } from '@testing-library/react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import Axios from "axios";
+import * as utils from "./index";
+import { wait } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks";
 
-jest.mock('axios');
+jest.mock("axios");
 
-it('should fetch resource', async () => {
+it("should fetch resource", async () => {
   Axios.get.mockResolvedValue({
     data: 2,
   });
-  const { result } = renderHook(() => utils.useFetch('/api/fake'));
+  const { result } = renderHook(() => utils.useFetch("/api/fake"));
   await act(async () => {
     await wait();
     const [data] = result.current;
@@ -17,12 +17,12 @@ it('should fetch resource', async () => {
   });
 });
 
-it('should manual fetch resource', async () => {
+it("should manual fetch resource", async () => {
   Axios.get.mockResolvedValue({
     data: 3,
   });
-  const { result } = renderHook(() => utils.useManualFetch('/api/fake'));
-  const [_, load] = result.current;
+  const { result } = renderHook(() => utils.useManualFetch("/api/fake"));
+  const [, load] = result.current;
   load();
   await act(async () => {
     await wait();
@@ -31,9 +31,9 @@ it('should manual fetch resource', async () => {
   });
 });
 
-it('should use bool state', async () => {
+it("should use bool state", async () => {
   const { result } = renderHook(() => utils.useBoolState());
-  const [_, setTrue, setFalse] = result.current;
+  const [, setTrue, setFalse] = result.current;
   act(() => {
     setTrue();
   });

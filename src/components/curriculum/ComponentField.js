@@ -1,21 +1,21 @@
-import React from 'react';
-import { FastField } from 'formik';
+import React from "react";
+import { FastField } from "formik";
 
-import { Text, Media, Switch, PageFooter } from './*';
+import { Text, Media, Switch, PageFooter } from "./*";
 
 export default function ComponentField({ name, component, index, ...props }) {
   let As;
   switch (component.type) {
-    case 'Text':
+    case "Text":
       As = Text;
       break;
-    case 'Media':
+    case "Media":
       As = Media;
       break;
-    case 'Switch':
+    case "Switch":
       As = Switch;
       break;
-    case 'PageFooter':
+    case "PageFooter":
       As = PageFooter;
       break;
     default:

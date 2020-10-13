@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Button, Space } from 'antd';
-import { Iconfont } from '../*';
+import React from "react";
+import styled from "styled-components";
+import { Button, Space } from "antd";
+import { Iconfont } from "../*";
 
 export default function Container({
   readonly,
@@ -35,7 +35,7 @@ export default function Container({
         <StyledContainer nested={nested}>
           <TitleContainer>
             <Title>
-              {icon && <Iconfont type={icon} style={{ marginRight: '8px' }} />}
+              {icon && <Iconfont type={icon} style={{ marginRight: "8px" }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
             </Title>
@@ -110,6 +110,6 @@ const Title = styled.div`
 `;
 
 const Body = styled.div`
-  ${({ noPadding }) => !noPadding && 'padding: 10px;'}
-  ${({ nested }) => nested && 'margin-bottom: -20px;'}
+  ${({ noPadding }) => !noPadding && "padding: 10px;"}
+  ${({ nested }) => nested && "margin-bottom: -20px;"}
 `;

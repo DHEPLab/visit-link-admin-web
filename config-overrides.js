@@ -1,4 +1,4 @@
-const { override, addLessLoader, addBabelPlugin } = require('customize-cra');
+const { override, addLessLoader, addBabelPlugin } = require("customize-cra");
 
 module.exports = function (config) {
   override(
@@ -7,7 +7,7 @@ module.exports = function (config) {
         javascriptEnabled: true,
       },
     }),
-    addBabelPlugin('wildcard')
+    addBabelPlugin("wildcard")
   )(config);
   return config;
 };

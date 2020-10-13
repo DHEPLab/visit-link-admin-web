@@ -1,34 +1,26 @@
-import React, { useEffect } from 'react';
-import Axios from 'axios';
-import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Form, Button, Tabs, Radio, Input } from 'antd';
-import { useQueryParam, StringParam } from 'use-query-params';
+import React, { useEffect } from "react";
+import Axios from "axios";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Form, Button, Tabs, Radio, Input } from "antd";
+import { useQueryParam, StringParam } from "use-query-params";
 
-import Rules from '../constants/rules';
-import { useBoolState } from '../utils';
-import { Role } from '../constants/enums';
-import {
-  ModalForm,
-  WithPage,
-  ContentHeader,
-  CardTabs,
-  ZebraTable,
-  SearchInput,
-  ChwTagSelector,
-} from '../components/*';
+import Rules from "../constants/rules";
+import { useBoolState } from "../utils";
+import { Role } from "../constants/enums";
+import { ModalForm, WithPage, ContentHeader, CardTabs, ZebraTable, SearchInput, ChwTagSelector } from "../components/*";
 
 const { TabPane } = Tabs;
 export default function Users() {
   const history = useHistory();
-  const [tab, setTab] = useQueryParam('tab', StringParam);
+  const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openUser, closeUser] = useBoolState();
   const { user } = useSelector((state) => state.users);
-  const isAdmin = user?.role === 'ROLE_ADMIN';
+  const isAdmin = user?.role === "ROLE_ADMIN";
 
   useEffect(() => {
-    if (!tab) setTab('chw');
+    if (!tab) setTab("chw");
   }, [tab, setTab]);
 
   // change tab to refresh table
@@ -39,7 +31,7 @@ export default function Users() {
   }
 
   function handleCreateUser(value) {
-    Axios.post('/admin/users', value).then(() => {
+    Axios.post("/admin/users", value).then(() => {
       refresh();
       closeUser();
     });
@@ -76,7 +68,7 @@ export default function Users() {
         visible={visible}
         onCancel={closeUser}
         onFinish={handleCreateUser}
-        initialValues={{ role: 'ROLE_CHW' }}
+        initialValues={{ role: "ROLE_CHW" }}
       >
         <h3>用户信息</h3>
         <Form.Item label="权限" name="role" rules={Rules.Required}>
@@ -84,7 +76,7 @@ export default function Users() {
             {Object.keys(Role)
               .filter((key) => {
                 if (isAdmin) return true;
-                return key === 'ROLE_CHW';
+                return key === "ROLE_CHW";
               })
               .map((key) => (
                 <Radio key={key} value={key}>
@@ -99,12 +91,12 @@ export default function Users() {
         <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
           {({ getFieldValue }) => (
             <>
-              {getFieldValue('role') === 'ROLE_CHW' && (
+              {getFieldValue("role") === "ROLE_CHW" && (
                 <>
-                  <Form.Item label="ID" name={['chw', 'identity']} rules={Rules.Required}>
+                  <Form.Item label="ID" name={["chw", "identity"]} rules={Rules.Required}>
                     <Input />
                   </Form.Item>
-                  <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
+                  <Form.Item label="所在区域" name={["chw", "tags"]} rules={Rules.Area}>
                     <ChwTagSelector />
                   </Form.Item>
                 </>
@@ -127,21 +119,21 @@ export default function Users() {
   );
 }
 
-const PageCHW = WithPage(CHW, '/admin/users/chw', {}, false);
-const PageSupervisor = WithPage(Supervisor, '/admin/users/supervisor', {}, false);
-const PageAdmin = WithPage(Admin, '/admin/users/admin?sort=id,desc', {}, false);
+const PageCHW = WithPage(CHW, "/admin/users/chw", {}, false);
+const PageSupervisor = WithPage(Supervisor, "/admin/users/supervisor", {}, false);
+const PageAdmin = WithPage(Admin, "/admin/users/admin?sort=id,desc", {}, false);
 
 function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
   useEffect(() => {
-    tab === 'chw' && loadData();
+    tab === "chw" && loadData();
   }, [tab, loadData]);
 
   return (
     <div>
       <ChwBar>
         <SearchInput
-          style={{ width: '420px' }}
-          onChange={(e) => onChangeSearch('search', e.target.value)}
+          style={{ width: "420px" }}
+          onChange={(e) => onChangeSearch("search", e.target.value)}
           placeholder="请输入社区工作者姓名、ID或所在区域搜索"
         />
         {/* <Button ghost type="primary">
@@ -156,26 +148,26 @@ function CHW({ tab, history, loadData, onChangeSearch, ...props }) {
         columns={[
           realName,
           {
-            title: 'ID',
+            title: "ID",
             width: 150,
-            dataIndex: ['user', 'chw', 'identity'],
+            dataIndex: ["user", "chw", "identity"],
           },
           {
-            title: '所在区域',
+            title: "所在区域",
             width: 350,
-            dataIndex: ['user', 'chw', 'tags'],
-            render: (tags) => tags && tags.join(', '),
+            dataIndex: ["user", "chw", "tags"],
+            render: (tags) => tags && tags.join(", "),
           },
           phone,
           {
-            title: '督导员',
+            title: "督导员",
             width: 120,
-            dataIndex: ['user', 'chw', 'supervisor', 'realName'],
+            dataIndex: ["user", "chw", "supervisor", "realName"],
           },
           {
-            title: '负责宝宝',
+            title: "负责宝宝",
             width: 100,
-            dataIndex: 'babyCount',
+            dataIndex: "babyCount",
             render: (h) => `${h} 位`,
           },
           username,
@@ -198,7 +190,7 @@ const ChwBar = styled.div`
 
 function Supervisor({ tab, history, loadData, ...props }) {
   useEffect(() => {
-    tab === 'supervisor' && loadData();
+    tab === "supervisor" && loadData();
   }, [tab, loadData]);
 
   return (
@@ -212,8 +204,8 @@ function Supervisor({ tab, history, loadData, ...props }) {
           realName,
           phone,
           {
-            title: '负责社区工作者',
-            dataIndex: 'chwCount',
+            title: "负责社区工作者",
+            dataIndex: "chwCount",
             width: 200,
             render: (h) => `${h} 位`,
           },
@@ -226,7 +218,7 @@ function Supervisor({ tab, history, loadData, ...props }) {
 
 function Admin({ tab, history, loadData, ...props }) {
   useEffect(() => {
-    tab === 'admin' && loadData();
+    tab === "admin" && loadData();
   }, [tab, loadData]);
 
   return (
@@ -237,9 +229,9 @@ function Admin({ tab, history, loadData, ...props }) {
         className="clickable"
         onRow={(record) => onRow(history, record.id)}
         columns={[
-          { ...realName, dataIndex: 'realName' },
-          { ...phone, dataIndex: 'phone' },
-          { ...username, dataIndex: 'username' },
+          { ...realName, dataIndex: "realName" },
+          { ...phone, dataIndex: "phone" },
+          { ...username, dataIndex: "username" },
         ]}
       />
     </div>
@@ -247,21 +239,21 @@ function Admin({ tab, history, loadData, ...props }) {
 }
 
 const realName = {
-  title: '姓名',
-  align: 'center',
+  title: "姓名",
+  align: "center",
   width: 100,
-  dataIndex: ['user', 'realName'],
+  dataIndex: ["user", "realName"],
 };
 
 const phone = {
-  title: '联系电话',
+  title: "联系电话",
   width: 200,
-  dataIndex: ['user', 'phone'],
+  dataIndex: ["user", "phone"],
 };
 
 const username = {
-  title: '账户名称',
-  dataIndex: ['user', 'username'],
+  title: "账户名称",
+  dataIndex: ["user", "username"],
   width: 200,
 };
 

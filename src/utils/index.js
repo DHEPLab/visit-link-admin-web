@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import Axios from 'axios';
+import { useState, useEffect } from "react";
+import Axios from "axios";
 
 export function useFetch(url, params = {}, initialState = {}) {
   const [data, setData] = useState(initialState);
@@ -34,7 +34,7 @@ export function useManualFetch(url, params = {}, initialState = {}) {
 
 export function fileFormat(file) {
   if (!file.name) return;
-  const array = file.name.split('.');
+  const array = file.name.split(".");
   return array[array.length - 1];
 }
 
@@ -51,5 +51,5 @@ export function useBoolState(initialState = false) {
 
 // return file path without query params
 export function cleanQueryParams(path) {
-  return path.split('?')[0];
+  return path.split("?")[0];
 }

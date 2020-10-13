@@ -1,21 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Button } from 'antd';
+import React from "react";
+import styled from "styled-components";
+import { Button } from "antd";
 
-import { Iconfont } from '../components/*';
+import { Iconfont } from "../components/*";
 
 export default function ({ username, role, onNavigate, onLogout }) {
   return (
     <Header>
       <Logo>
-        <img src={require('../assets/logo.png')} alt="Logo" />
+        <img src={require("../assets/logo.png")} alt="Logo" />
       </Logo>
       <Content>
         <Welcome>
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
-        <StyledButton type="link" onClick={() => onNavigate('/profiles')}>
+        <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
           个人中心
         </StyledButton>
         <SplitLine />

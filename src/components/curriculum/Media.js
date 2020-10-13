@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
-import styled from 'styled-components';
-import { Upload } from 'antd';
+import React, { useState } from "react";
+import Axios from "axios";
+import styled from "styled-components";
+import { Upload } from "antd";
 
-import Container from './Container';
-import { GhostInput, UploadButton } from '../*';
-import { fileFormat } from '../../utils';
+import Container from "./Container";
+import { GhostInput, UploadButton } from "../*";
+import { fileFormat } from "../../utils";
 
 export default function Media({ name, value, onChange, ...props }) {
   // temporarily stores the text value，modify the formik value on blur event to improve performance
@@ -19,7 +19,7 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function handleUploadPicture(file) {
     upload(file).then((filePath) => {
-      onChange(Name.type)('PICTURE');
+      onChange(Name.type)("PICTURE");
       onChange(Name.file)(filePath);
     });
     return false;
@@ -27,7 +27,7 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function handleUploadVideo(file) {
     upload(file).then((filePath) => {
-      onChange(Name.type)('VIDEO');
+      onChange(Name.type)("VIDEO");
       onChange(Name.file)(filePath);
     });
     return false;
@@ -35,7 +35,7 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function upload(file) {
     return new Promise((resolve, reject) => {
-      Axios.get('/admin/oss/pre-signed-url', {
+      Axios.get("/admin/oss/pre-signed-url", {
         params: {
           format: fileFormat(file),
         },
@@ -43,8 +43,8 @@ export default function Media({ name, value, onChange, ...props }) {
         .then(({ data: { url } }) => {
           Axios.put(url, file, {
             headers: {
-              Authorization: '',
-              'Content-Type': 'application/octet-stream',
+              Authorization: "",
+              "Content-Type": "application/octet-stream",
             },
           })
             .then((_) => {
@@ -67,11 +67,7 @@ export default function Media({ name, value, onChange, ...props }) {
           <Preview type={value.type} file={value.file} />
         ) : (
           <>
-            <Upload
-              accept="image/png, image/jpeg"
-              showUploadList={false}
-              beforeUpload={handleUploadPicture}
-            >
+            <Upload accept="image/png, image/jpeg" showUploadList={false} beforeUpload={handleUploadPicture}>
               <UploadButton title="点击上传图片" icon="iconpicture">
                 支持JPG/PNG/GIF
                 <br />
@@ -105,7 +101,7 @@ export default function Media({ name, value, onChange, ...props }) {
 }
 
 function Preview({ type, file }) {
-  if (type === 'PICTURE') {
+  if (type === "PICTURE") {
     return <PreviewImage url={`/api/files${file}`} />;
   }
   return (

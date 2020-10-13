@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import { Formik } from 'formik';
-import { Form, Space, Button, Input, message } from 'antd';
-import { useDispatch } from 'react-redux';
-import { useLocation, useHistory, useParams, Prompt } from 'react-router-dom';
-import { debounce } from 'lodash';
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import { Formik } from "formik";
+import { Form, Space, Button, Input, message } from "antd";
+import { useDispatch } from "react-redux";
+import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
+import { debounce } from "lodash";
 
-import Factory from '../components/curriculum/factory';
-import ModuleComponents from '../components/curriculum/ModuleComponents';
-import { Rules } from '../constants/*';
-import { ModuleTopic } from '../constants/enums';
-import {
-  DraftBar,
-  Card,
-  DetailHeader,
-  SelectEnum,
-  StaticField,
-  DeleteConfirmModal,
-} from '../components/*';
-import { moduleFinishActionOptions } from '../actions';
+import Factory from "../components/curriculum/factory";
+import ModuleComponents from "../components/curriculum/ModuleComponents";
+import { Rules } from "../constants/*";
+import { ModuleTopic } from "../constants/enums";
+import { DraftBar, Card, DetailHeader, SelectEnum, StaticField, DeleteConfirmModal } from "../components/*";
+import { moduleFinishActionOptions } from "../actions";
 
 export default function Module() {
   const { id } = useParams();
@@ -29,7 +22,7 @@ export default function Module() {
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
-  const [title, setTitle] = useState('创建新模块');
+  const [title, setTitle] = useState("创建新模块");
   const [submitURL, setSubmitURL] = useState();
 
   const [module, setModule] = useState({});
@@ -40,7 +33,7 @@ export default function Module() {
   const [draftDate, setDraftDate] = useState();
 
   useEffect(() => {
-    setReadonly(!pathname.includes('/modules/edit') && !pathname.includes('/modules/create'));
+    setReadonly(!pathname.includes("/modules/edit") && !pathname.includes("/modules/create"));
   }, [pathname, setReadonly]);
 
   useEffect(() => {
@@ -54,12 +47,12 @@ export default function Module() {
         setModule(data);
         setTitle(data.name);
         setComponents(data.components);
-        setDraftId(headers['x-draft-id']);
-        setDraftDate(headers['x-draft-date']);
+        setDraftId(headers["x-draft-id"]);
+        setDraftDate(headers["x-draft-date"]);
       });
     }
 
-    Axios.get('/admin/modules', {
+    Axios.get("/admin/modules", {
       params: {
         size: 1000,
         published: true,
@@ -78,19 +71,19 @@ export default function Module() {
   }
 
   function submitDraft(submit) {
-    setSubmitURL('/admin/modules/draft');
+    setSubmitURL("/admin/modules/draft");
     submit();
     setIsPrompt(false);
   }
 
   function submitPublish(submit) {
-    setSubmitURL('/admin/modules');
+    setSubmitURL("/admin/modules");
     submit();
     setIsPrompt(false);
   }
 
   function onSubmit(values) {
-    if (components.length === 0) return message.warn('至少添加一个组件');
+    if (components.length === 0) return message.warn("至少添加一个组件");
 
     Axios.post(submitURL, {
       id,
@@ -101,7 +94,7 @@ export default function Module() {
 
   function handleDelteDraft() {
     Axios.delete(`/admin/modules/${draftId}`).then(() => {
-      setDraftId('');
+      setDraftId("");
     });
   }
 
@@ -122,7 +115,7 @@ export default function Module() {
           <Prompt
             when={isPrompt}
             message={(location) => {
-              let isstop = location.pathname.startsWith("/modules/edit/")
+              let isstop = location.pathname.startsWith("/modules/edit/");
               if (isstop || readonly) {
                 return true;
               } else {
@@ -156,15 +149,15 @@ export default function Module() {
                     )}
                   </>
                 ) : (
-                    <>
-                      <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
-                        保存至草稿
+                  <>
+                    <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
+                      保存至草稿
                     </Button>
-                      <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
-                        保存并发布
+                    <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
+                      保存并发布
                     </Button>
-                    </>
-                  )}
+                  </>
+                )}
               </Space>
             }
           ></DetailHeader>
@@ -182,25 +175,21 @@ export default function Module() {
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-                <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                  <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
-                    <Input placeholder="请输入模块名称，限40个字符" />
-                  </Form.Item>
-                  <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                    <Input placeholder="请输入模块编号，限20个字符" />
-                  </Form.Item>
-                  <Form.Item
-                    label="模块描述"
-                    name="description"
-                    rules={[...Rules.Required, { max: 200 }]}
-                  >
-                    <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
-                  </Form.Item>
-                  <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                    <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
-                  </Form.Item>
-                </Form>
-              )}
+              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                  <Input placeholder="请输入模块名称，限40个字符" />
+                </Form.Item>
+                <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
+                  <Input placeholder="请输入模块编号，限20个字符" />
+                </Form.Item>
+                <Form.Item label="模块描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
+                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
+                </Form.Item>
+                <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
+                  <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
+                </Form.Item>
+              </Form>
+            )}
           </Card>
 
           <Card title="模块内容">
@@ -230,9 +219,9 @@ function stickyScrollListener(offsetTop, onChangeStickyTop) {
     // console.log('set sticky top, top', diffTop);
     onChangeStickyTop(diffTop > 0 ? diffTop : 0);
   }, 100);
-  document.getElementById('route-view').addEventListener('scroll', onScroll);
+  document.getElementById("route-view").addEventListener("scroll", onScroll);
   return () => {
     // console.log('remove listener');
-    document.getElementById('route-view').removeEventListener('scroll', onScroll);
+    document.getElementById("route-view").removeEventListener("scroll", onScroll);
   };
 }

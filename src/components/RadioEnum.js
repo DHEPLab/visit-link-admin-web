@@ -1,7 +1,7 @@
-import React from 'react';
-import { Radio } from 'antd';
+import React from "react";
+import { Radio } from "antd";
 
-import * as Enums from '../constants/enums';
+import * as Enums from "../constants/enums";
 
 export default function RadioEnum({ name, ...props }) {
   return (

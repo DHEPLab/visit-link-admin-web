@@ -1,12 +1,12 @@
-import React from 'react';
-import Axios from 'axios';
-import styled from 'styled-components';
+import React from "react";
+import Axios from "axios";
+import styled from "styled-components";
 
-import { Select, Button } from 'antd';
-import { useManualFetch } from '../utils';
+import { Select, Button } from "antd";
+import { useManualFetch } from "../utils";
 
 export default function TagSelect({ onChange, ...props }) {
-  const [options, refresh] = useManualFetch('/admin/tags', {}, []);
+  const [options, refresh] = useManualFetch("/admin/tags", {}, []);
 
   function handleDelete(option) {
     setTimeout(() => {
@@ -19,13 +19,7 @@ export default function TagSelect({ onChange, ...props }) {
   }
 
   return (
-    <Select
-      mode="tags"
-      onFocus={() => refresh()}
-      optionLabelProp="name"
-      onChange={onChange}
-      {...props}
-    >
+    <Select mode="tags" onFocus={() => refresh()} optionLabelProp="name" onChange={onChange} {...props}>
       {options.map((option) => (
         <Select.Option key={option.id} value={option.name}>
           <Option>

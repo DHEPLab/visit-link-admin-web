@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Iconfont } from './*';
+import React from "react";
+import styled from "styled-components";
+import { Iconfont } from "./*";
 
 export default function UploadButton({ icon, title, children }) {
   return (

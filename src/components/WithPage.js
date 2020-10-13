@@ -1,7 +1,7 @@
 // Higer-Order Component to enhance the paging
-import React, { useState, useCallback, useEffect } from 'react';
-import Axios from 'axios';
-import { debounce } from 'lodash';
+import React, { useState, useCallback, useEffect } from "react";
+import Axios from "axios";
+import { debounce } from "lodash";
 
 // first page start at 0
 const page = 0;

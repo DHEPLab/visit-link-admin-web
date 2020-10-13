@@ -1,10 +1,10 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import rootReducer from '../reducers';
+import React from "react";
+import { render } from "@testing-library/react";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from "../reducers";
 
 export default (component, history = createMemoryHistory()) => {
   const store = createStore(rootReducer);

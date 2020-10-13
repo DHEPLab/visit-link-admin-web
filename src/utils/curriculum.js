@@ -1,12 +1,7 @@
 function filterLessons(lessons, stage, startDays, endDays) {
-  if (!stage || startDays == null || startDays === '' || endDays == null || endDays === '')
-    return [];
+  if (!stage || startDays == null || startDays === "" || endDays == null || endDays === "") return [];
   return lessons.filter((lesson) => {
-    return (
-      lesson.stage === stage &&
-      lesson.startOfApplicableDays >= startDays &&
-      lesson.endOfApplicableDays <= endDays
-    );
+    return lesson.stage === stage && lesson.startOfApplicableDays >= startDays && lesson.endOfApplicableDays <= endDays;
   });
 }
 
@@ -32,12 +27,9 @@ function cleanInvalidLessons(schedules, lessons) {
   return schedules.map((schedule) => ({
     ...schedule,
     lessons: schedule.lessons.filter((domain) =>
-      filterLessons(
-        lessons,
-        schedule.stage,
-        schedule.startOfApplicableDays,
-        schedule.endOfApplicableDays
-      ).find((lesson) => domain.label === lesson.number)
+      filterLessons(lessons, schedule.stage, schedule.startOfApplicableDays, schedule.endOfApplicableDays).find(
+        (lesson) => domain.label === lesson.number
+      )
     ),
   }));
 }

@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import Arrays from 'lodash/array';
-import styled from 'styled-components';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { useHistory, useParams, useLocation, Prompt } from 'react-router-dom';
-import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from 'antd';
-import { InfoCircleFilled } from '@ant-design/icons';
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import Arrays from "lodash/array";
+import styled from "styled-components";
+import moment from "moment";
+import { useSelector } from "react-redux";
+import { useHistory, useParams, useLocation, Prompt } from "react-router-dom";
+import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from "antd";
+import { InfoCircleFilled } from "@ant-design/icons";
 
-import Rules from '../constants/rules';
-import CurriculumUtils from '../utils/curriculum';
-import { CurriculumBabyStage } from '../constants/enums';
-import { useBoolState } from '../utils';
+import Rules from "../constants/rules";
+import CurriculumUtils from "../utils/curriculum";
+import { CurriculumBabyStage } from "../constants/enums";
+import { useBoolState } from "../utils";
 import {
   StaticField,
   RadioEnum,
@@ -21,7 +21,7 @@ import {
   ZebraTable,
   ModalForm,
   DeleteConfirmModal,
-} from '../components/*';
+} from "../components/*";
 
 export default function Curriculum() {
   const { id } = useParams();
@@ -30,7 +30,7 @@ export default function Curriculum() {
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
-  const [title, setTitle] = useState('创建新大纲');
+  const [title, setTitle] = useState("创建新大纲");
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
@@ -42,9 +42,7 @@ export default function Curriculum() {
   const [draftDate, setDraftDate] = useState();
 
   useEffect(() => {
-    setReadonly(
-      !pathname.includes('/curriculums/edit') && !pathname.includes('/curriculums/create')
-    );
+    setReadonly(!pathname.includes("/curriculums/edit") && !pathname.includes("/curriculums/create"));
   }, [pathname, setReadonly]);
 
   useEffect(() => {
@@ -52,8 +50,8 @@ export default function Curriculum() {
     Axios.get(`/admin/curriculums/${id}`).then(({ data, headers }) => {
       if (!readonly) form.setFieldsValue(data);
       setTitle(data.name);
-      setDraftId(headers['x-draft-id']);
-      setDraftDate(headers['x-draft-date']);
+      setDraftId(headers["x-draft-id"]);
+      setDraftDate(headers["x-draft-date"]);
       setLessons(data.lessons);
       setSchedules(data.schedules);
       setCurriculum({ ...data, lessons: [], schedules: [] });
@@ -61,24 +59,24 @@ export default function Curriculum() {
   }, [id, form, readonly]);
 
   function submitDraft() {
-    setSubmitURL('/admin/curriculums/draft');
+    setSubmitURL("/admin/curriculums/draft");
     form.submit();
     setIsPrompt(false);
   }
 
   function submitPublish() {
-    setSubmitURL('/admin/curriculums');
+    setSubmitURL("/admin/curriculums");
     form.submit();
     setIsPrompt(false);
   }
 
   function validate() {
     if (lessons.length === 0) {
-      message.warn('至少添加一个课堂');
+      message.warn("至少添加一个课堂");
       return false;
     }
     if (schedules.length === 0) {
-      message.warn('至少添加一个匹配计划');
+      message.warn("至少添加一个匹配计划");
       return false;
     }
     for (const schedule of schedules) {
@@ -102,7 +100,7 @@ export default function Curriculum() {
 
   function handleDelteDraft() {
     Axios.delete(`/admin/curriculums/${draftId}`).then(() => {
-      setDraftId('');
+      setDraftId("");
     });
   }
 
@@ -125,11 +123,11 @@ export default function Curriculum() {
       <Prompt
         when={isPrompt}
         message={(location) => {
-          let isstop = location.pathname.startsWith('/curriculums/edit/');
+          let isstop = location.pathname.startsWith("/curriculums/edit/");
           if (isstop || readonly) {
             return true;
           } else {
-            return '当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?';
+            return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
           }
         }}
       />
@@ -137,7 +135,7 @@ export default function Curriculum() {
         icon="iconcurriculum-primary"
         menu="大纲管理"
         title={title}
-        role={readonly && moment(curriculum.lastPublishedAt).format('YYYY/MM/DD HH:mm')}
+        role={readonly && moment(curriculum.lastPublishedAt).format("YYYY/MM/DD HH:mm")}
         extra={
           <Space size="large">
             {readonly ? (
@@ -197,12 +195,7 @@ export default function Curriculum() {
       </Card>
 
       <EnhancedLessons disabled={readonly} value={lessons} onChange={onChangeLessons} />
-      <EnhancedSchedules
-        disabled={readonly}
-        value={schedules}
-        lessonOptions={lessons}
-        onChange={setSchedules}
-      />
+      <EnhancedSchedules disabled={readonly} value={schedules} lessonOptions={lessons} onChange={setSchedules} />
     </>
   );
 }
@@ -297,7 +290,7 @@ function Lessons({
   }
 
   function loadModuleOptions() {
-    Axios.get('/admin/modules', {
+    Axios.get("/admin/modules", {
       params: {
         size: 1000,
         published: true,
@@ -322,7 +315,7 @@ function Lessons({
       }
       extra={
         !disabled && (
-          <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
+          <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
             添加新课堂
           </Button>
         )
@@ -353,7 +346,7 @@ function Lessons({
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject('课堂序号不能重复');
+                return Promise.reject("课堂序号不能重复");
               },
             }),
           ]}
@@ -376,7 +369,7 @@ function Lessons({
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
-            loading={!!networks['/admin/modules']}
+            loading={!!networks["/admin/modules"]}
           ></Select>
         </Form.Item>
         <Form.Item label="调查问卷" name="questionnaireAddress" rules={[{ max: 100 }]}>
@@ -393,13 +386,13 @@ function Lessons({
         dataSource={value}
         columns={[
           {
-            title: '序号',
-            dataIndex: 'number',
+            title: "序号",
+            dataIndex: "number",
             width: 200,
           },
           {
-            title: '适用宝宝成长时期区间',
-            dataIndex: 'stage',
+            title: "适用宝宝成长时期区间",
+            dataIndex: "stage",
             width: 400,
             render: (_, record) => {
               return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
@@ -408,8 +401,8 @@ function Lessons({
             },
           },
           {
-            title: '包含模块',
-            dataIndex: 'modules',
+            title: "包含模块",
+            dataIndex: "modules",
             render: renderDomain,
           },
           lessonOperation(disabled, handleDelete, openEditModal),
@@ -434,10 +427,10 @@ function ApplicableDays({ value, currentEditValue }) {
               >
                 <InputNumber
                   min={1}
-                  max={maxApplicableDays(getFieldValue('stage')) - 1}
+                  max={maxApplicableDays(getFieldValue("stage")) - 1}
                   precision={0}
                   formatter={(value) => `${value}天`}
-                  parser={(value) => value.replace('天', '')}
+                  parser={(value) => value.replace("天", "")}
                 />
               </Form.Item>
               <ApplicableDaysConnector>至</ApplicableDaysConnector>
@@ -451,17 +444,17 @@ function ApplicableDays({ value, currentEditValue }) {
                     validator(_, endOfApplicableDays) {
                       if (
                         !endOfApplicableDays ||
-                        Number(endOfApplicableDays) > Number(getFieldValue('startOfApplicableDays'))
+                        Number(endOfApplicableDays) > Number(getFieldValue("startOfApplicableDays"))
                       ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject('必须大于起始天数');
+                      return Promise.reject("必须大于起始天数");
                     },
                   }),
                   ({ getFieldValue }) => ({
                     validator(_, endOfApplicableDays) {
-                      const stage = getFieldValue('stage');
-                      const startOfApplicableDays = Number(getFieldValue('startOfApplicableDays'));
+                      const stage = getFieldValue("stage");
+                      const startOfApplicableDays = Number(getFieldValue("startOfApplicableDays"));
                       endOfApplicableDays = Number(endOfApplicableDays);
                       if (
                         !endOfApplicableDays ||
@@ -474,17 +467,17 @@ function ApplicableDays({ value, currentEditValue }) {
                       ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject('适用天数不能重叠');
+                      return Promise.reject("适用天数不能重叠");
                     },
                   }),
                 ]}
               >
                 <InputNumber
                   min={1}
-                  max={maxApplicableDays(getFieldValue('stage'))}
+                  max={maxApplicableDays(getFieldValue("stage"))}
                   precision={0}
                   formatter={(value) => `${value}天`}
-                  parser={(value) => value.replace('天', '')}
+                  parser={(value) => value.replace("天", "")}
                 />
               </EndOfApplicableDaysFormItem>
             </>
@@ -513,7 +506,7 @@ const ApplicableDaysConnector = styled.div`
 `;
 
 function maxApplicableDays(stage) {
-  return stage === 'EDC' ? 280 : 9999;
+  return stage === "EDC" ? 280 : 9999;
 }
 
 function Schedules({
@@ -554,7 +547,7 @@ function Schedules({
       title="大纲区间匹配规则"
       extra={
         !disabled && (
-          <Button type="shade" onClick={() => openCreateModal({ stage: 'EDC' })}>
+          <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
             添加规则
           </Button>
         )
@@ -589,23 +582,20 @@ function Schedules({
             setFieldsValue({
               lessons: [],
             });
-            const stage = getFieldValue('stage');
-            const startMonths = getFieldValue('startOfApplicableDays');
-            const endMonths = getFieldValue('endOfApplicableDays');
+            const stage = getFieldValue("stage");
+            const startMonths = getFieldValue("startOfApplicableDays");
+            const endMonths = getFieldValue("endOfApplicableDays");
             return (
               <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
                 <Select
                   mode="multiple"
                   labelInValue
-                  options={CurriculumUtils.filterLessons(
-                    lessonOptions,
-                    stage,
-                    startMonths,
-                    endMonths
-                  ).map((lesson) => ({
-                    label: lesson.number,
-                    value: lesson.number,
-                  }))}
+                  options={CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map(
+                    (lesson) => ({
+                      label: lesson.number,
+                      value: lesson.number,
+                    })
+                  )}
                 ></Select>
               </Form.Item>
             );
@@ -619,13 +609,13 @@ function Schedules({
         dataSource={value}
         columns={[
           {
-            title: '规则',
-            dataIndex: 'name',
+            title: "规则",
+            dataIndex: "name",
             width: 200,
           },
           {
-            title: '适用宝宝成长时期区间',
-            dataIndex: 'stage',
+            title: "适用宝宝成长时期区间",
+            dataIndex: "stage",
             width: 400,
             render: (_, record) => {
               return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
@@ -634,8 +624,8 @@ function Schedules({
             },
           },
           {
-            title: '包含课堂',
-            dataIndex: 'lessons',
+            title: "包含课堂",
+            dataIndex: "lessons",
             render: renderDomain,
           },
           scheduleOperation(disabled, handleDelete, openEditModal),
@@ -645,7 +635,7 @@ function Schedules({
   );
 }
 
-const renderDomain = (h) => h.map((v) => v.label).join('、');
+const renderDomain = (h) => h.map((v) => v.label).join("、");
 
 const lessonOperation = (disabled, handleDelete, openEditModal) => {
   if (disabled) return {};
@@ -655,13 +645,13 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
         操作 &nbsp;
         {!disabled && (
           <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
-            <InfoCircleFilled style={{ color: '#000' }} />
+            <InfoCircleFilled style={{ color: "#000" }} />
           </Tooltip>
         )}
       </>
     ),
     width: 200,
-    align: 'center',
+    align: "center",
     render(_, record, index) {
       if (disabled) return null;
       return (
@@ -685,7 +675,7 @@ const scheduleOperation = (disabled, handleDelete, openEditModal) => {
   return {
     title: <>操作</>,
     width: 200,
-    align: 'center',
+    align: "center",
     render(_, record, index) {
       if (disabled) return null;
       return (

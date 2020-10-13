@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Form, Modal, Space, Button } from 'antd';
+import React, { useEffect } from "react";
+import { Form, Modal, Space, Button } from "antd";
 
 export default function ({ title, visible, onCancel, onFinish, initialValues = {}, children }) {
   const [form] = Form.useForm();

@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tabs } from 'antd';
+import React from "react";
+import styled from "styled-components";
+import { Tabs } from "antd";
 
 export default function ({ children, ...props }) {
   return (

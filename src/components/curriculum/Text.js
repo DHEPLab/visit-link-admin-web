@@ -1,48 +1,48 @@
-import React from 'react';
-import styled from 'styled-components';
-import ReactQuill, { Quill } from 'react-quill';
-import { debounce } from 'lodash';
+import React from "react";
+import styled from "styled-components";
+import ReactQuill, { Quill } from "react-quill";
+import { debounce } from "lodash";
 
-import Container from './Container';
+import Container from "./Container";
 
 const container = [
-  ['bold', 'italic'],
-  [{ list: 'ordered' }, { list: 'bullet' }],
+  ["bold", "italic"],
+  [{ list: "ordered" }, { list: "bullet" }],
 ];
 
 const colors = {
-  script: '#3490de',
-  instruction: '#05bfb2',
-  reference: '#6a2c70',
+  script: "#3490de",
+  instruction: "#05bfb2",
+  reference: "#6a2c70",
 };
 
 const typeLabels = {
-  script: '叙述文本',
-  instruction: '提示文本',
-  reference: '参考文本',
+  script: "叙述文本",
+  instruction: "提示文本",
+  reference: "参考文本",
 };
 
 // https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
-const Clipboard = Quill.import('modules/clipboard');
-const Delta = Quill.import('delta');
+const Clipboard = Quill.import("modules/clipboard");
+const Delta = Quill.import("delta");
 
 class PlainClipboard extends Clipboard {
   onPaste(e) {
     e.preventDefault();
     const range = this.quill.getSelection();
-    const text = e.clipboardData.getData('text/plain');
+    const text = e.clipboardData.getData("text/plain");
     const delta = new Delta().retain(range.index).delete(range.length).insert(text);
     const index = text.length + range.index;
     const length = 0;
-    this.quill.updateContents(delta, 'silent');
-    this.quill.setSelection(index, length, 'silent');
+    this.quill.updateContents(delta, "silent");
+    this.quill.setSelection(index, length, "silent");
     this.quill.scrollIntoView();
   }
 }
-Quill.register('modules/clipboard', PlainClipboard, true);
+Quill.register("modules/clipboard", PlainClipboard, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
-  const types = ['instruction', 'script', 'reference'];
+  const types = ["instruction", "script", "reference"];
   const Name = {
     html: `${name}.html`,
     type: `${name}.type`,
@@ -62,9 +62,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 
   return (
     <Container
-      right={
-        props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>
-      }
+      right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
       icon="icontext-gray"
       title="文本组件"
       name={name}
@@ -117,22 +115,22 @@ const QuillContainer = styled.div`
 
   .ql-picker.ql-type .ql-picker-item::before,
   .ql-picker.ql-type .ql-picker-label::before {
-    content: 'Type';
+    content: "Type";
   }
 
-  .ql-picker.ql-type [data-value='script']::before {
-    content: '${typeLabels['script']}';
-    color: ${colors['script']};
+  .ql-picker.ql-type [data-value="script"]::before {
+    content: "${typeLabels["script"]}";
+    color: ${colors["script"]};
   }
 
-  .ql-picker.ql-type [data-value='instruction']::before {
-    content: '${typeLabels['instruction']}';
-    color: ${colors['instruction']};
+  .ql-picker.ql-type [data-value="instruction"]::before {
+    content: "${typeLabels["instruction"]}";
+    color: ${colors["instruction"]};
   }
 
-  .ql-picker.ql-type [data-value='reference']::before {
-    content: '${typeLabels['reference']}';
-    color: ${colors['reference']};
+  .ql-picker.ql-type [data-value="reference"]::before {
+    content: "${typeLabels["reference"]}";
+    color: ${colors["reference"]};
   }
 
   .ql-container.ql-snow,

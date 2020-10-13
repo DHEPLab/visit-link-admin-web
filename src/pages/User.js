@@ -1,12 +1,12 @@
-import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { debounce } from 'lodash';
-import { Form, Modal, Button, Input, Space, Select } from 'antd';
-import { useParams, useHistory } from 'react-router-dom';
+import Axios from "axios";
+import React, { useEffect, useState } from "react";
+import { debounce } from "lodash";
+import { Form, Modal, Button, Input, Space, Select } from "antd";
+import { useParams, useHistory } from "react-router-dom";
 
-import Rules from '../constants/rules';
-import { useFetch, useBoolState } from '../utils';
-import { Role, Gender } from '../constants/enums';
+import Rules from "../constants/rules";
+import { useFetch, useBoolState } from "../utils";
+import { Role, Gender } from "../constants/enums";
 import {
   Card,
   ZebraTable,
@@ -17,7 +17,7 @@ import {
   DeleteConfirmModal,
   ChwTagSelector,
   WithPage,
-} from '../components/*';
+} from "../components/*";
 
 export default function User() {
   const { id } = useParams();
@@ -28,14 +28,10 @@ export default function User() {
   const [changePasswordVisible, openChangePassword, closeChangePassword] = useBoolState();
   const [changeProfileVisible, openChangeProfile, closeChangeProfile] = useBoolState();
   const [closeChwAccountVisible, openCloseChwAccount, closeCloseChwAccount] = useBoolState();
-  const [
-    closeSupervisorAccountVisible,
-    openCloseSupervisorAccount,
-    closeCloseSupervisorAccount,
-  ] = useBoolState();
+  const [closeSupervisorAccountVisible, openCloseSupervisorAccount, closeCloseSupervisorAccount] = useBoolState();
 
-  const roleChw = user?.role === 'ROLE_CHW';
-  const roleSupervisor = user?.role === 'ROLE_SUPERVISOR';
+  const roleChw = user?.role === "ROLE_CHW";
+  const roleSupervisor = user?.role === "ROLE_SUPERVISOR";
 
   function handleChangeProfile(values) {
     Axios.put(`/admin/users/${id}`, values).then(() => {
@@ -91,9 +87,7 @@ export default function User() {
       >
         <StaticField label="真实姓名">{user.realName}</StaticField>
         <StaticField label="联系电话">{user.phone}</StaticField>
-        {roleChw && (
-          <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(', ')}</StaticField>
-        )}
+        {roleChw && <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(", ")}</StaticField>}
       </Card>
       <Card
         title="账户信息"
@@ -108,9 +102,7 @@ export default function User() {
       </Card>
 
       {roleSupervisor && <AssignChw id={id} />}
-      {roleChw && (
-        <AssignBaby id={id} onChange={(babies) => setIsBabiesEmpty(babies?.length === 0)} />
-      )}
+      {roleChw && <AssignBaby id={id} onChange={(babies) => setIsBabiesEmpty(babies?.length === 0)} />}
 
       <ChangePasswordModal id={id} visible={changePasswordVisible} onCancel={closeChangePassword} />
       <CloseChwAccountModal
@@ -141,10 +133,10 @@ export default function User() {
         </Form.Item>
         {roleChw && (
           <>
-            <Form.Item label="ID" name={['chw', 'identity']} rules={Rules.Required}>
+            <Form.Item label="ID" name={["chw", "identity"]} rules={Rules.Required}>
               <Input />
             </Form.Item>
-            <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
+            <Form.Item label="所在区域" name={["chw", "tags"]} rules={Rules.Area}>
               <ChwTagSelector />
             </Form.Item>
           </>
@@ -187,7 +179,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
   }, [visible, form]);
 
   const debounceSearch = debounce((search) => {
-    Axios.get('/admin/users/chw', {
+    Axios.get("/admin/users/chw", {
       params: {
         search,
         size: 10,
@@ -215,7 +207,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
     >
       <p>
         注意！注销后，该账户将不可用且不可恢复。
-        {!isBabiesEmpty && '请先将其负责的宝宝移交至其他社区工作者后再进行注销'}
+        {!isBabiesEmpty && "请先将其负责的宝宝移交至其他社区工作者后再进行注销"}
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         {!isBabiesEmpty && (
@@ -225,14 +217,14 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
               filterOption={false}
               onFocus={() => debounceSearch()}
               onSearch={debounceSearch}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               placeholder="请选择移交宝宝的社区工作者"
             >
               {options
                 .filter((o) => o.user.id !== Number(id))
                 .map((o) => (
                   <Select.Option key={o.user.id}>
-                    {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(',')}
+                    {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(",")}
                   </Select.Option>
                 ))}
             </Select>
@@ -274,7 +266,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
       <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label="新的账户密码" name="password" rules={Rules.Password}>
-          <Input.Password style={{ width: '100%' }} placeholder="请输入新的账户密码" />
+          <Input.Password style={{ width: "100%" }} placeholder="请输入新的账户密码" />
         </Form.Item>
       </Form>
     </Modal>
@@ -311,7 +303,7 @@ function AssignBaby({ id, onChange }) {
         onRow={(record) => ({
           onClick: (event) => {
             // do noting when click other target
-            if (event.target.tagName === 'TD') {
+            if (event.target.tagName === "TD") {
               history.push(`/babies/${record.id}`);
             }
           },
@@ -320,33 +312,33 @@ function AssignBaby({ id, onChange }) {
         pagination={false}
         columns={[
           {
-            title: '宝宝姓名',
-            dataIndex: 'name',
+            title: "宝宝姓名",
+            dataIndex: "name",
             width: 140,
-            align: 'center',
+            align: "center",
           },
           {
-            title: 'ID',
-            dataIndex: 'identity',
+            title: "ID",
+            dataIndex: "identity",
           },
           {
-            title: '性别',
-            dataIndex: 'gender',
+            title: "性别",
+            dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: '主看护人',
-            dataIndex: 'masterCarerName',
+            title: "主看护人",
+            dataIndex: "masterCarerName",
           },
           {
-            title: '联系方式',
-            dataIndex: 'masterCarerPhone',
+            title: "联系方式",
+            dataIndex: "masterCarerPhone",
           },
           {
-            title: '操作',
-            dataIndex: 'id',
+            title: "操作",
+            dataIndex: "id",
             width: 200,
-            align: 'center',
+            align: "center",
             render(babyId) {
               return (
                 <DeleteConfirmModal
@@ -364,20 +356,12 @@ function AssignBaby({ id, onChange }) {
           },
         ]}
       />
-      <PageNotAssignedBabyModal
-        id={id}
-        onFinish={refresh}
-        visible={visible}
-        onCancel={closeModal}
-      />
+      <PageNotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 }
 
-const PageNotAssignedBabyModal = WithPage(
-  NotAssignedBabyModal,
-  '/admin/users/chw/not_assigned/babies'
-);
+const PageNotAssignedBabyModal = WithPage(NotAssignedBabyModal, "/admin/users/chw/not_assigned/babies");
 
 // open a new modal, assign chw to supervisor
 function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...props }) {
@@ -402,18 +386,18 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...pr
       onFinish={handleAssign}
       columns={[
         {
-          title: '宝宝姓名',
-          dataIndex: 'name',
+          title: "宝宝姓名",
+          dataIndex: "name",
           width: 100,
         },
         {
-          title: 'ID',
-          dataIndex: 'identity',
+          title: "ID",
+          dataIndex: "identity",
           width: 120,
         },
         {
-          title: '所在区域',
-          dataIndex: 'area',
+          title: "所在区域",
+          dataIndex: "area",
           width: 300,
         },
       ]}
@@ -446,29 +430,29 @@ function AssignChw({ id }) {
         pagination={false}
         columns={[
           {
-            title: '社区工作者姓名',
-            dataIndex: 'realName',
+            title: "社区工作者姓名",
+            dataIndex: "realName",
             width: 180,
-            align: 'center',
+            align: "center",
           },
           {
-            title: 'ID',
-            dataIndex: ['chw', 'identity'],
+            title: "ID",
+            dataIndex: ["chw", "identity"],
           },
           {
-            title: '所在区域',
-            dataIndex: ['chw', 'tags'],
-            render: (tags) => tags && tags.join(', '),
+            title: "所在区域",
+            dataIndex: ["chw", "tags"],
+            render: (tags) => tags && tags.join(", "),
           },
           {
-            title: '联系电话',
-            dataIndex: 'phone',
+            title: "联系电话",
+            dataIndex: "phone",
           },
           {
-            title: '操作',
-            dataIndex: 'id',
+            title: "操作",
+            dataIndex: "id",
             width: 200,
-            align: 'center',
+            align: "center",
             render(chwId) {
               return (
                 <DeleteConfirmModal
@@ -521,17 +505,17 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
       onChangeSearch={debounceRefresh}
       columns={[
         {
-          title: '社区工作者姓名',
-          dataIndex: 'realName',
+          title: "社区工作者姓名",
+          dataIndex: "realName",
         },
         {
-          title: 'ID',
-          dataIndex: ['chw', 'identity'],
+          title: "ID",
+          dataIndex: ["chw", "identity"],
         },
         {
-          title: '所在区域',
-          dataIndex: ['chw', 'tags'],
-          render: (tags) => tags && tags.join(', '),
+          title: "所在区域",
+          dataIndex: ["chw", "tags"],
+          render: (tags) => tags && tags.join(", "),
         },
       ]}
     />

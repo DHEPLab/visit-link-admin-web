@@ -1,20 +1,20 @@
-import React from 'react';
-import moment from 'moment';
-import { Select, Form, Input, Radio, DatePicker, Cascader } from 'antd';
+import React from "react";
+import moment from "moment";
+import { Select, Form, Input, Radio, DatePicker, Cascader } from "antd";
 
-import ModalForm from './ModalForm';
-import Pcas from '../constants/pcas-code.json';
-import Rules from '../constants/rules';
-import { Gender, BabyStage, FeedingPattern } from '../constants/enums';
+import ModalForm from "./ModalForm";
+import Pcas from "../constants/pcas-code.json";
+import Rules from "../constants/rules";
+import { Gender, BabyStage, FeedingPattern } from "../constants/enums";
 
 export function useMethods() {
   return {
     disabledDateForEDC(date, baseline) {
       if (!date) return false;
-      const start = moment(baseline).format('YYYY-MM-DD');
+      const start = moment(baseline).format("YYYY-MM-DD");
       // days of edc is 280
-      const end = moment(baseline).add(280, 'day').format('YYYY-MM-DD');
-      return !moment(moment(date).format('YYYY-MM-DD')).isBetween(start, end, undefined, '(]');
+      const end = moment(baseline).add(280, "day").format("YYYY-MM-DD");
+      return !moment(moment(date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "(]");
     },
   };
 }
@@ -49,8 +49,8 @@ export default function BabyModalForm({ disableStage, ...props }) {
       </Form.Item>
       <Form.Item noStyle shouldUpdate={(old, curr) => old.stage !== curr.stage}>
         {({ getFieldValue }) => {
-          const stage = getFieldValue('stage');
-          if (stage === 'EDC') {
+          const stage = getFieldValue("stage");
+          if (stage === "EDC") {
             return (
               <Form.Item label="待产日期" name="edc" rules={Rules.Required}>
                 <DatePicker disabledDate={(current) => disabledDateForEDC(current, moment())} />
@@ -62,7 +62,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
                 <Form.Item label="出生日期" name="birthday" rules={Rules.Required}>
                   <DatePicker
                     // Can not select days after today
-                    disabledDate={(current) => current && current > moment().endOf('day')}
+                    disabledDate={(current) => current && current > moment().endOf("day")}
                   />
                 </Form.Item>
                 <Form.Item label="辅食" name="assistedFood" rules={Rules.Required}>
@@ -86,10 +86,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
         }}
       </Form.Item>
       <Form.Item label="所在区域" name="area" rules={Rules.Required}>
-        <Cascader
-          options={Pcas}
-          fieldNames={{ label: 'name', value: 'name', children: 'children' }}
-        />
+        <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
       </Form.Item>
       <Form.Item label="详细地址" name="location" rules={Rules.Location}>
         <Input />
