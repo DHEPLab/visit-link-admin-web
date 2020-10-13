@@ -140,9 +140,14 @@ export default function User() {
           <Input />
         </Form.Item>
         {roleChw && (
-          <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
-            <ChwTagSelector />
-          </Form.Item>
+          <>
+            <Form.Item label="ID" name={['chw', 'identity']} rules={Rules.Required}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="所在区域" name={['chw', 'tags']} rules={Rules.Area}>
+              <ChwTagSelector />
+            </Form.Item>
+          </>
         )}
       </ModalForm>
     </>
