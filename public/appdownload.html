@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=" utf-8" />
+    <title>download</title>
+    <style type="text/css">
+      .wxtip {
+        background: rgb(104 102 102 / 80%);
+        text-align: center;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 998;
+        display: none;
+      }
+
+      .wxtip-icon {
+        width: 52px;
+        height: 67px;
+        background: url(weixin-tip.png) no-repeat;
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+      }
+
+      .wxtip-txt {
+        margin-top: 100px;
+        color: #fff;
+        font-size: 35px;
+        line-height: 1.5;
+        float: right;
+        margin-right: 50px;
+        text-align: left;
+      }
+
+      .vx-body {
+        position: absolute;
+        top: 25%;
+        text-align: center;
+        width: 100%;
+      }
+
+      .vx-font {
+        font-size: 55px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .vx-button {
+        width: 200px;
+        color: #fff;
+        background-color: #0c6;
+        border-color: #0c6;
+        font-weight: 400;
+        padding: 10px 20px;
+        font-size: 40px;
+        border-radius: 10px;
+        text-decoration: none;
+      }
+
+      .vx-tips-text {
+        background: #e9e8e9;
+        width: 80px;
+        border-radius: 10px;
+        height: 45px;
+        color: #000;
+        font-weight: bold;
+        text-align: center;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="vx-body">
+      <img src="./logo.png" style="height: 280px;" /><br />
+      <div class="vx-font">健康未来APP</div>
+      <div style="margin-top: 85px;width: 100%;text-align: center;">
+        <a
+          href="https://healthy-future-prod.oss-cn-zhangjiakou.aliyuncs.com/healthy-future-v1.0.0.apk"
+          id="JdownApp"
+          class="vx-button"
+          >点击下载</a
+        >
+      </div>
+    </div>
+    <div class="wxtip" id="JweixinTip">
+      <div class="wxtip-txt">
+        请点击右上角
+        <div class="vx-tips-text">
+          ···
+        </div>
+        按钮选择<br />使用浏览器进行下载
+      </div>
+    </div>
+  </body>
+  <script
+    typet="text/javascript"
+    src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"
+  ></script>
+  <script type="text/javascript">
+    $(function($) {
+      $('#JdownApp').click(function(e) {
+        var ua = navigator.userAgent;
+        var isWeixin = !!/MicroMessenger/i.test(ua);
+        if (isWeixin) {
+          window.event
+            ? (window.event.returnValue = false)
+            : e.preventDefault();
+
+          document.getElementById('JweixinTip').style.display = 'block';
+        }
+      });
+
+      $('#JweixinTip').click(function() {
+        this.style.display = 'none';
+      });
+    });
+  </script>
+</html>
