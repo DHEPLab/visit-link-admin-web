@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset=" utf-8" />
+    <meta charset="utf-8" />
     <title>健康未来APP下载</title>
     <style type="text/css">
       .wxtip {
@@ -75,21 +75,32 @@
         display: inline-block;
       }
     </style>
+    <script type="text/javascript">
+      function downloadAPP() {
+        var ua = navigator.userAgent;
+        var isWeixin = !!/MicroMessenger/i.test(ua);
+        if (isWeixin) {
+          document.getElementById("weixinTip").style.display = "block";
+        } else {
+          window.location.href =
+            "https://healthy-future-prod.oss-cn-zhangjiakou.aliyuncs.com/healthy-future-v1.0.0.apk";
+        }
+      }
+
+      function wxTipClick() {
+        document.getElementById("weixinTip").style.display = "none";
+      }
+    </script>
   </head>
   <body>
     <div class="vx-body">
       <img src="./logo.png" style="height: 280px;" /><br />
       <div class="vx-font">健康未来APP</div>
       <div style="margin-top: 85px;width: 100%;text-align: center;">
-        <a
-          href="https://healthy-future-prod.oss-cn-zhangjiakou.aliyuncs.com/healthy-future-v1.0.0.apk"
-          id="JdownApp"
-          class="vx-button"
-          >点击下载</a
-        >
+        <a href="#" class="vx-button" onclick="downloadAPP()">点击下载</a>
       </div>
     </div>
-    <div class="wxtip" id="JweixinTip">
+    <div class="wxtip" id="weixinTip" onclick="wxTipClick()">
       <div class="wxtip-txt">
         请点击右上角
         <div class="vx-tips-text">
@@ -99,22 +110,4 @@
       </div>
     </div>
   </body>
-  <script typet="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    $(function($) {
-      $("#JdownApp").click(function(e) {
-        var ua = navigator.userAgent;
-        var isWeixin = !!/MicroMessenger/i.test(ua);
-        if (isWeixin) {
-          window.event ? (window.event.returnValue = false) : e.preventDefault();
-
-          document.getElementById("JweixinTip").style.display = "block";
-        }
-      });
-
-      $("#JweixinTip").click(function() {
-        this.style.display = "none";
-      });
-    });
-  </script>
 </html>
