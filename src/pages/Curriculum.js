@@ -427,7 +427,7 @@ function ApplicableDays({ value, currentEditValue }) {
               >
                 <InputNumber
                   min={1}
-                  max={maxApplicableDays(getFieldValue("stage")) - 1}
+                  max={9999}
                   precision={0}
                   formatter={(value) => `${value}天`}
                   parser={(value) => value.replace("天", "")}
@@ -474,7 +474,7 @@ function ApplicableDays({ value, currentEditValue }) {
               >
                 <InputNumber
                   min={1}
-                  max={maxApplicableDays(getFieldValue("stage"))}
+                  max={9999}
                   precision={0}
                   formatter={(value) => `${value}天`}
                   parser={(value) => value.replace("天", "")}
@@ -504,10 +504,6 @@ const ApplicableDaysConnector = styled.div`
   margin: 0 14px;
   margin-top: 8px;
 `;
-
-function maxApplicableDays(stage) {
-  return stage === "EDC" ? 280 : 9999;
-}
 
 function Schedules({
   disabled,
