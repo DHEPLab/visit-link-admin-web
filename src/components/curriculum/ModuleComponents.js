@@ -29,6 +29,9 @@ export function handleRemove(helpers, index, focus, setFocus) {
   if (focus === index) {
     setFocus(-1);
   }
+  if (focus > index) {
+    setFocus(focus - 1);
+  }
 }
 
 export function insertComponent(helpers, component, focus, setFocus) {

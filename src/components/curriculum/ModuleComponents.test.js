@@ -47,5 +47,8 @@ describe("Component Helpers", () => {
     handleRemove(helpers, 1, 1, setFocus);
     expect(helpers.remove).toBeCalledWith(1);
     expect(setFocus).toBeCalledWith(-1);
+
+    handleRemove(helpers, 2, 4, setFocus);
+    expect(setFocus).toBeCalledWith(3);
   });
 });
