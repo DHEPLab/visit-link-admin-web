@@ -24,7 +24,7 @@ export default function PageFooter(props) {
 function PageFooterTitle({ onRemove, readonly, focus, onFocus }) {
   return (
     <TitleContainer focus={focus}>
-      <Title onClick={onFocus}>翻页分割线</Title>
+      <Title onClick={() => !readonly && onFocus()}>翻页分割线</Title>
       <SplitLine />
       {!readonly && (
         <Button size="small" type="link" onClick={onRemove}>

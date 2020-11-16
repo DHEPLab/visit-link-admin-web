@@ -36,7 +36,7 @@ export default function Container({
       ) : (
         <StyledContainer nested={nested} focus={focus}>
           <TitleContainer>
-            <Title onClick={onFocus}>
+            <Title onClick={() => !readonly && onFocus()}>
               {icon && <Iconfont type={icon} style={{ marginRight: "8px" }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
