@@ -1,5 +1,5 @@
 import React from "react";
-import { FastField } from "formik";
+import { Field } from "formik";
 
 import { Text, Media, Switch, PageFooter } from "./*";
 
@@ -26,7 +26,7 @@ export default function ComponentField({ name, component, index, onMoveDown, ...
   // Formik will automagically inject onChange, onBlur, name, and value props of the field designated by the name prop to the (custom) component.
   return (
     <div id={`${name}.${index}`}>
-      <FastField
+      <Field
         name={`${name}.${index}.value`}
         onMoveDown={() => {
           onMoveDown();

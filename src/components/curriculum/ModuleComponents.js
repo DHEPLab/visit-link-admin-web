@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { FieldArray } from "formik";
@@ -9,6 +9,9 @@ import { ComponentField } from "./*";
 import { Iconfont, Card } from "../*";
 
 export default function ModuleComponents({ value, readonly, stickyTop }) {
+  // current focus component index (first layer)
+  const [focus, setFocus] = useState(-1);
+
   return (
     <FieldArray name="components">
       {(helpers) => {
@@ -27,11 +30,12 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
             <ComponentForm>
               {value.map((component, index) => (
                 <ComponentField
-                  {...{ index, readonly, component, key: component.key }}
+                  {...{ index, readonly, component, focus: focus === index, key: component.key }}
                   name="components"
                   onRemove={() => helpers.remove(index)}
                   onMoveUp={() => handleMoveUp(index)}
                   onMoveDown={() => handleMoveDown(index)}
+                  onFocus={() => setFocus(index)}
                 />
               ))}
             </ComponentForm>

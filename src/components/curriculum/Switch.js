@@ -15,13 +15,22 @@ export default function Switch({ name, value, onChange, ...props }) {
 
   return (
     <Container icon="iconswitch-gray" title="选择组件" name={name} {...props}>
-      <Text {...props} name={Name.question} value={value.question} onChange={onChange} hideMove hideRemove />
+      <Text
+        {...props}
+        focus={false}
+        name={Name.question}
+        value={value.question}
+        onChange={onChange}
+        hideMove
+        hideRemove
+      />
       <FieldArray name={Name.cases}>
         {(helpers) => (
           <>
             {value.cases.map((v, index) => (
               <Case
                 {...props}
+                focus={false}
                 key={v.key}
                 value={v}
                 index={index}

@@ -18,6 +18,8 @@ export default function Container({
   noPadding,
   component,
   right,
+  focus,
+  onFocus,
 }) {
   return (
     <Flex>
@@ -32,8 +34,8 @@ export default function Container({
       {component ? (
         component
       ) : (
-        <StyledContainer nested={nested}>
-          <TitleContainer>
+        <StyledContainer nested={nested} focus={focus}>
+          <TitleContainer onClick={onFocus}>
             <Title>
               {icon && <Iconfont type={icon} style={{ marginRight: "8px" }} />}
               <div>{title}</div>
@@ -86,20 +88,20 @@ const TitleContainer = styled.div`
   padding: 0 30px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid #eee;
   cursor: pointer;
 `;
 
 const StyledContainer = styled.div`
   flex: 1;
-  border: 1px solid #eee;
+  border: 2px solid #eee;
   border-radius: 10px;
   margin-bottom: ${({ nested }) => (nested ? 0 : 20)}px;
-  ${({ active }) =>
-    active &&
+  ${({ focus }) =>
+    focus &&
     `
-    border-color: #8E8E93;
-    border-width: 2px;`}
+    border: 2px dashed #FF794F;
+  `}
 `;
 
 const Title = styled.div`
