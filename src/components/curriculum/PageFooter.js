@@ -6,13 +6,25 @@ import Container from "./Container";
 import { Iconfont } from "../*";
 
 export default function PageFooter(props) {
-  return <Container component={<PageFooterTitle onRemove={props.onRemove} readonly={props.readonly} />} {...props} />;
+  return (
+    <Container
+      component={
+        <PageFooterTitle
+          onRemove={props.onRemove}
+          readonly={props.readonly}
+          focus={props.focus}
+          onFocus={props.onFocus}
+        />
+      }
+      {...props}
+    />
+  );
 }
 
-function PageFooterTitle({ onRemove, readonly }) {
+function PageFooterTitle({ onRemove, readonly, focus, onFocus }) {
   return (
-    <TitleContainer>
-      <Title>翻页分割线</Title>
+    <TitleContainer focus={focus}>
+      <Title onClick={onFocus}>翻页分割线</Title>
       <SplitLine />
       {!readonly && (
         <Button size="small" type="link" onClick={onRemove}>
@@ -36,16 +48,23 @@ const SplitLine = styled.div`
 const Title = styled.div`
   color: #8e8e93;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 const TitleContainer = styled.div`
   flex: 1;
   height: 52px;
   border-radius: 8px;
-  border: 1px solid #eee;
+  border: 2px solid #eee;
   display: flex;
   margin-bottom: 20px;
   align-items: center;
   padding: 0 30px;
   justify-content: space-between;
+
+  ${({ focus }) =>
+    focus &&
+    `
+    border: 2px dashed #FF794F;
+  `}
 `;
