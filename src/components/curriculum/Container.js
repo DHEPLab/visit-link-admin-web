@@ -35,8 +35,8 @@ export default function Container({
         component
       ) : (
         <StyledContainer nested={nested} focus={focus}>
-          <TitleContainer onClick={onFocus}>
-            <Title>
+          <TitleContainer>
+            <Title onClick={onFocus}>
               {icon && <Iconfont type={icon} style={{ marginRight: "8px" }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
@@ -89,7 +89,6 @@ const TitleContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid #eee;
-  cursor: pointer;
 `;
 
 const StyledContainer = styled.div`
@@ -109,6 +108,7 @@ const Title = styled.div`
   color: #8e8e93;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Body = styled.div`

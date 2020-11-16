@@ -8,23 +8,35 @@ import Factory from "./factory";
 import { ComponentField } from "./*";
 import { Iconfont, Card } from "../*";
 
+export function handleMoveUp(helpers, index, focus, setFocus) {
+  if (index === 0) return;
+  helpers.move(index, index - 1);
+  if (focus === index) {
+    setFocus(index - 1);
+  }
+}
+
+export function handleMoveDown(helpers, index, focus, setFocus, componentSize) {
+  if (index === componentSize - 1) return;
+  helpers.move(index, index + 1);
+  if (focus === index) {
+    setFocus(index + 1);
+  }
+}
+
+export function handleRemove(helpers, index, focus, setFocus) {
+  helpers.remove(index);
+  if (focus === index) {
+    setFocus(-1);
+  }
+}
+
 export default function ModuleComponents({ value, readonly, stickyTop }) {
-  // current focus component index (first layer)
   const [focus, setFocus] = useState(-1);
 
   return (
     <FieldArray name="components">
       {(helpers) => {
-        function handleMoveUp(index) {
-          if (index === 0) return;
-          helpers.move(index, index - 1);
-        }
-
-        function handleMoveDown(index) {
-          if (index === value.length - 1) return;
-          helpers.move(index, index + 1);
-        }
-
         return (
           <FieldArrayContainer>
             <ComponentForm>
@@ -32,9 +44,9 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
                 <ComponentField
                   {...{ index, readonly, component, focus: focus === index, key: component.key }}
                   name="components"
-                  onRemove={() => helpers.remove(index)}
-                  onMoveUp={() => handleMoveUp(index)}
-                  onMoveDown={() => handleMoveDown(index)}
+                  onRemove={() => handleRemove(helpers, index, focus, setFocus)}
+                  onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
+                  onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, value.length)}
                   onFocus={() => setFocus(index)}
                 />
               ))}
