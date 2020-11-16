@@ -31,6 +31,15 @@ export function handleRemove(helpers, index, focus, setFocus) {
   }
 }
 
+export function insertComponent(helpers, component, focus, setFocus) {
+  if (focus === -1) {
+    helpers.push(component);
+  } else {
+    helpers.insert(focus + 1, component);
+    setFocus(focus + 1);
+  }
+}
+
 export default function ModuleComponents({ value, readonly, stickyTop }) {
   const [focus, setFocus] = useState(-1);
 
@@ -57,18 +66,30 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
                 <StickyContainer top={stickyTop}>
                   <Card title="添加组件：">
                     <Space direction="vertical" size="large">
-                      <Button type="primary" onClick={() => helpers.push(Factory.createText())}>
+                      <Button
+                        type="primary"
+                        onClick={() => insertComponent(helpers, Factory.createText(), focus, setFocus)}
+                      >
                         <Iconfont type="icontext" /> 添加文本组件
                       </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createMedia())}>
+                      <Button
+                        type="primary"
+                        onClick={() => insertComponent(helpers, Factory.createMedia(), focus, setFocus)}
+                      >
                         <Iconfont type="iconmedia" />
                         添加媒体组件
                       </Button>
-                      <Button type="primary" onClick={() => helpers.push(Factory.createSwitch())}>
+                      <Button
+                        type="primary"
+                        onClick={() => insertComponent(helpers, Factory.createSwitch(), focus, setFocus)}
+                      >
                         <Iconfont type="iconswitch" />
                         添加选择组件
                       </Button>
-                      <PageButton type="primary" onClick={() => helpers.push(Factory.createPageFooter())}>
+                      <PageButton
+                        type="primary"
+                        onClick={() => insertComponent(helpers, Factory.createPageFooter(), focus, setFocus)}
+                      >
                         添加翻页分割组件
                       </PageButton>
                     </Space>
