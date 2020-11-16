@@ -18,6 +18,7 @@ export default function Switch({ name, value, onChange, ...props }) {
       <Text
         {...props}
         focus={false}
+        onFocus={null}
         name={Name.question}
         value={value.question}
         onChange={onChange}
@@ -31,6 +32,7 @@ export default function Switch({ name, value, onChange, ...props }) {
               <Case
                 {...props}
                 focus={false}
+                onFocus={null}
                 key={v.key}
                 value={v}
                 index={index}
