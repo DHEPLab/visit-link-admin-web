@@ -79,7 +79,7 @@ export default function Media({ name, value, onChange, ...props }) {
             <Upload accept=".mp4" showUploadList={false} beforeUpload={handleUploadVideo}>
               <UploadButton title="点击上传视频" icon="iconvideo">
                 支持MP4 <br />
-                大小不超过10M
+                大小不超过1G
                 <br />
                 建议尺寸为 16:10
               </UploadButton>
