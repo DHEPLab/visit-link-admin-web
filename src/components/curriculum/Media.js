@@ -114,7 +114,7 @@ function Preview({ type, file }) {
 const PreviewImage = styled.div`
   width: 400px;
   height: 250px;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 8px;
