@@ -49,6 +49,7 @@ export default function (
         // 是否展示 pageSize 切换器，当 total 大于 50 时默认为 true
         showSizeChanger: false,
         pageSize: size,
+        current: search.page + 1,
         total: totalElements,
         showTotal(total) {
           return `共 ${total} 条`;
