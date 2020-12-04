@@ -219,6 +219,7 @@ export default function Baby() {
         <StaticField label="所在区域">{baby.area}</StaticField>
         <StaticField label="详细地址">{baby.location}</StaticField>
         <StaticField label="备注信息">{baby.remark}</StaticField>
+        {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
       </Card>
 
       <Carers babyId={id} deleted={deleted} />
