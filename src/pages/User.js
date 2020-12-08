@@ -77,6 +77,14 @@ export default function User() {
           </>
         }
       />
+
+      {roleChw && (
+        <Card title="负责督导员">
+          <StaticField label="真实姓名">{user?.chw?.supervisor?.realName}</StaticField>
+          <StaticField label="联系电话">{user?.chw?.supervisor?.phone}</StaticField>
+        </Card>
+      )}
+
       <Card
         title="用户信息"
         extra={
