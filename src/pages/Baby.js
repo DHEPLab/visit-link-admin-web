@@ -33,6 +33,7 @@ export default function Baby() {
   const [approveModifyVisible, openApproveModifyModal, closeApproveModifyModal] = useBoolState();
   const [approveDeleteVisible, openApproveDeleteModal, closeApproveDeleteModal] = useBoolState();
   const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
+  const [revertAccountVisible, openRevertAccountModal, closeRevertAccountModal] = useBoolState();
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
 
   const { chw, approved, actionFromApp, deleted } = baby;
@@ -98,6 +99,13 @@ export default function Baby() {
     });
   }
 
+  function handleRevertAccount() {
+    Axios.put(`/admin/babies/${id}/revert`).then(() => {
+      closeRevertAccountModal();
+      refresh();
+    });
+  }
+
   function handleChangeChw(selected) {
     if (selected.length === 0) message.warning("请选择一个社区工作者");
     const [userId] = selected;
@@ -109,6 +117,23 @@ export default function Baby() {
 
   if (!baby.id) return null;
 
+  function headerExtra() {
+    if (!approved) return;
+    if (deleted) {
+      return (
+        <Button ghost type="danger" onClick={openRevertAccountModal}>
+          恢复宝宝
+        </Button>
+      );
+    } else {
+      return (
+        <Button ghost type="danger" onClick={openCloseAccountModal}>
+          注销宝宝
+        </Button>
+      );
+    }
+  }
+
   return (
     <>
       <DetailHeader
@@ -116,19 +141,17 @@ export default function Baby() {
         menu="宝宝管理"
         title={baby.name}
         role={`宝宝ID ${baby.identity || "待核准"}`}
-        extra={
-          approved &&
-          !deleted && (
-            <Button ghost type="danger" onClick={openCloseAccountModal}>
-              注销宝宝
-            </Button>
-          )
-        }
+        extra={headerExtra()}
       />
       <CloseAccountBabyModal
         visible={closeAccountVisible}
         onCancel={closeCloseAccountModal}
         onOk={handleCloseAccount}
+      />
+      <RevertAccountBabyModal
+        visible={revertAccountVisible}
+        onCancel={closeRevertAccountModal}
+        onOk={handleRevertAccount}
       />
 
       {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
@@ -239,6 +262,30 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
+
+function RevertAccountBabyModal({ visible, onCancel, onOk }) {
+  return (
+    <Modal
+      title="恢复宝宝"
+      closable={false}
+      destroyOnClose
+      onCancel={onCancel}
+      footer={
+        <Space size="large">
+          <Button ghost type="danger" onClick={onCancel}>
+            再想想
+          </Button>
+          <Button type="danger" onClick={onOk}>
+            恢复
+          </Button>
+        </Space>
+      }
+      visible={visible}
+    >
+      <p>确定要恢复宝宝？</p>
+    </Modal>
+  );
+}
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
   return (
