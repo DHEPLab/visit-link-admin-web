@@ -93,8 +93,8 @@ export default function Baby() {
     });
   }
 
-  function handleCloseAccount() {
-    Axios.delete(`/admin/babies/${id}`).then(() => {
+  function handleCloseAccount({ reason }) {
+    Axios.delete(`/admin/babies/${id}?reason=${reason}`).then(() => {
       history.goBack();
     });
   }
@@ -288,6 +288,8 @@ function RevertAccountBabyModal({ visible, onCancel, onOk }) {
 }
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
+  const [form] = Form.useForm();
+
   return (
     <Modal
       title="注销宝宝"
@@ -299,7 +301,7 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
           <Button ghost type="danger" onClick={onCancel}>
             再想想
           </Button>
-          <Button type="danger" onClick={onOk}>
+          <Button type="danger" onClick={form.submit}>
             注销
           </Button>
         </Space>
@@ -307,6 +309,11 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
       visible={visible}
     >
       <p>注销后，社区工作者将无法继续查看，修改，拜访该宝宝。是否继续？</p>
+      <Form form={form} onFinish={onOk} labelCol={{ span: 0 }}>
+        <Form.Item label="注销原因" name="reason" rules={Rules.Required}>
+          <Input style={{ width: "100%" }} placeholder="请输入注销原因" />
+        </Form.Item>
+      </Form>
     </Modal>
   );
 }
