@@ -52,7 +52,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
           const stage = getFieldValue("stage");
           if (stage === "EDC") {
             return (
-              <Form.Item label="待产日期" name="edc" rules={Rules.Required}>
+              <Form.Item label="预产期" name="edc" rules={Rules.Required}>
                 <DatePicker disabledDate={(current) => disabledDateForEDC(current, moment())} />
               </Form.Item>
             );
