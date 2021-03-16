@@ -70,7 +70,7 @@ export default function Survey() {
 
     if (!readonly) {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
-      return stickyScrollListener(687, setStickyTop);
+      return stickyScrollListener(422, setStickyTop);
     }
   }, [id, form, readonly, dispatch]);
 
