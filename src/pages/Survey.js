@@ -7,6 +7,7 @@ import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
 
 import Factory from "../components/curriculum/factory";
 import { Rules } from "../constants/*";
+import SurveyComponents from "../components/curriculum/SurveyComponents";
 import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components/*";
 import { debounce } from "lodash";
 
@@ -54,7 +55,7 @@ export default function Survey() {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
-        setComponents(data.components);
+        // setComponents(data.components);
         setDraftId(headers["x-draft-id"]);
         setDraftDate(headers["x-draft-date"]);
       // });
@@ -186,14 +187,12 @@ export default function Survey() {
                 <Form.Item label="问卷名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
                   <Input placeholder="请输入问卷名称，限40个字符" />
                 </Form.Item>
-                <Form.Item label="问卷编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入问卷编号，限20个字符" />
-                </Form.Item>
-                <Form.Item label="问卷描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
-                  <Input.TextArea rows={4} placeholder="请输入问卷描述，限200个字符" />
-                </Form.Item>
               </Form>
             )}
+          </Card>
+
+          <Card title="问卷内容">
+            <SurveyComponents value={values.components} readonly={readonly} stickyTop={stickyTop} />
           </Card>
 
         </>
@@ -207,8 +206,6 @@ function ReadonlyForm({ value }) {
   return (
     <div data-testid="readonly-form">
       <StaticField label="问卷名称">{value.name}</StaticField>
-      <StaticField label="问卷编号">{value.number}</StaticField>
-      <StaticField label="问卷描述">{value.description}</StaticField>
     </div>
   );
 }
