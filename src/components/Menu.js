@@ -20,6 +20,9 @@ export default function Menu() {
             <li>
               <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
             </li>
+            <li>
+              <ActivableLink title="问卷管理" to="/surveys" icon="iconmodule" />
+            </li>
           </>
         )}
         <li>
