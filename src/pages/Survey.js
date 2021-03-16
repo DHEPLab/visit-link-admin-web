@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Formik } from "formik";
-import { Form, Space, Button, message } from "antd";
+import { useDispatch } from "react-redux";
+import { Form, Space, Button, Input, message } from "antd";
 import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
 
-import { DetailHeader, DeleteConfirmModal } from "../components/*";
+import Factory from "../components/curriculum/factory";
+import { Rules } from "../constants/*";
+import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components/*";
+import { debounce } from "lodash";
 
 export default function Survey() {
   const { id } = useParams();
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
@@ -18,13 +23,55 @@ export default function Survey() {
   const [form] = Form.useForm();
   const history = useHistory();
 
+  const [module, setModule] = useState({});
   const [components, setComponents] = useState();
+  const [stickyTop, setStickyTop] = useState(0);
 
   const [draftId, setDraftId] = useState();
+  const [draftDate, setDraftDate] = useState();
 
   useEffect(() => {
     setReadonly(!pathname.includes("/surveys/edit") && !pathname.includes("/surveys/create"));
   }, [pathname, setReadonly]);
+
+  
+  useEffect(() => {
+    if (readonly == null) return;
+
+    if (!id) {
+      setComponents([Factory.createText()]);
+    } else {
+      // Axios.get(`/admin/surveys/${id}`).then(({ data, headers }) => {
+        const data = {
+          name: '我的测试问卷',
+          number: '编号00012',
+          description: '问卷描述'
+        }
+        const headers = {
+          'x-draft-id': null,
+          'x-draft-date': null
+        }
+        if (!readonly) form.setFieldsValue(data);
+        setModule(data);
+        setTitle(data.name);
+        setComponents(data.components);
+        setDraftId(headers["x-draft-id"]);
+        setDraftDate(headers["x-draft-date"]);
+      // });
+    }
+
+    // Axios.get("/admin/surveys", {
+    //   params: {
+    //     size: 1000,
+    //     published: true,
+    //   },
+    // }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
+
+    if (!readonly) {
+      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
+      return stickyScrollListener(687, setStickyTop);
+    }
+  }, [id, form, readonly, dispatch]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -51,6 +98,12 @@ export default function Survey() {
       components,
       ...values,
     }).then(history.goBack);
+  }
+
+  function handleDelteDraft() {
+    Axios.delete(`/admin/surveys/${draftId}`).then(() => {
+      setDraftId("");
+    });
   }
 
   function handleDeleteModule() {
@@ -97,7 +150,7 @@ export default function Survey() {
                       </DeleteConfirmModal>
                     )}
                     {!draftId && (
-                      <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
+                      <Button type="danger" onClick={() => history.push(`/surveys/edit/${id}`)}>
                         编辑问卷
                       </Button>
                     )}
@@ -115,9 +168,58 @@ export default function Survey() {
               </Space>
             }
           ></DetailHeader>
-          
+
+          {draftId && (
+            <DraftBar
+              title="本模块有1个尚未发布的草稿："
+              lastModifiedDraftAt={draftDate}
+              onRemove={handleDelteDraft}
+              onClick={() => history.push(`/modules/edit/${draftId}`)}
+            />
+          )}
+
+          <Card title="问卷基本信息">
+            {readonly ? (
+              <ReadonlyForm value={module} />
+            ) : (
+              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+                <Form.Item label="问卷名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                  <Input placeholder="请输入问卷名称，限40个字符" />
+                </Form.Item>
+                <Form.Item label="问卷编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
+                  <Input placeholder="请输入问卷编号，限20个字符" />
+                </Form.Item>
+                <Form.Item label="问卷描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
+                  <Input.TextArea rows={4} placeholder="请输入问卷描述，限200个字符" />
+                </Form.Item>
+              </Form>
+            )}
+          </Card>
+
         </>
       )}
     </Formik>
   );
+}
+
+
+function ReadonlyForm({ value }) {
+  return (
+    <div data-testid="readonly-form">
+      <StaticField label="问卷名称">{value.name}</StaticField>
+      <StaticField label="问卷编号">{value.number}</StaticField>
+      <StaticField label="问卷描述">{value.description}</StaticField>
+    </div>
+  );
+}
+
+function stickyScrollListener(offsetTop, onChangeStickyTop) {
+  const onScroll = debounce((event) => {
+    const diffTop = event.target.scrollTop - offsetTop;
+    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
+  }, 100);
+  document.getElementById("route-view").addEventListener("scroll", onScroll);
+  return () => {
+    document.getElementById("route-view").removeEventListener("scroll", onScroll);
+  };
 }
