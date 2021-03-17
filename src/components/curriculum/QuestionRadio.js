@@ -102,11 +102,6 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                   <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
                     <Iconfont type="icontrash-orange" size={14} /> 移除
                   </Button>
-                  <Field
-                    name={`questions.${(!index && index !== 0 ? -1 : index)}.name`}
-                    validate={(value) => value ? '' : '此项必填，不能为空！'}
-                    style={{ display: 'none' }}
-                  />
                 </Col>
               </RowLine>
             </div>
