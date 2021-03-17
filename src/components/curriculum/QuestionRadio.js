@@ -39,9 +39,6 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
   function handlerRadioChange (name, value) {
     const onChange = handleChange(`${name}`)
     onChange({ target: { value } })
-    if (name.split('.').includes('dependenceId')) {
-      setTimeout(() => validateForm(), 0)
-    }
   }
 
   function handlerRemove (arrayHelper, i) {
@@ -60,7 +57,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
       {props.readonly ? <TextTitle>{value.title}</TextTitle> : <RowLine>
         <Text span={4}>题干文本 </Text>
         <Col span={20}>
-          <TitleInput placeholder="请输入题干文本" />
+          <TitleInput name={`${name}.title`} defaultValue={value.title} placeholder="请输入题干文本" />
         </Col>
       </RowLine>}
 
@@ -86,20 +83,20 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                 <Text span={4}>选项{String.fromCharCode(i + 65)}. </Text>
                 <Col span={12}>
                   <Input
-                    name={`temporary${i}`}
+                    name={`${name}.options.${i}.label`}
                     style={{ width: 360 }}
-                    value={e.label}
+                    defaultValue={e.label}
                     placeholder="请输入"
                     onChange={e => {
                       questionValue[i] = e.target.value
                       setQuestionValue(questionValue)
                       validateForm()
                     }}
-                    onBlur={e => handlerRadioChange(`${name}.options.${i}`, e.target.value)}
+                    onBlur={e => handlerRadioChange(`${name}.options.${i}.label`, e.target.value)}
                   />
                 </Col>
                 <Col span={3}>
-                  <AddTextCheckbox>附文本框</AddTextCheckbox>
+                  <AddTextCheckbox name={`${name}.options.${i}.needEnter`} defaultChecked={e.needEnter}>附文本框</AddTextCheckbox>
                 </Col>
                 <Col span={3}>
                   <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>

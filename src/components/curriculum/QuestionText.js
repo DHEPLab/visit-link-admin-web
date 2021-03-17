@@ -43,11 +43,11 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
       right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
       icon="icontext-gray"
       title="文本问题"
-      name={name}
+      name={`${name}.title`}
       noPadding
       {...props}
     >
-      {props.readonly? <TextTitle>{value.title}</TextTitle> : <Text placeholder="请输入叙述文本内容" bordered={false} />}
+      {props.readonly? <TextTitle>{value.title}</TextTitle> : <Text defaultValue={value.title} placeholder="请输入叙述文本内容" bordered={false} />}
     </Container>
   );
 }
