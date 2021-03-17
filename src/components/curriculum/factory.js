@@ -27,6 +27,39 @@ function createText() {
   };
 }
 
+function createQuestionText() {
+  return {
+    type: "Text",
+    key: generateKey(),
+    value: {
+      type: "script",
+      html: "",
+    },
+  };
+}
+
+function createQuestionRadio() {
+  return {
+    type: "Radio",
+    key: generateKey(),
+    value: {
+      type: "script",
+      html: "",
+    },
+  };
+}
+
+function createQuestionCheckbox() {
+  return {
+    type: "Checkbox",
+    key: generateKey(),
+    value: {
+      type: "script",
+      html: "",
+    },
+  };
+}
+
 function createSwitch() {
   return {
     type: "Switch",
@@ -58,6 +91,9 @@ export default {
   createText,
   createMedia,
   createSwitch,
+  createQuestionText,
+  createQuestionRadio,
+  createQuestionCheckbox,
   createCase,
   createPageFooter,
 };
