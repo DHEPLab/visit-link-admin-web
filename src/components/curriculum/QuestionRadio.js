@@ -69,9 +69,9 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
             <div key={i}>
               <ReadOnlyLine>
                 <Text span="2" >选项{String.fromCharCode(i + 65)}. </Text>
-                <Text>{value.options[i]}</Text>
+                <Text>{value.options[i]?.label}</Text>
                 <Col>
-                  <Input style={{marginLeft: 20}} placeholder='填写内容' />
+                  {value.options[i]?.needEnter && <Input style={{marginLeft: 20}} placeholder='填写内容' />}
                 </Col>
               </ReadOnlyLine>
             </div>
@@ -88,7 +88,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                   <Input
                     name={`temporary${i}`}
                     style={{ width: 360 }}
-                    value={e}
+                    value={e.label}
                     placeholder="请输入"
                     onChange={e => {
                       questionValue[i] = e.target.value

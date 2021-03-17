@@ -46,7 +46,12 @@ export default function Survey() {
         const data = {
           name: '我的测试问卷',
           number: '编号00012',
-          description: '问卷描述'
+          description: '问卷描述',
+          questions: [
+            {"key": 1599212637987, "type": "Text", "value": {title: "填空题题目?"}},
+            {"key": 1615878521396, "type": "Radio", "value":{ title: "选择题题目?", options: [
+              {label: "徐昂1", needEnter: true}, {label: "徐昂2", needEnter: false}]}
+            }]
         }
         const headers = {
           'x-draft-id': null,
@@ -55,7 +60,7 @@ export default function Survey() {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
-        // setQuestions(data.questions);
+        setQuestions(data.questions);
         setDraftId(headers["x-draft-id"]);
         setDraftDate(headers["x-draft-date"]);
       // });
