@@ -47,7 +47,7 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
       noPadding
       {...props}
     >
-      <Text placeholder="请输入叙述文本内容" bordered={false} />
+      {props.readonly? <TextTitle>{value.title}</TextTitle> : <Text placeholder="请输入叙述文本内容" bordered={false} />}
     </Container>
   );
 }
@@ -57,6 +57,11 @@ const TextType = styled.div`
   font-size: 16px;
   color: ${({ color }) => color};
 `;
+
+const TextTitle = styled.div`
+  font-weight: 600;
+  margin: 20px 0px 20px 40px;
+`
 
 const Text = styled(Input.TextArea)`
   width: 100%

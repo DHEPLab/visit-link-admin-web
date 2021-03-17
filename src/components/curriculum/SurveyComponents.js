@@ -46,7 +46,7 @@ export function insertComponent(helpers, component, focus, setFocus) {
 export default function SurveyComponents({ value, readonly, stickyTop }) {
   const [focus, setFocus] = useState(-1);
   return (
-    <FieldArray name="components">
+    <FieldArray name="questions">
       {(helpers) => {
         return (
           <FieldArrayContainer>
@@ -54,7 +54,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
               {value && value.map((component, index) => (
                 <ComponentQuestion
                   {...{ index, readonly, component, focus: focus === index, key: component.key }}
-                  name="components"
+                  name="questions"
                   onRemove={() => handleRemove(helpers, index, focus, setFocus)}
                   onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
                   onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, value.length)}

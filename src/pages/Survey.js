@@ -25,7 +25,7 @@ export default function Survey() {
   const history = useHistory();
 
   const [module, setModule] = useState({});
-  const [components, setComponents] = useState();
+  const [questions, setQuestions] = useState();
   const [stickyTop, setStickyTop] = useState(0);
 
   const [draftId, setDraftId] = useState();
@@ -40,7 +40,7 @@ export default function Survey() {
     if (readonly == null) return;
 
     if (!id) {
-      setComponents([Factory.createText()]);
+      setQuestions([Factory.createText()]);
     } else {
       // Axios.get(`/admin/surveys/${id}`).then(({ data, headers }) => {
         const data = {
@@ -55,7 +55,7 @@ export default function Survey() {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
-        // setComponents(data.components);
+        // setQuestions(data.questions);
         setDraftId(headers["x-draft-id"]);
         setDraftDate(headers["x-draft-date"]);
       // });
@@ -75,7 +75,7 @@ export default function Survey() {
   }, [id, form, readonly, dispatch]);
 
   function onSubmitFormik(values) {
-    setComponents(values.components);
+    setQuestions(values.questions);
     form.submit();
   }
 
@@ -92,11 +92,11 @@ export default function Survey() {
   }
 
   function onSubmit(values) {
-    if (components.length === 0) return message.warn("至少添加一个问题");
+    if (questions.length === 0) return message.warn("至少添加一个问题");
 
     Axios.post(submitURL, {
       id,
-      components,
+      questions,
       ...values,
     }).then(history.goBack);
   }
@@ -113,10 +113,10 @@ export default function Survey() {
     });
   }
 
-  if (readonly == null || (id == null)) return null;
+  if (!questions) return null;
 
   return (
-    <Formik initialValues={{ components }} onSubmit={onSubmitFormik}>
+    <Formik initialValues={{ questions }} onSubmit={onSubmitFormik}>
       {({ values, handleSubmit }) => (
         <>
           <Prompt
@@ -175,7 +175,7 @@ export default function Survey() {
               title="本模块有1个尚未发布的草稿："
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
-              onClick={() => history.push(`/modules/edit/${draftId}`)}
+              onClick={() => history.push(`/surveys/edit/${draftId}`)}
             />
           )}
 
@@ -192,7 +192,7 @@ export default function Survey() {
           </Card>
 
           <Card title="问卷内容">
-            <SurveyComponents value={values.components} readonly={readonly} stickyTop={stickyTop} />
+            <SurveyComponents value={values.questions} readonly={readonly} stickyTop={stickyTop} />
           </Card>
 
         </>

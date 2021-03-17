@@ -26,6 +26,7 @@ const Container = styled.div`
   cursor: pointer;
   /* text-align: center; */
   text-align: -webkit-center;
+  margin-bottom: 10px;
 `;
 
 const Title = styled.span`

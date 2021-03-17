@@ -57,12 +57,26 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
       noPadding
       {...props}
     >
-      <RowLine>
+      {props.readonly ? <TextTitle>{value.title}</TextTitle> : <RowLine>
         <Text span={4}>题干文本 </Text>
         <Col span={20}>
           <TitleInput placeholder="请输入题干文本" />
         </Col>
-      </RowLine>
+      </RowLine>}
+
+      {props.readonly ? <>
+        {questionValue.map((e, i) => (
+            <div key={i}>
+              <ReadOnlyLine>
+                <Text span="2" >选项{String.fromCharCode(i + 65)}. </Text>
+                <Text>{value.options[i]}</Text>
+                <Col>
+                  <Input style={{marginLeft: 20}} placeholder='填写内容' />
+                </Col>
+              </ReadOnlyLine>
+            </div>
+          ))}
+      </> :
       <FieldArray name={`${name}.options`} render={(arrayHelper) => (
         <>
         {!props.readonly && <div onClick={() => addOptions(arrayHelper)} ><QuestionButton title="点击添加选项" icon="iconbaby-primary" /></div>}
@@ -98,11 +112,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                   />
                 </Col>
               </RowLine>
-              {/* <QuestionButton title="删除" icon="iconbaby-primary" onClick={() => handlerRemove(arrayHelper, i)} /> */}
             </div>
           ))}
         </>
-      )} />
+      )} />}
+      
     </Container>
   );
 }
@@ -117,8 +131,18 @@ const RowLine = styled(Row)`
   margin: 10px auto;
 `
 
+const ReadOnlyLine = styled(Row)`
+  margin-left: 40px;
+  margin-bottom: 10px;
+`
+
 const TitleInput = styled(Input)`
   width: 35vw;
+`
+
+const TextTitle = styled.div`
+  font-weight: 600;
+  margin: 20px 0px 20px 40px;
 `
 
 const Text = styled(Col)`
