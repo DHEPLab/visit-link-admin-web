@@ -32,9 +32,8 @@ function createQuestionText() {
     type: "Text",
     key: generateKey(),
     value: {
-      type: "script",
-      html: "",
-    },
+      title: ""
+    }
   };
 }
 
@@ -43,9 +42,9 @@ function createQuestionRadio() {
     type: "Radio",
     key: generateKey(),
     value: {
-      type: "script",
-      html: "",
-    },
+      title: "",
+      options: []
+    }
   };
 }
 
@@ -54,9 +53,9 @@ function createQuestionCheckbox() {
     type: "Checkbox",
     key: generateKey(),
     value: {
-      type: "script",
-      html: "",
-    },
+      title: "",
+      options: []
+    }
   };
 }
 

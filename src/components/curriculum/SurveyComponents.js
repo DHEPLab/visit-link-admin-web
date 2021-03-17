@@ -45,7 +45,6 @@ export function insertComponent(helpers, component, focus, setFocus) {
 
 export default function SurveyComponents({ value, readonly, stickyTop }) {
   const [focus, setFocus] = useState(-1);
-  console.log(value, 99777799)
   return (
     <FieldArray name="components">
       {(helpers) => {

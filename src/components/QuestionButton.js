@@ -3,12 +3,12 @@ import styled from "styled-components";
 import {Row, Col} from 'antd';
 import { Iconfont } from "./*";
 
-export default function QuestionButton({ icon, title, children }) {
+export default function QuestionButton({ icon, title }) {
   return (
     <Container>
       <RowLine>
         <Col span={6}>
-          <Iconfont type={icon} size={40} />
+          <Iconfont type={icon} size={30} />
         </Col>
         <Text span={18}>
           <Title>{title}</Title>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { QuestionText } from "./*";
+import { QuestionText, QuestionRadio } from "./*";
 
 export default function ComponentQuestion({ name, component, index, onMoveDown, ...props }) {
   let As;
@@ -8,11 +8,11 @@ export default function ComponentQuestion({ name, component, index, onMoveDown, 
     case "Text":
       As = QuestionText;
       break;
-    case "Media":
-      As = QuestionText;
+    case "Radio":
+      As = QuestionRadio;
       break;
-    case "Switch":
-      As = QuestionText;
+    case "Checkbox":
+      As = QuestionRadio;
       break;
     default:
       As = <div>{component.type}</div>;
