@@ -1,19 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import {Row, Col} from 'antd';
 import { Iconfont } from "./*";
 
 export default function QuestionButton({ icon, title }) {
   return (
     <Container>
-      <RowLine>
-        <Col span={6}>
-          <Iconfont type={icon} size={30} />
-        </Col>
-        <Text span={18}>
+      <Line>
+          <Iconfont type={icon} size={27} />
           <Title>{title}</Title>
-        </Text>
-      </RowLine>
+      </Line>
     </Container>
   );
 }
@@ -30,17 +25,15 @@ const Container = styled.div`
 `;
 
 const Title = styled.span`
+  margin-left: 10px;
   color: #ff794f;
   font-weight: bold;
 `;
 
-const Text = styled(Col)`
+const Line = styled.div`
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: justify;
-`
-
-const RowLine = styled(Row)`
-  width: 188px;
 `

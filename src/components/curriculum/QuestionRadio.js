@@ -78,7 +78,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
       </> :
       <FieldArray name={`${name}.options`} render={(arrayHelper) => (
         <>
-        {!props.readonly && <div onClick={() => addOptions(arrayHelper)} ><QuestionButton title="点击添加选项" icon="iconbaby-primary" /></div>}
+        {!props.readonly && <div onClick={() => addOptions(arrayHelper)} ><QuestionButton title="点击添加选项" icon="iconadd-circle-Fill" /></div>}
           {value.options && value.options.map((e, i) => (
             <div key={i}>
               <RowLine>
