@@ -41,7 +41,7 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
   return (
     <Container
       right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
-      icon="icontext-gray"
+      icon="iconquestion-text-gray"
       title="文本问题"
       name={`${name}.title`}
       noPadding

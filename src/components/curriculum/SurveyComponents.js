@@ -72,20 +72,20 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionText(), focus, setFocus)}
                       >
-                        <Iconfont type="iconqtext" /> 添加文本问题
+                        <Iconfont type="iconquestion-text" /> 添加文本问题
                       </Button>
                       <Button
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionRadio(), focus, setFocus)}
                       >
-                        <Iconfont type="iconmedia" />
+                        <Iconfont type="iconquestion-radio" />
                         添加单选问题
                       </Button>
                       <Button
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionCheckbox(), focus, setFocus)}
                       >
-                        <Iconfont type="iconswitch" />
+                        <Iconfont type="iconquestion-checkbox" />
                         添加多选问题
                       </Button>
                     </Space>
