@@ -32,8 +32,8 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
   }, [])
   
   function addOptions (arrayHelper) {
-    setQuestionValue([...questionValue, ''])
-    arrayHelper.push('')
+    setQuestionValue([...questionValue, {label:'', needEnter: false}])
+    arrayHelper.push({label:'', needEnter: false})
   }
 
   function handlerRadioChange (name, value) {
@@ -48,7 +48,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
   return (
     <Container
       right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
-      icon="icontext-gray"
+      icon="iconquestion-radio-gray"
       title="单选问题"
       name={name}
       noPadding
@@ -57,7 +57,12 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
       {props.readonly ? <TextTitle>{value.title}</TextTitle> : <RowLine>
         <Text span={4}>题干文本 </Text>
         <Col span={20}>
-          <TitleInput name={`${name}.title`} defaultValue={value.title} placeholder="请输入题干文本" />
+          <TitleInput
+            name={`${name}.title`}
+            defaultValue={value.title}
+            placeholder="请输入题干文本"
+            onBlur={e => handlerRadioChange(`${name}.title`, e.target.value)}
+          />
         </Col>
       </RowLine>}
 
@@ -96,7 +101,12 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                   />
                 </Col>
                 <Col span={3}>
-                  <AddTextCheckbox name={`${name}.options.${i}.needEnter`} defaultChecked={e.needEnter}>附文本框</AddTextCheckbox>
+                  <AddTextCheckbox
+                    name={`${name}.options.${i}.needEnter`}
+                    defaultChecked={e.needEnter}
+                    onChange={e => handlerRadioChange(`${name}.options.${i}.needEnter`, e.target.checked)}
+                  >附文本框
+                  </AddTextCheckbox>
                 </Col>
                 <Col span={3}>
                   <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
