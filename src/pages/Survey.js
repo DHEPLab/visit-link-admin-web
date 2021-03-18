@@ -137,7 +137,7 @@ export default function Survey() {
           />
 
           <DetailHeader
-            icon="iconmodule-primary"
+            icon="iconwenjuan-primary"
             menu="问卷管理"
             title={title}
             extra={
