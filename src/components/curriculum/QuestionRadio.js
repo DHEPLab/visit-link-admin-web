@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
-import { Input, Row, Col, Button, Checkbox } from 'antd';
+import { Input, Row, Col, Button } from 'antd';
 import { useFormikContext, FieldArray, Field } from 'formik'
+import { Checkbox } from 'formik-antd'
 import { QuestionButton, Iconfont } from "../*";
 
 import Container from "./Container";
@@ -20,16 +21,10 @@ const typeLabels = {
 
 export default function QuestionRadio({ name, onBlur, onChange, value, index, ...props }) {
 
-  const [questionValue, setQuestionValue] = useState([])
   const { values, handleChange } = useFormikContext()
   const type = values.questions[index]?.type
 
-  useEffect(() => {
-    setQuestionValue([...(value.options || [])])
-  }, [value])
-
   function addOptions (arrayHelper) {
-    setQuestionValue([...questionValue, {label:'', needEnter: false}])
     arrayHelper.push({label:'', needEnter: false})
   }
 
@@ -39,10 +34,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
   }
 
   function handlerRemove (arrayHelper, i) {
-    questionValue.splice(i, 1)
-    setQuestionValue([...questionValue])
-    const onChange = handleChange(`${name}.options`)
-    onChange({ target: {value : questionValue} })
+    arrayHelper.remove(i)
   }
 
   return (
@@ -72,7 +64,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
       </RowLine>}
 
       {props.readonly ? <>
-        {questionValue && questionValue.map((e, i) => (
+        {value.options && value.options.map((e, i) => (
             <div key={i}>
               <ReadOnlyLine>
                 <Text span="2" >选项{String.fromCharCode(i + 65)}. </Text>
@@ -87,7 +79,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
       <FieldArray name={`${name}.options`} render={(arrayHelper) => (
         <>
         {!props.readonly && <div onClick={() => addOptions(arrayHelper)} ><QuestionButton title="点击添加选项" icon="iconbaby-primary" /></div>}
-          {questionValue && questionValue.map((e, i) => (
+          {value.options && value.options.map((e, i) => (
             <div key={i}>
               <RowLine>
                 <Text span={4}>选项{String.fromCharCode(i + 65)}. </Text>
@@ -102,12 +94,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                   />
                 </Col>
                 <Col span={3}>
-                  <Field
-                    as={AddTextCheckbox}
+                  <AddTextCheckbox
                     name={`${name}.options.${i}.needEnter`}
                     defaultChecked={e.needEnter}
                     onChange={e => handlerRadioChange(`${name}.options.${i}.needEnter`, e.target.checked)}
-                  >附文本框</Field>
+                  >附文本框</AddTextCheckbox>
                 </Col>
                 <Col span={3}>
                   <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
@@ -119,7 +110,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
           ))}
         </>
       )} />}
-      
+
     </Container>
   );
 }
