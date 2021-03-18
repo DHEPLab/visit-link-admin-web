@@ -21,11 +21,13 @@ const typeLabels = {
 export default function QuestionRadio({ name, onBlur, onChange, value, index, ...props }) {
 
   const [questionValue, setQuestionValue] = useState([])
-  const { values, handleChange, validateForm } = useFormikContext()
+  const { values, handleChange } = useFormikContext()
   const type = values.questions[index]?.type
+
   useEffect(() => {
-    setQuestionValue([...value.options])
+    setQuestionValue([...(value.options || [])])
   }, [value])
+
   function addOptions (arrayHelper) {
     setQuestionValue([...questionValue, {label:'', needEnter: false}])
     arrayHelper.push({label:'', needEnter: false})
@@ -37,8 +39,10 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
   }
 
   function handlerRemove (arrayHelper, i) {
-    arrayHelper.remove(i)
-    setQuestionValue(questionValue.filter((e, inde) => inde !== i))
+    questionValue.splice(i, 1)
+    setQuestionValue([...questionValue])
+    const onChange = handleChange(`${name}.options`)
+    onChange({ target: {value : questionValue} })
   }
 
   return (
@@ -68,7 +72,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
       </RowLine>}
 
       {props.readonly ? <>
-        {questionValue.map((e, i) => (
+        {questionValue && questionValue.map((e, i) => (
             <div key={i}>
               <ReadOnlyLine>
                 <Text span="2" >选项{String.fromCharCode(i + 65)}. </Text>
@@ -83,36 +87,27 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
       <FieldArray name={`${name}.options`} render={(arrayHelper) => (
         <>
         {!props.readonly && <div onClick={() => addOptions(arrayHelper)} ><QuestionButton title="点击添加选项" icon="iconbaby-primary" /></div>}
-          {questionValue.map((e, i) => (
+          {questionValue && questionValue.map((e, i) => (
             <div key={i}>
               <RowLine>
                 <Text span={4}>选项{String.fromCharCode(i + 65)}. </Text>
                 <Col span={12}>
-                  <Input
-                    name={`${name}.options.${i}.label`}
-                    style={{ width: 360 }}
-                    defaultValue={e.label}
-                    placeholder="请输入"
-                    onChange={e => {
-                      questionValue[i] = e.target.value
-                      setQuestionValue(questionValue)
-                      validateForm()
-                    }}
-                    onBlur={e => handlerRadioChange(`${name}.options.${i}.label`, e.target.value)}
-                  />
                   <Field
                     name={`${name}.options.${i}.label`}
                     validate={value => value ? '' : 'Required！'}
-                    style={{ display: 'none' }}
+                    defaultValue={e.label}
+                    placeholder="请输入"
+                    style={{ width: 360 }}
+                    as={Input}
                   />
                 </Col>
                 <Col span={3}>
-                  <AddTextCheckbox
+                  <Field
+                    as={AddTextCheckbox}
                     name={`${name}.options.${i}.needEnter`}
                     defaultChecked={e.needEnter}
                     onChange={e => handlerRadioChange(`${name}.options.${i}.needEnter`, e.target.checked)}
-                  >附文本框
-                  </AddTextCheckbox>
+                  >附文本框</Field>
                 </Col>
                 <Col span={3}>
                   <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
