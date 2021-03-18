@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import { Input, Row, Col, Button, Checkbox } from 'antd';
-import { Field, useFormikContext, FieldArray } from 'formik'
+import { useFormikContext, FieldArray, Field } from 'formik'
 import { QuestionButton, Iconfont } from "../*";
 import _ from 'lodash'
 
@@ -23,13 +23,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
 
   const [questionValue, setQuestionValue] = useState([])
   const { values, handleChange, validateForm } = useFormikContext()
-  const index = props.index;
 
-  
   useEffect(() => {
     const question = _.get(values, name, {})
     setQuestionValue([...question.options])
-  }, [])
+  }, [name, values])
   
   function addOptions (arrayHelper) {
     setQuestionValue([...questionValue, {label:'', needEnter: false}])
@@ -62,6 +60,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
             defaultValue={value.title}
             placeholder="请输入题干文本"
             onBlur={e => handlerRadioChange(`${name}.title`, e.target.value)}
+          />
+          <Field
+            name={`${name}.title`}
+            validate={value => value ? '' : 'Required！'}
+            style={{ display: 'none' }}
           />
         </Col>
       </RowLine>}
@@ -98,6 +101,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
                       validateForm()
                     }}
                     onBlur={e => handlerRadioChange(`${name}.options.${i}.label`, e.target.value)}
+                  />
+                  <Field
+                    name={`${name}.options.${i}.label`}
+                    validate={value => value ? '' : 'Required！'}
+                    style={{ display: 'none' }}
                   />
                 </Col>
                 <Col span={3}>

@@ -90,7 +90,13 @@ export default function Survey() {
     setIsPrompt(false);
   }
 
-  function submitPublish(submit) {
+  function submitPublish(submit, validateForm) {
+    validateForm().then(r => {
+      const validateresult = r.questions || []
+      if (validateresult.length > 0) {
+        message.warning('不能保存内容为空题目！')
+      }
+    })
     setSubmitURL("/admin/surveys");
     submit();
     setIsPrompt(false);
@@ -122,7 +128,7 @@ export default function Survey() {
 
   return (
     <Formik initialValues={{ questions }} onSubmit={onSubmitFormik}>
-      {({ values, handleSubmit }) => (
+      {({ values, handleSubmit, validateForm }) => (
         <>
           <Prompt
             when={isPrompt}
@@ -166,7 +172,7 @@ export default function Survey() {
                     <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
                       保存至草稿
                     </Button>
-                    <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
+                    <Button type="danger" onClick={() => submitPublish(handleSubmit, validateForm)}>
                       保存并发布
                     </Button>
                   </>

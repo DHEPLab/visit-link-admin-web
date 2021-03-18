@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Quill } from "react-quill";
-import { useFormikContext } from 'formik'
+import { useFormikContext, Field } from 'formik'
 import { Input } from 'antd';
 
 import Container from "./Container";
@@ -42,6 +41,11 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
           placeholder="请输入叙述文本内容"
           onBlur={e => TextChange(`${name}.title`, e.target.value)}
           bordered={false} />}
+          <Field
+            name={`${name}.title`}
+            validate={value => value ? '' : 'Required！'}
+            style={{ display: 'none' }}
+          />
     </Container>
   );
 }
