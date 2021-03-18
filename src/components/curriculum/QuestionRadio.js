@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Input, Row, Col, Button, Checkbox } from 'antd';
 import { useFormikContext, FieldArray, Field } from 'formik'
 import { QuestionButton, Iconfont } from "../*";
-import _ from 'lodash'
 
 import Container from "./Container";
 
@@ -19,16 +18,14 @@ const typeLabels = {
   checkbox: "多选问题",
 };
 
-export default function QuestionRadio({ name, onBlur, onChange, value, ...props }) {
+export default function QuestionRadio({ name, onBlur, onChange, value, index, ...props }) {
 
   const [questionValue, setQuestionValue] = useState([])
   const { values, handleChange, validateForm } = useFormikContext()
-
+  const type = values.questions[index]?.type
   useEffect(() => {
-    const question = _.get(values, name, {})
-    setQuestionValue([...question.options])
-  }, [name, values])
-  
+    setQuestionValue([...value.options])
+  }, [value])
   function addOptions (arrayHelper) {
     setQuestionValue([...questionValue, {label:'', needEnter: false}])
     arrayHelper.push({label:'', needEnter: false})
@@ -41,13 +38,14 @@ export default function QuestionRadio({ name, onBlur, onChange, value, ...props 
 
   function handlerRemove (arrayHelper, i) {
     arrayHelper.remove(i)
+    setQuestionValue(questionValue.filter((e, inde) => inde !== i))
   }
 
   return (
     <Container
-      right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
-      icon="iconquestion-radio-gray"
-      title="单选问题"
+      right={props.readonly && <TextType color={colors[type]}>{typeLabels[type]}</TextType>}
+      icon={type === 'Radio' ? 'iconquestion-radio-gray' : 'iconquestion-checkbox-gray'}
+      title={type === 'Radio' ? '单选问题' : '多选问题'}
       name={name}
       noPadding
       {...props}

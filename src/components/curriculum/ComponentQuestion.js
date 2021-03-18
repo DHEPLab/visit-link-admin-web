@@ -22,6 +22,7 @@ export default function ComponentQuestion({ name, component, index, onMoveDown, 
     <div id={`${name}.${index}`}>
       <Field
         name={`${name}.${index}.value`}
+        index={index}
         onMoveDown={() => {
           onMoveDown();
           setTimeout(() => {
