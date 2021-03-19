@@ -275,6 +275,7 @@ function Lessons({
 }) {
   const { networks } = useSelector((state) => state);
   const [moduleOptions, setModuleOptions] = useState([]);
+  const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -297,6 +298,17 @@ function Lessons({
       },
     }).then(({ data }) => {
       setModuleOptions(data.content.map(({ number, id }) => ({ label: number, value: id })));
+    });
+  }
+
+  function loadQuestionnairesOptions() {
+    Axios.get("/admin/questionnaires/findAllQuestionnaires", {
+      params: {
+        size: 1000,
+        published: true,
+      },
+    }).then(({ data }) => {
+      setQuestionnairesOptions(data.map(({ name, id }) => ({ label: name, value: id })));
     });
   }
 
@@ -372,8 +384,13 @@ function Lessons({
             loading={!!networks["/admin/modules"]}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress" rules={[{ max: 100 }]}>
-          <Input />
+        <Form.Item label="调查问卷" name="questionnaireAddress">
+          <Select
+            showArrow={false}
+            options={questionnairesOptions}
+            onFocus={loadQuestionnairesOptions}
+            loading={!!networks["/admin/findAllQuestionnaires"]}
+          ></Select>
         </Form.Item>
         <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
