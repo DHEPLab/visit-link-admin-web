@@ -63,7 +63,13 @@ export default function Survey() {
     form.submit();
   }
 
-  function submitDraft(submit) {
+  function submitDraft(submit, validateForm) {
+    validateForm().then(r => {
+      const validateresult = r.questions || []
+      if (validateresult.length > 0) {
+        message.warning('题干或选项不能为空！')
+      }
+    })
     setSubmitURL("/admin/questionnaires/draft");
     submit();
     setIsPrompt(false);
@@ -73,7 +79,7 @@ export default function Survey() {
     validateForm().then(r => {
       const validateresult = r.questions || []
       if (validateresult.length > 0) {
-        message.warning('不能保存内容为空题目！')
+        message.warning('题干或选项不能为空！')
       }
     })
     setSubmitURL("/admin/questionnaires");
@@ -148,7 +154,7 @@ export default function Survey() {
                   </>
                 ) : (
                   <>
-                    <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
+                    <Button ghost type="danger" onClick={() => submitDraft(handleSubmit, validateForm)}>
                       保存至草稿
                     </Button>
                     <Button type="danger" onClick={() => submitPublish(handleSubmit, validateForm)}>
