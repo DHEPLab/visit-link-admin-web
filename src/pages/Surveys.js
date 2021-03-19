@@ -42,16 +42,8 @@ function Surveys({ loadData, onChangeSearch, ...props }) {
             render: (h) => <StatusTag value={h} />,
           },
           {
-            title: "问卷编号",
-            dataIndex: "number",
-          },
-          {
             title: "问卷名称",
             dataIndex: "name",
-          },
-          {
-            title: "问卷描述",
-            dataIndex: "description",
           }
         ]}
       />
@@ -59,4 +51,4 @@ function Surveys({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Surveys, "/admin/surveys?sort=id,desc");
+export default WithPage(Surveys, "/admin/questionnaires?sort=id,desc");

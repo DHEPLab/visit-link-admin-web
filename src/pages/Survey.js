@@ -42,36 +42,15 @@ export default function Survey() {
     if (!id) {
       setQuestions([Factory.createText()]);
     } else {
-      // Axios.get(`/admin/surveys/${id}`).then(({ data, headers }) => {
-        const data = {
-          name: '我的测试问卷',
-          number: '编号00012',
-          description: '问卷描述',
-          questions: [
-            {"key": 1599212637987, "type": "Text", "value": {title: "填空题题目?"}},
-            {"key": 1615878521396, "type": "Radio", "value":{ title: "选择题题目?", options: [
-              {label: "徐昂1", needEnter: true}, {label: "徐昂2", needEnter: false}]}
-            }]
-        }
-        const headers = {
-          'x-draft-id': null,
-          'x-draft-date': null
-        }
+      Axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
-        setQuestions(data.questions);
+        setQuestions(data.questions.map((n, i) => ({...n, key: i})));
         setDraftId(headers["x-draft-id"]);
         setDraftDate(headers["x-draft-date"]);
-      // });
+      });
     }
-
-    // Axios.get("/admin/surveys", {
-    //   params: {
-    //     size: 1000,
-    //     published: true,
-    //   },
-    // }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
 
     if (!readonly) {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
@@ -85,7 +64,7 @@ export default function Survey() {
   }
 
   function submitDraft(submit) {
-    setSubmitURL("/admin/surveys/draft");
+    setSubmitURL("/admin/questionnaires/draft");
     submit();
     setIsPrompt(false);
   }
@@ -97,7 +76,7 @@ export default function Survey() {
         message.warning('不能保存内容为空题目！')
       }
     })
-    setSubmitURL("/admin/surveys");
+    setSubmitURL("/admin/questionnaires");
     submit();
     setIsPrompt(false);
   }
@@ -113,13 +92,13 @@ export default function Survey() {
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/surveys/${draftId}`).then(() => {
+    Axios.delete(`/admin/questionnaires/${draftId}`).then(() => {
       setDraftId("");
     });
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/surveys/${id}`).then(() => {
+    Axios.delete(`/admin/questionnaires/${id}`).then(() => {
       history.goBack();
     });
   }
