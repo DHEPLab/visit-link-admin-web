@@ -26,3 +26,5 @@ service.conf
 *.tar.gz
 
 .scannerwork/**/*
+
+.history/
