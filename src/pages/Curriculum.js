@@ -52,7 +52,7 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
-      setLessons(data.lessons.map(n => ({...n, questionnaire: n.questionnaire.id})));
+      setLessons(data.lessons.map(n => ({...n, questionnaire: n.questionnaire?.id})));
       setSchedules(data.schedules);
       setCurriculum({ ...data, lessons: [], schedules: [] });
     });
@@ -277,12 +277,12 @@ function Lessons({
   const { networks } = useSelector((state) => state);
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
-  useEffect(() => loadQuestionnairesOptions(), [])
+
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(Arrays.concat(value, formValues));
     } else {
-      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
     }
     closeModal();
   }
@@ -309,7 +309,7 @@ function Lessons({
         published: true,
       },
     }).then(({ data }) => {
-      setQuestionnairesOptions(data.content.map(({ name, id }) => ({ label: name, value: id })));
+      setQuestionnairesOptions([...data.content.map(({ name, id }) => ({ label: name, value: id }))]);
     });
   }
 
@@ -547,7 +547,7 @@ function Schedules({
         })
       );
     } else {
-      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue.id }));
+      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
     }
     closeModal();
   }
