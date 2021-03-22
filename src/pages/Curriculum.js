@@ -52,7 +52,7 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
-      setLessons(data.lessons);
+      setLessons(data.lessons.map(n => ({...n, questionnaire: n.questionnaire.id})));
       setSchedules(data.schedules);
       setCurriculum({ ...data, lessons: [], schedules: [] });
     });
@@ -233,7 +233,7 @@ function withEdit(Wrapper) {
 
     function openEditModal(values, index) {
       setCurrentEditIndex(index);
-      setCurrentEditValue({...values, questionnaire: values?.questionnaire?.id});
+      setCurrentEditValue(values);
       openModal();
     }
 
