@@ -90,10 +90,11 @@ export default function Curriculum() {
 
   function onFinish(values) {
     if (!validate()) return;
+    const lessonResult = lessons.map(n => ({...n, questionnaire: {id: n.questionnaire}}))
     Axios.post(submitURL, {
       id,
       ...values,
-      lessons,
+      lessons: lessonResult,
       schedules,
     }).then(history.goBack);
   }
@@ -232,7 +233,7 @@ function withEdit(Wrapper) {
 
     function openEditModal(values, index) {
       setCurrentEditIndex(index);
-      setCurrentEditValue(values);
+      setCurrentEditValue({...values, questionnaire: values?.questionnaire?.id});
       openModal();
     }
 
@@ -276,7 +277,7 @@ function Lessons({
   const { networks } = useSelector((state) => state);
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
-
+  useEffect(() => loadQuestionnairesOptions(), [])
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(Arrays.concat(value, formValues));
@@ -302,13 +303,13 @@ function Lessons({
   }
 
   function loadQuestionnairesOptions() {
-    Axios.get("/admin/questionnaires/findAllQuestionnaires", {
+    Axios.get("/admin/questionnaires", {
       params: {
         size: 1000,
         published: true,
       },
     }).then(({ data }) => {
-      setQuestionnairesOptions(data.map(({ name, id }) => ({ label: name, value: id })));
+      setQuestionnairesOptions(data.content.map(({ name, id }) => ({ label: name, value: id })));
     });
   }
 
@@ -384,7 +385,7 @@ function Lessons({
             loading={!!networks["/admin/modules"]}
           ></Select>
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaireAddress">
+        <Form.Item label="调查问卷" name="questionnaire">
           <Select
             showArrow={false}
             options={questionnairesOptions}
