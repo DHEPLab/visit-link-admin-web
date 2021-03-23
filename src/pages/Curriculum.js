@@ -278,6 +278,12 @@ function Lessons({
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
+  useEffect(() => {
+    if (questionnairesOptions.length === 0) {
+      loadQuestionnairesOptions()
+    }
+  }, [openEditModal, setQuestionnairesOptions])
+
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(Arrays.concat(value, formValues));
@@ -309,7 +315,7 @@ function Lessons({
         published: true,
       },
     }).then(({ data }) => {
-      setQuestionnairesOptions([...data.content.map(({ name, id }) => ({ label: name, value: id }))]);
+      setQuestionnairesOptions(data?.content?.map(({ name, id }) => ({ label: name, value: id })));
     });
   }
 

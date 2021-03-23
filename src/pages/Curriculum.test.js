@@ -18,10 +18,19 @@ jest.mock("react-redux", () => ({
 
 jest.mock("axios");
 
-test("should render create page", () => {
+test("should render create page", async () => {
   useParams.mockImplementation(() => ({}));
   useLocation.mockImplementation(() => ({ pathname: "/curriculums/create" }));
-  const { queryByText, queryByTestId } = render(<Curriculum />);
+  Axios.get.mockResolvedValue({
+    data: {
+      content: []
+    }
+  });
+  let renderResult;
+  await act(async () => {
+    renderResult = render(<Curriculum />);
+  });
+  const { queryByText, queryByTestId } = renderResult;
   expect(queryByText(/创建新大纲/)).toBeInTheDocument();
   expect(queryByTestId("basic-form")).toBeInTheDocument();
   expect(queryByTestId("readonly-form")).not.toBeInTheDocument();
