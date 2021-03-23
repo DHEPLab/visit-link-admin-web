@@ -279,9 +279,7 @@ function Lessons({
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
   useEffect(() => {
-    if (questionnairesOptions.length === 0) {
-      loadQuestionnairesOptions()
-    }
+    loadQuestionnairesOptions()
   }, [openEditModal, setQuestionnairesOptions])
 
   function onFinish(formValues) {
