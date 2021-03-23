@@ -90,7 +90,7 @@ export default function Curriculum() {
 
   function onFinish(values) {
     if (!validate()) return;
-    const lessonResult = lessons.map(n => ({...n, questionnaire: {id: n.questionnaire}}))
+    const lessonResult = lessons.map(n => ({...n, questionnaire: (n.questionnaire ? {id: n.questionnaire} : null)}))
     Axios.post(submitURL, {
       id,
       ...values,
