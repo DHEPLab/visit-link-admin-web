@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Space } from "antd";
 import { useHistory } from "react-router-dom";
 
-import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components/*";
+import { WithPage, ContentHeader, ZebraTable, StatusTag } from "../components/*";
 
 function Surveys({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
@@ -11,11 +11,11 @@ function Surveys({ loadData, onChangeSearch, ...props }) {
     <>
       <ContentHeader title="问卷管理">
         <Space size="large">
-          <SearchInput
+          {/* <SearchInput
             onChange={(e) => onChangeSearch("search", e.target.value)}
             className="master"
             placeholder="请输入问卷名称搜索"
-          />
+          /> */}
           <Button type="primary" onClick={() => history.push("/surveys/create")}>
             创建新问卷
           </Button>
