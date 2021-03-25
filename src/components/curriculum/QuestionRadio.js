@@ -70,7 +70,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                 <Text span="2" >选项{String.fromCharCode(i + 65)}. </Text>
                 <Text>{value.options[i]?.label}</Text>
                 <Col>
-                  {value.options[i]?.needEnter && <Input style={{marginLeft: 20}} placeholder='填写内容' />}
+                  {value.options[i]?.needEnter && <Input style={{marginLeft: 20}} placeholder='请输入内容' />}
                 </Col>
               </ReadOnlyLine>
             </div>
@@ -88,7 +88,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                     name={`${name}.options.${i}.label`}
                     validate={value => value ? '' : 'Required！'}
                     defaultValue={e.label}
-                    placeholder="请输入"
+                    placeholder="请输入内容"
                     style={{ width: 360 }}
                     as={Input}
                   />
