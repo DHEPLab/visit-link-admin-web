@@ -168,7 +168,7 @@ export default function Survey() {
 
           {draftId && (
             <DraftBar
-              title="本模块有1个尚未发布的草稿："
+              title="本问卷有1个尚未发布的草稿："
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
               onClick={() => history.push(`/surveys/edit/${draftId}`)}
