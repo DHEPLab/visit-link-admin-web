@@ -108,6 +108,11 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
               </RowLine>
             </div>
           ))}
+          <Field
+            name={`${name}.options`}
+            style={{ display: 'none' }}
+            validate={options => options && options.length > 0 ? '' : 'Can’t be empty!'}
+          />
         </>
       )} />}
 
