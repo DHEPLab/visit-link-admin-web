@@ -445,7 +445,27 @@ function ApplicableDays({ value, currentEditValue }) {
                 label="适用天数"
                 labelCol={{ span: 0 }}
                 name="startOfApplicableDays"
-                rules={[...Rules.Required]}
+                rules={[...Rules.Required,
+                  ({ getFieldValue }) => ({
+                    validator(_, startOfApplicableDays) {
+                      const stage = getFieldValue("stage");
+                      const endOfApplicableDays = Number(getFieldValue("endOfApplicableDays"));
+                      startOfApplicableDays = Number(startOfApplicableDays);
+                      if (
+                        !startOfApplicableDays ||
+                        CurriculumUtils.validateLessonDateRange(value, {
+                          id: currentEditValue.id,
+                          stage,
+                          endOfApplicableDays,
+                          startOfApplicableDays,
+                        })
+                      ) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject("适用天数不能重叠");
+                    }
+                  })
+                ]}
               >
                 <InputNumber
                   min={1}
