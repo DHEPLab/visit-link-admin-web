@@ -232,7 +232,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
                 .filter((o) => o.user.id !== Number(id))
                 .map((o) => (
                   <Select.Option key={o.user.id}>
-                    {o.user.realName}/{o.user.chw.identity}/{o.user.chw.tags.join(",")}
+                    {o.user.realName}/{o.user.chw.identity}/{(o.user.chw.tags || []).join(",")}
                   </Select.Option>
                 ))}
             </Select>
