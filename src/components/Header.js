@@ -1,10 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "antd";
+import { Button, DatePicker, Form } from "antd";
+import { useBoolState } from "../utils";
 
-import { Iconfont } from "../components/*";
+import { DownloadOutlined } from '@ant-design/icons';
+import { Iconfont, ModalForm } from "../components/*";
+import Rules from "../constants/rules";
+import packageConfig from '../../package.json'
+const { RangePicker } = DatePicker;
 
 export default function ({ username, role, onNavigate, onLogout }) {
+  const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
+  const {proxy} = packageConfig
+
+  async function handleSaveExport(values) {
+    const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
+    window.open(`${proxy}/admin/report?${params}`, '_self')
+    closeExportModal()
+  }
+
   return (
     <Header>
       <Logo>
@@ -15,6 +29,9 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
+        {username && <StyledButton type="link" onClick={openExportModal}>
+          <DownloadOutlined />数据导出 &nbsp;&nbsp;
+        </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
           个人中心
         </StyledButton>
@@ -24,6 +41,17 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <Iconfont type="iconescape" />
         </StyledButton>
       </Content>
+      <ModalForm
+        title="导出数据"
+        visible={visibleExport}
+        initialValues={{range: []}}
+        onFinish={handleSaveExport}
+        onCancel={closeExportModal}
+      >
+        <Form.Item label="时间范围" name="range" rules={Rules.Required}>
+          <RangePicker />
+        </Form.Item>
+      </ModalForm>
     </Header>
   );
 }
