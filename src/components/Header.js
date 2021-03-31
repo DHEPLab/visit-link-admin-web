@@ -29,7 +29,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
-        {username && <StyledButton type="link" onClick={openExportModal}>
+        {username === 'admin' && <StyledButton type="link" onClick={openExportModal}>
           <DownloadOutlined />数据导出 &nbsp;&nbsp;
         </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
