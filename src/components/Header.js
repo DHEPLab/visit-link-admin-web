@@ -6,16 +6,14 @@ import { useBoolState } from "../utils";
 import { DownloadOutlined } from '@ant-design/icons';
 import { Iconfont, ModalForm } from "../components/*";
 import Rules from "../constants/rules";
-import packageConfig from '../../package.json'
 const { RangePicker } = DatePicker;
 
 export default function ({ username, role, onNavigate, onLogout }) {
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
-  const {proxy} = packageConfig
 
   async function handleSaveExport(values) {
     const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
-    window.open(`${proxy}/admin/report?${params}`, '_self')
+    window.open(`/admin/report?${params}`, '_self')
     closeExportModal()
   }
 
