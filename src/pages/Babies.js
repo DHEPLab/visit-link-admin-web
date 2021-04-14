@@ -79,6 +79,16 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
     tab === "unreviewed" && loadData();
   }, [tab, loadData]);
 
+  function sorterFun (pagination, filters, sorter) {
+    const {order, field} = sorter
+    if (order) {
+      const type = order === 'ascend' ? 'asc' : 'desc'
+      onChangeSearch('sort', `${field},${type}`)
+    } else {
+      onChangeSearch('sort', null)
+    }
+  }
+
   return (
     <>
       <SearchBar>
@@ -99,12 +109,15 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
             history.push(`/babies/${record.id}`);
           },
         })}
+        onChange={sorterFun}
+        scroll={{ x: '100vw' }}
         columns={[
           {
             title: "修改日期",
             dataIndex: "lastModifiedAt",
             align: "center",
             width: 220,
+            sorter: true,
             render: (h, baby) => {
               return (
                 <>
@@ -118,6 +131,7 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
             title: "宝宝姓名",
             dataIndex: "name",
             width: 120,
+            sorter: true
           },
           {
             title: "ID",
@@ -146,6 +160,13 @@ function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
             dataIndex: "visitCount",
             width: 150,
             render: (h) => `${h} 节课堂`,
+          },
+          {
+            title: "注册日期",
+            dataIndex: "createdAt",
+            align: "center",
+            width: 150,
+            render: (h) => formatDate(h)
           },
         ]}
       />
@@ -176,6 +197,16 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
     tab === "approved" && loadData();
   }, [tab, loadData]);
 
+  function sorterFun (pagination, filters, sorter) {
+    const {order, field} = sorter
+    if (order) {
+      const type = order === 'ascend' ? 'asc' : 'desc'
+      onChangeSearch('sort', `${field},${type}`)
+    } else {
+      onChangeSearch('sort', null)
+    }
+  }
+
   return (
     <>
       <SearchBar>
@@ -196,6 +227,8 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
             history.push(`/babies/${record.id}`);
           },
         })}
+        onChange={sorterFun}
+        scroll={{ x: '100vw' }}
         columns={[
           {
             title: "宝宝状态",
@@ -205,14 +238,23 @@ function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
             render: (h) => <StatusTag value={!h} trueText="正常" falseText="注销" />,
           },
           {
+            title: "注册日期",
+            dataIndex: "createdAt",
+            align: "center",
+            sorter: true,
+            width: 150,
+            render: (h) => formatDate(h)
+          },
+          {
             title: "宝宝姓名",
             dataIndex: "name",
-            width: 120,
+            width: 140,
+            sorter: true
           },
           {
             title: "ID",
             width: 200,
-            dataIndex: "identity",
+            dataIndex: "identity"
           },
           {
             title: "性别",
