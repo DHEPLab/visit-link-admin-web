@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Button, DatePicker, Form } from "antd";
+import { Button, DatePicker, Form, Select } from "antd";
 import { useBoolState } from "../utils";
 
 import { DownloadOutlined } from '@ant-design/icons';
 import { Iconfont, ModalForm } from "../components/*";
 import Rules from "../constants/rules";
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 export default function ({ username, role, onNavigate, onLogout }) {
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
+  const [exportType, setExportType] = useState('visit');
 
   async function handleSaveExport(values) {
-    const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
-    window.open(`/admin/report?${params}`, '_self')
+    switch (exportType) {
+      case 'visit':
+        const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
+        window.open(`/admin/report?${params}`, '_self')
+        break;
+      case 'chw':
+        window.open(`/admin/report/chwReport`, '_self')
+        break;
+      case 'baby':
+        window.open(`/admin/report/babyRosterReport`, '_self')
+        break;
+      default:
+        break;
+    }
     closeExportModal()
   }
 
@@ -46,9 +60,17 @@ export default function ({ username, role, onNavigate, onLogout }) {
         onFinish={handleSaveExport}
         onCancel={closeExportModal}
       >
-        <Form.Item label="时间范围" name="range" rules={Rules.Required}>
-          <RangePicker />
+        <Form.Item label="数据类别" rules={Rules.Required}>
+          <Select value={exportType} onChange={key => setExportType(key)}>
+            <Option value="visit">家访</Option>
+            <Option value="chw">chw</Option>
+            <Option value="baby">宝宝</Option>
+          </Select>
         </Form.Item>
+        {exportType === 'visit' &&
+          <Form.Item label="时间范围" name="range" rules={Rules.Required}>
+            <RangePicker />
+          </Form.Item>}
       </ModalForm>
     </Header>
   );
