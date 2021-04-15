@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from 'axios';
+import { saveAs } from 'file-saver';
 import styled from "styled-components";
 import { Button, DatePicker, Form, Select } from "antd";
 import { useBoolState } from "../utils";
@@ -17,18 +19,26 @@ export default function ({ username, role, onNavigate, onLogout }) {
     switch (exportType) {
       case 'visit':
         const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
-        window.open(`/admin/report?${params}`, '_self')
+        download(`/admin/report?${params}`, 'visit')
         break;
       case 'chw':
-        window.open(`/admin/report/chwReport`, '_self')
+        download('/admin/report/chwReport', 'chw')
         break;
       case 'baby':
-        window.open(`/admin/report/babyRosterReport`, '_self')
+        download('/admin/report/babyRosterReport', 'baby')
         break;
       default:
         break;
     }
     closeExportModal()
+  }
+
+  async function download (requestUrl, filename) {
+    const response = await axios.get(`${requestUrl}`, {
+      responseType: 'blob',
+      headers: { 'x-mask-request': true }
+    })
+    saveAs(new Blob([response.data]), `${filename}.xlsx`)
   }
 
   return (
