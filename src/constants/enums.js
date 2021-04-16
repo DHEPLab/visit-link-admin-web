@@ -44,6 +44,7 @@ export const ModuleTopic = {
   INFANT_INJURY_AND_PREVENTION: "婴儿伤病和预防",
   CAREGIVER_MENTAL_HEALTH: "照料人心理健康",
   GOVERNMENT_SERVICES: "政府服务",
+  KNOWLEDGE_ATTITUDE_TEST: "知识态度检测",
 };
 
 export const ActionFromApp = {
