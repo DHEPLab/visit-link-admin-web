@@ -21,6 +21,9 @@ export default function ({ username, role, onNavigate, onLogout }) {
         const params = `startDay=${values?.range[0].format('YYYY-MM-DD')}&endDay=${values?.range[1].format('YYYY-MM-DD')}`
         download(`/admin/report?${params}`, 'visit')
         break;
+      case 'visit2':
+        download('/admin/report/notStartVisit', 'not finished visit')
+        break;
       case 'chw':
         download('/admin/report/chwReport', 'chw')
         break;
@@ -51,7 +54,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{role}</Role>
         </Welcome>
-        {username === 'admin' && <StyledButton type="link" onClick={openExportModal}>
+        {role === '管理员' && <StyledButton type="link" onClick={openExportModal}>
           <DownloadOutlined />数据导出 &nbsp;&nbsp;
         </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
@@ -72,7 +75,8 @@ export default function ({ username, role, onNavigate, onLogout }) {
       >
         <Form.Item label="数据类别" rules={Rules.Required}>
           <Select value={exportType} onChange={key => setExportType(key)}>
-            <Option value="visit">家访</Option>
+            <Option value="visit">完成家访(已完成、已过期)</Option>
+            <Option value="visit2">未完成家访(待开始、未完成)</Option>
             <Option value="chw">chw</Option>
             <Option value="baby">宝宝</Option>
           </Select>
