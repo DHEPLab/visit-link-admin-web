@@ -22,7 +22,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
         download(`/admin/report?${params}`, 'visit')
         break;
       case 'visit2':
-        download('/admin/report/notStartVisit', 'not finished visit')
+        download('/api/visits/notStartVisit', 'not finished visit')
         break;
       case 'chw':
         download('/admin/report/chwReport', 'chw')
