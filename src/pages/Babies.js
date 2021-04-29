@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import moment from "moment";
 import styled from "styled-components";
@@ -74,18 +74,21 @@ export default function Babies() {
 const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);
 const PageUnreviewed = WithPage(Unreviewed, "/admin/babies/unreviewed", {}, false);
 
-function Unreviewed({ onChangeSearch, tab, history, loadData, ...props }) {
+function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...props }) {
   useEffect(() => {
     tab === "unreviewed" && loadData();
   }, [tab, loadData]);
 
+  const [sortField, setSortField] = useState(null);
+
   function sorterFun (pagination, filters, sorter) {
     const {order, field} = sorter
-    if (order) {
-      const type = order === 'ascend' ? 'asc' : 'desc'
-      onChangeSearch('sort', `${field},${type}`)
+    const newSortField = order ? `${field},${order === 'ascend' ? 'asc' : 'desc'}` : null
+    setSortField(newSortField)
+    if (newSortField === sortField) {
+      onChangePage(pagination)
     } else {
-      onChangeSearch('sort', null)
+      onChangeSearch('sort', newSortField)
     }
   }
 
@@ -192,18 +195,21 @@ const Tag = styled.span`
   display: inline-block;
 `;
 
-function Approved({ tab, history, loadData, onChangeSearch, ...props }) {
+function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...props }) {
   useEffect(() => {
     tab === "approved" && loadData();
   }, [tab, loadData]);
 
+  const [sortField, setSortField] = useState(null);
+
   function sorterFun (pagination, filters, sorter) {
     const {order, field} = sorter
-    if (order) {
-      const type = order === 'ascend' ? 'asc' : 'desc'
-      onChangeSearch('sort', `${field},${type}`)
+    const newSortField = order ? `${field},${order === 'ascend' ? 'asc' : 'desc'}` : null
+    setSortField(newSortField)
+    if (newSortField === sortField) {
+      onChangePage(pagination)
     } else {
-      onChangeSearch('sort', null)
+      onChangeSearch('sort', newSortField)
     }
   }
 
