@@ -76,7 +76,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
         <Form.Item label="数据类别" rules={Rules.Required}>
           <Select value={exportType} onChange={key => setExportType(key)}>
             <Option value="visit">完成家访(已完成、已过期)</Option>
-            <Option value="visit2">未完成家访(待开始、未完成)</Option>
+            <Option value="visit2">未完成家访(待开始、未完成、已取消)</Option>
             <Option value="chw">chw</Option>
             <Option value="baby">宝宝</Option>
           </Select>
