@@ -617,23 +617,23 @@ function Schedules({
           {({ getFieldValue, setFieldsValue }) => {
             // filter lesson options
             // Only lesson at the same stage are available and schedule range must contain lesson range
-            setFieldsValue({
-              lessons: [],
-            });
             const stage = getFieldValue("stage");
             const startMonths = getFieldValue("startOfApplicableDays");
             const endMonths = getFieldValue("endOfApplicableDays");
+            const lessonsOptions = CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map(
+              (lesson) => ({
+                label: lesson.number,
+                value: lesson.number,
+              })
+            )
+            const lessonArr = currentEditValue.lessons.filter(a => lessonOptions.filter(b=> a.value === b.value))
+            setFieldsValue({ lessons: lessonArr});
             return (
               <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
                 <Select
                   mode="multiple"
                   labelInValue
-                  options={CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map(
-                    (lesson) => ({
-                      label: lesson.number,
-                      value: lesson.number,
-                    })
-                  )}
+                  options={lessonsOptions}
                 ></Select>
               </Form.Item>
             );
