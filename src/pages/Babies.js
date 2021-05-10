@@ -119,6 +119,7 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
             title: "修改日期",
             dataIndex: "lastModifiedAt",
             align: "center",
+            className: "sort-column-vertical-center",
             width: 220,
             sorter: true,
             render: (h, baby) => {
@@ -132,6 +133,7 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
           },
           {
             title: "宝宝姓名",
+            className: "sort-column-vertical-center",
             dataIndex: "name",
             width: 120,
             sorter: true
@@ -246,6 +248,7 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
           {
             title: "注册日期",
             dataIndex: "createdAt",
+            className: "sort-column-vertical-center",
             align: "center",
             sorter: true,
             width: 150,
@@ -254,6 +257,7 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
           {
             title: "宝宝姓名",
             dataIndex: "name",
+            className: "sort-column-vertical-center",
             width: 140,
             sorter: true
           },
