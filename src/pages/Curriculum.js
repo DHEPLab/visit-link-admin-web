@@ -626,7 +626,7 @@ function Schedules({
                 value: lesson.number,
               })
             )
-            const lessonArr = currentEditValue.lessons.filter(a => lessonOptions.filter(b=> a.value === b.value))
+            const lessonArr = (currentEditValue.lessons || []).filter(a => lessonsOptions.filter(b=> a.value === b.value))
             setFieldsValue({ lessons: lessonArr});
             return (
               <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
