@@ -159,7 +159,7 @@ Axios.interceptors.response.use(
         const { data } = response;
         if (data.violations) {
           // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
-          msg = "表单校验失败";
+          msg = data.violations[0] ? `${data.violations[0]?.field} ${data.violations[0]?.message}` : "表单校验失败";
         } else if (data.detail) {
           msg = data.detail;
         }
