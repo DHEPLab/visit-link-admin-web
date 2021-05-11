@@ -138,7 +138,7 @@ export default function Survey() {
                     {id && (
                       <DeleteConfirmModal
                         title="删除问卷"
-                        content="删除后问卷内容将无法恢复是否继续？"
+                        content="删除后，问卷内容将无法恢复，是否继续？"
                         onConfirm={handleDeleteModule}
                       >
                         <Button ghost type="danger">
