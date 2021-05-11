@@ -43,7 +43,7 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
           bordered={false} />}
           <Field
             name={`${name}.title`}
-            validate={value => value ? '' : 'Required！'}
+            validate={value => value && `${value}`.trim() ? '' : 'Required！'}
             style={{ display: 'none' }}
           />
     </Container>

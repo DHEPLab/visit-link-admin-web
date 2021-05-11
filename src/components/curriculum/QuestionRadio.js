@@ -57,7 +57,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
           />
           <Field
             name={`${name}.title`}
-            validate={value => value ? '' : 'Required！'}
+            validate={value => value && `${value}`.trim() ? '' : 'Required！'}
             style={{ display: 'none' }}
           />
         </Col>
@@ -86,7 +86,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                 <Col span={12}>
                   <Field
                     name={`${name}.options.${i}.label`}
-                    validate={value => value ? '' : 'Required！'}
+                    validate={value => value && `${value}`.trim() ? '' : 'Required！'}
                     defaultValue={e.label}
                     placeholder="请输入内容"
                     style={{ width: 360 }}
