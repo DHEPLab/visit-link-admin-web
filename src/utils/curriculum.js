@@ -11,7 +11,10 @@ function validateLessonNumber(lessons, number, exclude) {
 
 function validateLessonDateRange(lessons, lesson) {
   return !lessons
-    .filter((item) => item.id !== lesson.id && item.stage === lesson.stage)
+    .filter((item) => {
+      const isAdd = (item.id === undefined && lesson.id === undefined)
+      return (item.id !== lesson.id || isAdd) && item.stage === lesson.stage;
+    })
     .find(
       (item) =>
         (item.startOfApplicableDays <= lesson.startOfApplicableDays &&
