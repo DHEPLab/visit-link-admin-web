@@ -4,7 +4,6 @@ import { Formik } from "formik";
 import { Form, Space, Button, Input, message } from "antd";
 import { useDispatch } from "react-redux";
 import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
-import { debounce } from "lodash";
 
 import Factory from "../components/curriculum/factory";
 import ModuleComponents from "../components/curriculum/ModuleComponents";
@@ -27,7 +26,6 @@ export default function Module() {
 
   const [module, setModule] = useState({});
   const [components, setComponents] = useState();
-  const [stickyTop, setStickyTop] = useState(0);
 
   const [draftId, setDraftId] = useState();
   const [draftDate, setDraftDate] = useState();
@@ -58,11 +56,6 @@ export default function Module() {
         published: true,
       },
     }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
-
-    if (!readonly) {
-      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
-      return stickyScrollListener(687, setStickyTop);
-    }
   }, [id, form, readonly, dispatch]);
 
   function onSubmitFormik(values) {
@@ -193,7 +186,7 @@ export default function Module() {
           </Card>
 
           <Card title="模块内容">
-            <ModuleComponents value={values.components} readonly={readonly} stickyTop={stickyTop} />
+            <ModuleComponents value={values.components} readonly={readonly} />
           </Card>
         </>
       )}
@@ -210,18 +203,4 @@ function ReadonlyForm({ value }) {
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
     </div>
   );
-}
-
-function stickyScrollListener(offsetTop, onChangeStickyTop) {
-  // console.log('add listener');
-  const onScroll = debounce((event) => {
-    const diffTop = event.target.scrollTop - offsetTop;
-    // console.log('set sticky top, top', diffTop);
-    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
-  }, 100);
-  document.getElementById("route-view").addEventListener("scroll", onScroll);
-  return () => {
-    // console.log('remove listener');
-    document.getElementById("route-view").removeEventListener("scroll", onScroll);
-  };
 }
