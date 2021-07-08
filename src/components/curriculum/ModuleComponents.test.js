@@ -9,7 +9,7 @@ describe("<ModuleComponents />", () => {
   it("should render", () => {
     const components = [factory.createText()];
     render(
-      <Formik initialValues={{ components }}>{({ values }) => <ModuleComponents value={values.components} />}</Formik>
+      <Formik initialValues={{ components }}>{({ values }) => <ModuleComponents value={values.components} readonly={true} />}</Formik>
     );
   });
 });

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { debounce } from "lodash";
 
 import { FieldArray } from "formik";
 import { Space, Button } from "antd";
@@ -43,7 +44,7 @@ export function insertComponent(helpers, component, focus, setFocus) {
   }
 }
 
-export default function ModuleComponents({ value, readonly, stickyTop }) {
+export default function ModuleComponents({ value, readonly }) {
   const [focus, setFocus] = useState(-1);
 
   return (
@@ -63,48 +64,68 @@ export default function ModuleComponents({ value, readonly, stickyTop }) {
                 />
               ))}
             </ComponentForm>
-
-            {!readonly && (
-              <ComponentToolBar>
-                <StickyContainer top={stickyTop}>
-                  <Card title="添加组件：">
-                    <Space direction="vertical" size="large">
-                      <Button
-                        type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createText(), focus, setFocus)}
-                      >
-                        <Iconfont type="icontext" /> 添加文本组件
-                      </Button>
-                      <Button
-                        type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createMedia(), focus, setFocus)}
-                      >
-                        <Iconfont type="iconmedia" />
-                        添加媒体组件
-                      </Button>
-                      <Button
-                        type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createSwitch(), focus, setFocus)}
-                      >
-                        <Iconfont type="iconswitch" />
-                        添加选择组件
-                      </Button>
-                      <PageButton
-                        type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createPageFooter(), focus, setFocus)}
-                      >
-                        添加翻页分割组件
-                      </PageButton>
-                    </Space>
-                  </Card>
-                </StickyContainer>
-              </ComponentToolBar>
-            )}
+            <ToolBar {...{ readonly, helpers, focus, setFocus }} />
           </FieldArrayContainer>
         );
       }}
     </FieldArray>
   );
+}
+
+/**
+ * 使用一个新的 Component 解决当焦点在富文本编辑器上时，改变 stickyTop 带来的重复渲染整个 Form 导致工具栏上下跳动的问题
+ * 现在 stickyTop 改变时，只重新渲染 ToolBar Component
+ */
+function ToolBar({ readonly, helpers, focus, setFocus }) {
+  const [stickyTop, setStickyTop] = useState(0);
+
+  useEffect(() => {
+    if (!readonly) {
+      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
+      return stickyScrollListener(687, setStickyTop);
+    }
+  }, [readonly]);
+
+  if (readonly) return null;
+
+  return (
+    <ComponentToolBar>
+      <StickyContainer top={stickyTop}>
+        <Card title="添加组件：">
+          <Space direction="vertical" size="large">
+            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createText(), focus, setFocus)}>
+              <Iconfont type="icontext" /> 添加文本组件
+            </Button>
+            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createMedia(), focus, setFocus)}>
+              <Iconfont type="iconmedia" />
+              添加媒体组件
+            </Button>
+            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createSwitch(), focus, setFocus)}>
+              <Iconfont type="iconswitch" />
+              添加选择组件
+            </Button>
+            <PageButton
+              type="primary"
+              onClick={() => insertComponent(helpers, Factory.createPageFooter(), focus, setFocus)}
+            >
+              添加翻页分割组件
+            </PageButton>
+          </Space>
+        </Card>
+      </StickyContainer>
+    </ComponentToolBar>
+  );
+}
+
+function stickyScrollListener(offsetTop, onChangeStickyTop) {
+  const onScroll = debounce((event) => {
+    const diffTop = event.target.scrollTop - offsetTop;
+    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
+  }, 100);
+  document.getElementById("route-view").addEventListener("scroll", onScroll);
+  return () => {
+    document.getElementById("route-view").removeEventListener("scroll", onScroll);
+  };
 }
 
 const PageButton = styled(Button)`
