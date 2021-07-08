@@ -22,7 +22,8 @@
     "react-test-renderer": "^16.13.1",
     "redux": "^4.0.5",
     "styled-components": "^5.1.0",
-    "use-query-params": "^1.1.6"
+    "use-query-params": "^1.1.6",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
@@ -51,7 +52,7 @@
       "plugin:prettier/recommended"
     ]
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "https://dev.healthyfutures.cloud",
   "browserslist": {
     "production": [
       ">0.2%",
