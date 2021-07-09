@@ -149,7 +149,16 @@ export default function ImportExcel({ refresh, close }) {
     const babiesArray = babiesjsonArray.map(json => toBaby(json))
     let passArray = []
     let errorArray = []
-    babiesArray.forEach(element => {
+    const filterArr = []
+    babiesArray.forEach((curr) => {
+      const extend = filterArr.find(ele => ele.identity === curr.identity)
+      if (extend) {
+        errorArray.push({ name: curr.name, matters: 'ID重复' })
+      } else {
+        filterArr.push(curr)
+      }
+    })
+    filterArr.forEach(element => {
       if (!element.identity || !element.name || !element.gender || !element.stage || !element.area || !element.location) {
         errorArray.push({ name: element.name, matters: '必填字段为空' })
         return;
