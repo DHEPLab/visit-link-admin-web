@@ -59,7 +59,75 @@ export default function ImportExcel({ refresh, close }) {
     return null;
   };
 
+  function getFamilyTies (value) {
+    const arr = [
+      {key: 'MOTHER', value: "母亲"},
+      {key: 'FATHER', value: "父亲"},
+      {key: 'GRANDMOTHER', value: "(外)祖母"},
+      {key: 'GRANDFATHER', value: "(外)祖父"},
+      {key: 'SISTER', value: "亲姐妹"},
+      {key: 'BROTHER', value: "亲兄弟"},
+      {key: 'OTHER', value: "其他"}
+    ]
+    const find =  arr.find(ele => ele.value === value)
+    if (find) return find.key
+    return 'OTHER';
+  };
+
+  function getCares (babyjson) {
+    const cares = []
+    if (babyjson["Caregiver_Main_name"]) {
+      cares.push({
+        master: true,
+        name: babyjson["Caregiver_Main_name"],
+        familyTies: getFamilyTies(babyjson["Caregiver_Main_relationship"]),
+        phone: babyjson["Caregiver_Main_phone"],
+        wechat: babyjson["Caregiver_Main_Wechat"]
+      })
+    } else {
+      return cares;
+    }
+
+    if (babyjson["Caregiver_II_name"]) {
+      cares.push({
+        master: false,
+        name: babyjson["Caregiver_II_name"],
+        familyTies: getFamilyTies(babyjson["Caregiver_II_relationship"]),
+        phone: babyjson["Caregiver_II_phone"],
+        wechat: babyjson["Caregiver_II_Wechat"]
+      })
+    } else {
+      return cares;
+    }
+
+    if (babyjson["Caregiver_III_name"]) {
+      cares.push({
+        master: false,
+        name: babyjson["Caregiver_III_name"],
+        familyTies: getFamilyTies(babyjson["Caregiver_III_relationship"]),
+        phone: babyjson["Caregiver_III_phone"],
+        wechat: babyjson["Caregiver_III_Wechat"]
+      })
+    } else {
+      return cares;
+    }
+
+    if (babyjson["Caregiver_IV_name"]) {
+      cares.push({
+        master: false,
+        name: babyjson["Caregiver_IV_name"],
+        familyTies: getFamilyTies(babyjson["Caregiver_IV_relationship"]),
+        phone: babyjson["Caregiver_IV_phone"],
+        wechat: babyjson["Caregiver_IV_Wechat"]
+      })
+    } else {
+      return cares;
+    }
+    return cares;
+  }
+
   function toBaby (babyjson) {
+    const cares = getCares(babyjson);
     return {
       identity: babyjson['宝宝id'],
       name: babyjson['宝宝姓名'],
@@ -72,7 +140,8 @@ export default function ImportExcel({ refresh, close }) {
       area: babyjson['所在地区'],
       location: babyjson['详细地址'],
       remark: babyjson['备注信息'],
-      chw: {chw: {identity: babyjson['CHW_ID']}}
+      chw: {chw: {identity: babyjson['CHW_ID']}},
+      cares: cares
     }
   }
 
@@ -89,6 +158,19 @@ export default function ImportExcel({ refresh, close }) {
       if (! new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
         errorArray.push({ name: element.name, matters: '姓名必须为2个以上的汉字' })
         return;
+      }
+
+      if (element.cares.length > 0) {
+        const result =  element.cares.every(element => {
+          if (!element.phone || !element.wechat || !element.familyTies) return false
+          if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) return false
+          if (!new RegExp(/^1[0-9]{10}$/).test(element.phone)) return false
+          return true
+        });
+        if (!result) {
+          errorArray.push({ name: element.name, matters: '看护人信息不符合规则' })
+          return;
+        }
       }
 
       if (element.stage === "EDC") {
