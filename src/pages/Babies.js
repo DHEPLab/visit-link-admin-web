@@ -5,11 +5,11 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useQueryParam, StringParam } from "use-query-params";
 
-import { Button, Space, Tabs } from "antd";
+import { Button, Space, Tabs, Modal } from "antd";
 
 import { useBoolState } from "../utils";
 import { Gender, ActionFromApp } from "../constants/enums";
-import { WithPage, ContentHeader, CardTabs, ZebraTable, BabyModalForm, SearchInput, StatusTag } from "../components/*";
+import { WithPage, ContentHeader, CardTabs, ZebraTable, BabyModalForm, SearchInput, StatusTag, ImportExcel } from "../components/*";
 
 const { TabPane } = Tabs;
 
@@ -21,6 +21,7 @@ export default function Babies() {
   const history = useHistory();
   const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
+  const [impoerModal, openImpoerModal, closeImpoerModal] = useBoolState(false);
 
   useEffect(() => {
     if (!tab) setTab("approved");
@@ -46,6 +47,9 @@ export default function Babies() {
   return (
     <>
       <ContentHeader title="宝宝管理">
+        <ImportButton onClick={openImpoerModal}>
+          批量创建宝宝
+        </ImportButton>
         <Button type="primary" onClick={openBaby}>
           创建新宝宝
         </Button>
@@ -67,6 +71,9 @@ export default function Babies() {
         onCancel={closeBaby}
         initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
       />
+      <Modal visible={impoerModal} title="从Excel导入" onCancel={closeImpoerModal} footer={false} >
+        <ImportExcel refresh={refresh} close={closeImpoerModal} />
+      </Modal>
     </>
   );
 }
@@ -298,6 +305,12 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
     </>
   );
 }
+
+const ImportButton = styled(Button)`
+  border-color: #ff794f;
+  color: #ff794f;
+  margin-right: 10px;
+`
 
 const SearchBar = styled.div`
   height: 76px;
