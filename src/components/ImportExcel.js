@@ -166,6 +166,11 @@ export default function ImportExcel({ refresh, close }) {
         return;
       }
 
+      if (element.area.split('/').length !== 4) {
+        errorArray.push({ name: element.name, matters: '所在地区格式错误' })
+        return;
+      }
+
       if (element.cares.length > 0) {
         const result =  element.cares.every(element => {
           if (!element.phone || !element.wechat || !element.familyTies) return false
