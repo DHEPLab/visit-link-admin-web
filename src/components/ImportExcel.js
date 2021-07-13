@@ -22,7 +22,8 @@ export default function ImportExcel({ refresh, close }) {
       let data = e.target.result;
       let wb = XLSX.read(data, { type: 'binary' });
       let json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-      checkBaby(json)
+      const arr = json.length > 1 ? json.slice(1) : []
+      checkBaby(arr)
     };
   };
 
@@ -185,9 +186,25 @@ export default function ImportExcel({ refresh, close }) {
       }
 
       if (element.stage === "EDC") {
-        element.edc? passArray.push(element) : errorArray.push({ name: element.name, matters: '预产期为空' })
+        if (!element.edc) {
+          errorArray.push({ name: element.name, matters: '预产期为空' })
+          return
+        }
+        if (moment().unix() > moment(element.edc).unix()) {
+          errorArray.push({ name: element.name, matters: '预产期不能小于当前时间' })
+          return
+        }
+        passArray.push(element)
       } else {
-        (element.birthday && element.feedingPattern) ? passArray.push(element) : errorArray.push({ name: element.name, matters: '生日/喂养方式为空' })
+        if (!element.birthday || !element.feedingPattern) {
+          errorArray.push({ name: element.name, matters: '生日/喂养方式为空' })
+          return
+        }
+        if (moment().unix() < moment(element.birthday).unix()) {
+          errorArray.push({ name: element.name, matters: '生日不能大于当前时间' })
+          return
+        }
+        passArray.push(element)
       }
     });
 
