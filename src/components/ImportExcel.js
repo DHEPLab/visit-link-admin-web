@@ -242,8 +242,8 @@ export default function ImportExcel({ refresh, close }) {
           dataSource={errData.map((element, index) => ({...element, key: index}))}
           pagination={false}
         >
-          <Column title="宝宝姓名" align="center" dataIndex="name" key="name" />
-          <Column title="错误事项" align="center" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red'}}>{matters}</span>} />
+          <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
+          <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 13}}>{matters}</span>} />
         </Table>
         <ImportLine>
           <Button type="primary" size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
@@ -268,6 +268,7 @@ const ResultContainer = styled.div`
 
 const Result = styled.div`
   text-align: right;
+  font-size: 14px;
 `
 
 const Title = styled.div`
