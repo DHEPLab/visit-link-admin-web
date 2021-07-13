@@ -221,7 +221,7 @@ export default function ImportExcel({ refresh, close }) {
       <Steps progressDot current={3} size="small" >
         <Step title="下载模板" />
         <Step title="导入数据" />
-        <Step title="下载完成" />
+        <Step title="导入完成" />
       </Steps>
       <Title>1.直接上传</Title>
       <Desc>
