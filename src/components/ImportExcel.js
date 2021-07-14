@@ -154,22 +154,22 @@ export default function ImportExcel({ refresh, close }) {
     babiesArray.forEach(element => {
 
       if (passArray.find(ele => ele.identity === element.identity)) {
-        errorArray.push({ name: element.name, matters: 'ID重复' })
+        errorArray.push({ number: element.number, name: element.name, matters: 'ID重复' })
         return;
       }
 
       if (!element.identity || !element.name || !element.gender || !element.stage || !element.area || !element.location) {
-        errorArray.push({ name: element.name, matters: '必填字段为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: '必填字段为空' })
         return;
       }
       
       if (! new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
-        errorArray.push({ name: element.name, matters: '姓名必须为2个以上的汉字' })
+        errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2个以上的汉字' })
         return;
       }
 
       if (element.area.split('/').length !== 4) {
-        errorArray.push({ name: element.name, matters: '所在地区格式错误' })
+        errorArray.push({ number: element.number, name: element.name, matters: '所在地区格式错误' })
         return;
       }
 
@@ -181,28 +181,28 @@ export default function ImportExcel({ refresh, close }) {
           return true
         });
         if (!result) {
-          errorArray.push({ name: element.name, matters: '看护人信息不符合规则' })
+          errorArray.push({ number: element.number, name: element.name, matters: '看护人信息不符合规则' })
           return;
         }
       }
 
       if (element.stage === "EDC") {
         if (!element.edc) {
-          errorArray.push({ name: element.name, matters: '预产期为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: '预产期为空' })
           return
         }
         if (moment().unix() > moment(element.edc).unix()) {
-          errorArray.push({ name: element.name, matters: '预产期不能小于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: '预产期不能小于当前时间' })
           return
         }
         passArray.push(element)
       } else {
         if (!element.birthday || !element.feedingPattern) {
-          errorArray.push({ name: element.name, matters: '生日/喂养方式为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: '生日/喂养方式为空' })
           return
         }
         if (moment().unix() < moment(element.birthday).unix()) {
-          errorArray.push({ name: element.name, matters: '生日不能大于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: '生日不能大于当前时间' })
           return
         }
         passArray.push(element)
@@ -211,7 +211,7 @@ export default function ImportExcel({ refresh, close }) {
 
     Axios.post("/admin/babies/check", passArray).then(res => {
       const { data } = res;
-      const errresults = [...errorArray, ...(data || [])]
+      const errresults = [...errorArray, ...(data || [])].sort((a, b) => parseInt(`${a.number}`) - parseInt(`${b.number}`))
       setErrData(errresults)
       //后端报错有三种： 1、宝宝id重复 2、chwid找不到
       const successResults = passArray.filter(element => !(data || []).find(baby => baby.name === element.name))
@@ -243,7 +243,7 @@ export default function ImportExcel({ refresh, close }) {
       </Steps>
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false} >
-          <UploadButton title="点击上传Excel" icon="iconpicture">
+          <UploadButton title="点击上传Excel" icon="iconvideo">
             支持支持 xls/xlsx
             <br />
             大小不超过5M
@@ -259,6 +259,7 @@ export default function ImportExcel({ refresh, close }) {
           dataSource={errData.map((element, index) => ({...element, key: index}))}
           pagination={false}
         >
+          <Column title="行号" align="left" dataIndex="number" key="number" />
           <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
           <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 13}}>{matters}</span>} />
         </Table>
@@ -292,7 +293,7 @@ const Result = styled.div`
 `
 
 const ButtonLine = styled.div`
-  margin: 10px 20px;
+  margin: 20px;
   text-align: center;
 `
 
