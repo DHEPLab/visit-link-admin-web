@@ -248,7 +248,7 @@ export default function ImportExcel({ refresh, close }) {
             <br />
             大小不超过5M
             <br />
-            单次至多导入500条任务
+            单次导入数据最好不超过500条
           </UploadButton>
         </Upload>
         <DownLink href="/static/template/import_baby.xlsx" download >下载模板</DownLink>
