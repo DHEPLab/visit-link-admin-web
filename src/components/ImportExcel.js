@@ -3,6 +3,7 @@ import XLSX from 'xlsx';
 import styled from "styled-components";
 import { Steps, Button, Spin, Upload, Table, message } from "antd";
 import Column from 'antd/lib/table/Column';
+import { UploadButton } from "./*";
 import moment from "moment";
 import Axios from "axios";
 const { Step } = Steps;
@@ -147,7 +148,7 @@ export default function ImportExcel({ refresh, close }) {
   }
 
   async function checkBaby (babiesjsonArray) {
-    const babiesArray = babiesjsonArray.map(json => toBaby(json))
+    const babiesArray = babiesjsonArray.map((json, index) => ({...toBaby(json), number: (index+1)}))
     let passArray = []
     let errorArray = []
     babiesArray.forEach(element => {
@@ -240,20 +241,19 @@ export default function ImportExcel({ refresh, close }) {
         <Step title="导入数据" />
         <Step title="导入完成" />
       </Steps>
-      <Title>1.直接上传</Title>
-      <Desc>
-        -支持文件类型: xls, xlsx, csv <br />
-        -导入表格文件不能大于1M <br />
-        -支持所有基础字段的导入,一次至多导入500条任务,每个任务至多支持20个自定义字段(不符合规则整条任务不予以导入)
-      </Desc>
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false} >
-          <Button type="primary" size="small" >上传文件</Button>
+          <UploadButton title="点击上传Excel" icon="iconpicture">
+            支持支持 xls/xlsx
+            <br />
+            大小不超过5M
+            <br />
+            单次至多导入500条任务
+          </UploadButton>
         </Upload>
         <DownLink href="/static/template/import_baby.xlsx" download >下载模板</DownLink>
       </ButtonLine>
       {(importData.length > 0 || errData.length > 0 )&& <ResultContainer>
-        <Result>成功校验数据{importData.length}条， 共{importData.length+errData.length}条</Result>
         <Table
           size="small"
           dataSource={errData.map((element, index) => ({...element, key: index}))}
@@ -262,6 +262,7 @@ export default function ImportExcel({ refresh, close }) {
           <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
           <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 13}}>{matters}</span>} />
         </Table>
+        <Result>成功校验数据{importData.length}条， 共{importData.length+errData.length}条</Result>
         <ImportLine>
           <Button type="primary" size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
         </ImportLine>
@@ -286,25 +287,16 @@ const ResultContainer = styled.div`
 const Result = styled.div`
   text-align: right;
   font-size: 14px;
-`
-
-const Title = styled.div`
-  color: #3E3E3E;
-  font-weight: 600;
-  margin: 10px 20px;
-`
-
-const Desc = styled.div`
-  color: #8F8F8F;
-  font-size: 14px;
-  margin: 0px 20px;
+  line-height: 30px;
+  font-family: fantasy;
 `
 
 const ButtonLine = styled.div`
   margin: 10px 20px;
-  display: flex;
+  text-align: center;
 `
 
 const DownLink = styled.a`
-  margin-left: 20px;
+  position: relative;
+  bottom: -30px;
 `
