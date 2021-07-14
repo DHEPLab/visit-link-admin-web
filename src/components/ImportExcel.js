@@ -154,7 +154,7 @@ export default function ImportExcel({ refresh, close }) {
     babiesArray.forEach(element => {
 
       if (passArray.find(ele => ele.identity === element.identity)) {
-        errorArray.push({ number: element.number, name: element.name, matters: 'ID重复' })
+        errorArray.push({ number: element.number, name: element.name, matters: '表内ID重复' })
         return;
       }
 
@@ -258,19 +258,29 @@ export default function ImportExcel({ refresh, close }) {
           size="small"
           dataSource={errData.map((element, index) => ({...element, key: index}))}
           pagination={false}
+          scroll={{ y: 200 }}
         >
-          <Column title="行号" align="left" dataIndex="number" key="number" />
+          <Column title="行号" align="left" dataIndex="number" key="number" width={50} />
           <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
-          <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 13}}>{matters}</span>} />
+          <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 12}}>{matters}</span>} />
         </Table>
         <Result>成功校验数据{importData.length}条， 共{importData.length+errData.length}条</Result>
         <ImportLine>
-          <Button type="primary" size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
+          <CloseButton type="default" size="middle" onClick={() => close()} >关闭</CloseButton>
+          <Button type="primary" style={{float: 'right', width: 160}} size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
         </ImportLine>
       </ResultContainer>}
     </Container>
   );
 }
+
+const CloseButton = styled(Button)`
+  border-color: #ff794f;
+  color: #ff794f;
+  margin-right: 10px;
+  float: left;
+  width: 160px;
+`
 
 const Container = styled(Spin)`
   margin-bottom: 20px;
@@ -279,7 +289,8 @@ const Container = styled(Spin)`
 
 const ImportLine = styled.div`
   margin-top: 10px;
-  text-align: end;
+  padding: 0px 60px;
+  height: 30px;
 `;
 
 const ResultContainer = styled.div`
