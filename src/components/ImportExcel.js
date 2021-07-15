@@ -158,8 +158,33 @@ export default function ImportExcel({ refresh, close }) {
         return;
       }
 
-      if (!element.identity || !element.name || !element.gender || !element.stage || !element.area || !element.location) {
-        errorArray.push({ number: element.number, name: element.name, matters: '必填字段为空' })
+      if (!element.identity) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝ID为空' })
+        return;
+      }
+
+      if (!element.name) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝姓名为空' })
+        return;
+      }
+
+      if (!element.gender) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝性别为空' })
+        return;
+      }
+
+      if (!element.stage ) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝成长阶段为空' })
+        return;
+      }
+
+      if (!element.area) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝地区为空' })
+        return;
+      }
+
+      if (!element.location) {
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝详细地址为空' })
         return;
       }
       
