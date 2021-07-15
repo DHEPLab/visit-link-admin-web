@@ -61,6 +61,16 @@ export default function ImportExcel({ refresh, close }) {
     return null;
   };
 
+  function getAssistedFood (value) {
+    const arr = [
+      {key: true, value: "已添加"},
+      {key: false, value: "未添加"},
+    ]
+    const find =  arr.find(ele => ele.value === value)
+    if (find) return find.key
+    return null;
+  };
+
   function getFamilyTies (value) {
     const arr = [
       {key: 'MOTHER', value: "母亲"},
@@ -73,7 +83,7 @@ export default function ImportExcel({ refresh, close }) {
     ]
     const find =  arr.find(ele => ele.value === value)
     if (find) return find.key
-    return 'OTHER';
+    return null;
   };
 
   function getCares (babyjson) {
@@ -81,7 +91,7 @@ export default function ImportExcel({ refresh, close }) {
     if (babyjson["Caregiver_Main_name"]) {
       cares.push({
         master: true,
-        name: babyjson["Caregiver_Main_name"],
+        name: babyjson["Caregiver_Main_name"].trim(),
         familyTies: getFamilyTies(babyjson["Caregiver_Main_relationship"]),
         phone: babyjson["Caregiver_Main_phone"],
         wechat: babyjson["Caregiver_Main_Wechat"]
@@ -131,13 +141,13 @@ export default function ImportExcel({ refresh, close }) {
   function toBaby (babyjson) {
     const cares = getCares(babyjson);
     return {
-      identity: babyjson['宝宝id'],
-      name: babyjson['宝宝姓名'],
+      identity: babyjson['宝宝id'].trim(),
+      name: babyjson['宝宝姓名'].trim(),
       stage: getBabyStage(babyjson['成长阶段']),
       gender: getGender(babyjson['宝宝性别']),
-      edc: babyjson['预产期'] && moment(babyjson['预产期']).format('YYYY-MM-DD'),
-      birthday: babyjson['出生日期'] && moment(babyjson['出生日期']).format('YYYY-MM-DD'),
-      assistedFood: babyjson['辅食'] === '已添加' ? true : false,
+      edc: babyjson['预产期'],
+      birthday: babyjson['出生日期'],
+      assistedFood: getAssistedFood(babyjson['辅食']),
       feedingPattern: getFeedingPattern(babyjson['喂养方式']),
       area: babyjson['所在地区'],
       location: babyjson['详细地址'],
@@ -169,12 +179,12 @@ export default function ImportExcel({ refresh, close }) {
       }
 
       if (!element.gender) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝性别为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝性别为空/格式错误' })
         return;
       }
 
       if (!element.stage ) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝成长阶段为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: '宝宝成长阶段为空/格式错误' })
         return;
       }
 
@@ -217,10 +227,12 @@ export default function ImportExcel({ refresh, close }) {
           return
         }
 
-        if (element.edc.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
+        if (element.edc.split('-').length !== 3) {
           errorArray.push({ number: element.number, name: element.name, matters: '预产期格式错误' })
           return
         }
+
+        element.edc = moment(element.edc).format('YYYY-MM-DD')
 
         if (moment().unix() > moment(element.edc).unix()) {
           errorArray.push({ number: element.number, name: element.name, matters: '预产期不能小于当前时间' })
@@ -228,15 +240,23 @@ export default function ImportExcel({ refresh, close }) {
         }
         passArray.push(element)
       } else {
+        if (element.feedingPattern === null) {
+          errorArray.push({ number: element.number, name: element.name, matters: '喂养方式格式错误' })
+          return
+        }
+
         if (!element.birthday || !element.feedingPattern) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日/喂养方式为空' })
           return
         }
+        console.log(element.name, element.birthday, element.birthday.split('-'), 777777777777)
 
-        if (element.birthday.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
+        if (element.birthday.split('-').length !== 3) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日格式错误' })
           return
         }
+
+        element.birthday = moment(element.birthday).format('YYYY-MM-DD')
 
         if (moment().unix() < moment(element.birthday).unix()) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日不能大于当前时间' })
