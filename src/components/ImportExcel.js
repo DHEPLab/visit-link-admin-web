@@ -174,10 +174,10 @@ export default function ImportExcel({ refresh, close }) {
       }
 
       if (element.cares.length > 0) {
-        const result =  element.cares.every(element => {
-          if (!element.phone || !element.wechat || !element.familyTies) return false
-          if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) return false
-          if (!new RegExp(/^1[0-9]{10}$/).test(element.phone)) return false
+        const result =  element.cares.every(ele => {
+          if (!ele.phone || !ele.familyTies) return false
+          if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
+          if (!new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
           return true
         });
         if (!result) {
@@ -191,6 +191,12 @@ export default function ImportExcel({ refresh, close }) {
           errorArray.push({ number: element.number, name: element.name, matters: '预产期为空' })
           return
         }
+
+        if (element.edc.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
+          errorArray.push({ number: element.number, name: element.name, matters: '预产期格式错误' })
+          return
+        }
+
         if (moment().unix() > moment(element.edc).unix()) {
           errorArray.push({ number: element.number, name: element.name, matters: '预产期不能小于当前时间' })
           return
@@ -201,6 +207,12 @@ export default function ImportExcel({ refresh, close }) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日/喂养方式为空' })
           return
         }
+
+        if (element.birthday.match(/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
+          errorArray.push({ number: element.number, name: element.name, matters: '生日格式错误' })
+          return
+        }
+
         if (moment().unix() < moment(element.birthday).unix()) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日不能大于当前时间' })
           return
