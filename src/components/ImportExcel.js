@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import XLSX from 'xlsx';
 import styled from "styled-components";
 import { Steps, Button, Spin, Upload, Table, message } from "antd";
@@ -8,11 +8,16 @@ import moment from "moment";
 import Axios from "axios";
 const { Step } = Steps;
 
-export default function ImportExcel({ refresh, close }) {
+export default function ImportExcel({ open, refresh, close }) {
 
   const [spinningLoading, setSpinningLoading] = useState(false);
   const [importData, setImportData] = useState([])
   const [errData, setErrData] = useState([])
+
+    useEffect(() => {
+      setImportData([])
+      setErrData([])
+    }, [open])
 
   async function putBlob(fileInfo) {
     setSpinningLoading(true)
@@ -91,7 +96,7 @@ export default function ImportExcel({ refresh, close }) {
     if (babyjson["Caregiver_Main_name"]) {
       cares.push({
         master: true,
-        name: babyjson["Caregiver_Main_name"].trim(),
+        name: babyjson["Caregiver_Main_name"] && babyjson["Caregiver_Main_name"].trim(),
         familyTies: getFamilyTies(babyjson["Caregiver_Main_relationship"]),
         phone: babyjson["Caregiver_Main_phone"],
         wechat: babyjson["Caregiver_Main_Wechat"]
@@ -141,8 +146,8 @@ export default function ImportExcel({ refresh, close }) {
   function toBaby (babyjson) {
     const cares = getCares(babyjson);
     return {
-      identity: babyjson['宝宝id'].trim(),
-      name: babyjson['宝宝姓名'].trim(),
+      identity: babyjson['宝宝id'] && babyjson['宝宝id'].trim(),
+      name: babyjson['宝宝姓名'] && babyjson['宝宝姓名'].trim(),
       stage: getBabyStage(babyjson['成长阶段']),
       gender: getGender(babyjson['宝宝性别']),
       edc: babyjson['预产期'],

@@ -72,7 +72,7 @@ export default function Babies() {
         initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
       />
       <Modal visible={impoerModal} title="从Excel导入" onCancel={closeImpoerModal} style={{top: 50}} footer={false} >
-        <ImportExcel refresh={refresh} close={closeImpoerModal} />
+        <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
       </Modal>
     </>
   );
