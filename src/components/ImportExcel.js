@@ -203,11 +203,6 @@ export default function ImportExcel({ open, refresh, close }) {
         return;
       }
 
-      if (!element.chw.chw.identity) {
-        errorArray.push({ number: element.number, name: element.name, matters: 'CHW_ID为空' })
-        return;
-      }
-
       if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
         errorArray.push({ number: element.number, name: element.name, matters: '至少添加一位主看护人' })
         return;
