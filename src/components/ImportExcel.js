@@ -203,13 +203,18 @@ export default function ImportExcel({ open, refresh, close }) {
         return;
       }
 
+      if (!element.chw.chw.identity) {
+        errorArray.push({ number: element.number, name: element.name, matters: 'CHW_ID为空' })
+        return;
+      }
+
       if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
         errorArray.push({ number: element.number, name: element.name, matters: '至少添加一位主看护人' })
         return;
       }
 
       if (! new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
-        errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2个以上的汉字' })
+        errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2-10个汉字' })
         return;
       }
 
