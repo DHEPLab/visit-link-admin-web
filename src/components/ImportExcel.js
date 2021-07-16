@@ -314,7 +314,7 @@ export default function ImportExcel({ open, refresh, close }) {
       </Steps>
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false} >
-          <UploadButton title="点击上传Excel" icon="iconvideo">
+          <UploadButton title="点击上传Excel" icon="iconimport-excel">
             支持支持 xls/xlsx
             <br />
             大小不超过5M
