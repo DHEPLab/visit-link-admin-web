@@ -202,7 +202,12 @@ export default function ImportExcel({ open, refresh, close }) {
         errorArray.push({ number: element.number, name: element.name, matters: '宝宝详细地址为空' })
         return;
       }
-      
+
+      if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
+        errorArray.push({ number: element.number, name: element.name, matters: '至少添加一位主看护人' })
+        return;
+      }
+
       if (! new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
         errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2个以上的汉字' })
         return;
@@ -250,11 +255,15 @@ export default function ImportExcel({ open, refresh, close }) {
           return
         }
 
+        if (element.assistedFood === null) {
+          errorArray.push({ number: element.number, name: element.name, matters: '辅食格式错误' })
+          return
+        }
+
         if (!element.birthday || !element.feedingPattern) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日/喂养方式为空' })
           return
         }
-        console.log(element.name, element.birthday, element.birthday.split('-'), 777777777777)
 
         if (element.birthday.split('-').length !== 3) {
           errorArray.push({ number: element.number, name: element.name, matters: '生日格式错误' })
