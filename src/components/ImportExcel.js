@@ -56,10 +56,10 @@ export default function ImportExcel({ open, refresh, close }) {
 
   function getFamilyTies (value) {
     const arr = [
-      {key: 'MOTHER', value: "母亲"},
-      {key: 'FATHER', value: "父亲"},
-      {key: 'GRANDMOTHER', value: "(外)祖母"},
-      {key: 'GRANDFATHER', value: "(外)祖父"},
+      {key: 'MOTHER', value: "妈妈"},
+      {key: 'FATHER', value: "爸爸"},
+      {key: 'GRANDMOTHER', value: "奶奶(或外婆)"},
+      {key: 'GRANDFATHER', value: "爷爷(或外公)"},
       {key: 'SISTER', value: "亲姐妹"},
       {key: 'BROTHER', value: "亲兄弟"},
       {key: 'OTHER', value: "其他"}
@@ -196,6 +196,7 @@ export default function ImportExcel({ open, refresh, close }) {
 
       if (element.cares.length > 0) {
         const result =  element.cares.every(ele => {
+          console.log(ele, 777777)
           if (!ele.phone || !ele.familyTies) return false
           if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
           if (!new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
@@ -251,7 +252,6 @@ export default function ImportExcel({ open, refresh, close }) {
       const { data } = res;
       const errresults = [...errorArray, ...(data || [])].sort((a, b) => parseInt(`${a.number}`) - parseInt(`${b.number}`))
       setErrData(errresults)
-      //后端报错有三种： 1、宝宝id重复 2、chwid找不到
       const successResults = passArray.filter(element => !(data || []).find(baby => baby.name === element.name))
       setImportData(successResults)
       setSpinningLoading(false)

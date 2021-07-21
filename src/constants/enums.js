@@ -28,10 +28,10 @@ export const FeedingPattern = {
 };
 
 export const FamilyTies = {
-  MOTHER: "母亲",
-  FATHER: "父亲",
-  GRANDMOTHER: "(外)祖母",
-  GRANDFATHER: "(外)祖父",
+  MOTHER: "妈妈",
+  FATHER: "爸爸",
+  GRANDMOTHER: "奶奶(或外婆)",
+  GRANDFATHER: "爷爷(或外公)",
   SISTER: "亲姐妹",
   BROTHER: "亲兄弟",
   OTHER: "其他",
