@@ -33,18 +33,6 @@ export default function ImportExcel({ open, refresh, close }) {
     };
   };
 
-  function getFeedingPattern (value) {
-    const arr = [
-      {key: 'BREAST_MILK', value: "纯母乳喂养"},
-      {key: 'MILK_POWDER', value: "纯奶粉喂养"},
-      {key: 'MIXED', value: "母乳奶粉混合喂养"},
-      {key: 'TERMINATED', value: "已终止母乳/奶粉喂养"}
-    ]
-    const find =  arr.find(ele => ele.value === value)
-    if (find) return find.key
-    return null;
-  };
-
   function getBabyStage (value) {
     const arr = [
       {key: 'EDC', value: "待产期"},
@@ -60,16 +48,6 @@ export default function ImportExcel({ open, refresh, close }) {
       {key: 'MALE', value: "男"},
       {key: 'FEMALE', value: "女"},
       {key: 'UNKNOWN', value: "未知"}
-    ]
-    const find =  arr.find(ele => ele.value === value)
-    if (find) return find.key
-    return null;
-  };
-
-  function getAssistedFood (value) {
-    const arr = [
-      {key: true, value: "已添加"},
-      {key: false, value: "未添加"},
     ]
     const find =  arr.find(ele => ele.value === value)
     if (find) return find.key
@@ -152,8 +130,6 @@ export default function ImportExcel({ open, refresh, close }) {
       gender: getGender(babyjson['宝宝性别']),
       edc: babyjson['预产期'],
       birthday: babyjson['出生日期'],
-      assistedFood: getAssistedFood(babyjson['辅食']),
-      feedingPattern: getFeedingPattern(babyjson['喂养方式']),
       area: babyjson['所在地区'],
       location: babyjson['详细地址'],
       remark: babyjson['备注信息'],
@@ -250,18 +226,9 @@ export default function ImportExcel({ open, refresh, close }) {
         }
         passArray.push(element)
       } else {
-        if (element.feedingPattern === null) {
-          errorArray.push({ number: element.number, name: element.name, matters: '喂养方式格式错误' })
-          return
-        }
 
-        if (element.assistedFood === null) {
-          errorArray.push({ number: element.number, name: element.name, matters: '辅食格式错误' })
-          return
-        }
-
-        if (!element.birthday || !element.feedingPattern) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日/喂养方式为空' })
+        if (!element.birthday) {
+          errorArray.push({ number: element.number, name: element.name, matters: '生日为空' })
           return
         }
 
