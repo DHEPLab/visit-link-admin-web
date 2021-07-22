@@ -80,10 +80,10 @@ export default function ImportExcel({ open, refresh, close }) {
     const arr = [
       {key: 'MOTHER', value: "妈妈"},
       {key: 'FATHER', value: "爸爸"},
-      {key: 'GRANDMOTHER', value: "奶奶(或外婆)"},
-      {key: 'GRANDFATHER', value: "爷爷(或外公)"},
-      {key: 'SISTER', value: "亲姐妹"},
-      {key: 'BROTHER', value: "亲兄弟"},
+      {key: 'GRANDMOTHER', value: "奶奶"},
+      {key: 'GRANDMA', value: "外婆"},
+      {key: 'GRANDFATHER', value: "爷爷"},
+      {key: 'GRANDPA', value: "外公"},
       {key: 'OTHER', value: "其他"}
     ]
     const find =  arr.find(ele => ele.value === value)

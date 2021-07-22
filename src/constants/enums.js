@@ -30,10 +30,10 @@ export const FeedingPattern = {
 export const FamilyTies = {
   MOTHER: "妈妈",
   FATHER: "爸爸",
-  GRANDMOTHER: "奶奶(或外婆)",
-  GRANDFATHER: "爷爷(或外公)",
-  SISTER: "亲姐妹",
-  BROTHER: "亲兄弟",
+  GRANDMOTHER: "奶奶",
+  GRANDMA: "外婆",
+  GRANDFATHER: "爷爷",
+  GRANDPA: "外公",
   OTHER: "其他",
 };
 
