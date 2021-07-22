@@ -144,9 +144,10 @@ export default function ImportExcel({ open, refresh, close }) {
   }
 
   function toBaby (babyjson) {
+    console.log(babyjson, 7777)
     const cares = getCares(babyjson);
     return {
-      identity: babyjson['宝宝id'] && babyjson['宝宝id'].trim(),
+      identity: babyjson['宝宝id'] && `${babyjson['宝宝id']}`.trim(),
       name: babyjson['宝宝姓名'] && babyjson['宝宝姓名'].trim(),
       stage: getBabyStage(babyjson['成长阶段']),
       gender: getGender(babyjson['宝宝性别']),
