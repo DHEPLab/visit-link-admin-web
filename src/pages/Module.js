@@ -31,7 +31,7 @@ export default function Module() {
   const [draftDate, setDraftDate] = useState();
 
   useEffect(() => {
-    setReadonly(!pathname.includes("/modules/edit") && !pathname.includes("/modules/create"));
+    setReadonly(!pathname.includes("/modules/edit") && !pathname.includes("/modules/create") && !pathname.includes("/modules/copy"));
   }, [pathname, setReadonly]);
 
   useEffect(() => {
@@ -41,7 +41,13 @@ export default function Module() {
       setComponents([Factory.createText()]);
     } else {
       Axios.get(`/admin/modules/${id}`).then(({ data, headers }) => {
-        if (!readonly) form.setFieldsValue(data);
+        const formValue = pathname.includes("/modules/edit") ? data : {
+          ...data,
+          id: null,
+          name: `${data.name}-copy`,
+          number: `${data.number}-copy`,
+        }
+        if (!readonly) form.setFieldsValue(formValue);
         setModule(data);
         setTitle(data.name);
         setComponents(data.components);
@@ -56,7 +62,7 @@ export default function Module() {
         published: true,
       },
     }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
-  }, [id, form, readonly, dispatch]);
+  }, [id, form, readonly, pathname, dispatch]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
@@ -77,12 +83,18 @@ export default function Module() {
 
   function onSubmit(values) {
     if (components.length === 0) return message.warn("至少添加一个组件");
-
+    const isEdit = pathname.includes("/modules/edit")
     Axios.post(submitURL, {
-      id,
+      id: isEdit ? id : null,
       components,
       ...values,
-    }).then(history.goBack);
+    }).then(() => {
+      if (isEdit) {
+        history.goBack()
+      } else {
+        history.push('/modules')
+      }
+    });
   }
 
   function handleDelteDraft() {
@@ -95,6 +107,10 @@ export default function Module() {
     Axios.delete(`/admin/modules/${id}`).then(() => {
       history.goBack();
     });
+  }
+
+  function copy() {
+    history.push(`/modules/copy/${id}`)
   }
 
   if (!components) {
@@ -124,6 +140,11 @@ export default function Module() {
               <Space size="large">
                 {readonly ? (
                   <>
+                    {id && (
+                      <Button ghost type="danger" onClick={copy} >
+                        复制模块
+                      </Button>
+                    )}
                     {id && (
                       <DeleteConfirmModal
                         title="删除模块"

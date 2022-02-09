@@ -63,6 +63,10 @@ const routes = [
     component: Module,
   },
   {
+    path: "/modules/copy/:id",
+    component: Module,
+  },
+  {
     path: "/modules/create",
     component: Module,
   },
