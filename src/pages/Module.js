@@ -44,8 +44,8 @@ export default function Module() {
         const formValue = pathname.includes("/modules/edit") ? data : {
           ...data,
           id: null,
-          name: `${data.name}-copy`,
-          number: `${data.number}-copy`,
+          name: `${data.name}（1）`,
+          number: `${data.number}-1`,
         }
         if (!readonly) form.setFieldsValue(formValue);
         setModule(data);
