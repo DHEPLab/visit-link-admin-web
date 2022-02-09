@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { FieldArray } from "formik";
-import { Space, Button } from "antd";
+import { Space, Button, message } from "antd";
 
 import Factory from "./factory";
 import { ComponentQuestion } from "./*";
@@ -34,7 +34,11 @@ export function handleRemove(helpers, index, focus, setFocus) {
   }
 }
 
-export function insertComponent(helpers, component, focus, setFocus) {
+export function insertComponent(length, helpers, component, focus, setFocus) {
+  if (length > 20) {
+    message.warning("题目数量最多添加二十个！")
+    return
+  }
   if (focus === -1) {
     helpers.push(component);
   } else {
@@ -70,20 +74,20 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                     <Space direction="vertical" size="large">
                       <Button
                         type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createQuestionText(), focus, setFocus)}
+                        onClick={() => insertComponent(value.length, helpers, Factory.createQuestionText(), focus, setFocus)}
                       >
                         <Iconfont type="iconquestion-text" /> 添加文本问题
                       </Button>
                       <Button
                         type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createQuestionRadio(), focus, setFocus)}
+                        onClick={() => insertComponent(value.length, helpers, Factory.createQuestionRadio(), focus, setFocus)}
                       >
                         <Iconfont type="iconquestion-radio" />
                         添加单选问题
                       </Button>
                       <Button
                         type="primary"
-                        onClick={() => insertComponent(helpers, Factory.createQuestionCheckbox(), focus, setFocus)}
+                        onClick={() => insertComponent(value.length, helpers, Factory.createQuestionCheckbox(), focus, setFocus)}
                       >
                         <Iconfont type="iconquestion-checkbox" />
                         添加多选问题
