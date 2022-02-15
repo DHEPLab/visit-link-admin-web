@@ -134,6 +134,13 @@ export default function Baby() {
     }
   }
 
+  function resetLocation() {
+    Axios.post(`/admin/babies/reset/location/${id}`).then(() => {
+      message.success("校正成功！")
+      refresh();
+    });
+  }
+
   return (
     <>
       <DetailHeader
@@ -219,9 +226,14 @@ export default function Baby() {
         title="宝宝信息"
         extra={
           !deleted && (
-            <Button type="shade" onClick={openModal}>
-              编辑资料
-            </Button>
+            <>
+              <Button type="danger" ghost onClick={resetLocation} style={{ marginRight: 10 }}>
+                校正位置
+              </Button>
+              <Button type="shade" onClick={openModal}>
+                编辑资料
+              </Button>
+            </>
           )
         }
       >
@@ -241,6 +253,7 @@ export default function Baby() {
         )}
         <StaticField label="所在区域">{baby.area}</StaticField>
         <StaticField label="详细地址">{baby.location}</StaticField>
+        <StaticField label="经纬度">{baby.longitude && `${baby.longitude}，${baby.latitude}`}</StaticField>
         <StaticField label="备注信息">{baby.remark}</StaticField>
         {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
       </Card>

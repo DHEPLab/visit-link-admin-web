@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { Select, Form, Input, Radio, DatePicker, Cascader } from "antd";
+import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
 
 import ModalForm from "./ModalForm";
 import Pcas from "../constants/pcas-code.json";
@@ -91,6 +91,18 @@ export default function BabyModalForm({ disableStage, ...props }) {
       <Form.Item label="详细地址" name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
+      <Row>
+        <Col span={10} offset={1}>
+          <Form.Item label="经度" name="longitude">
+            <InputNumber style={{ width: 160 }} />
+          </Form.Item>
+        </Col>
+        <Col span={10}>
+          <Form.Item label="维度" name="latitude">
+            <InputNumber style={{ width: 160 }} />
+          </Form.Item>
+        </Col>
+      </Row>
       <Form.Item label="备注信息" name="remark" rules={Rules.Remark}>
         <Input />
       </Form.Item>
