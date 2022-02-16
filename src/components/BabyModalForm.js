@@ -98,7 +98,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
           </Form.Item>
         </Col>
         <Col span={10}>
-          <Form.Item label="维度" name="latitude">
+          <Form.Item label="纬度" name="latitude">
             <InputNumber style={{ width: 160 }} />
           </Form.Item>
         </Col>
