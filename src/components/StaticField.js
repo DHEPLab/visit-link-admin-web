@@ -1,14 +1,25 @@
 import React from "react";
 import styled from "styled-components";
+import { SwapRightOutlined } from '@ant-design/icons';
 
-export default function ({ label, children }) {
+export default function ({ label, children, history = '' }) {
   return (
     <Container>
       <Label>{label}</Label>
-      <Value>{children}</Value>
+      <Value>{history && <History>{`${history} `}<SwapRightOutlined /></History>}{children}</Value>
     </Container>
   );
 }
+
+const History = styled.span`
+  color: #B2B2B2;
+  font-weight: 400;
+  font-size: 18px;
+  margin-right: 10px;
+  .anticon-swap-right{
+    font-size: 24px;
+  }
+`
 
 const Container = styled.div`
   display: flex;

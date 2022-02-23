@@ -22,6 +22,7 @@ import {
   AssignModalTable,
   WithPage,
 } from "../components/*";
+import styled from "styled-components";
 
 export default function Baby() {
   const { id } = useParams();
@@ -35,8 +36,18 @@ export default function Baby() {
   const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
   const [revertAccountVisible, openRevertAccountModal, closeRevertAccountModal] = useBoolState();
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
+  const [oldValue, setOldValue] = useState({})
 
   const { chw, approved, actionFromApp, deleted } = baby;
+  const [dataSource] = useFetch('/admin/babies/modifyRecord/getBabyModifyRecord', { babyId: id }, []);
+
+  useEffect(() => {
+    if (!dataSource || dataSource.length === 0) return
+    const { columnName, oldValue } = dataSource[0];
+    const result = Object.fromEntries(columnName.map((e, i) => [e, oldValue[i]]));
+    setOldValue(result)
+  }, [dataSource])
+
   const initialValues = () => ({
     ...baby,
     chw: null,
@@ -237,29 +248,30 @@ export default function Baby() {
           )
         }
       >
-        <StaticField label="真实姓名">{baby.name}</StaticField>
-        <StaticField label="性别">{Gender[baby.gender]}</StaticField>
+        <StaticField label="真实姓名" history={oldValue["name"]} >{baby.name}</StaticField>
+        <StaticField label="性别" history={oldValue["gender"] && Gender[oldValue["gender"]]}>{Gender[baby.gender]}</StaticField>
         <StaticField label="成长阶段">
           {BabyStage[baby.stage]} {baby.days}天
         </StaticField>
         {baby.stage === "EDC" ? (
-          <StaticField label="预产期">{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
+          <StaticField label="预产期" history={oldValue["edc"]}>{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
         ) : (
           <>
-            <StaticField label="出生日期">{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
-            <StaticField label="辅食">{baby.assistedFood ? "已添加" : "未添加"}</StaticField>
-            <StaticField label="喂养方式">{FeedingPattern[baby.feedingPattern]}</StaticField>
+            <StaticField label="出生日期" history={oldValue["birthday"]}>{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
+            <StaticField label="辅食" history={typeof oldValue["assistedFood"] === 'boolean' && (oldValue["assistedFood"] ? "已添加" : "未添加")}>{baby.assistedFood ? "已添加" : "未添加"}</StaticField>
+            <StaticField label="喂养方式" history={oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"]]}>{FeedingPattern[baby.feedingPattern]}</StaticField>
           </>
         )}
-        <StaticField label="所在区域">{baby.area}</StaticField>
-        <StaticField label="详细地址">{baby.location}</StaticField>
-        <StaticField label="经纬度">{baby.longitude && `${baby.longitude}，${baby.latitude}`}</StaticField>
-        <StaticField label="备注信息">{baby.remark}</StaticField>
+        <StaticField label="所在区域" history={oldValue["area"]}>{baby.area}</StaticField>
+        <StaticField label="详细地址" history={oldValue["location"]}>{baby.location}</StaticField>
+        <StaticField label="经纬度" history={oldValue["longitude"]}>{baby.longitude && `${baby.longitude}，${baby.latitude}`}</StaticField>
+        <StaticField label="备注信息" history={oldValue["remark"]}>{baby.remark}</StaticField>
         {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
       </Card>
 
       <Carers babyId={id} deleted={deleted} />
       <Visits babyId={id} />
+      <History dataSource={dataSource.map((e, i) => ({ ...e, number: i }))} />
 
       <BabyModalForm
         title="修改宝宝信息"
@@ -458,6 +470,71 @@ function Visits({ babyId }) {
   );
 }
 
+function History({ dataSource }) {
+  const columnValues = {
+    chw: "社区工作者",
+    name: "宝宝姓名",
+    gender: "宝宝性别",
+    edc: "预产期",
+    birthday: "宝宝出生日期",
+    assistedFood: "宝宝辅食",
+    feedingPattern: "宝宝喂养方式",
+    area: "宝宝所在区域",
+    location: "宝宝详细地址",
+    longitude: "宝宝经纬度",
+    remark: "宝宝备注"
+  };
+
+  function getValue(key, value) {
+    switch (key) {
+      case 'gender':
+        return Gender[value];
+      case 'assistedFood':
+        return value ? "已添加" : "未添加";
+      case 'feedingPattern':
+        return FeedingPattern[value];
+      default:
+        return value;
+    }
+  }
+
+  return (
+    <Card title="信息变更记录" noPadding>
+      <ZebraTable
+        rowKey="number"
+        dataSource={dataSource}
+        pagination={false}
+        columns={[
+          {
+            title: "时间",
+            dataIndex: "lastModifiedAt",
+            width: 200,
+            align: "center",
+            render: (h) => moment(h).format('YYYY-MM-DD HH:mm:ss'),
+          },
+          {
+            title: "内容",
+            dataIndex: "newValue",
+            render: (h, record) => {
+              const { columnName, newValue, oldValue } = record;
+              const changevalues = columnName.map((e, i) => {
+                return columnValues[e] ? {
+                  columnName: columnValues[e],
+                  oldValue: getValue(e, oldValue[i]),
+                  newValue: getValue(e, newValue[i]),
+                } : null;
+              }).filter(e => !!e)
+              return <div>{changevalues.map((e, i) => (<div key={i}>
+                将<BlobFont>{e.columnName}</BlobFont>由<BlobFont>{e.oldValue}</BlobFont>更改为<BlobFont>{e.newValue}</BlobFont>；
+              </div>))}</div>
+            }
+          }
+        ]}
+      />
+    </Card>
+  );
+}
+
 function Carers({ babyId, deleted }) {
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
@@ -636,3 +713,9 @@ function Carers({ babyId, deleted }) {
     </Card>
   );
 }
+
+const BlobFont = styled.span`
+  font-weight: bold;
+  color: #ff9c78;
+  margin: 0px 2px;
+`
