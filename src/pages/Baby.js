@@ -23,6 +23,7 @@ import {
   WithPage,
 } from "../components/*";
 import styled from "styled-components";
+const { confirm } = Modal;
 
 export default function Baby() {
   const { id } = useParams();
@@ -81,6 +82,19 @@ export default function Baby() {
       default:
       // TODO
     }
+  }
+
+  function handleReject() {
+    confirm({
+      title: '确定驳回申请嘛?',
+      content: '驳回后，宝宝可以继续申请修改',
+      onOk() {
+        Axios.put(`/admin/babies/${id}/reject`, baby).then(() => {
+          refresh();
+        });
+      },
+      onCancel() { }
+    });
   }
 
   function handleApproveCreateFinish(values) {
@@ -172,7 +186,7 @@ export default function Baby() {
         onOk={handleRevertAccount}
       />
 
-      {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} />}
+      {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} onReject={handleReject} />}
       <ApproveCreateBabyModal
         visible={approveCreateVisible}
         onCancel={closeApproveCreateModal}

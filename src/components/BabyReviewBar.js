@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Space, Button } from "antd";
 import { ReviewActionFromApp } from "../constants/enums";
 
-export default function BabyReviewBar({ baby, onApprove }) {
+export default function BabyReviewBar({ baby, onApprove, onReject }) {
   return (
     <Container>
       <Title>审核类型：{ReviewActionFromApp[baby.actionFromApp]} </Title>
@@ -14,6 +14,9 @@ export default function BabyReviewBar({ baby, onApprove }) {
         <Label>修改日期：</Label>
         {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format("YYYY/MM/DD")}</Value>}
         <Space size="large">
+          <EditButton ghost type="primary" onClick={onReject}>
+            驳回申请
+          </EditButton>
           <EditButton ghost type="primary" onClick={onApprove}>
             批准申请
           </EditButton>
