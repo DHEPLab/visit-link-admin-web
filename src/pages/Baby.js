@@ -37,17 +37,13 @@ export default function Baby() {
   const [closeAccountVisible, openCloseAccountModal, closeCloseAccountModal] = useBoolState();
   const [revertAccountVisible, openRevertAccountModal, closeRevertAccountModal] = useBoolState();
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
-  const [oldValue, setOldValue] = useState({})
 
   const { chw, approved, actionFromApp, deleted } = baby;
-  const [dataSource] = useFetch('/admin/babies/modifyRecord/getBabyModifyRecord', { babyId: id }, []);
-
-  useEffect(() => {
-    if (!dataSource || dataSource.length === 0) return
-    const { columnName, oldValue } = dataSource[0];
-    const result = Object.fromEntries(columnName.map((e, i) => [e, oldValue[i]]));
-    setOldValue(result)
-  }, [dataSource])
+  const [dataSource, refreshHistory] = useFetch('/admin/babies/modifyRecord/getBabyModifyRecord', { babyId: id }, []);
+  const oldValue =
+    !dataSource || dataSource.length === 0
+      ? {}
+      : Object.fromEntries((dataSource[0].columnName || []).map((e, i) => [e, dataSource[0].oldValue[i]]));
 
   const initialValues = () => ({
     ...baby,
@@ -65,6 +61,7 @@ export default function Baby() {
     Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
+      refreshHistory();
     });
   }
 
@@ -530,8 +527,8 @@ function History({ dataSource }) {
             title: "内容",
             dataIndex: "newValue",
             render: (h, record) => {
-              const { columnName, newValue, oldValue } = record;
-              const changevalues = columnName.map((e, i) => {
+              const { columnName, newValue, oldValue, roleName, userName } = record;
+              const changevalues = (columnName || []).map((e, i) => {
                 return columnValues[e] ? {
                   columnName: columnValues[e],
                   oldValue: getValue(e, oldValue[i]),
@@ -539,7 +536,7 @@ function History({ dataSource }) {
                 } : null;
               }).filter(e => !!e)
               return <div>{changevalues.map((e, i) => (<div key={i}>
-                将<BlobFont>{e.columnName}</BlobFont>由<BlobFont>{e.oldValue}</BlobFont>更改为<BlobFont>{e.newValue}</BlobFont>；
+                <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{e.columnName}</BlobFont>由<BlobFont>{e.oldValue}</BlobFont>更改为<BlobFont>{e.newValue}</BlobFont>；
               </div>))}</div>
             }
           }
