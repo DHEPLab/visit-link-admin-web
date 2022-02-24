@@ -275,8 +275,19 @@ export default function Baby() {
         )}
         <StaticField label="所在区域" history={oldValue["area"]}>{baby.area}</StaticField>
         <StaticField label="详细地址" history={oldValue["location"]}>{baby.location}</StaticField>
-        <StaticField label="经纬度" history={oldValue["longitude"]}>{baby.longitude && `${baby.longitude}，${baby.latitude}`}</StaticField>
-        <StaticField label="备注信息" history={oldValue["remark"]}>{baby.remark}</StaticField>
+        <StaticField
+          label="经纬度"
+          history={
+            oldValue["longitude"] || oldValue["latitude"]
+              ? `${oldValue["longitude"] || baby["longitude"]}，${oldValue["latitude"] || baby["latitude"]}`
+              : ""
+          }
+        >
+          {baby.longitude && `${baby.longitude}，${baby.latitude}`}
+        </StaticField>
+        <StaticField label="备注信息" history={oldValue["remark"]}>
+          {baby.remark}
+        </StaticField>
         {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
       </Card>
 
@@ -492,7 +503,8 @@ function History({ dataSource }) {
     feedingPattern: "宝宝喂养方式",
     area: "宝宝所在区域",
     location: "宝宝详细地址",
-    longitude: "宝宝经纬度",
+    longitude: "宝宝经度",
+    latitude: "宝宝纬度",
     remark: "宝宝备注"
   };
 
