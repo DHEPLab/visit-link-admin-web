@@ -510,6 +510,8 @@ function History({ dataSource }) {
 
   function getValue(key, value) {
     switch (key) {
+      case 'chw':
+        return value['username'];
       case 'gender':
         return Gender[value];
       case 'assistedFood':

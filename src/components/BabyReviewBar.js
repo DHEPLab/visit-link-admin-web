@@ -14,9 +14,9 @@ export default function BabyReviewBar({ baby, onApprove, onReject }) {
         <Label>修改日期：</Label>
         {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format("YYYY/MM/DD")}</Value>}
         <Space size="large">
-          <EditButton ghost type="primary" onClick={onReject}>
+          {baby.actionFromApp === 'MODIFY' && <EditButton ghost type="primary" onClick={onReject}>
             驳回申请
-          </EditButton>
+          </EditButton>}
           <EditButton ghost type="primary" onClick={onApprove}>
             批准申请
           </EditButton>
