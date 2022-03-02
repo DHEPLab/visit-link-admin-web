@@ -507,6 +507,11 @@ function Visits({ babyId }) {
             title: "过期/未完成原因",
             dataIndex: "remark",
           },
+          {
+            title: "位置信息",
+            dataIndex: "distance",
+            render: (v) => `距离家访地点${v}(Km)`
+          }
         ]}
       />
     </Card>
