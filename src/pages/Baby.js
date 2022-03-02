@@ -40,6 +40,7 @@ export default function Baby() {
 
   const { chw, approved, actionFromApp, deleted } = baby;
   const [dataSource, refreshHistory] = useFetch('/admin/babies/modifyRecord/getBabyModifyRecord', { babyId: id }, []);
+  const [careModifyRecords, refreshCareModifyRecords] = useFetch('/admin/modifyRecord/getCarerModifyRecord', { babyId: id }, []);
   const oldValue =
     !dataSource || dataSource.length === 0
       ? {}
@@ -291,9 +292,29 @@ export default function Baby() {
         {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
       </Card>
 
-      <Carers babyId={id} deleted={deleted} />
+      <Carers babyId={id} deleted={deleted} onModify={refreshCareModifyRecords} />
       <Visits babyId={id} />
-      <History dataSource={dataSource.map((e, i) => ({ ...e, number: i }))} />
+      <History title="宝宝信息变更记录" columnValues={{
+        chw: "社区工作者",
+        name: "宝宝姓名",
+        gender: "宝宝性别",
+        edc: "预产期",
+        birthday: "宝宝出生日期",
+        assistedFood: "宝宝辅食",
+        feedingPattern: "宝宝喂养方式",
+        area: "宝宝所在区域",
+        location: "宝宝详细地址",
+        longitude: "宝宝经度",
+        latitude: "宝宝纬度",
+        remark: "宝宝备注"
+      }} dataSource={dataSource.map((e, i) => ({ ...e, number: i }))} />
+      <History title="看护人信息变更记录" columnValues={{
+        master: "主看护人",
+        name: "看护人姓名",
+        phone: "手机号",
+        wechat: "微信号",
+        familyTies: "亲属关系",
+      }} dataSource={careModifyRecords.map((e, i) => ({ ...e, number: i }))} />
 
       <BabyModalForm
         title="修改宝宝信息"
@@ -492,22 +513,7 @@ function Visits({ babyId }) {
   );
 }
 
-function History({ dataSource }) {
-  const columnValues = {
-    chw: "社区工作者",
-    name: "宝宝姓名",
-    gender: "宝宝性别",
-    edc: "预产期",
-    birthday: "宝宝出生日期",
-    assistedFood: "宝宝辅食",
-    feedingPattern: "宝宝喂养方式",
-    area: "宝宝所在区域",
-    location: "宝宝详细地址",
-    longitude: "宝宝经度",
-    latitude: "宝宝纬度",
-    remark: "宝宝备注"
-  };
-
+function History({ dataSource, columnValues }) {
   function getValue(key, value) {
     switch (key) {
       case 'gender':
@@ -516,6 +522,10 @@ function History({ dataSource }) {
         return value ? "已添加" : "未添加";
       case 'feedingPattern':
         return FeedingPattern[value];
+      case 'master':
+        return value?"是" : "否";
+      case 'familyTies':
+        return FamilyTies[value];
       default:
         return value;
     }
@@ -558,7 +568,7 @@ function History({ dataSource }) {
   );
 }
 
-function Carers({ babyId, deleted }) {
+function Carers({ babyId, deleted, onModify }) {
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carers`, {}, []);
@@ -590,6 +600,9 @@ function Carers({ babyId, deleted }) {
     });
     refresh();
     safeCloseCarer();
+    if (id) {
+      onModify && onModify()
+    }
   }
 
   function onFinish(values) {
