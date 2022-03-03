@@ -5,7 +5,7 @@ import styled from "styled-components";
 // https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=1901605
 export default styled(
   createFromIconfontCN({
-    scriptUrl: "//at.alicdn.com/t/font_1901605_40b1eml7bxn.js",
+    scriptUrl: "//at.alicdn.com/t/font_1901605_1mrmcd6g6xr.js",
   })
 )`
   svg {

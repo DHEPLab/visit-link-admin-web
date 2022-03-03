@@ -12,6 +12,7 @@
     "file-saver": "^2.0.5",
     "formik": "^2.1.4",
     "formik-antd": "^2.0.1",
+    "qrcode.react": "^1.0.1",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -52,7 +53,7 @@
       "plugin:prettier/recommended"
     ]
   },
-  "proxy": "http://localhost:8080",
+  "proxy": "https://dev.healthyfutures.cloud",
   "browserslist": {
     "production": [
       ">0.2%",

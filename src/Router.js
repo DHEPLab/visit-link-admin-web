@@ -4,6 +4,7 @@ import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { getToken } from "./utils/token";
 
 import { SignIn, Profiles, User, Users, Babies, Baby, Modules, Module, Curriculums, Curriculum, Surveys, Survey } from "./pages/*";
+import Projects from "./components/Projects";
 
 const routes = [
   {
@@ -77,6 +78,10 @@ const routes = [
   {
     path: "/modules",
     component: Modules,
+  },
+  {
+    path: "/projects",
+    component: Projects,
   },
   {
     path: "*",

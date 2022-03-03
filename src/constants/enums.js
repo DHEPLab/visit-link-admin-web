@@ -2,6 +2,7 @@ export const Role = {
   ROLE_CHW: "社区工作者",
   ROLE_SUPERVISOR: "督导员",
   ROLE_ADMIN: "管理员",
+  ROLE_SUPER_ADMIN: "超级管理员",
 };
 
 export const Gender = {
@@ -65,3 +66,8 @@ export const VisitStatus = {
   EXPIRED: "已过期",
   DONE: "已完成",
 };
+
+export const QrType = {
+  MODULE_DATA: "MODULE_DATA", // module原始数据
+  MODULE_ID: "MODULE_ID"      // module的id
+}

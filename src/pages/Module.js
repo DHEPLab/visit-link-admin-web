@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import { Formik } from "formik";
-import { Form, Space, Button, Input, message } from "antd";
-import { useDispatch } from "react-redux";
-import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
+import {Formik, useFormikContext} from "formik";
+import {Button, Col, Form, Input, message, Row, Space} from "antd";
+import {useDispatch} from "react-redux";
+import {Prompt, useHistory, useLocation, useParams} from "react-router-dom";
 
 import Factory from "../components/curriculum/factory";
 import ModuleComponents from "../components/curriculum/ModuleComponents";
-import { Rules } from "../constants/*";
-import { ModuleTopic } from "../constants/enums";
-import { DraftBar, Card, DetailHeader, SelectEnum, StaticField, DeleteConfirmModal } from "../components/*";
-import { moduleFinishActionOptions } from "../actions";
+import {Rules} from "../constants/*";
+import {ModuleTopic, QrType} from "../constants/enums";
+import {Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticField} from "../components/*";
+import {moduleFinishActionOptions} from "../actions";
+import QRCode from 'qrcode.react'
+import {debounce} from "../utils";
 
 export default function Module() {
   const { id } = useParams();
@@ -25,7 +27,7 @@ export default function Module() {
   const [submitURL, setSubmitURL] = useState();
 
   const [module, setModule] = useState({});
-  const [components, setComponents] = useState();
+  const [components, setComponents] = useState([]);
 
   const [draftId, setDraftId] = useState();
   const [draftDate, setDraftDate] = useState();
@@ -116,7 +118,6 @@ export default function Module() {
   if (!components) {
     return null;
   }
-
   return (
     <Formik initialValues={{ components }} onSubmit={onSubmitFormik}>
       {({ values, handleSubmit }) => (
@@ -186,24 +187,35 @@ export default function Module() {
           )}
 
           <Card title="模块基本信息">
-            {readonly ? (
-              <ReadonlyForm value={module} />
-            ) : (
-              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder="请输入模块名称，限40个字符" />
-                </Form.Item>
-                <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块编号，限20个字符" />
-                </Form.Item>
-                <Form.Item label="模块描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
-                </Form.Item>
-                <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                  <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
-                </Form.Item>
-              </Form>
-            )}
+            <Row>
+              <Col span={12}>
+                {readonly ? (
+                    <ReadonlyForm value={module} />
+                ) : (
+                    <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+                      <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
+                        <Input placeholder="请输入模块名称，限40个字符" />
+                      </Form.Item>
+                      <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
+                        <Input placeholder="请输入模块编号，限20个字符" />
+                      </Form.Item>
+                      <Form.Item label="模块描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
+                        <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
+                      </Form.Item>
+                      <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
+                        <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
+                      </Form.Item>
+                    </Form>
+                )}
+              </Col>
+              <Col offset={6} span={6}>
+                <div style={{fontSize:14}}>登录APP -> 个人中心 -> 扫码预览</div>
+                {readonly && (
+                    <QRCode value={JSON.stringify( {type:QrType.MODULE_ID, data: module.id})}
+                            size={200} fgColor="black"/>
+                )}
+              </Col>
+            </Row>
           </Card>
 
           <Card title="模块内容">
@@ -224,4 +236,13 @@ function ReadonlyForm({ value }) {
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
     </div>
   );
+}
+
+function FormikComponentsEffect({onChange, debounceTime = 1000}) {
+  const { values } = useFormikContext();
+  const [debounceFunc, setDebounceFunc] = useState(() => debounce((v) => onChange && onChange(v), debounceTime))
+  useEffect(() => {
+    debounceFunc(values.components)
+  }, [values.components])
+  return null
 }

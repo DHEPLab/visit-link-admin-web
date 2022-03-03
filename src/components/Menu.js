@@ -1,56 +1,62 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 
 import Iconfont from "./Iconfont";
 
 export default function Menu() {
-  const { user } = useSelector((state) => state.users);
-  const isAdmin = user?.role === "ROLE_ADMIN";
+    const {user} = useSelector((state) => state.users);
+    const isAdmin = user?.role === "ROLE_ADMIN";
+    const isSuperAdmin = user?.role === "ROLE_SUPER_ADMIN";
 
-  return (
-    <Container>
-      <MenuItemGroup>
-        {isAdmin && (
-          <>
-            <li>
-              <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum" />
-            </li>
-            <li>
-              <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
-            </li>
-            <li>
-              <ActivableLink title="问卷管理" to="/surveys" icon="iconwenjuan" />
-            </li>
-          </>
-        )}
-        <li>
-          <ActivableLink title="账户管理" to="/users" icon="iconuser" />
-        </li>
-        <li>
-          <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby" />
-        </li>
-      </MenuItemGroup>
-    </Container>
-  );
+    return (
+        <Container>
+            <MenuItemGroup>
+                {isAdmin && (
+                    <li>
+                        <ActivableLink title="项目管理" to="/projects" icon="iconproject"/>
+                    </li>
+                )}
+                {isAdmin && (
+                    <>
+                        <li>
+                            <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum"/>
+                        </li>
+                        <li>
+                            <ActivableLink title="模块管理" to="/modules" icon="iconmodule"/>
+                        </li>
+                        <li>
+                            <ActivableLink title="问卷管理" to="/surveys" icon="iconwenjuan"/>
+                        </li>
+                    </>
+                )}
+                <li>
+                    <ActivableLink title="账户管理" to="/users" icon="iconuser"/>
+                </li>
+                <li>
+                    <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby"/>
+                </li>
+            </MenuItemGroup>
+        </Container>
+    );
 }
 
-function ActivableLink({ to, icon, title }) {
-  const location = useLocation();
-  const active = location.pathname.includes(to);
-  const className = active && "active";
+function ActivableLink({to, icon, title}) {
+    const location = useLocation();
+    const active = location.pathname.includes(to);
+    const className = active && "active";
 
-  return (
-    <StyledLink to={to} className={className}>
-      <ActiveBar className="active-bar" />
-      <Wrapper>
-        {icon && <Iconfont opacity={active ? 1 : 0.5} type={icon} size={20} />}
-        {title}
-      </Wrapper>
-      <Iconfont type="iconarrow" size={10} />
-    </StyledLink>
-  );
+    return (
+        <StyledLink to={to} className={className}>
+            <ActiveBar className="active-bar"/>
+            <Wrapper>
+                {icon && <Iconfont opacity={active ? 1 : 0.5} type={icon} size={20}/>}
+                {title}
+            </Wrapper>
+            <Iconfont type="iconarrow" size={10}/>
+        </StyledLink>
+    );
 }
 
 const Wrapper = styled.div`
