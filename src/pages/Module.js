@@ -209,10 +209,12 @@ export default function Module() {
                 )}
               </Col>
               <Col offset={6} span={6}>
-                <div style={{fontSize:14}}>登录APP -> 个人中心 -> 扫码预览</div>
                 {readonly && (
-                    <QRCode value={JSON.stringify( {type:QrType.MODULE_ID, data: module.id})}
-                            size={200} fgColor="black"/>
+                    <>
+                      <div style={{fontSize:14}}>登录APP -> 个人中心 -> 扫码预览</div>
+                      <QRCode value={JSON.stringify( {type:QrType.MODULE_ID, data: module.id})}
+                              size={200} fgColor="black"/>
+                    </>
                 )}
               </Col>
             </Row>
