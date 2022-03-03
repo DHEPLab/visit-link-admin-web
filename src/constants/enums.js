@@ -67,6 +67,11 @@ export const VisitStatus = {
   DONE: "已完成",
 };
 
+export const ProjectStatus = {
+  "1": "发布",
+  "0": "停用"
+};
+
 export const QrType = {
   MODULE_DATA: "MODULE_DATA", // module原始数据
   MODULE_ID: "MODULE_ID"      // module的id

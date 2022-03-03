@@ -13,7 +13,7 @@ export default function Menu() {
     return (
         <Container>
             <MenuItemGroup>
-                {isAdmin && (
+                {isSuperAdmin && (
                     <li>
                         <ActivableLink title="项目管理" to="/projects" icon="iconproject"/>
                     </li>
