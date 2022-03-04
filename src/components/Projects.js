@@ -33,16 +33,18 @@ export default function Projects() {
         const url = id? `/admin/project/update/${id}` : "/admin/project/create"
         Axios.post(url, value)
             .then(({data}) => {
-                Modal.info({
-                    title: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
-                    content: (
-                        <div>
-                            <p>用户名：{data.username}</p>
-                            <p>密码：{data.password}</p>
-                        </div>
-                    ),
-                    onOk() {},
-                });
+                if (!id) {
+                    Modal.info({
+                        title: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
+                        content: (
+                            <div>
+                                <p>用户名：{data.username}</p>
+                                <p>密码：{data.password}</p>
+                            </div>
+                        ),
+                        onOk() {},
+                    });
+                }
                 fetchProject()
                 closeFormModal()
             })
