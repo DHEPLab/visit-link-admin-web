@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Axios from "axios";
-import {Formik, useFormikContext} from "formik";
+import {Formik} from "formik";
 import {Button, Col, Form, Input, message, Row, Space} from "antd";
 import {useDispatch} from "react-redux";
 import {Prompt, useHistory, useLocation, useParams} from "react-router-dom";
@@ -12,7 +12,6 @@ import {ModuleTopic, QrType} from "../constants/enums";
 import {Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticField} from "../components/*";
 import {moduleFinishActionOptions} from "../actions";
 import QRCode from 'qrcode.react'
-import {debounce} from "../utils";
 
 export default function Module() {
   const { id } = useParams();
@@ -238,13 +237,4 @@ function ReadonlyForm({ value }) {
       <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
     </div>
   );
-}
-
-function FormikComponentsEffect({onChange, debounceTime = 1000}) {
-  const { values } = useFormikContext();
-  const [debounceFunc, setDebounceFunc] = useState(() => debounce((v) => onChange && onChange(v), debounceTime))
-  useEffect(() => {
-    debounceFunc(values.components)
-  }, [values.components])
-  return null
 }

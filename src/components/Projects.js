@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Button, Form, Input, Modal, Popconfirm, Radio, Select, Space} from "antd";
+import {Button, Form, Input, Modal, Popconfirm, Radio, Space} from "antd";
 import ContentHeader from "./ContentHeader";
 import StatusTag from "./StatusTag";
 import ZebraTable from "./ZebraTable";
 import Axios from "axios";
 import Rules from "../constants/rules";
-import CurriculumUtils from "../utils/curriculum";
 import ModalForm from "./ModalForm";
-import {useBoolState} from "../utils";
-import {BabyStage, ProjectStatus} from "../constants/enums";
-import RadioEnum from "./RadioEnum";
+import {ProjectStatus} from "../constants/enums";
 
 export default function Projects() {
     const [projects, setProjects] = useState([])
