@@ -518,7 +518,7 @@ function Visits({ babyId }) {
   );
 }
 
-function History({ dataSource, columnValues }) {
+function History({ title, dataSource, columnValues }) {
   function getValue(key, value) {
     switch (key) {
       case 'gender':
@@ -537,7 +537,7 @@ function History({ dataSource, columnValues }) {
   }
 
   return (
-    <Card title="信息变更记录" noPadding>
+    <Card title={title} noPadding>
       <ZebraTable
         rowKey="number"
         dataSource={dataSource}
