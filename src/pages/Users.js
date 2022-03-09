@@ -149,6 +149,7 @@ function CHW({tab, history, loadData, onChangeSearch, ...props}) {
             <ZebraTable
                 {...props}
                 className="clickable"
+                scroll={{x: true}}
                 rowKey={(record) => record.user.id}
                 onRow={(record) => onRow(history, record.user.id)}
                 columns={[
@@ -172,11 +173,23 @@ function CHW({tab, history, loadData, onChangeSearch, ...props}) {
                     },
                     {
                         title: "负责宝宝",
-                        width: 100,
+                        width: 90,
                         dataIndex: "babyCount",
                         render: (h) => `${h} 位`,
                     },
                     username,
+                    {
+                        title: "已完成/应完成",
+                        width: 120,
+                        dataIndex: "hasFinish",
+                        render: (hasFinish, v) => `${hasFinish} / ${v.shouldFinish}`,
+                    },
+                    {
+                        title: "完成率",
+                        width: 100,
+                        dataIndex: "shouldFinish",
+                        render: (shouldFinish, v) => `${shouldFinish === 0?0:Number(v.hasFinish/shouldFinish*100).toFixed(2)*1}%`,
+                    }
                 ]}
             />
         </div>
@@ -203,6 +216,7 @@ function Supervisor({tab, history, loadData, ...props}) {
         <div>
             <ZebraTable
                 {...props}
+                scroll={{x: true}}
                 className="clickable"
                 rowKey={(record) => record.user.id}
                 onRow={(record) => onRow(history, record.user.id)}
@@ -231,6 +245,7 @@ function Admin({tab, history, loadData, ...props}) {
         <div>
             <ZebraTable
                 {...props}
+                scroll={{x: true}}
                 rowKey="id"
                 className="clickable"
                 onRow={(record) => onRow(history, record.id)}
