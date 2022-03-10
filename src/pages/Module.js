@@ -113,7 +113,6 @@ export default function Module() {
                 return
             }
         }
-        return
         const isEdit = pathname.includes("/modules/edit")
         Axios.post(submitURL, {
             id: isEdit ? id : null,
