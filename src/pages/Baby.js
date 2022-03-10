@@ -39,13 +39,12 @@ export default function Baby() {
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
 
   const { chw, approved, actionFromApp, deleted } = baby;
-  const [dataSource, refreshHistory] = useFetch('/admin/babies/modifyRecord/getBabyModifyRecord', { babyId: id }, []);
-  const [careModifyRecords, refreshCareModifyRecords] = useFetch('/admin/modifyRecord/getCarerModifyRecord', { babyId: id }, []);
+  const [dataSource, refreshHistory] = useFetch('/admin/babies/modify-records', { babyId: id }, []);
+  const [careModifyRecords, refreshCareModifyRecords] = useFetch('/admin/carers/modify-records', { babyId: id }, []);
   const oldValue =
     !dataSource || dataSource.length === 0
       ? {}
       : Object.fromEntries((dataSource[0].columnName || []).map((e, i) => [e, dataSource[0].oldValue[i]]));
-
   const initialValues = () => ({
     ...baby,
     chw: null,
