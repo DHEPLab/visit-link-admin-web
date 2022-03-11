@@ -13,7 +13,7 @@ import {Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticFiel
 import {moduleFinishActionOptions} from "../actions";
 import QRCode from 'qrcode.react'
 
-export default function Module() {
+export default function Module(props) {
     const {id} = useParams();
     const {pathname} = useLocation();
     const [readonly, setReadonly] = useState();
@@ -34,6 +34,9 @@ export default function Module() {
     useEffect(() => {
         setReadonly(!pathname.includes("/modules/edit") && !pathname.includes("/modules/create") && !pathname.includes("/modules/copy"));
     }, [pathname, setReadonly]);
+
+    useEffect(() => {
+    }, [components])
 
     useEffect(() => {
         if (readonly == null) return;
@@ -143,7 +146,7 @@ export default function Module() {
         history.push(`/modules/copy/${id}`)
     }
 
-    if (!components) {
+    if (!components || components.length === 0) {
         return null;
     }
     return (
@@ -250,6 +253,7 @@ export default function Module() {
                     </Card>
 
                     <Card title="模块内容">
+                        {console.log(values) && <div>123</div>}
                         <ModuleComponents value={values.components} readonly={readonly}/>
                     </Card>
                 </>
