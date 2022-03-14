@@ -509,7 +509,7 @@ function Visits({ babyId }) {
           {
             title: "位置信息",
             dataIndex: "distance",
-            render: (v) => `距离家访地点${v}(Km)`
+            render: (v) => `距离家访地点${v||0}(Km)`
           }
         ]}
       />
