@@ -12,13 +12,14 @@ import {Role} from "../constants/enums";
 import {CardTabs, ChwTagSelector, ContentHeader, ModalForm, SearchInput, WithPage, ZebraTable} from "../components/*";
 import UploadButton from "../components/UploadButton";
 import Column from "antd/lib/table/Column";
+import ImportUserExcel from "../components/ImportUserExcel";
 
 const {TabPane} = Tabs;
 export default function Users() {
     const history = useHistory();
     const [tab, setTab] = useQueryParam("tab", StringParam);
     const [visible, openUser, closeUser] = useBoolState();
-    const [visibleImportModal, openImportModal, closeImportModal] = useBoolState(false)
+    const [importModal, openImportModal, closeImportModal] = useBoolState(false);
     const {user} = useSelector((state) => state.users);
     const isAdmin = user?.role === "ROLE_ADMIN";
 
@@ -46,7 +47,9 @@ export default function Users() {
                 <Button style={{marginRight: 28, borderColor: "#ff794f", color: "#ff794f"}} onClick={openImportModal}>
                     批量创建账户
                 </Button>
-                <BatchImportModal visible={visibleImportModal} onClose={closeImportModal}/>
+                <Modal visible={importModal} title="从Excel导入" onCancel={closeImportModal} style={{top: 50}} footer={false} >
+                    <ImportUserExcel refresh={refresh} close={closeImportModal} open={importModal} />
+                </Modal>
                 <Button type="primary" onClick={openUser}>
                     创建新用户
                 </Button>
@@ -258,69 +261,6 @@ function Admin({tab, history, loadData, ...props}) {
             />
         </div>
     );
-}
-
-function BatchImportModal({visible, onClose}) {
-    const [result, setResult] = useState({
-        errData: [],
-        total: 0
-    })
-    useEffect(() => {
-        setResult({
-            errData: [],
-            total: 0
-        })
-    }, [visible])
-    const {errData} = result
-    const successTotal = result.total - errData.length
-    const onUpload = ({file}) => {
-        const formData = new FormData();
-        formData.append("records", file)
-        Axios.post("/admin/users/import", formData)
-            .then(({data}) => {
-                if (data.errData.length > 0) {
-                    setResult(data)
-                    return
-                }
-                message.success("导入成功")
-                onClose && onClose()
-            })
-    }
-    return visible ?
-        <Modal visible={true} onCancel={onClose} title="从Excel导入" footer={null}>
-            <Steps progressDot current={3} size="small">
-                <Steps.Step title="下载模板"/>
-                <Steps.Step title="导入数据"/>
-                <Steps.Step title="导入完成"/>
-            </Steps>
-            <div style={{marginTop: 12, display: "flex", justifyContent: "center"}}>
-                <Upload customRequest={onUpload} accept=".xls,.xlsx,.csv" showUploadList={false} name="records">
-                    <UploadButton title="点击上传Excel" icon="iconimport-excel">
-                        支持支持 xls/xlsx
-                        <br/>
-                        大小不超过5M
-                        <br/>
-                        单次导入数据最好不超过500条
-                    </UploadButton>
-                </Upload>
-                <a style={{alignSelf: "end"}} href="/static/template/import_chw.xlsx" download>下载模板</a>
-            </div>
-            {(result.total > 0 || errData.length > 0) && <div>
-                <Table
-                    size="small"
-                    dataSource={errData.map((element, index) => ({...element, key: index}))}
-                    pagination={false}
-                    scroll={{y: 200}}
-                >
-                    <Column title="行号" align="left" dataIndex="number" key="number" width={50}/>
-                    <Column title="姓名" align="left" dataIndex="name" key="name"/>
-                    <Column title="错误事项" align="left" dataIndex="matters" key="matters"
-                            render={(matters) => <span style={{color: 'red', fontSize: 12}}>{matters}</span>}/>
-                </Table>
-                <Result>成功校验数据{successTotal}条， 共{result.total}条</Result>
-            </div>}
-        </Modal>
-        : null
 }
 
 const realName = {
