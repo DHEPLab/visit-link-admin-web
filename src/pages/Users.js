@@ -85,6 +85,7 @@ export default function Users() {
                     <Radio.Group>
                         {Object.keys(Role)
                             .filter((key) => {
+                                if (key === "ROLE_SUPER_ADMIN") return false;
                                 if (isAdmin) return true;
                                 return key === "ROLE_CHW";
                             })

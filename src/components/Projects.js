@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Form, Input, Modal, Popconfirm, Radio, Space} from "antd";
+import {Button, Col, Form, Input, Modal, Popconfirm, Radio, Row, Space} from "antd";
 import ContentHeader from "./ContentHeader";
 import StatusTag from "./StatusTag";
 import ZebraTable from "./ZebraTable";
@@ -110,26 +110,63 @@ export default function Projects() {
                     },
                 ]}
             />
-            <ModalForm title="编辑课堂"
+            <ProjectModalForm title={formModal.values?.id?"编辑项目":"新建项目"}
                 visible={formModal.visible}
-                initialValues={formModal.values}
+                values={formModal.values}
                 onCancel={closeFormModal}
                 onFinish={onSubmit}
-            >
-                <Form.Item label="项目名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
-                    <Input />
-                </Form.Item>
-
-                <Form.Item label="项目状态" name="status" rules={[...Rules.Required]}>
-                    <Radio.Group>
-                        {Object.keys(ProjectStatus).map((key) => (
-                            <Radio key={key} value={parseInt(key)}>
-                                {ProjectStatus[key]}
-                            </Radio>
-                        ))}
-                    </Radio.Group>
-                </Form.Item>
-            </ModalForm>
+            />
         </>
     )
+}
+
+function ProjectModalForm({visible, values, onCancel, onFinish}) {
+    const [admin, setAdmin] = useState({})
+    const fetchAdminByProjectId = (id) => {
+        Axios.get(`/admin/users/project/${id}`)
+            .then(({data}) => setAdmin(data))
+    }
+    useEffect(() => {
+        values?.id && fetchAdminByProjectId(values.id)
+    }, [values?.id])
+    return visible?(<ModalForm title={values?.id?"编辑项目":"新建项目"}
+                               visible={visible}
+                               initialValues={values}
+                               onCancel={onCancel}
+                               onFinish={onFinish}
+    >
+        <Form.Item label="项目名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
+            <Input />
+        </Form.Item>
+
+        <Form.Item label="项目状态" name="status" rules={[...Rules.Required]}>
+            <Radio.Group>
+                {Object.keys(ProjectStatus).map((key) => (
+                    <Radio key={key} value={parseInt(key)}>
+                        {ProjectStatus[key]}
+                    </Radio>
+                ))}
+            </Radio.Group>
+        </Form.Item>
+        {values?.id && (
+            <>
+                <div className="ant-row ant-form-item ant-space-align-center">
+                    <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
+                        <label>管理员账户：</label>
+                    </div>
+                    <div className="ant-col ">
+                        {admin.name}
+                    </div>
+                </div>
+                <div className="ant-row ant-form-item ant-space-align-center">
+                    <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
+                        <label>管理员密码：</label>
+                    </div>
+                    <div className="ant-form-item-control-input-content">
+                        {admin.password}
+                    </div>
+                </div>
+            </>
+        )}
+    </ModalForm>) : null
 }

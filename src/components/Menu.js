@@ -31,12 +31,16 @@ export default function Menu() {
                         </li>
                     </>
                 )}
-                <li>
-                    <ActivableLink title="账户管理" to="/users" icon="iconuser"/>
-                </li>
-                <li>
-                    <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby"/>
-                </li>
+                {!isSuperAdmin && (
+                    <>
+                        <li>
+                            <ActivableLink title="账户管理" to="/users" icon="iconuser"/>
+                        </li>
+                        <li>
+                            <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby"/>
+                        </li>
+                    </>
+                )}
             </MenuItemGroup>
         </Container>
     );
