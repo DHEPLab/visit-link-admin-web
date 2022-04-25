@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {Button, Col, Form, Input, Modal, Popconfirm, Radio, Row, Space} from "antd";
-import ContentHeader from "./ContentHeader";
-import StatusTag from "./StatusTag";
-import ZebraTable from "./ZebraTable";
+import {Button, Form, Input, Modal, Popconfirm, Radio, Space} from "antd";
 import Axios from "axios";
 import Rules from "../constants/rules";
-import ModalForm from "./ModalForm";
 import {ProjectStatus} from "../constants/enums";
+import ContentHeader from "../components/ContentHeader";
+import ZebraTable from "../components/ZebraTable";
+import StatusTag from "../components/StatusTag";
+import ModalForm from "../components/ModalForm";
 
 export default function Projects() {
     const [projects, setProjects] = useState([])

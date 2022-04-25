@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import XLSX from 'xlsx';
 import styled from "styled-components";
 import {Button, message, Spin, Steps, Table, Upload} from "antd";
 import Column from 'antd/lib/table/Column';

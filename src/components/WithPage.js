@@ -1,7 +1,8 @@
 // Higer-Order Component to enhance the paging
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Axios from "axios";
 import {debounce} from "lodash";
+import {useHistory} from "react-router-dom";
 
 // first page start at 0
 const page = 0;
@@ -17,7 +18,9 @@ export default function (
     loadOnMount = true
 ) {
     return function (props) {
-        const [search, setSearch] = useState({
+        const history = useHistory();
+        const historyPageState = history.location.state?.page?.[url]
+        const [search, setSearch] = useState(historyPageState || {
             page,
             size,
         });
@@ -27,14 +30,27 @@ export default function (
 
         const loadData = useCallback(() => {
             if (!requestURL) return;
+            const newParams = {
+                ...search,
+                ...params,
+            }
             Axios.get(requestURL, {
-                params: {
-                    ...search,
-                    ...params,
-                },
+                params: newParams,
             }).then(({data}) => {
                 setTotalElements(data.totalElements);
                 setContent(data.content);
+
+                const hPageState = history.location.state?.page
+                console.log(hPageState, newParams)
+                window.history.pushState({
+                    key: history.location.key,
+                    state: {
+                        page: {
+                            ...(hPageState || {}),
+                            [url]: newParams
+                        }
+                    },
+                }, null, window.location.href)
             });
         }, [search, requestURL]);
 
@@ -84,6 +100,7 @@ export default function (
 
         return (
             <WrapperComponent
+                historyPageState={historyPageState}
                 pagination={pagination()}
                 dataSource={content}
                 loadData={loadData}

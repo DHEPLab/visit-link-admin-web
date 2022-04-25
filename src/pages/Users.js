@@ -1,17 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import {useHistory} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {Button, Form, Input, message, Modal, Radio, Steps, Table, Tabs, Upload} from "antd";
+import {Button, Form, Input, Modal, Radio, Tabs} from "antd";
 import {StringParam, useQueryParam} from "use-query-params";
 
 import Rules from "../constants/rules";
 import {useBoolState} from "../utils";
 import {Role} from "../constants/enums";
 import {CardTabs, ChwTagSelector, ContentHeader, ModalForm, SearchInput, WithPage, ZebraTable} from "../components/*";
-import UploadButton from "../components/UploadButton";
-import Column from "antd/lib/table/Column";
 import ImportUserExcel from "../components/ImportUserExcel";
 
 const {TabPane} = Tabs;
@@ -134,7 +132,7 @@ const PageCHW = WithPage(CHW, "/admin/users/chw", {}, false);
 const PageSupervisor = WithPage(Supervisor, "/admin/users/supervisor", {}, false);
 const PageAdmin = WithPage(Admin, "/admin/users/admin?sort=id,desc", {}, false);
 
-function CHW({tab, history, loadData, onChangeSearch, ...props}) {
+function CHW({historyPageState, tab, history, loadData, onChangeSearch, ...props}) {
     useEffect(() => {
         tab === "chw" && loadData();
     }, [tab, loadData]);
@@ -143,6 +141,7 @@ function CHW({tab, history, loadData, onChangeSearch, ...props}) {
         <div>
             <ChwBar>
                 <SearchInput
+                    defaultValue={historyPageState?.search}
                     style={{width: "420px"}}
                     onChange={(e) => onChangeSearch("search", e.target.value)}
                     placeholder="请输入社区工作者姓名、ID或所在区域搜索"
