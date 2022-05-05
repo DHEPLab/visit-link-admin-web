@@ -19,7 +19,7 @@ export default function (
 ) {
     return function (props) {
         const history = useHistory();
-        const historyPageState = history.location.state?.page?.[url]
+        const historyPageState = history?.location.state?.page?.[url]
         const [search, setSearch] = useState(historyPageState || {
             page,
             size,
@@ -40,8 +40,7 @@ export default function (
                 setTotalElements(data.totalElements);
                 setContent(data.content);
 
-                const hPageState = history.location.state?.page
-                console.log(hPageState, newParams)
+                const hPageState = history?.location.state?.page
                 window.history.pushState({
                     key: history.location.key,
                     state: {
