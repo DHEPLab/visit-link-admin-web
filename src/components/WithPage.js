@@ -27,6 +27,7 @@ export default function (
         const [requestURL, setRequestURL] = useState(url);
         const [totalElements, setTotalElements] = useState(0);
         const [content, setContent] = useState([]);
+        const [loading, setLoading] = useState(false)
 
         const loadData = useCallback(() => {
             if (!requestURL) return;
@@ -34,6 +35,7 @@ export default function (
                 ...search,
                 ...params,
             }
+            setLoading(true)
             Axios.get(requestURL, {
                 params: newParams,
             }).then(({data}) => {
@@ -50,7 +52,7 @@ export default function (
                         }
                     },
                 }, null, window.location.href)
-            });
+            }).finally(_ => setLoading(false));
         }, [search, requestURL]);
 
         useEffect(() => {
@@ -99,6 +101,7 @@ export default function (
 
         return (
             <WrapperComponent
+                loading={loading}
                 historyPageState={historyPageState}
                 pagination={pagination()}
                 dataSource={content}
