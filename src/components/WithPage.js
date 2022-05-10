@@ -41,7 +41,7 @@ export default function (
                 setContent(data.content);
 
                 const hPageState = history?.location.state?.page
-                window.history.pushState({
+                window.history.replaceState({
                     key: history.location.key,
                     state: {
                         page: {
