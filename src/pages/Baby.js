@@ -554,16 +554,25 @@ function History({ title, dataSource, columnValues }) {
             dataIndex: "newValue",
             render: (h, record) => {
               const { columnName, newValue, oldValue, roleName, userName } = record;
-              const changevalues = (columnName || []).map((e, i) => {
+              const changeValues = (columnName || []).filter(e => e !== "chw").map((e, i) => {
                 return columnValues[e] ? {
                   columnName: columnValues[e],
                   oldValue: getValue(e, oldValue[i]),
                   newValue: getValue(e, newValue[i]),
                 } : null;
               }).filter(e => !!e)
-              return <div>{changevalues.map((e, i) => (<div key={i}>
-                <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{e.columnName}</BlobFont>由<BlobFont>{e.oldValue}</BlobFont>更改为<BlobFont>{e.newValue}</BlobFont>；
-              </div>))}</div>
+              return (
+                  <div>
+                      {changeValues.map((e, i) => {
+                          const obj = e || {}
+                          return (
+                              <div key={i}>
+                                  <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{obj.columnName}</BlobFont>由<BlobFont>{obj.oldValue}</BlobFont>更改为<BlobFont>{obj.newValue}</BlobFont>；
+                              </div>
+                          )
+                      })}
+                  </div>
+              )
             }
           }
         ]}
