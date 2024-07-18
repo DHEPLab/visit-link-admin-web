@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Form, Input, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from 'react-i18next';
 
 import Rules from "../constants/rules";
 import { applyToken } from "../utils/token";
@@ -12,6 +13,7 @@ import SignInBg from "../assets/signin-bg.png";
 import { Message } from "../components/*";
 
 export default function SignIn() {
+  const { t } = useTranslation("signIn");
   const history = useHistory();
   const dispatch = useDispatch();
   const networks = useSelector((state) => state.networks);
@@ -28,7 +30,7 @@ export default function SignIn() {
       const profile = await Axios.get("/api/account/profile");
       dispatch(apiAccountProfile(profile));
 
-      Message.success("登录成功", "您已成功登录系统", 1);
+      Message.success(t('success.title'), t('success.message'), 1);
       history.push("/");
     } catch {
       setError(true);
@@ -40,11 +42,11 @@ export default function SignIn() {
       <Container>
         <Logo src={require("../assets/logo.png")} />
         <Form form={form} onFinish={handleSignIn}>
-          <Form.Item label="账户名" name="username" rules={Rules.Required} labelCol={{ span: 0 }}>
-            <Input className="master" size="large" placeholder="请输入账户名" autoFocus />
+          <Form.Item label={t('username.label')} name="username" rules={Rules.Required} labelCol={{ span: 0 }}>
+            <Input className="master" size="large" placeholder={t('username.placeholder')} autoFocus />
           </Form.Item>
-          <Form.Item label="账户密码" name="password" rules={Rules.Required} labelCol={{ span: 0 }}>
-            <Input.Password className="master" size="large" placeholder="请输入账户密码" onPressEnter={form.submit} />
+          <Form.Item label={t('password.label')} name="password" rules={Rules.Required} labelCol={{ span: 0 }}>
+            <Input.Password className="master" size="large" placeholder={t('password.placeholder')} onPressEnter={form.submit} />
           </Form.Item>
         </Form>
         <ForgetPassword>
@@ -52,14 +54,14 @@ export default function SignIn() {
             忘记密码？
           </Button> */}
         </ForgetPassword>
-        {error && <ErrorMessage>您输入的账号名称/账户密码可能有误</ErrorMessage>}
+        {error && <ErrorMessage>{t('errorMessage')}</ErrorMessage>}
         <Button
           size="large"
           type="shade"
           onClick={form.submit}
           loading={networks["/admin/authenticate"] > 0 || networks["/api/account/profile"] > 0}
         >
-          登录
+          {t('login')}
         </Button>
       </Container>
     </AbsoluteContainer>

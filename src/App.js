@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import zhCN from "antd/es/locale/zh_CN";
+
 import { ConfigProvider } from "antd";
 import { QueryParamProvider } from "use-query-params";
 import "moment/locale/zh-cn";
+import { I18nextProvider } from 'react-i18next';
+
 
 import RouteView from "./Router";
 import { Role } from "./constants/enums";
@@ -17,22 +19,25 @@ import { apiAccountProfile } from "./actions";
 
 import store from "./store";
 import "./config";
+import i18n from './i18n';
 
 applyToken(getToken());
 
 export default function () {
   return (
-    <ConfigProvider locale={zhCN}>
-      <Provider store={store}>
-        <AppContainer>
-          <BrowserRouter>
-            <QueryParamProvider ReactRouterRoute={Route}>
-              <App />
-            </QueryParamProvider>
-          </BrowserRouter>
-        </AppContainer>
-      </Provider>
-    </ConfigProvider>
+    <I18nextProvider i18n={i18n}>
+      <ConfigProvider locale={i18n.t('antd')}>
+        <Provider store={store}>
+          <AppContainer>
+            <BrowserRouter>
+              <QueryParamProvider ReactRouterRoute={Route}>
+                <App />
+              </QueryParamProvider>
+            </BrowserRouter>
+          </AppContainer>
+        </Provider>
+       </ConfigProvider>
+    </I18nextProvider>
   );
 }
 
