@@ -28,6 +28,8 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.20.7",
+    "@babel/preset-env": "^7.24.8",
     "@types/jest": "^26.0.3",
     "babel-plugin-wildcard": "^6.0.0",
     "customize-cra": "^1.0.0-alpha.0",
