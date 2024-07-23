@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ConfigProvider } from "antd";
 import { QueryParamProvider } from "use-query-params";
 import "moment/locale/zh-cn";
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from "react-i18next";
 
 
 import RouteView from "./Router";
@@ -44,6 +44,7 @@ export default function () {
 function App() {
   const history = useHistory();
   const { user } = useSelector((state) => state.users);
+  const { t } = useTranslation();
 
   const loadProfile = useCallback(() => {
     Axios.get("/api/account/profile")
@@ -56,7 +57,7 @@ function App() {
   function handleLogout() {
     clearToken();
     history.push("/sign_in");
-    Message.success("您已退出登录", "如您需进入系统，请重新登录");
+    Message.success(t('app.logoutSuccess'), t('app.logoutMessage'));
   }
 
   return (

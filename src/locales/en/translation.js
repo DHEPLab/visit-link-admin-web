@@ -30,5 +30,9 @@ export default {
     chw: "CHW",
     baby: "Baby"
   },
+  app: {
+    logoutSuccess: "Log Out Successfully",
+    logoutMessage: "To access the system, please log in again."
+  },
     antd: enUs,
 }

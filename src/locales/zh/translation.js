@@ -30,5 +30,9 @@ export default {
         chw: "chw",
         baby: "宝宝"
     },
+    app: {
+        logoutSuccess: "您已退出登录",
+        logoutMessage: "如您需进入系统，请重新登录"
+    },
     antd: zhCN
 }
