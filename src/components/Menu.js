@@ -87,39 +87,42 @@ const ActiveBar = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-  font-size: 16px;
-  opacity: 0.5;
-  height: 80px;
-  line-height: 80px;
-  width: 100%;
-  padding-left: 40px;
-  padding-right: 40px;
-  margin: 2px 0;
-  font-weight: 400;
-  &.active,
-  &.active:hover,
-  &:hover {
-    opacity: 1;
-    color: #fff;
-    font-weight: bold;
-    background: rgba(247, 247, 247, 0.3);
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-
-    .active-bar {
-      display: block;
-    }
-  }
-
-  svg {
-    margin-right: 14px;
-  }
-
-  &:hover {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     color: white;
-  }
+    font-size: 16px; 
+    opacity: 0.5;
+    height: auto; 
+    min-height: 80px; 
+    line-height: 20px; 
+    padding: 20px 40px; 
+    margin: 2px 0;
+    font-weight: 400;
+    white-space: normal;
+    overflow: visible; 
+
+    &.active,
+    &.active:hover,
+    &:hover {
+        opacity: 1;
+        color: #fff;
+        font-weight: bold;
+        background: rgba(247, 247, 247, 0.3);
+        transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+        .active-bar {
+            display: block;
+        }
+    }
+
+    svg {
+        margin-right: 14px; 
+    }
+
+    &:hover {
+        color: white;
+    }
 `;
+
