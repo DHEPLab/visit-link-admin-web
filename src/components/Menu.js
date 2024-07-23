@@ -4,10 +4,13 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 
 import Iconfont from "./Iconfont";
+import { useTranslation } from "react-i18next";
 
 export default function Menu() {
   const { user } = useSelector((state) => state.users);
   const isAdmin = user?.role === "ROLE_ADMIN";
+  const { t } = useTranslation('menu');
+
 
   return (
     <Container>
@@ -15,21 +18,21 @@ export default function Menu() {
         {isAdmin && (
           <>
             <li>
-              <ActivableLink title="大纲管理" to="/curriculums" icon="iconcurriculum" />
+              <ActivableLink title={t('curriculumManagement')} to="/curriculums" icon="iconcurriculum" />
             </li>
             <li>
-              <ActivableLink title="模块管理" to="/modules" icon="iconmodule" />
+              <ActivableLink title={t('moduleManagement')} to="/modules" icon="iconmodule" />
             </li>
             <li>
-              <ActivableLink title="问卷管理" to="/surveys" icon="iconwenjuan" />
+              <ActivableLink title={t('surveyManagement')} to="/surveys" icon="iconwenjuan" />
             </li>
           </>
         )}
         <li>
-          <ActivableLink title="账户管理" to="/users" icon="iconuser" />
+          <ActivableLink title={t('accountManagement')} to="/users" icon="iconuser" />
         </li>
         <li>
-          <ActivableLink title="宝宝管理" to="/babies" icon="iconbaby" />
+          <ActivableLink title={t('babyManagement')} to="/babies" icon="iconbaby" />
         </li>
       </MenuItemGroup>
     </Container>

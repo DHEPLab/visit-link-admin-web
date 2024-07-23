@@ -38,5 +38,12 @@ export default {
     ROLE_SUPERVISOR: "Supervisor",
     ROLE_ADMIN: "Admin",
   },
+  menu: {
+    curriculumManagement: "Curriculum Management",
+    moduleManagement: "Module Management",
+    surveyManagement: "Survey Management",
+    accountManagement: "Account Management",
+    babyManagement: "Baby Management"
+  },
     antd: enUs,
 }

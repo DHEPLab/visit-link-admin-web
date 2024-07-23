@@ -38,5 +38,12 @@ export default {
         ROLE_SUPERVISOR: "督导员",
         ROLE_ADMIN: "管理员",
     },
+    menu: {
+        curriculumManagement: "大纲管理",
+        moduleManagement: "模块管理",
+        surveyManagement: "问卷管理",
+        accountManagement: "账户管理",
+        babyManagement: "宝宝管理"
+    },
     antd: zhCN
 }
