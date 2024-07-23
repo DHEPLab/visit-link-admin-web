@@ -8,10 +8,12 @@ import { useBoolState } from "../utils";
 import { DownloadOutlined } from '@ant-design/icons';
 import { Iconfont, ModalForm } from "../components/*";
 import Rules from "../constants/rules";
+import { useTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 export default function ({ username, role, onNavigate, onLogout }) {
+  const { t } = useTranslation("header");
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
   const [exportType, setExportType] = useState('visit');
 
@@ -51,38 +53,38 @@ export default function ({ username, role, onNavigate, onLogout }) {
       </Logo>
       <Content>
         <Welcome>
-          <b>{username}</b>
-          <Role>{role}</Role>
+          <b>{t('welcome', {username})}</b>
+          <Role>{t('role', {role: t(role)})}</Role>
         </Welcome>
         {role === '管理员' && <StyledButton type="link" onClick={openExportModal}>
-          <DownloadOutlined />数据导出 &nbsp;&nbsp;
+          <DownloadOutlined /> {t('exportData')}
         </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
-          个人中心
+          {t('myAccount')}
         </StyledButton>
         <SplitLine />
         <StyledButton type="link" onClick={() => onLogout()}>
-          退出
+          {t('logOut')}
           <Iconfont type="iconescape" />
         </StyledButton>
       </Content>
       <ModalForm
-        title="导出数据"
+        title={t('exportData')}
         visible={visibleExport}
         initialValues={{range: []}}
         onFinish={handleSaveExport}
         onCancel={closeExportModal}
       >
-        <Form.Item label="数据类别" rules={Rules.Required}>
+        <Form.Item label={t('dataCategory')} rules={Rules.Required}>
           <Select value={exportType} onChange={key => setExportType(key)}>
-            <Option value="visit">完成家访(已完成、已过期)</Option>
-            <Option value="visit2">未完成家访(待开始、未完成、已取消)</Option>
-            <Option value="chw">chw</Option>
-            <Option value="baby">宝宝</Option>
+            <Option value="visit">{t('completeVisits')}</Option>
+            <Option value="visit2">{t('incompleteVisits')}</Option>
+            <Option value="chw">{t('chw')}</Option>
+            <Option value="baby">{t('baby')}</Option>
           </Select>
         </Form.Item>
         {exportType === 'visit' &&
-          <Form.Item label="时间范围" name="range" rules={Rules.Required}>
+          <Form.Item label={t('timeRange')} name="range" rules={Rules.Required}>
             <RangePicker />
           </Form.Item>}
       </ModalForm>
