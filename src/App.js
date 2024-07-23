@@ -44,7 +44,7 @@ export default function () {
 function App() {
   const history = useHistory();
   const { user } = useSelector((state) => state.users);
-  const { t } = useTranslation();
+  const { t } = useTranslation('app');
 
   const loadProfile = useCallback(() => {
     Axios.get("/api/account/profile")
@@ -57,9 +57,8 @@ function App() {
   function handleLogout() {
     clearToken();
     history.push("/sign_in");
-    Message.success(t('app.logoutSuccess'), t('app.logoutMessage'));
+    Message.success(t('logoutSuccess'), t('logoutMessage'));
   }
-
   return (
     <>
       <Header username={user.realName} role={Role[user.role]} onNavigate={history.push} onLogout={handleLogout} />

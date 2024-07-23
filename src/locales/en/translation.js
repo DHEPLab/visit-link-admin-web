@@ -18,8 +18,6 @@ export default {
         }
     },
   header: {
-    welcome: "Welcome, {username}",
-    role: "Role: {role}",
     myAccount: "My Account",
     logOut: "Log Out",
     exportData: "Export Data",
@@ -29,10 +27,16 @@ export default {
     incompleteVisits: "Incomplete Visits (To Start, Not Completed, Cancelled)",
     chw: "CHW",
     baby: "Baby"
+
   },
   app: {
     logoutSuccess: "Log Out Successfully",
     logoutMessage: "To access the system, please log in again."
+  },
+  roles: {
+    ROLE_CHW: "CNW",
+    ROLE_SUPERVISOR: "Supervisor",
+    ROLE_ADMIN: "Admin",
   },
     antd: enUs,
 }

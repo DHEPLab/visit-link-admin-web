@@ -19,7 +19,6 @@ export default {
     },
     header: {
         welcome: "{username}，欢迎您",
-        role: "角色：{role}",
         myAccount: "个人中心",
         logOut: "退出",
         exportData: "数据导出",
@@ -33,6 +32,11 @@ export default {
     app: {
         logoutSuccess: "您已退出登录",
         logoutMessage: "如您需进入系统，请重新登录"
+    },
+    roles: {
+        ROLE_CHW: "社区工作者",
+        ROLE_SUPERVISOR: "督导员",
+        ROLE_ADMIN: "管理员",
     },
     antd: zhCN
 }

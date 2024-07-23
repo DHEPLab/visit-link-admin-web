@@ -1,7 +1,7 @@
 export const Role = {
-  ROLE_CHW: "社区工作者",
-  ROLE_SUPERVISOR: "督导员",
-  ROLE_ADMIN: "管理员",
+  ROLE_CHW: "CNW",
+  ROLE_SUPERVISOR: "Supervisor",
+  ROLE_ADMIN: "Admin",
 };
 
 export const Gender = {
