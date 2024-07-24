@@ -4,6 +4,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useQueryParam, StringParam } from "use-query-params";
+import { useTranslation } from 'react-i18next';
 
 import { Button, Space, Tabs, Modal } from "antd";
 
@@ -18,6 +19,7 @@ function formatDate(datetime) {
 }
 
 export default function Babies() {
+  const { t } = useTranslation("babies");
   const history = useHistory();
   const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
@@ -46,32 +48,32 @@ export default function Babies() {
 
   return (
     <>
-      <ContentHeader title="宝宝管理">
+      <ContentHeader title={t('babyManagement')}>
         <ImportButton onClick={openImpoerModal}>
-          批量创建宝宝
+          {t('batchNewBabies')}
         </ImportButton>
         <Button type="primary" onClick={openBaby}>
-          创建新宝宝
+          {t('newBaby')}
         </Button>
       </ContentHeader>
 
       <CardTabs onChange={setTab} defaultActiveKey={tab}>
-        <TabPane tab="已审核" key="approved">
+        <TabPane tab={t('approved')} key="approved">
           <PageApproved tab={tab} history={history} />
         </TabPane>
-        <TabPane tab="待审核" key="unreviewed">
+        <TabPane tab={t('unreviewed')} key="unreviewed">
           <PageUnreviewed tab={tab} history={history} />
         </TabPane>
       </CardTabs>
 
       <BabyModalForm
-        title="创建新宝宝"
+        title={t('newBaby')}
         visible={visible}
         onFinish={handleCreateBaby}
         onCancel={closeBaby}
         initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
       />
-      <Modal visible={impoerModal} title="从Excel导入" onCancel={closeImpoerModal} style={{top: 50}} footer={false} >
+      <Modal visible={impoerModal} title={t('importFromExcel')} onCancel={closeImpoerModal} style={{top: 50}} footer={false} >
         <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
       </Modal>
     </>
@@ -82,6 +84,7 @@ const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);
 const PageUnreviewed = WithPage(Unreviewed, "/admin/babies/unreviewed", {}, false);
 
 function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...props }) {
+  const { t } = useTranslation("babies");
   useEffect(() => {
     tab === "unreviewed" && loadData();
   }, [tab, loadData]);
@@ -105,7 +108,7 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
         <Space size="large">
           <SearchInput
             className="master"
-            placeholder="请输入宝宝姓名、ID或所在区域搜索"
+            placeholder={t('searchBabyInputPlaceholder')}
             onChange={(e) => onChangeSearch("search", e.target.value)}
           />
         </Space>
@@ -123,7 +126,7 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
         scroll={{ x: '100vw' }}
         columns={[
           {
-            title: "修改日期",
+            title: t('lastModifyAt'),
             dataIndex: "lastModifiedAt",
             align: "center",
             className: "sort-column-vertical-center",
@@ -139,42 +142,42 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
             },
           },
           {
-            title: "宝宝姓名",
+            title: t('babyName'),
             className: "sort-column-vertical-center",
             dataIndex: "name",
             width: 120,
             sorter: true
           },
           {
-            title: "ID",
+            title: t('id'),
             width: 200,
             dataIndex: "identity",
-            render: (h) => h || "待核准",
+            render: (h) => h || t('pending'),
           },
           {
-            title: "性别",
+            title: t('gender'),
             width: 80,
             dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: "所在区域",
+            title: t('area'),
             dataIndex: "area",
             width: 300,
           },
           {
-            title: "负责社区工作者",
+            title: t('chw'),
             dataIndex: "chw",
             width: 150,
           },
           {
-            title: "已上课堂",
+            title: t('completedSession'),
             dataIndex: "visitCount",
             width: 150,
-            render: (h) => `${h} 节课堂`,
+            render: (h) => `${h} ${t('sessions')}`,
           },
           {
-            title: "注册日期",
+            title: t('registerDate'),
             dataIndex: "createdAt",
             align: "center",
             width: 150,
@@ -205,6 +208,7 @@ const Tag = styled.span`
 `;
 
 function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...props }) {
+  const { t } = useTranslation("babies");
   useEffect(() => {
     tab === "approved" && loadData();
   }, [tab, loadData]);
@@ -228,7 +232,7 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
         <Space size="large">
           <SearchInput
             className="master"
-            placeholder="请输入宝宝姓名、ID或所在区域搜索"
+            placeholder={t('searchBabyInputPlaceholder')}
             onChange={(e) => onChangeSearch("search", e.target.value)}
           />
         </Space>
@@ -246,14 +250,14 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
         scroll={{ x: '100vw' }}
         columns={[
           {
-            title: "宝宝状态",
+            title: t('babtStatus'),
             dataIndex: "deleted",
             align: "center",
             width: 100,
-            render: (h) => <StatusTag value={!h} trueText="正常" falseText="注销" />,
+            render: (h) => <StatusTag value={!h} trueText={t('active')} falseText={t('archive')} />,
           },
           {
-            title: "注册日期",
+            title: t('registerDate'),
             dataIndex: "createdAt",
             className: "sort-column-vertical-center",
             align: "center",
@@ -262,41 +266,41 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
             render: (h) => formatDate(h)
           },
           {
-            title: "宝宝姓名",
+            title: t('babyName'),
             dataIndex: "name",
             className: "sort-column-vertical-center",
             width: 140,
             sorter: true
           },
           {
-            title: "ID",
+            title: t('id'),
             width: 200,
             dataIndex: "identity"
           },
           {
-            title: "性别",
+            title: t('gender'),
             width: 80,
             dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: "所在区域",
+            title: t('area'),
             dataIndex: "area",
             width: 300,
           },
           {
-            title: "负责社区工作者",
+            title: t('chw'),
             dataIndex: "chw",
             width: 150,
           },
           {
-            title: "已上课堂",
+            title: t('completedSession'),
             dataIndex: "visitCount",
             width: 150,
-            render: (h) => `${h} 节课堂`,
+            render: (h) => `${h} ${t('sessions')}`,
           },
           {
-            title: "当前进度",
+            title: t('currentProgress'),
             dataIndex: "currentLessonName",
             width: 200,
           },
