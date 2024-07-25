@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Button, Form, Input } from "antd";
+import { useTranslation } from 'react-i18next';
 
 import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
@@ -13,6 +14,7 @@ import { Card, StaticField, ModalForm, Message } from "../components/*";
 import { apiAccountProfile } from "../actions";
 
 export default function Profiles() {
+  const { t } = useTranslation(["myAccount"]);
   const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
@@ -27,64 +29,64 @@ export default function Profiles() {
 
   async function handleChangePassword(values) {
     await Axios.put("/api/account/password", values);
-    Message.success("密码修改成功", "请您重新登录", 1);
+    Message.success(t('passwordChangedTip'), t('reLoginTip'), 1);
     clearToken();
     history.push("/sign_in");
   }
 
   return (
     <>
-      <ContentHeader title="个人中心" />
+      <ContentHeader title={t('myAccount')} />
 
       <Card
-        title="基本信息"
+        title={t('generalInformation')}
         extra={
           <Button type="shade" onClick={openProfileModal}>
-            编辑资料
+            {t('edit')}
           </Button>
         }
       >
-        <StaticField label="真实姓名">{user.realName}</StaticField>
-        <StaticField label="联系电话">{user.phone}</StaticField>
-        <StaticField label="权限">{Role[user.role]}</StaticField>
+        <StaticField label={t('name')}>{user.realName}</StaticField>
+        <StaticField label={t('phoneNumber')}>{user.phone}</StaticField>
+        <StaticField label={t('permissions')}>{Role[user.role]}</StaticField>
       </Card>
 
       <Card
-        title="账户信息"
+        title={t('accountInformation')}
         extra={
           <Button type="shade" onClick={openPasswordModal}>
-            修改密码
+            {t('resetPassword')}
           </Button>
         }
       >
-        <StaticField label="账户名称">{user.username}</StaticField>
-        <StaticField label="账户密码">******</StaticField>
+        <StaticField label={t('username')}>{user.username}</StaticField>
+        <StaticField label={t('password')}>******</StaticField>
       </Card>
 
       <ModalForm
-        title="编辑基本信息"
+        title={t('editGeneralInformation')}
         visible={visibleProfile}
         initialValues={user}
         onFinish={handleChangeProfile}
         onCancel={closeProfileModal}
       >
-        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
+        <Form.Item label={t('name')} name="realName" rules={Rules.RealName}>
           <Input />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
+        <Form.Item label={t('phoneNumber')} name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
       </ModalForm>
 
-      <ModalForm title="修改密码" visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
-        <Form.Item label="旧密码" name="oldPassword" rules={Rules.Required}>
+      <ModalForm title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
+        <Form.Item label={t('oldPassword')} name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
         </Form.Item>
-        <Form.Item label="新密码" name="password" rules={Rules.Password}>
+        <Form.Item label={t('newPassword')} name="password" rules={Rules.Password}>
           <Input.Password></Input.Password>
         </Form.Item>
         <Form.Item
-          label="确认密码"
+          label={t('confirmPassword')}
           name="confirmPassword"
           rules={[
             ...Rules.Required,
@@ -93,7 +95,7 @@ export default function Profiles() {
                 if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject("两次密码输入不一致");
+                return Promise.reject(t('passwordNotMatch'));
               },
             }),
           ]}

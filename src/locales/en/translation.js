@@ -133,12 +133,19 @@ export default {
         chwID: "CHW ID",
         chooseCHW: "Choose the CHW",
         changeCHW: "Change CHW",
-        assignCHW: "Assign CHW"
+        assignCHW: "Assign CHW",
+        reviewType: "Review Type",
+        modifyDate: "Modify Date",
     },
     common: {
         enter: "Please Enter ",
         unit: {
             day: "day(s)"
+        },
+        excel: {
+            downloadTemplate: "Download Template",
+            importData: "Import Data",
+            finishImport: "Finish"
         }
     },
     antd: enUs,

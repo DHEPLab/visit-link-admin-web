@@ -2,20 +2,24 @@ import React from "react";
 import moment from "moment";
 import styled from "styled-components";
 import { Space, Button } from "antd";
+import { useTranslation } from 'react-i18next';
+
 import { ReviewActionFromApp } from "../constants/enums";
 
 export default function BabyReviewBar({ baby, onApprove }) {
+  const { t } = useTranslation("baby");
+
   return (
     <Container>
-      <Title>审核类型：{ReviewActionFromApp[baby.actionFromApp]} </Title>
+      <Title>{t('reviewType')}：{ReviewActionFromApp[baby.actionFromApp]} </Title>
       <Flex>
-        {baby.closeAccountReason && <Label>注销原因：</Label>}
+        {baby.closeAccountReason && <Label>{t('archiveReason')}：</Label>}
         <Value>{baby.closeAccountReason}</Value>
-        <Label>修改日期：</Label>
+        <Label>{t('modifyDate')}：</Label>
         {baby.lastModifiedAt && <Value>{moment(baby.lastModifiedAt).format("YYYY/MM/DD")}</Value>}
         <Space size="large">
           <EditButton ghost type="primary" onClick={onApprove}>
-            批准申请
+            {t('approve')}
           </EditButton>
         </Space>
       </Flex>

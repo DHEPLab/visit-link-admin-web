@@ -71,7 +71,7 @@ export default {
         sessions: "节课堂",
     },
     baby: {
-        noSelectedChwWarning: "请选择一个社区工作者" ,
+        noSelectedChwWarning: "请选择一个社区工作者",
         reactiveBaby: "恢复宝宝",
         archiveBaby: "注销宝宝",
         reactiveBabyConfirm: "确定要恢复宝宝？",
@@ -121,7 +121,7 @@ export default {
         noAdd: "未添加",
         feedingMethods: "喂养方式",
         area: '所在区域',
-        address: "Address",
+        address: "详细地址",
         comments: "备注信息",
         relatives: "亲属关系",
         repeatRelatives: "亲属关系不能重复选择",
@@ -135,12 +135,38 @@ export default {
         chwID: "社区工作者ID",
         chooseCHW: "选择社区工作者",
         changeCHW: "更改人员",
-        assignCHW: "分配人员"
+        assignCHW: "分配人员",
+        reviewType: "审核类型",
+        modifyDate: "修改日期",
+    },
+    myAccount: {
+        myAccount: "个人中心",
+        generalInformation: "基本信息",
+        edit: "编辑资料",
+        name: "真实姓名",
+        phoneNumber: "联系电话",
+        permissions: "权限",
+        accountInformation: "账户信息",
+        username: "账户名称",
+        password: "账户密码",
+        editGeneralInformation: "编辑基本信息",
+        resetPassword: "修改密码",
+        oldPassword: "旧密码",
+        newPassword: "新密码",
+        confirmPassword: "确认密码",
+        passwordNotMatch: "两次密码输入不一致",
+        passwordChangedTip: "密码修改成功",
+        reLoginTip: "请您重新登录"
     },
     common: {
         enter: "请输入",
         unit: {
             day: "天"
+        },
+        excel: {
+            downloadTemplate: "下载模板",
+            importData: "导入数据",
+            finishImport: "导入完成"
         }
     },
     antd: zhCN,
