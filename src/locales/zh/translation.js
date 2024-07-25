@@ -167,7 +167,9 @@ export default {
             downloadTemplate: "下载模板",
             importData: "导入数据",
             finishImport: "导入完成"
-        }
+        },
+        submit: "提交",
+        cancel: "放弃"
     },
     antd: zhCN,
 }

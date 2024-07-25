@@ -78,7 +78,7 @@ export default function Profiles() {
         </Form.Item>
       </ModalForm>
 
-      <ModalForm title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
+      <ModalForm width={650} title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
         <Form.Item label={t('oldPassword')} name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
         </Form.Item>

@@ -137,6 +137,25 @@ export default {
         reviewType: "Review Type",
         modifyDate: "Modify Date",
     },
+    myAccount: {
+        myAccount: "My Account",
+        generalInformation: "General Information",
+        edit: "Edit",
+        name: "Name",
+        phoneNumber: "Phone Number",
+        permissions: "Permissions",
+        accountInformation: "Account Information",
+        username: "Username",
+        password: "Password",
+        editGeneralInformation: "Edit General Information",
+        resetPassword: "Reset Password",
+        oldPassword: "Old Password",
+        newPassword: "New Password",
+        confirmPassword: "Confirm Password",
+        passwordNotMatch: "The two passwords you entered do not match.",
+        passwordChangedTip: "Password Reset Complete",
+        reLoginTip: "Please log in again."
+    },
     common: {
         enter: "Please Enter ",
         unit: {
@@ -146,7 +165,9 @@ export default {
             downloadTemplate: "Download Template",
             importData: "Import Data",
             finishImport: "Finish"
-        }
+        },
+        submit: "Submit",
+        cancel: "Cancel"
     },
     antd: enUs,
 }
