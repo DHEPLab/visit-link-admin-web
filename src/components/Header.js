@@ -13,11 +13,9 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 export default function ({ username, role, onNavigate, onLogout }) {
-  const { t: tHeader } = useTranslation('header');
-  const {t:tRole}=useTranslation('roles')
+  const { t } = useTranslation(['header', 'roles']);
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
   const [exportType, setExportType] = useState('visit');
-
   async function handleSaveExport(values) {
     switch (exportType) {
       case 'visit':
@@ -56,37 +54,37 @@ export default function ({ username, role, onNavigate, onLogout }) {
       <Content>
         <Welcome>
           <b>{ username}</b>
-          <Role>{tRole(`${role}`)}</Role>
+          <Role>{t(`roles:${role}`)}</Role>
         </Welcome>
         {role === Role.ROLE_ADMIN && <StyledButton type="link" onClick={openExportModal}>
-          <DownloadOutlined /> {tHeader('exportData')}
+          <DownloadOutlined /> {t('exportData')}
         </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
-          {tHeader('myAccount')}
+          {t('myAccount')}
         </StyledButton>
         <SplitLine />
         <StyledButton type="link" onClick={() => onLogout()}>
-          {tHeader('logOut')}
+          {t('logOut')}
           <Iconfont type="iconescape" />
         </StyledButton>
       </Content>
       <ModalForm
-        title={tHeader('exportData')}
+        title={t('exportData')}
         visible={visibleExport}
         initialValues={{range: []}}
         onFinish={handleSaveExport}
         onCancel={closeExportModal}
       >
-        <Form.Item label={tHeader('dataCategory')} rules={Rules.Required}>
+        <Form.Item label={t('dataCategory')} rules={Rules.Required}>
           <Select value={exportType} onChange={key => setExportType(key)}>
-            <Option value="visit">{tHeader('completeVisits')}</Option>
-            <Option value="visit2">{tHeader('incompleteVisits')}</Option>
-            <Option value="chw">{tHeader('chw')}</Option>
-            <Option value="baby">{tHeader('baby')}</Option>
+            <Option value="visit">{t('completeVisits')}</Option>
+            <Option value="visit2">{t('incompleteVisits')}</Option>
+            <Option value="chw">{t('chw')}</Option>
+            <Option value="baby">{t('baby')}</Option>
           </Select>
         </Form.Item>
         {exportType === 'visit' &&
-          <Form.Item label={tHeader('timeRange')} name="range" rules={Rules.Required}>
+          <Form.Item label={t('timeRange')} name="range" rules={Rules.Required}>
             <RangePicker />
           </Form.Item>}
       </ModalForm>

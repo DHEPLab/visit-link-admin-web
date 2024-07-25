@@ -1,7 +1,7 @@
 export const Role = {
-  ROLE_CHW: "CNW",
-  ROLE_SUPERVISOR: "Supervisor",
-  ROLE_ADMIN: "Admin",
+  ROLE_CHW: "ROLE_CHW",
+  ROLE_SUPERVISOR: "ROLE_SUPERVISOR",
+  ROLE_ADMIN: "ROLE_ADMIN",
 };
 
 export const Gender = {
