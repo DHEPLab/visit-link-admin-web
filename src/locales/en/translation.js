@@ -11,7 +11,7 @@ export default {
         },
         password: {
             lable: "Enter password",
-            placeholder: "please enter the password",
+            placeholder: "Enter password",
             required: "Please enter password"
         },
         errorMessage: "Incorrect username or password",

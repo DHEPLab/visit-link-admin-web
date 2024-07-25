@@ -5,11 +5,13 @@ export default {
         login: "登录",
         username: {
             lable: "账户名",
-            placeholder: "请输入账户名"
+            placeholder: "请输入账户名",
+            required: "请输入您的用户名"
         },
         password: {
             lable: "账户密码",
-            placeholder: "请输入账户密码"
+            placeholder: "请输入账户密码",
+            required:"请输入您的密码"
         },
         errorMessage: "您输入的账号名称/账户密码可能有误",
         success: {
