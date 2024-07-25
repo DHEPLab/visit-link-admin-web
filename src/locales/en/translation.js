@@ -2,19 +2,22 @@ import enUs from "antd/es/locale/en_US";
 
 export default {
     signIn: {
-        login: "login",
+        login: "Login",
         username: {
             lable: "username",
-            placeholder: "please enter the username"
+            placeholder: "Enter username",
+            required: "Please enter username"
+
         },
         password: {
-            lable: "password",
-            placeholder: "please enter the password"
+            lable: "Enter password",
+            placeholder: "please enter the password",
+            required: "Please enter password"
         },
-        errorMessage: "The account name/password you entered may be incorrect.",
+        errorMessage: "Incorrect username or password",
         success: {
-            title: "login success",
-            message: "You have successfully logged into the system"
+            title: "Log In Successfully",
+            message: "Please proceed to use the system."
         }
     },
     header: {

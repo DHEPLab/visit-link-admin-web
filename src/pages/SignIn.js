@@ -42,10 +42,17 @@ export default function SignIn() {
       <Container>
         <Logo src={require("../assets/logo.png")} />
         <Form form={form} onFinish={handleSignIn}>
-          <Form.Item label={t('username.label')} name="username" rules={Rules.Required} labelCol={{ span: 0 }}>
-            <Input className="master" size="large" placeholder={t('username.placeholder')} autoFocus />
+          <Form.Item
+            label={t('username.label')}
+            name="username"
+            rules={[{ required: true, message: t('username.required') }]}
+            labelCol={{ span: 0 }}
+          ><Input className="master" size="large" placeholder={t('username.placeholder')} autoFocus />
           </Form.Item>
-          <Form.Item label={t('password.label')} name="password" rules={Rules.Required} labelCol={{ span: 0 }}>
+          <Form.Item label={t('password.label')}
+                     name="password"
+                     rules={[{ required: true, message: t('password.required') }]}
+                     labelCol={{ span: 0 }}>
             <Input.Password className="master" size="large" placeholder={t('password.placeholder')} onPressEnter={form.submit} />
           </Form.Item>
         </Form>

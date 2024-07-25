@@ -2,6 +2,7 @@ const Required = [{ required: true }];
 
 export default {
   Required,
+
   Password: [{ required: true, min: 6 }],
   Phone: [
     { required: true, message: "请输入手机号", trigger: "blur" },
