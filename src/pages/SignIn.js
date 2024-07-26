@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
 
-import Rules from "../constants/rules";
 import { applyToken } from "../utils/token";
 import { apiAccountProfile } from "../actions";
 import SignInBg from "../assets/signin-bg.png";
@@ -50,9 +49,9 @@ export default function SignIn() {
           ><Input className="master" size="large" placeholder={t('username.placeholder')} autoFocus />
           </Form.Item>
           <Form.Item label={t('password.label')}
-                     name="password"
-                     rules={[{ required: true, message: t('password.required') }]}
-                     labelCol={{ span: 0 }}>
+            name="password"
+            rules={[{ required: true, message: t('password.required') }]}
+            labelCol={{ span: 0 }}>
             <Input.Password className="master" size="large" placeholder={t('password.placeholder')} onPressEnter={form.submit} />
           </Form.Item>
         </Form>

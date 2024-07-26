@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Axios from "axios";
 import { debounce } from "lodash";
+import { useTranslation } from 'react-i18next';
 
 // first page start at 0
 const page = 0;
@@ -17,6 +18,7 @@ export default function (
   loadOnMount = true
 ) {
   return function (props) {
+    const { t } = useTranslation(["common"]);
     const [search, setSearch] = useState({
       page,
       size,
@@ -52,7 +54,7 @@ export default function (
         current: search.page + 1,
         total: totalElements,
         showTotal(total) {
-          return `共 ${total} 条`;
+          return `${t('total')} ${total} ${t('unit.item')}`;
         },
       };
     }

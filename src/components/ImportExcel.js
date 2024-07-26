@@ -12,7 +12,7 @@ import { UploadButton } from "./*";
 const { Step } = Steps;
 
 export default function ImportExcel({ open, refresh, close }) {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["common", "enum"]);
 
   const [spinningLoading, setSpinningLoading] = useState(false);
   const [importData, setImportData] = useState([])
@@ -39,6 +39,10 @@ export default function ImportExcel({ open, refresh, close }) {
 
   function getFeedingPattern(value) {
     const arr = [
+      // { key: 'BREAST_MILK', value: t('enum.FeedingPattern.BREAST_MILK', { ns: "enum" }) },
+      // { key: 'MILK_POWDER', value: t('enum.FeedingPattern.MILK_POWDER', { ns: "enum" }) },
+      // { key: 'MIXED', value: t('enum.FeedingPattern.MIXED', { ns: "enum" }) },
+      // { key: 'TERMINATED', value: t('FeedingPattern.TERMINATED', { ns: "enum" }) }
       { key: 'BREAST_MILK', value: "纯母乳喂养" },
       { key: 'MILK_POWDER', value: "纯奶粉喂养" },
       { key: 'MIXED', value: "母乳奶粉混合喂养" },
@@ -308,15 +312,15 @@ export default function ImportExcel({ open, refresh, close }) {
       </Steps>
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false} >
-          <UploadButton title="点击上传Excel" icon="iconimport-excel">
-            支持支持 xls/xlsx
+          <UploadButton title={t('excel.clickToUploadExcel')} icon="iconimport-excel">
+            {t('excel.support')}
             <br />
-            大小不超过5M
+            {t('excel.filesizeMaxTo5M')}
             <br />
-            单次导入数据最好不超过500条
+            {t('excel.batchImportCountSuggest')}
           </UploadButton>
         </Upload>
-        <DownLink href="/static/template/import_baby.xlsx" download >下载模板</DownLink>
+        <DownLink href="/static/template/import_baby.xlsx" download >{t('excel.downloadTemplate')}</DownLink>
       </ButtonLine>
       {(importData.length > 0 || errData.length > 0) && <ResultContainer>
         <Table
@@ -325,14 +329,14 @@ export default function ImportExcel({ open, refresh, close }) {
           pagination={false}
           scroll={{ y: 200 }}
         >
-          <Column title="行号" align="left" dataIndex="number" key="number" width={50} />
-          <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
-          <Column title="错误事项" align="left" dataIndex="matters" key="matters" render={(matters) => <span style={{ color: 'red', fontSize: 12 }}>{matters}</span>} />
+          <Column title={t('row')} align="left" dataIndex="number" key="number" width={50} />
+          <Column title={t('babyName')} align="left" dataIndex="name" key="name" />
+          <Column title={t('errorItem')} align="left" dataIndex="matters" key="matters" render={(matters) => <span style={{ color: 'red', fontSize: 12 }}>{matters}</span>} />
         </Table>
-        <Result>成功校验数据{importData.length}条， 共{importData.length + errData.length}条</Result>
+        <Result>{t('excel.verifiedDataCount')} {importData.length} {t('unit.item')}, {t('total')}{importData.length + errData.length} {t('unit.item')}</Result>
         <ImportLine>
-          <CloseButton type="default" size="middle" onClick={() => close()} >关闭</CloseButton>
-          <Button type="primary" style={{ float: 'right', width: 160 }} size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
+          <CloseButton type="default" size="middle" onClick={() => close()} >{t('close')}</CloseButton>
+          <Button type="primary" style={{ float: 'right', width: 160 }} size="middle" onClick={importDatas} disabled={importData.length === 0} >{t('excel.importData')}</Button>
         </ImportLine>
       </ResultContainer>}
     </Container>

@@ -224,18 +224,59 @@ export default {
         enter: "请输入",
         unit: {
             day: "天",
-            person: "位(人)"
+            person: "位(人)",
+            items: "条",
         },
         excel: {
             downloadTemplate: "下载模板",
             importData: "导入数据",
-            finishImport: "导入完成"
+            finishImport: "导入完成",
+            clickToUploadExcel: "点击上传Excel",
+            support: "支持 xls/xlsx",
+            filesizeMaxTo5M: "大小不超过5M",
+            batchImportCountSuggest: "单次导入数据最好不超过500条",
+            verifiedDataCount: "成功校验数据",
         },
         confirm: "确定",
         add: "添加",
         submit: "提交",
         cancel: "放弃",
+        total: "共",
+        close: "关闭",
+        row: "行号",
+        babyName: "宝宝姓名",
+        errorItem: "错误事项",
         searchInputByNameIDAreaPlaceholder: "请输入姓名、ID或所在区域搜索",
     },
+    // enum: {
+    //     FeedingPattern: {
+    //         BREAST_MILK: "纯母乳喂养",
+    //         MILK_POWDER: "纯奶粉喂养",
+    //         MIXED: "母乳奶粉混合喂养",
+    //         TERMINATED: "已终止母乳/奶粉喂养"
+    //     },
+    //     Gender: {
+    //         MALE: "男",
+    //         FEMALE: "女",
+    //         UNKNOWN: "未知"
+    //     },
+    //     BabyStage: {
+    //         EDC: "待产期",
+    //         BIRTH: "已出生"
+    //     },
+    //     AssistedFood: {
+    //         TRUE: "已添加",
+    //         FALSE: "未添加"
+    //     },
+    //     RELATIVES: {
+    //         MOTHER: "妈妈",
+    //         FATHER: "爸爸",
+    //         GRANDMOTHER: "奶奶",
+    //         GRANDMA: "外婆",
+    //         GRANDFATHER: "爷爷",
+    //         GRANDPA: "外公",
+    //         OTHER: "其他"
+    //     }
+    // },
     antd: zhCN,
 }
