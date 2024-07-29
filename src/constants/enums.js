@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+
 export const Role = {
   ROLE_CHW: "ROLE_CHW",
   ROLE_SUPERVISOR: "ROLE_SUPERVISOR",
@@ -5,14 +7,14 @@ export const Role = {
 };
 
 export const Gender = {
-  MALE: "男",
-  FEMALE: "女",
-  UNKNOWN: "未知",
+  MALE: i18n.t('Gender.MALE', { ns: "enum" }),
+  FEMALE: i18n.t('Gender.FEMALE', { ns: "enum" }),
+  UNKNOWN: i18n.t('Gender.UNKNOWN', { ns: "enum" }),
 };
 
 export const BabyStage = {
-  EDC: "待产期",
-  BIRTH: "已出生",
+  EDC: i18n.t('BabyStage.EDC', { ns: "enum" }),
+  BIRTH: i18n.t('BabyStage.BIRTH', { ns: "enum" }),
 };
 
 export const CurriculumBabyStage = {
@@ -21,10 +23,10 @@ export const CurriculumBabyStage = {
 };
 
 export const FeedingPattern = {
-  BREAST_MILK: "纯母乳喂养",
-  MILK_POWDER: "纯奶粉喂养",
-  MIXED: "母乳奶粉混合喂养",
-  TERMINATED: "已终止母乳/奶粉喂养",
+  BREAST_MILK: i18n.t('FeedingPattern.BREAST_MILK', { ns: "enum" }),
+  MILK_POWDER: i18n.t('FeedingPattern.MILK_POWDER', { ns: "enum" }),
+  MIXED: i18n.t('FeedingPattern.MIXED', { ns: "enum" }),
+  TERMINATED: i18n.t('FeedingPattern.TERMINATED', { ns: "enum" }),
 };
 
 export const FamilyTies = {
