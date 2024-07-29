@@ -72,6 +72,7 @@ export default function Users() {
         onCancel={closeUser}
         onFinish={handleCreateUser}
         initialValues={{ role: "ROLE_CHW" }}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <h3>{t('generalInformation')}</h3>
         <Form.Item label={t('permissions')} name="role" rules={Rules.Required}>
