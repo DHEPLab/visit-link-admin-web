@@ -294,7 +294,7 @@ export default function ImportExcel({ open, refresh, close }) {
   function importDatas() {
     setSpinningLoading(true)
     Axios.post("/admin/babies/imports", importData).then(res => {
-      message.success("导入成功")
+      message.success(t('excel.importSuccess'))
       refresh()
       close()
       setSpinningLoading(false)

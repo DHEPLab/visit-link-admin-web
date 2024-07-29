@@ -73,7 +73,7 @@ export default function Babies() {
         onCancel={closeBaby}
         initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
       />
-      <Modal visible={impoerModal} title={t('importFromExcel')} onCancel={closeImpoerModal} style={{top: 50}} footer={false} >
+      <Modal visible={impoerModal} title={t('importFromExcel')} onCancel={closeImpoerModal} style={{ top: 50 }} footer={false} >
         <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
       </Modal>
     </>
@@ -91,8 +91,8 @@ function Unreviewed({ onChangeSearch, onChangePage, tab, history, loadData, ...p
 
   const [sortField, setSortField] = useState(null);
 
-  function sorterFun (pagination, filters, sorter) {
-    const {order, field} = sorter
+  function sorterFun(pagination, filters, sorter) {
+    const { order, field } = sorter
     const newSortField = order ? `${field},${order === 'ascend' ? 'asc' : 'desc'}` : null
     setSortField(newSortField)
     if (newSortField === sortField) {
@@ -215,8 +215,8 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
 
   const [sortField, setSortField] = useState(null);
 
-  function sorterFun (pagination, filters, sorter) {
-    const {order, field} = sorter
+  function sorterFun(pagination, filters, sorter) {
+    const { order, field } = sorter
     const newSortField = order ? `${field},${order === 'ascend' ? 'asc' : 'desc'}` : null
     setSortField(newSortField)
     if (newSortField === sortField) {
@@ -250,7 +250,7 @@ function Approved({ tab, history, loadData, onChangeSearch, onChangePage, ...pro
         scroll={{ x: '100vw' }}
         columns={[
           {
-            title: t('babtStatus'),
+            title: t('babyStatus'),
             dataIndex: "deleted",
             align: "center",
             width: 100,

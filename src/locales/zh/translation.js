@@ -11,7 +11,7 @@ export default {
         password: {
             lable: "账户密码",
             placeholder: "请输入账户密码",
-            required:"请输入您的密码"
+            required: "请输入您的密码"
         },
         errorMessage: "您输入的账号名称/账户密码可能有误",
         success: {
@@ -231,6 +231,7 @@ export default {
             downloadTemplate: "下载模板",
             importData: "导入数据",
             finishImport: "导入完成",
+            importSuccess: "导入成功",
             clickToUploadExcel: "点击上传Excel",
             support: "支持 xls/xlsx",
             filesizeMaxTo5M: "大小不超过5M",
