@@ -248,6 +248,14 @@ export default {
         babyName: "宝宝姓名",
         errorItem: "错误事项",
         searchInputByNameIDAreaPlaceholder: "请输入姓名、ID或所在区域搜索",
+        /* eslint-disable no-template-curly-in-string */
+        validateMessages: { // node_modules/rc-field-form/lib/interface.d.ts
+            required: '请输入${label}！',
+            string: {
+                min: '${label}长度不得少于${min}位',
+                max: '${label}长度不得多于${max}位'
+            }
+        }
     },
     // enum: {
     //     FeedingPattern: {

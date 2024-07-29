@@ -14,7 +14,7 @@ import { Card, StaticField, ModalForm, Message } from "../components/*";
 import { apiAccountProfile } from "../actions";
 
 export default function Profiles() {
-  const { t } = useTranslation(["myAccount"]);
+  const { t } = useTranslation(["myAccount", "common"]);
   const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
@@ -77,8 +77,10 @@ export default function Profiles() {
           <Input />
         </Form.Item>
       </ModalForm>
-
-      <ModalForm width={650} title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal}>
+      {
+        console.log(t('validateMessages', { ns: "common", returnObjects: true }))
+      }
+      <ModalForm width={650} title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal} validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}>
         <Form.Item label={t('oldPassword')} name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
         </Form.Item>

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Modal, Space, Button } from "antd";
 import { useTranslation } from 'react-i18next';
 
-export default function ({ width = 600, title, visible, onCancel, onFinish, initialValues = {}, children }) {
+export default function ({ width = 600, title, visible, onCancel, onFinish, initialValues = {}, children, validateMessages }) {
   const { t } = useTranslation(["common"]);
   const [form] = Form.useForm();
 
@@ -32,7 +32,7 @@ export default function ({ width = 600, title, visible, onCancel, onFinish, init
         </Space>
       }
     >
-      <Form form={form} labelCol={{ span: 6 }} onFinish={onFinish}>
+      <Form form={form} labelCol={{ span: 6 }} onFinish={onFinish} validateMessages={validateMessages}>
         {children}
       </Form>
     </Modal>

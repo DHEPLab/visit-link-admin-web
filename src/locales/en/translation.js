@@ -247,6 +247,14 @@ export default {
         babyName: "name",
         errorItem: "Error Item",
         searchInputByNameIDAreaPlaceholder: "Search by CHW Name/ID/Area",
+        /* eslint-disable no-template-curly-in-string */
+        validateMessages: { // node_modules/rc-field-form/lib/interface.d.ts
+            required: '${label} is required!',
+            string: {
+                min: '${label} must be at least ${min} characters',
+                max: '${label} must be no longer than ${max} characters'
+            }
+        }
     },
     // enum: {
     //     FeedingPattern: {
