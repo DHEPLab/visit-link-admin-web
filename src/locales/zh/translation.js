@@ -259,35 +259,35 @@ export default {
             }
         }
     },
-    // enum: {
-    //     FeedingPattern: {
-    //         BREAST_MILK: "纯母乳喂养",
-    //         MILK_POWDER: "纯奶粉喂养",
-    //         MIXED: "母乳奶粉混合喂养",
-    //         TERMINATED: "已终止母乳/奶粉喂养"
-    //     },
-    //     Gender: {
-    //         MALE: "男",
-    //         FEMALE: "女",
-    //         UNKNOWN: "未知"
-    //     },
-    //     BabyStage: {
-    //         EDC: "待产期",
-    //         BIRTH: "已出生"
-    //     },
-    //     AssistedFood: {
-    //         TRUE: "已添加",
-    //         FALSE: "未添加"
-    //     },
-    //     RELATIVES: {
-    //         MOTHER: "妈妈",
-    //         FATHER: "爸爸",
-    //         GRANDMOTHER: "奶奶",
-    //         GRANDMA: "外婆",
-    //         GRANDFATHER: "爷爷",
-    //         GRANDPA: "外公",
-    //         OTHER: "其他"
-    //     }
-    // },
+    enum: {
+        FeedingPattern: {
+            BREAST_MILK: "纯母乳喂养",
+            MILK_POWDER: "纯奶粉喂养",
+            MIXED: "母乳奶粉混合喂养",
+            TERMINATED: "已终止母乳/奶粉喂养"
+        },
+        Gender: {
+            MALE: "男",
+            FEMALE: "女",
+            UNKNOWN: "未知"
+        },
+        BabyStage: {
+            EDC: "待产期",
+            BIRTH: "已出生"
+        },
+        AssistedFood: {
+            TRUE: "已添加",
+            FALSE: "未添加"
+        },
+        RELATIVES: {
+            MOTHER: "妈妈",
+            FATHER: "爸爸",
+            GRANDMOTHER: "奶奶",
+            GRANDMA: "外婆",
+            GRANDFATHER: "爷爷",
+            GRANDPA: "外公",
+            OTHER: "其他"
+        }
+    },
     antd: zhCN,
 }
