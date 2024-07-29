@@ -345,5 +345,26 @@ export default {
         deleteRuleConfirmation: "您确定要删除这个规则吗？此操作不可撤销。",
     },
 
-    antd: zhCN,
-}
+  curriculums: {
+    curriculumManagement: "大纲管理",
+    searchByCurriculumName: "请输入大纲名称搜索",
+    createNewCurriculum: "创建新大纲",
+    curriculumStatus: "大纲状态",
+    curriculumName: "大纲名称",
+    action: "操作",
+    assignBaby: "分配宝宝",
+    babyList: "宝宝列表",
+    curriculumAssignedBabyList: "大纲分配宝宝列表",
+    babyAutoAssignTip: "宝宝将自动分配至最新发布的大纲版本",
+    addNewBaby: "添加新宝宝",
+    babyName: "宝宝姓名",
+    ID: "ID",
+    gender: "性别",
+    area: "所在区域",
+    primaryCaregiver: "主照料人",
+    contactPhone: "联系电话",
+    delete: "删除",
+  },
+
+  antd: zhCN,
+};

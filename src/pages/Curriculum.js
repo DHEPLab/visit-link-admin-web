@@ -28,8 +28,7 @@ export default function Curriculum() {
   const { id } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
-  const { t } = useTranslation('curriculum');
-
+  const { t } = useTranslation("curriculum");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
@@ -55,7 +54,7 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
-      setLessons(data.lessons.map(n => ({...n, questionnaire: n.questionnaire?.id})));
+      setLessons(data.lessons.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
       setSchedules(data.schedules);
       setCurriculum({ ...data, lessons: [], schedules: [] });
     });
@@ -93,7 +92,10 @@ export default function Curriculum() {
 
   function onFinish(values) {
     if (!validate()) return;
-    const lessonResult = lessons.map(n => ({...n, questionnaire: (n.questionnaire ? {id: n.questionnaire} : null)}))
+    const lessonResult = lessons.map((n) => ({
+      ...n,
+      questionnaire: n.questionnaire ? { id: n.questionnaire } : null,
+    }));
     Axios.post(submitURL, {
       id,
       ...values,
@@ -207,7 +209,7 @@ const EnhancedLessons = withEdit(Lessons);
 const EnhancedSchedules = withEdit(Schedules);
 
 function ReadonlyForm({ value: { name, description } }) {
-  const { t } = useTranslation('curriculum');
+  const { t } = useTranslation("curriculum");
   return (
     <div data-testid="readonly-form">
       <StaticField label={t("curriculumName")}>{name}</StaticField>
@@ -278,14 +280,14 @@ function Lessons({
   visible,
 }) {
   const { networks } = useSelector((state) => state);
-  const { t } = useTranslation('curriculum');
+  const { t } = useTranslation("curriculum");
 
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
   useEffect(() => {
-    loadQuestionnairesOptions()
-  }, [openEditModal, setQuestionnairesOptions])
+    loadQuestionnairesOptions();
+  }, [openEditModal, setQuestionnairesOptions]);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -421,9 +423,9 @@ function Lessons({
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t('common.unit.day')} - ${
-                record.endOfApplicableDays
-              }${t('common.unit.day')}`;
+              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
+                "common.unit.day"
+              )} - ${record.endOfApplicableDays}${t("common.unit.day")}`;
             },
           },
           {
@@ -431,16 +433,15 @@ function Lessons({
             dataIndex: "modules",
             render: renderDomain,
           },
-          lessonOperation(disabled, handleDelete, openEditModal,t),
+          lessonOperation(disabled, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
   );
-
 }
 
 function ApplicableDays({ value, currentEditValue }) {
-  const { t } = useTranslation('curriculum');
+  const { t } = useTranslation("curriculum");
 
   return (
     <ApplicableDaysContainer>
@@ -452,7 +453,8 @@ function ApplicableDays({ value, currentEditValue }) {
                 label={t("applicableDays")}
                 labelCol={{ span: 0 }}
                 name="startOfApplicableDays"
-                rules={[...Rules.Required,
+                rules={[
+                  ...Rules.Required,
                   ({ getFieldValue }) => ({
                     validator(_, startOfApplicableDays) {
                       const stage = getFieldValue("stage");
@@ -470,16 +472,16 @@ function ApplicableDays({ value, currentEditValue }) {
                         return Promise.resolve();
                       }
                       return Promise.reject(t("applicableDaysOverlap"));
-                    }
-                  })
+                    },
+                  }),
                 ]}
               >
                 <InputNumber
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}${t('common.unit.day')}`}
-                  parser={(value) => value.replace(t('common.unit.day'), "")}
+                  formatter={(value) => `${value}${t("common.unit.day")}`}
+                  parser={(value) => value.replace(t("common.unit.day"), "")}
                 />
               </Form.Item>
               <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
@@ -525,8 +527,8 @@ function ApplicableDays({ value, currentEditValue }) {
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}${t('common.unit.day')}`}
-                  parser={(value) => value.replace(t('common.unit.day'), "")}
+                  formatter={(value) => `${value}${t("common.unit.day")}`}
+                  parser={(value) => value.replace(t("common.unit.day"), "")}
                 />
               </EndOfApplicableDaysFormItem>
             </>
@@ -568,7 +570,7 @@ function Schedules({
   closeModal,
   visible,
 }) {
-  const { t } = useTranslation('curriculum');
+  const { t } = useTranslation("curriculum");
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -634,16 +636,14 @@ function Schedules({
                 label: lesson.number,
                 value: lesson.number,
               })
-            )
-            const lessonArr = (currentEditValue.lessons || []).filter(a => lessonsOptions.filter(b=> a.value === b.value))
-            setFieldsValue({ lessons: lessonArr});
+            );
+            const lessonArr = (currentEditValue.lessons || []).filter((a) =>
+              lessonsOptions.filter((b) => a.value === b.value)
+            );
+            setFieldsValue({ lessons: lessonArr });
             return (
               <Form.Item label={t("sessionsIncluded")} name="lessons" rules={Rules.Required}>
-                <Select
-                  mode="multiple"
-                  labelInValue
-                  options={lessonsOptions}
-                ></Select>
+                <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
               </Form.Item>
             );
           }}
@@ -665,9 +665,9 @@ function Schedules({
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t('common.unit.day')} - ${
-                record.endOfApplicableDays
-              }${t('common.unit.day')}`;
+              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
+                "common.unit.day"
+              )} - ${record.endOfApplicableDays}${t("common.unit.day")}`;
             },
           },
           {
@@ -675,7 +675,7 @@ function Schedules({
             dataIndex: "lessons",
             render: renderDomain,
           },
-          scheduleOperation(disabled, handleDelete, openEditModal),
+          scheduleOperation(disabled, handleDelete, openEditModal,t),
         ]}
       />
     </Card>
@@ -684,7 +684,7 @@ function Schedules({
 
 const renderDomain = (h) => h.map((v) => v.label).join("、");
 
-const lessonOperation = (disabled, handleDelete, openEditModal,t) => {
+const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
   return {
     title: t("operation"),
@@ -708,7 +708,7 @@ const lessonOperation = (disabled, handleDelete, openEditModal,t) => {
   };
 };
 
-const scheduleOperation = (disabled, handleDelete, openEditModal,t) => {
+const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
   return {
     title: t("operation"),
