@@ -221,6 +221,7 @@ export default {
         assignNewChw: "分配新社区工作者",
     },
     common: {
+        wordBreak: "",
         enter: "请输入",
         unit: {
             day: "天",
@@ -240,6 +241,7 @@ export default {
         },
         confirm: "确定",
         add: "添加",
+        delete: "删除",
         submit: "提交",
         cancel: "放弃",
         total: "共",

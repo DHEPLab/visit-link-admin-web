@@ -220,6 +220,7 @@ export default {
         assignNewChw: "Assign New CHW",
     },
     common: {
+        wordBreak: " ",
         enter: "Please Enter ",
         unit: {
             day: "day(s)",
@@ -239,6 +240,7 @@ export default {
         },
         confirm: "Comfirm",
         add: "Add",
+        delete: "Delete",
         submit: "Submit",
         cancel: "Cancel",
         total: "Total",
@@ -254,7 +256,7 @@ export default {
                 min: '${label} must be at least ${min} characters',
                 max: '${label} must be no longer than ${max} characters'
             }
-        }
+        },
     },
     enum: {
         FeedingPattern: {

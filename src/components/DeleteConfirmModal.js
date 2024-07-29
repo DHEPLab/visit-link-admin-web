@@ -1,15 +1,18 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 import { useBoolState } from "../utils";
 import { Space, Button, Modal } from "antd";
 
-export default function DeleteConfirmModal({
-  title = "删除",
-  content = "确认删除？",
-  onConfirm,
-  children,
-  okText = "删除",
-}) {
+export default function DeleteConfirmModal(props) {
+  const { t } = useTranslation(["common"]);
+  const {
+    title = t('delete'),
+    content = `${[t('confirm'), t('delete')].join(t('workBreak'))}?`,
+    onConfirm,
+    children,
+    okText = t('delete'),
+  } = props
   const [visible, openModal, closeModal] = useBoolState();
 
   return (
@@ -23,7 +26,7 @@ export default function DeleteConfirmModal({
         footer={
           <Space size="large">
             <Button ghost type="danger" onClick={closeModal}>
-              再想想
+              {t('cancel')}
             </Button>
             <Button
               type="danger"
