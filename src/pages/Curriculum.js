@@ -28,7 +28,6 @@ export default function Curriculum() {
   const { id } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
-  const { t } = useTranslation('curriculum');
 
   const { t } = useTranslation("curriculum");
 
