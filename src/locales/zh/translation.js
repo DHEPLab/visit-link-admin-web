@@ -20,8 +20,7 @@ export default {
         },
     },
     header: {
-        welcome: "{username}，欢迎您",
-        myAccount: "个人中心",
+            myAccount: "个人中心",
         logOut: "退出",
         exportData: "数据导出",
         dataCategory: "数据类别",
