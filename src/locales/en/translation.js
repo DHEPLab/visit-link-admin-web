@@ -226,6 +226,7 @@ export default {
         unbindChw: "Unbind CHW",
         unbindChwMessage: "Are you sure to unbind this CHW?",
         assignNewChw: "Assign New CHW",
+        saveSuccessfully: "Save Successfully",
     },
     common: {
         wordBreak: " ",
