@@ -109,7 +109,7 @@ export default function Baby() {
   }
 
   function handleChangeChw(selected) {
-    if (selected.length === 0) message.warning(t('noSelectedChwWarning'));
+    if (selected.length === 0) return message.warning(t('noSelectedChwWarning'));
     const [userId] = selected;
     Axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
       closeChangeChwModal();
@@ -230,7 +230,7 @@ export default function Baby() {
         <StaticField label={t('name')}>{baby.name}</StaticField>
         <StaticField label={t('gender')}>{Gender[baby.gender]}</StaticField>
         <StaticField label={t('growthStage')}>
-          {BabyStage[baby.stage]} {baby.days} {t('unit.day', {ns: "common"})}
+          {BabyStage[baby.stage]} {baby.days} {t('unit.day', { ns: "common" })}
         </StaticField>
         {baby.stage === "EDC" ? (
           <StaticField label={t('dueDay')}>{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
@@ -258,6 +258,7 @@ export default function Baby() {
         initialValues={initialValues()}
         // 一旦进入婴幼期则不可修改回待产期
         disableStage={baby.stage === "BIRTH"}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       />
     </>
   );
@@ -315,7 +316,7 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
       <p>{t('archiveTip')}</p>
       <Form form={form} onFinish={onOk} labelCol={{ span: 0 }}>
         <Form.Item label={t('archiveReason')} name="reason" rules={Rules.Required}>
-          <Input style={{ width: "100%" }} placeholder={`${t('enter', {ns: 'common'})}${t('archiveReason')}`} />
+          <Input style={{ width: "100%" }} placeholder={`${t('enter', { ns: 'common' })}${t('archiveReason')}`} />
         </Form.Item>
       </Form>
     </Modal>
@@ -404,7 +405,7 @@ function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         <Form.Item label={t('id')} name="identity" rules={Rules.Required}>
-          <Input autoFocus style={{ width: "100%" }} placeholder={`${t('enter', {ns: 'common'})}${t('id')}`} />
+          <Input autoFocus style={{ width: "100%" }} placeholder={`${t('enter', { ns: 'common' })}${t('id')}`} />
         </Form.Item>
       </Form>
     </Modal>
@@ -530,6 +531,7 @@ function Carers({ babyId, deleted }) {
         visible={visible}
         onCancel={safeCloseCarer}
         onFinish={onFinish}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <Form.Item label={t('master')} name="master" rules={Rules.Required}>
           <Radio.Group>

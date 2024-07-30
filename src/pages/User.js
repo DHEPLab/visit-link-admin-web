@@ -134,6 +134,7 @@ export default function User() {
         onFinish={handleChangeProfile}
         visible={changeProfileVisible}
         onCancel={closeChangeProfile}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <Form.Item label={t('name')} name="realName" rules={Rules.RealName}>
           <Input />
@@ -277,7 +278,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
       {...props}
     >
       <p>{t('resetPasswordMessage')}</p>
-      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
+      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }} validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}>
         <Form.Item label={t('newPassword')} name="password" rules={Rules.Password}>
           <Input.Password style={{ width: "100%" }} placeholder={t('enter', { ns: 'common' }) + t('newPassword')} />
         </Form.Item>

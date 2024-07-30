@@ -69,6 +69,7 @@ export default function Profiles() {
         initialValues={user}
         onFinish={handleChangeProfile}
         onCancel={closeProfileModal}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <Form.Item label={t('name')} name="realName" rules={Rules.RealName}>
           <Input />
@@ -77,9 +78,6 @@ export default function Profiles() {
           <Input />
         </Form.Item>
       </ModalForm>
-      {
-        console.log(t('validateMessages', { ns: "common", returnObjects: true }))
-      }
       <ModalForm width={650} title={t('resetPassword')} visible={visible} onFinish={handleChangePassword} onCancel={closePasswordModal} validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}>
         <Form.Item label={t('oldPassword')} name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>

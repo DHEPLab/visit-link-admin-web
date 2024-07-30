@@ -72,6 +72,7 @@ export default function Babies() {
         onFinish={handleCreateBaby}
         onCancel={closeBaby}
         initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       />
       <Modal visible={impoerModal} title={t('importFromExcel')} onCancel={closeImpoerModal} style={{ top: 50 }} footer={false} >
         <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
