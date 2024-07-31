@@ -465,5 +465,11 @@ export default {
     enterNarrativeText: "请输入叙述文本内容",
     required: "必填！",
   },
+  surveyComponents: {
+    addComponent: "添加组件：",
+    addTextQuestion: "添加文本问题",
+    addSingleChoiceQuestion: "添加单选问题",
+    addMultipleChoiceQuestion: "添加多选问题",
+  },
   antd: zhCN,
 };

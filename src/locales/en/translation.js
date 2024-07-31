@@ -478,5 +478,11 @@ export default {
     enterNarrativeText: "Please enter narrative text content",
     required: "Required!",
   },
+  surveyComponents: {
+    addComponent: "Add Component:",
+    addTextQuestion: "Add Text Question",
+    addSingleChoiceQuestion: "Add Single Choice Question",
+    addMultipleChoiceQuestion: "Add Multiple Choice Question",
+  },
   antd: enUs,
 };
