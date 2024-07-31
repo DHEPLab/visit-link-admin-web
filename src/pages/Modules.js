@@ -1,24 +1,26 @@
 import React from "react";
 import { Button, Space } from "antd";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { ModuleTopic } from "../constants/enums";
 import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components/*";
 
 function Components({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
+  const { t } = useTranslation("modules");
 
   return (
     <>
-      <ContentHeader title="模块管理">
+      <ContentHeader title={t("moduleManagement")}>
         <Space size="large">
           <SearchInput
             onChange={(e) => onChangeSearch("search", e.target.value)}
             className="master"
-            placeholder="请输入模块名称搜索"
+            placeholder={t("searchModulePlaceholder")}
           />
           <Button type="primary" onClick={() => history.push("/modules/create")}>
-            创建新模块
+            {t("createNewModule")}
           </Button>
         </Space>
       </ContentHeader>
@@ -36,25 +38,25 @@ function Components({ loadData, onChangeSearch, ...props }) {
         }}
         columns={[
           {
-            title: "模块状态",
+            title: t("moduleStatus"),
             dataIndex: "published",
             width: 120,
             align: "center",
             render: (h) => <StatusTag value={h} />,
           },
           {
-            title: "模块编号",
+            title: t("moduleNumber"),
             dataIndex: "number",
             width: 150,
           },
           {
-            title: "模块名称",
+            title: t("moduleName"),
             dataIndex: "name",
           },
           {
-            title: "模块主题",
+            title: t("moduleTheme"),
             dataIndex: "topic",
-            render: (h) => ModuleTopic[h],
+            render: (h) => t(ModuleTopic[h]),
           },
         ]}
       />

@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { Form, Space, Button, Input, message } from "antd";
 import { useDispatch } from "react-redux";
 import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
 import ModuleComponents from "../components/curriculum/ModuleComponents";
@@ -18,10 +19,11 @@ export default function Module() {
   const [readonly, setReadonly] = useState();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { t } = useTranslation("module");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
-  const [title, setTitle] = useState("创建新模块");
+  const [title, setTitle] = useState(t("createNewModule"));
   const [submitURL, setSubmitURL] = useState();
 
   const [module, setModule] = useState({});
@@ -76,7 +78,7 @@ export default function Module() {
   }
 
   function onSubmit(values) {
-    if (components.length === 0) return message.warn("至少添加一个组件");
+    if (components.length === 0) return message.warn(t("atLeastOneComponent"));
 
     Axios.post(submitURL, {
       id,
@@ -112,13 +114,13 @@ export default function Module() {
               if (isstop || readonly) {
                 return true;
               } else {
-                return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
+                return t("unsavedChangesWarning");
               }
             }}
           />
           <DetailHeader
             icon="iconmodule-primary"
-            menu="模块管理"
+            menu={t("moduleManagement")}
             title={title}
             extra={
               <Space size="large">
@@ -126,28 +128,28 @@ export default function Module() {
                   <>
                     {id && (
                       <DeleteConfirmModal
-                        title="删除模块"
-                        content="删除后模块内容将无法恢复是否继续？"
+                        title={t("deleteModule")}
+                        content={t("deleteModuleWarning")}
                         onConfirm={handleDeleteModule}
                       >
                         <Button ghost type="danger">
-                          删除模块
+                          {t("deleteModule")}
                         </Button>
                       </DeleteConfirmModal>
                     )}
                     {!draftId && (
                       <Button type="danger" onClick={() => history.push(`/modules/edit/${id}`)}>
-                        编辑模块
+                        {t("editModule")}
                       </Button>
                     )}
                   </>
                 ) : (
                   <>
                     <Button ghost type="danger" onClick={() => submitDraft(handleSubmit)}>
-                      保存至草稿
+                      {t("saveToDraft")}
                     </Button>
                     <Button type="danger" onClick={() => submitPublish(handleSubmit)}>
-                      保存并发布
+                      {t("saveAndPublish")}
                     </Button>
                   </>
                 )}
@@ -157,35 +159,35 @@ export default function Module() {
 
           {draftId && (
             <DraftBar
-              title="本模块有1个尚未发布的草稿："
+              title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
               onClick={() => history.push(`/modules/edit/${draftId}`)}
             />
           )}
 
-          <Card title="模块基本信息">
+          <Card title={t("moduleInformation")}>
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="模块名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder="请输入模块名称，限40个字符" />
+                <Form.Item label={t("moduleName")} name="name" rules={[...Rules.Required, { max: 40 }]}>
+                  <Input placeholder={t("enterModuleName")} />
                 </Form.Item>
-                <Form.Item label="模块编号" name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder="请输入模块编号，限20个字符" />
+                <Form.Item label={t("moduleNumber")} name="number" rules={[...Rules.Required, { max: 20 }]}>
+                  <Input placeholder={t("enterModuleNumber")} />
                 </Form.Item>
-                <Form.Item label="模块描述" name="description" rules={[...Rules.Required, { max: 200 }]}>
-                  <Input.TextArea rows={4} placeholder="请输入模块描述，限200个字符" />
+                <Form.Item label={t("moduleDescription")} name="description" rules={[...Rules.Required, { max: 200 }]}>
+                  <Input.TextArea rows={4} placeholder={t("enterModuleDescription")} />
                 </Form.Item>
-                <Form.Item label="模块主题" name="topic" rules={Rules.Required}>
-                  <SelectEnum name="ModuleTopic" placeholder="请选择模块主题" />
+                <Form.Item label={t("moduleTheme")} name="topic" rules={Rules.Required}>
+                  <SelectEnum name="ModuleTopic" placeholder={t("selectModuleTheme")} />
                 </Form.Item>
               </Form>
             )}
           </Card>
 
-          <Card title="模块内容">
+          <Card title={t("moduleContent")}>
             <ModuleComponents value={values.components} readonly={readonly} />
           </Card>
         </>
@@ -195,12 +197,13 @@ export default function Module() {
 }
 
 function ReadonlyForm({ value }) {
+  const { t } = useTranslation("module");
   return (
     <div data-testid="readonly-form">
-      <StaticField label="模块名称">{value.name}</StaticField>
-      <StaticField label="模块编号">{value.number}</StaticField>
-      <StaticField label="模块描述">{value.description}</StaticField>
-      <StaticField label="模块主题">{ModuleTopic[value.topic]}</StaticField>
+      <StaticField label={t("moduleName")}>{value.name}</StaticField>
+      <StaticField label={t("moduleNumber")}>{value.number}</StaticField>
+      <StaticField label={t("moduleDescription")}>{value.description}</StaticField>
+      <StaticField label={t("moduleTheme")}>{t(ModuleTopic[value.topic])}</StaticField>
     </div>
   );
 }
