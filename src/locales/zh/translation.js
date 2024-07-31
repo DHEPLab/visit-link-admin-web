@@ -471,5 +471,9 @@ export default {
     addSingleChoiceQuestion: "添加单选问题",
     addMultipleChoiceQuestion: "添加多选问题",
   },
+  switch: {
+    choiceComponent: "选择组件",
+    addOption: "添加选项",
+  },
   antd: zhCN,
 };

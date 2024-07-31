@@ -484,5 +484,9 @@ export default {
     addSingleChoiceQuestion: "Add Single Choice Question",
     addMultipleChoiceQuestion: "Add Multiple Choice Question",
   },
+  switch: {
+    choiceComponent: "Choice Component",
+    addOption: "Add Option",
+  },
   antd: enUs,
 };

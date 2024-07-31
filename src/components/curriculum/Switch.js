@@ -2,11 +2,14 @@ import React from "react";
 import { Button } from "antd";
 import { FieldArray } from "formik";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 import Factory from "./factory";
 import { Text, Container, Case } from "./*";
 
 export default function Switch({ name, value, onChange, ...props }) {
+  const { t } = useTranslation("switch");
+
   const Name = {
     question: `${name}.question`,
     cases: `${name}.cases`,
@@ -14,7 +17,7 @@ export default function Switch({ name, value, onChange, ...props }) {
   };
 
   return (
-    <Container icon="iconswitch-gray" title="选择组件" name={name} {...props}>
+    <Container icon="iconswitch-gray" title={t("choiceComponent")} name={name} {...props}>
       <Text
         {...props}
         focus={false}
@@ -44,14 +47,13 @@ export default function Switch({ name, value, onChange, ...props }) {
             {!props.readonly && (
               <ButtonContainer>
                 <Button size="mini" type="link" onClick={() => helpers.push(Factory.createCase())}>
-                  添加选项
+                  {t("addOption")}
                 </Button>
               </ButtonContainer>
             )}
           </>
         )}
       </FieldArray>
-      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </Container>
   );
 }
