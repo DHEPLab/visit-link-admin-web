@@ -1,5 +1,6 @@
 import enUs from "antd/es/locale/en_US";
 import PageFooter from "../../components/curriculum/PageFooter";
+import QuestionRadio from "../../components/curriculum/QuestionRadio";
 
 export default {
   signIn: {
@@ -452,9 +453,23 @@ export default {
     addChoiceComponent: "Add Choice Component",
     addPageBreakComponent: "Add Page Break Component",
   },
-  PageFooter: {
+  parseIntageFooter: {
     pageBreakLine: "Page Break Line",
     remove: "Remove",
+  },
+  questionRadio: {
+    textQuestion: "Text Question",
+    singleChoiceQuestion: "Single Choice Question",
+    multipleChoiceQuestion: "Multiple Choice Question",
+    questionText: "Question Text",
+    enterQuestionText: "Please enter question text",
+    required: "Required!",
+    option: "Option",
+    pleaseEnter: "Please enter",
+    clickToAddOption: "Click to add option",
+    addTextBox: "Add text box",
+    remove: "Remove",
+    cantBeEmpty: "Can't be empty!",
   },
   antd: enUs,
 };
