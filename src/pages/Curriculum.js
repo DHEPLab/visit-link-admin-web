@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
@@ -439,7 +439,6 @@ function Lessons({
       />
     </Card>
   );
-
 }
 
 function ApplicableDays({ value, currentEditValue }) {
@@ -482,8 +481,8 @@ function ApplicableDays({ value, currentEditValue }) {
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}${t("common.unit.day")}`}
-                  parser={(value) => value.replace(t("common.unit.day"), "")}
+                  formatter={(value) => `${value}${t("common:unit.day")}`}
+                  parser={(value) => value.replace(t("common:unit.day"), "")}
                 />
               </Form.Item>
               <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
@@ -529,8 +528,8 @@ function ApplicableDays({ value, currentEditValue }) {
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}${t("common.unit.day")}`}
-                  parser={(value) => value.replace(t("common.unit.day"), "")}
+                  formatter={(value) => `${value}${t("common:unit.day")}`}
+                  parser={(value) => value.replace(t("common:unit.day"), "")}
                 />
               </EndOfApplicableDaysFormItem>
             </>
@@ -573,13 +572,28 @@ function Schedules({
   visible,
 }) {
   const { t } = useTranslation("curriculum");
+  const [form] = Form.useForm();
+
+  const filteredLessons = useMemo(() => {
+    const stage = form.getFieldValue("stage");
+    const startMonths = form.getFieldValue("startOfApplicableDays");
+    const endMonths = form.getFieldValue("endOfApplicableDays");
+    return CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map((lesson) => ({
+      label: lesson.number,
+      value: lesson.number,
+    }));
+  }, [form, lessonOptions]);
+
+  useEffect(() => {
+    const lessonArr = (currentEditValue.lessons || []).filter((a) => filteredLessons.some((b) => a.value === b.value));
+    form.setFieldsValue({ lessons: lessonArr });
+  }, [currentEditValue.lessons, filteredLessons, form]);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(
         Arrays.concat(value, {
           ...formValues,
-          // clean lesson.value, backend will be reconnect by label
           lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
         })
       );
@@ -611,6 +625,7 @@ function Schedules({
         visible={visible}
         onCancel={closeModal}
         onFinish={onFinish}
+        form={form}
       >
         <Form.Item label={t("ruleName")} name="name" rules={Rules.Required}>
           <Input />
@@ -619,36 +634,8 @@ function Schedules({
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
-        <Form.Item
-          noStyle
-          shouldUpdate={(pre, cur) =>
-            pre.stage !== cur.stage ||
-            pre.startOfApplicableDays !== cur.startOfApplicableDays ||
-            pre.endOfApplicableDays !== cur.endOfApplicableDays
-          }
-        >
-          {({ getFieldValue, setFieldsValue }) => {
-            // filter lesson options
-            // Only lesson at the same stage are available and schedule range must contain lesson range
-            const stage = getFieldValue("stage");
-            const startMonths = getFieldValue("startOfApplicableDays");
-            const endMonths = getFieldValue("endOfApplicableDays");
-            const lessonsOptions = CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map(
-              (lesson) => ({
-                label: lesson.number,
-                value: lesson.number,
-              })
-            );
-            const lessonArr = (currentEditValue.lessons || []).filter((a) =>
-              lessonsOptions.filter((b) => a.value === b.value)
-            );
-            setFieldsValue({ lessons: lessonArr });
-            return (
-              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={Rules.Required}>
-                <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
-              </Form.Item>
-            );
-          }}
+        <Form.Item label={t("sessionsIncluded")} name="lessons" rules={Rules.Required}>
+          <Select mode="multiple" labelInValue options={filteredLessons}></Select>
         </Form.Item>
       </ModalForm>
 
@@ -677,7 +664,7 @@ function Schedules({
             dataIndex: "lessons",
             render: renderDomain,
           },
-          scheduleOperation(disabled, handleDelete, openEditModal,t),
+          scheduleOperation(disabled, handleDelete, openEditModal, t),
         ]}
       />
     </Card>

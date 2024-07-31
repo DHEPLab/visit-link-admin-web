@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import enUs from "antd/es/locale/en_US";
 
 export default {
@@ -58,7 +57,7 @@ export default {
     searchBabyInputPlaceholder: "Search by Baby name/ID/Area",
     babyName: "Baby Name",
     id: "ID",
-    chwID:"CHW ID",
+    chwID: "CHW ID",
     gender: "Gender",
     area: "Area",
     chw: "CHW",
@@ -298,6 +297,10 @@ export default {
       GRANDFATHER: "爷爷",
       GRANDPA: "外公",
       OTHER: "其他",
+    },
+    CurriculumBabyStage: {
+      EDC: "Pregnant",
+      BIRTH: "Born",
     },
   },
   curriculum: {

@@ -293,6 +293,10 @@ export default {
       GRANDPA: "外公",
       OTHER: "其他",
     },
+    CurriculumBabyStage: {
+      EDC: "已怀孕",
+      BIRTH: "已出生",
+    },
   },
 
   curriculum: {
