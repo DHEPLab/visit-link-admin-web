@@ -471,5 +471,12 @@ export default {
     remove: "Remove",
     cantBeEmpty: "Can't be empty!",
   },
+  questionText: {
+    textQuestion: "Text Question",
+    singleChoiceQuestion: "Single Choice Question",
+    multipleChoiceQuestion: "Multiple Choice Question",
+    enterNarrativeText: "Please enter narrative text content",
+    required: "Required!",
+  },
   antd: enUs,
 };

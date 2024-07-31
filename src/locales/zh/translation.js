@@ -458,5 +458,12 @@ export default {
     remove: "移除",
     cantBeEmpty: "不能为空！",
   },
+  questionText: {
+    textQuestion: "文本问题",
+    singleChoiceQuestion: "单选问题",
+    multipleChoiceQuestion: "多选问题",
+    enterNarrativeText: "请输入叙述文本内容",
+    required: "必填！",
+  },
   antd: zhCN,
 };
