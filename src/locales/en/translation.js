@@ -444,5 +444,12 @@ export default {
     recommendedVideoRatio: "Recommended aspect ratio is 16:10",
     enterMediaDescription: "Please enter media description text",
   },
+  moduleComponents: {
+    addComponent: "Add Component:",
+    addTextComponent: "Add Text Component",
+    addMediaComponent: "Add Media Component",
+    addChoiceComponent: "Add Choice Component",
+    addPageBreakComponent: "Add Page Break Component",
+  },
   antd: enUs,
 };

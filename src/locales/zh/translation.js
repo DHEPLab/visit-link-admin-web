@@ -433,5 +433,12 @@ export default {
     recommendedVideoRatio: "建议尺寸为 16:10",
     enterMediaDescription: "请输入媒体描述文本",
   },
+  moduleComponents: {
+    addComponent: "添加组件：",
+    addTextComponent: "添加文本组件",
+    addMediaComponent: "添加媒体组件",
+    addChoiceComponent: "添加选择组件",
+    addPageBreakComponent: "添加翻页分割组件",
+  },
   antd: zhCN,
 };
