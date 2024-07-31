@@ -9,7 +9,6 @@ import { ComponentQuestion } from "./*";
 import { Iconfont, Card } from "../*";
 import { useTranslation } from "react-i18next";
 
-
 export function handleMoveUp(helpers, index, focus, setFocus) {
   if (index === 0) return;
   helpers.move(index, index - 1);
@@ -47,7 +46,7 @@ export function insertComponent(helpers, component, focus, setFocus) {
 
 export default function SurveyComponents({ value, readonly, stickyTop }) {
   const [focus, setFocus] = useState(-1);
-  const { t } = useTranslation('surveyComponents');
+  const { t } = useTranslation("surveyComponents");
 
   return (
     <FieldArray name="questions">
@@ -71,25 +70,25 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
             {!readonly && (
               <ComponentToolBar>
                 <StickyContainer top={stickyTop}>
-                  <Card title={t('addComponent')}>
+                  <Card title={t("addComponent")}>
                     <Space direction="vertical" size="large">
                       <Button
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionText(), focus, setFocus)}
                       >
-                        <Iconfont type="iconquestion-text" /> {t('addTextQuestion')}
+                        <Iconfont type="iconquestion-text" /> {t("addTextQuestion")}
                       </Button>
                       <Button
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionRadio(), focus, setFocus)}
                       >
-                        <Iconfont type="iconquestion-radio" /> {t('addSingleChoiceQuestion')}
+                        <Iconfont type="iconquestion-radio" /> {t("addSingleChoiceQuestion")}
                       </Button>
                       <Button
                         type="primary"
                         onClick={() => insertComponent(helpers, Factory.createQuestionCheckbox(), focus, setFocus)}
                       >
-                        <Iconfont type="iconquestion-checkbox" /> {t('addMultipleChoiceQuestion')}
+                        <Iconfont type="iconquestion-checkbox" /> {t("addMultipleChoiceQuestion")}
                       </Button>
                     </Space>
                   </Card>

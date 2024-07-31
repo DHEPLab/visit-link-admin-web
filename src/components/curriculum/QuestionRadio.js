@@ -142,7 +142,6 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
   );
 }
 
-
 const TextType = styled.div`
   font-weight: bold;
   font-size: 16px;

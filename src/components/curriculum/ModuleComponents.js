@@ -47,7 +47,6 @@ export function insertComponent(helpers, component, focus, setFocus) {
 
 export default function ModuleComponents({ value, readonly }) {
   const [focus, setFocus] = useState(-1);
-  const { t } = useTranslation("moduleComponents");
 
   return (
     <FieldArray name="components">
