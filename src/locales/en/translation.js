@@ -1,4 +1,5 @@
 import enUs from "antd/es/locale/en_US";
+import PageFooter from "../../components/curriculum/PageFooter";
 
 export default {
   signIn: {
@@ -450,6 +451,10 @@ export default {
     addMediaComponent: "Add Media Component",
     addChoiceComponent: "Add Choice Component",
     addPageBreakComponent: "Add Page Break Component",
+  },
+  PageFooter: {
+    pageBreakLine: "Page Break Line",
+    remove: "Remove",
   },
   antd: enUs,
 };

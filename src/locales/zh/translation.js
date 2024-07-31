@@ -440,5 +440,9 @@ export default {
     addChoiceComponent: "添加选择组件",
     addPageBreakComponent: "添加翻页分割组件",
   },
+  pageFooter: {
+    pageBreakLine: "翻页分割线",
+    remove: "移除",
+  },
   antd: zhCN,
 };
