@@ -488,5 +488,13 @@ export default {
     choiceComponent: "Choice Component",
     addOption: "Add Option",
   },
+  text: {
+    narrativeText: "Narrative Text",
+    instructionText: "Instruction Text",
+    referenceText: "Reference Text",
+    textComponent: "Text Component",
+    enterTextContent: "Please enter text content",
+    type: "Type",
+  },
   antd: enUs,
 };

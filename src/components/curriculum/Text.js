@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ReactQuill, { Quill } from "react-quill";
 import { debounce } from "lodash";
+import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
 
@@ -42,6 +43,14 @@ class PlainClipboard extends Clipboard {
 Quill.register("modules/clipboard", PlainClipboard, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
+  const { t } = useTranslation("text");
+
+  const typeLabels = {
+    script: t("narrativeText"),
+    instruction: t("instructionText"),
+    reference: t("referenceText"),
+  };
+
   const types = ["instruction", "script", "reference"];
   const Name = {
     html: `${name}.html`,
@@ -56,15 +65,14 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   function toolbarContainer() {
     return props.readonly
       ? []
-      : // use quill toolbar default value echo type, put current type to first item
-        [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
+      : [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
   }
 
   return (
     <Container
       right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
       icon="icontext-gray"
-      title="文本组件"
+      title={t("textComponent")}
       name={name}
       noPadding
       {...props}
@@ -82,13 +90,10 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
             },
           }}
           defaultValue={value.html}
-          // Debounce trigger that formik on change event
-          // fix typing Chinese always automatically triggers onChange
           onChange={debounce(onChange(Name.html), 1000)}
-          placeholder="请输入文本内容"
+          placeholder={t("enterTextContent")}
         />
       </QuillContainer>
-      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </Container>
   );
 }

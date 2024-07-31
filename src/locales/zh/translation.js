@@ -475,5 +475,13 @@ export default {
     choiceComponent: "选择组件",
     addOption: "添加选项",
   },
+  text: {
+    narrativeText: "叙述文本",
+    instructionText: "提示文本",
+    referenceText: "参考文本",
+    textComponent: "文本组件",
+    enterTextContent: "请输入文本内容",
+    type: "类型",
+  },
   antd: zhCN,
 };
