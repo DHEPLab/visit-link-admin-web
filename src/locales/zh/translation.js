@@ -298,6 +298,15 @@ export default {
       EDC: "已怀孕",
       BIRTH: "已出生",
     },
+    ModuleTopic: {
+      MOTHER_NUTRITION: "母亲营养",
+      BREASTFEEDING: "母乳喂养",
+      BABY_FOOD: "婴儿辅食",
+      INFANT_INJURY_AND_PREVENTION: "婴儿伤病和预防",
+      CAREGIVER_MENTAL_HEALTH: "照料人心理健康",
+      GOVERNMENT_SERVICES: "政府服务",
+      KNOWLEDGE_ATTITUDE_TEST: "知识态度检测",
+    },
   },
 
   curriculum: {

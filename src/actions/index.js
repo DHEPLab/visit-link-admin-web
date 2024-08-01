@@ -1,5 +1,5 @@
 import { cleanQueryParams } from "../utils";
-import i18n from "i18next"; 
+import i18n from "i18next";
 
 export function httpRequestStart(config) {
   return {

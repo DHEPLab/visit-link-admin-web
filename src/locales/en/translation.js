@@ -304,6 +304,15 @@ export default {
       EDC: "Pregnant",
       BIRTH: "Born",
     },
+    ModuleTopic: {
+      MOTHER_NUTRITION: "Maternal nutrition",
+      BREASTFEEDING: "Breastfeeding",
+      BABY_FOOD: "Infant complementary feeding",
+      INFANT_INJURY_AND_PREVENTION: "Infant injury and prevention",
+      CAREGIVER_MENTAL_HEALTH: "Caregiver's mental health",
+      GOVERNMENT_SERVICES: "Government public health services",
+      KNOWLEDGE_ATTITUDE_TEST: "Knowledge and attitude assessment",
+    },
   },
   curriculum: {
     createNewCurriculum: "Create New Curriculum",
@@ -504,5 +513,6 @@ export default {
     jumpToAnotherModuleAndEnd: "Jump to another module and end the current module",
     jumpToAnotherModuleAndContinue: "Jump to another module and return to continue with the current level's content",
   },
+
   antd: enUs,
 };
