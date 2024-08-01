@@ -22,7 +22,7 @@ export default function Container({
   focus,
   onFocus,
 }) {
-    const { t } = useTranslation("container");
+  const { t } = useTranslation("container");
   return (
     <Flex>
       {!readonly && !hideMove && (

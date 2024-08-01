@@ -487,5 +487,10 @@ export default {
   container: {
     remove: "移除",
   },
+  action: {
+    continueCurrentLevel: "继续本层级内容",
+    jumpToAnotherModuleAndEnd: "跳转至其他模块并结束本模块",
+    jumpToAnotherModuleAndContinue: "跳转至其他模块并返回继续本层级的内容",
+  },
   antd: zhCN,
 };

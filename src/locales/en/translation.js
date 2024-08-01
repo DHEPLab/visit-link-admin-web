@@ -499,5 +499,10 @@ export default {
   container: {
     remove: "Remove",
   },
+  action: {
+    continueCurrentLevel: "Continue with the current level's content",
+    jumpToAnotherModuleAndEnd: "Jump to another module and end the current module",
+    jumpToAnotherModuleAndContinue: "Jump to another module and return to continue with the current level's content",
+  },
   antd: enUs,
 };
