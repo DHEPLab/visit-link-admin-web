@@ -48,7 +48,7 @@ export default {
     },
     babies: {
         babyManagement: "Baby Management",
-        batchNewBabies: "Batch New Baby",
+        batchNewBabies: "Batch New Babies",
         newBaby: "New Baby",
         approved: "Approved",
         unreviewed: "Unreviewed",
@@ -92,7 +92,7 @@ export default {
         modifyBabyTitle: "Are you sure to approve the application to modify baby information?",
         approveModifyTip:
             "Please review the baby account information modified by the CHW. Once the request is approved, the baby's account information will be updated.",
-        batchNewBabiesTitle: "Are you sure to approve the batch new baby",
+        batchNewBabiesTitle: "Are you sure to approve the batch new babies",
         batchNewBabiesTip:
             "Please verify the information submitted by the CHW for the new baby account and set the baby ID to approve the account creation request. Once the request is approved, the baby ID cannot be changed.",
         id: "Baby ID",
@@ -292,7 +292,7 @@ export default {
             modifyBabyTitle: "Are you sure to approve the application to modify baby information?",
             approveModifyTip:
                 "Please review the baby account information modified by the CHW. Once the request is approved, the baby's account information will be updated.",
-            batchNewBabiesTitle: "Are you sure to approve the batch new baby",
+            batchNewBabiesTitle: "Are you sure to approve the batch new babies",
             batchNewBabiesTip:
                 "Please verify the information submitted by the CHW for the new baby account and set the baby ID to approve the account creation request. Once the request is approved, the baby ID cannot be changed.",
             id: "Baby ID",
