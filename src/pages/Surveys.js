@@ -1,23 +1,25 @@
 import React from "react";
 import { Button, Space } from "antd";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { WithPage, ContentHeader, ZebraTable, StatusTag } from "../components/*";
 
 function Surveys({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
+  const { t } = useTranslation("surveys");
 
   return (
     <>
-      <ContentHeader title="问卷管理">
+      <ContentHeader title={t("surveyManagement")}>
         <Space size="large">
           {/* <SearchInput
             onChange={(e) => onChangeSearch("search", e.target.value)}
             className="master"
-            placeholder="请输入问卷名称搜索"
+            placeholder={t("searchSurveyPlaceholder")}
           /> */}
           <Button type="primary" onClick={() => history.push("/surveys/create")}>
-            创建新问卷
+            {t("createNewSurvey")}
           </Button>
         </Space>
       </ContentHeader>
@@ -35,16 +37,16 @@ function Surveys({ loadData, onChangeSearch, ...props }) {
         }}
         columns={[
           {
-            title: "问卷状态",
+            title: t("surveyStatus"),
             dataIndex: "published",
             width: 120,
             align: "center",
             render: (h) => <StatusTag value={h} />,
           },
           {
-            title: "问卷名称",
+            title: t("surveyName"),
             dataIndex: "name",
-          }
+          },
         ]}
       />
     </>

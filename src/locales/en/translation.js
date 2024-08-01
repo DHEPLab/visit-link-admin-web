@@ -513,6 +513,34 @@ export default {
     jumpToAnotherModuleAndEnd: "Jump to another module and end the current module",
     jumpToAnotherModuleAndContinue: "Jump to another module and return to continue with the current level's content",
   },
-
+  survey: {
+    createNewSurvey: "Create New Survey",
+    questionOrChoiceCannotBeEmpty: "The question or choice cannot be empty",
+    atLeastOneQuestion: "Please add at least one question",
+    unsavedChangesWarning:
+      "The current page has unsaved or unsubmitted content. If you leave, you will lose the edited content. Are you sure you want to leave?",
+    surveyManagement: "Survey Management",
+    deleteSurvey: "Delete Survey",
+    deleteSurveyWarning: "After deletion, the survey content cannot be recovered. Do you want to continue?",
+    editSurvey: "Edit Survey",
+    saveToDraft: "Save to draft",
+    saveAndPublish: "Save and Publish",
+    unpublishedDraft: "This survey has an unpublished draft:",
+    surveyInformation: "Survey Information",
+    surveyName: "Survey Name",
+    enterSurveyName: "Please enter survey name, no more than 40 characters",
+    surveyContent: "Survey Content",
+  },
+  surveys: {
+    surveyManagement: "Survey Management",
+    searchSurveyPlaceholder: "Search by survey name",
+    createNewSurvey: "Create New Survey",
+    surveyStatus: "Survey Status",
+    surveyName: "Survey Name",
+  },
+  statusTag: {
+    published: "Published",
+    draft: "Draft",
+  },
   antd: enUs,
 };

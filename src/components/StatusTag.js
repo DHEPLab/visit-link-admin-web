@@ -1,11 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
-export default function StatusTag({ value, trueText = "已发布", falseText = "草稿" }) {
+export default function StatusTag({ value }) {
+  const { t } = useTranslation("statusTag");
+
   if (value) {
-    return <TrueContainer>{trueText}</TrueContainer>;
+    return <TrueContainer>{t("published")}</TrueContainer>;
   }
-  return <FalseContainer>{falseText}</FalseContainer>;
+  return <FalseContainer>{t("draft")}</FalseContainer>;
 }
 
 const TrueContainer = styled.div`
