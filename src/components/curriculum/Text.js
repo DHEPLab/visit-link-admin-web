@@ -17,12 +17,6 @@ const colors = {
   reference: "#6a2c70",
 };
 
-const typeLabels = {
-  script: "叙述文本",
-  instruction: "提示文本",
-  reference: "参考文本",
-};
-
 // https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
 const Clipboard = Quill.import("modules/clipboard");
 const Delta = Quill.import("delta");
@@ -46,9 +40,9 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   const { t } = useTranslation("text");
 
   const typeLabels = {
-    script: t("narrativeText"),
-    instruction: t("instructionText"),
-    reference: t("referenceText"),
+    script: t("script"),
+    instruction: t("instruction"),
+    reference: t("reference"),
   };
 
   const types = ["instruction", "script", "reference"];
@@ -77,7 +71,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
       noPadding
       {...props}
     >
-      <QuillContainer className="text-editor" readonly={props.readonly}>
+      <QuillContainer className="text-editor" readonly={props.readonly} typeLabels={typeLabels} colors={colors} t={t}>
         <ReactQuill
           readOnly={props.readonly}
           theme="snow"
@@ -120,22 +114,22 @@ const QuillContainer = styled.div`
 
   .ql-picker.ql-type .ql-picker-item::before,
   .ql-picker.ql-type .ql-picker-label::before {
-    content: "Type";
+    content: "${(props) => props.t("type")}";
   }
 
   .ql-picker.ql-type [data-value="script"]::before {
-    content: "${typeLabels["script"]}";
-    color: ${colors["script"]};
+    content: "${(props) => props.typeLabels.script}";
+    color: ${(props) => props.colors.script};
   }
 
   .ql-picker.ql-type [data-value="instruction"]::before {
-    content: "${typeLabels["instruction"]}";
-    color: ${colors["instruction"]};
+    content: "${(props) => props.typeLabels.instruction}";
+    color: ${(props) => props.colors.instruction};
   }
 
   .ql-picker.ql-type [data-value="reference"]::before {
-    content: "${typeLabels["reference"]}";
-    color: ${colors["reference"]};
+    content: "${(props) => props.typeLabels.reference}";
+    color: ${(props) => props.colors.reference};
   }
 
   .ql-container.ql-snow,
