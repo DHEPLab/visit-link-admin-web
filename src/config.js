@@ -85,10 +85,10 @@ const urlInfo = {
     {
       url: "/admin/carers/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t('deleteSuccessfully', { ns: 'baby' }),
       context: "",
       endsWith: "",
-    }, //删除看护人
+    }, //删除看护人 
     {
       url: "/admin/curriculums/",
       isequals: false,
@@ -106,7 +106,7 @@ const urlInfo = {
     {
       url: "/admin/babies/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t('deleteSuccessfully', { ns: 'baby' }),
       context: "",
       endsWith: "curriculum",
     }, //大纲分配宝宝列表删除宝宝
