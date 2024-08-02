@@ -485,7 +485,7 @@ export default {
     textQuestion: "Text Question",
     singleChoiceQuestion: "Single Choice Question",
     multipleChoiceQuestion: "Multiple Choice Question",
-    enterNarrativeText: "Please enter narrative text content",
+    enterText: "Please enter text content",
     required: "Required!",
   },
   surveyComponents: {

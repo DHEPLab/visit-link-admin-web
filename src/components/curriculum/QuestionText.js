@@ -41,7 +41,7 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
       ) : (
         <Text
           defaultValue={value.title}
-          placeholder={t("enterNarrativeText")}
+          placeholder={t("enterText")}
           onBlur={(e) => TextChange(`${name}.title`, e.target.value)}
           bordered={false}
         />
