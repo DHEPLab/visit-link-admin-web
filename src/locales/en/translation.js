@@ -104,7 +104,8 @@ export default {
     reasonOfUncompleteOrExpired: "Reason of Uncomplete/ Expired",
     deleteMasterWarning:
       "The primary caregiver cannot be deleted. Please replace the primary caregiver before performing this operation.",
-    changeMasterConfirm: "Setting the current caregiver as the primary caregiver will replace the original primary caregiver. Do you want to continue?",
+    changeMasterConfirm:
+      "Setting the current caregiver as the primary caregiver will replace the original primary caregiver. Do you want to continue?",
     proceed: "Proceed",
     confirm: "Confirm",
     caregiverList: "Caregiver List",
@@ -145,7 +146,7 @@ export default {
     assignCHW: "Assign CHW",
     reviewType: "Review Type",
     modifyDate: "Modify Date",
-    importBabyTemplate: "/static/template/import_baby_en.xlsx"
+    importBabyTemplate: "/static/template/import_baby_en.xlsx",
   },
   myAccount: {
     myAccount: "My Account",
@@ -545,12 +546,12 @@ export default {
   },
   config: {
     draftSaveSuccessfully: "Draft Save Successfully",
-      addSuccessfully: "Add Successfully",
-      publishSuccessfully: "Publish Successfully",
-      curriculumPublishedMessage: "The curriculum has been published. You can add babies and view it on the app.",
-      modulePublishedMessage: "The module has been published and can be associated with it during session editing.",
-      passwordChangedSuccessfully: "Password Changed Successfully",
-      deleteSuccessfully: "Delete Successfully",
+    addSuccessfully: "Add Successfully",
+    publishSuccessfully: "Publish Successfully",
+    curriculumPublishedMessage: "The curriculum has been published. You can add babies and view it on the app.",
+    modulePublishedMessage: "The module has been published and can be associated with it during session editing.",
+    passwordChangedSuccessfully: "Password Changed Successfully",
+    deleteSuccessfully: "Delete Successfully",
   },
   antd: enUs,
 };

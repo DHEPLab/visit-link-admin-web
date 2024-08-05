@@ -19,7 +19,7 @@ export const BabyStage = {
 
 export const CurriculumBabyStage = {
   EDC: i18n.t('CurriculumBabyStage.EDC', { ns: "enum" }),
-  BIRTH: i18n.t,
+  BIRTH: i18n.t('CurriculumBabyStage.BIRTH', { ns: "enum" }),
 };
 
 export const FeedingPattern = {
