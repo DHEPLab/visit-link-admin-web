@@ -425,8 +425,8 @@ function Lessons({
             width: 400,
             render: (_, record) => {
               return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
-                "common.unit.day"
-              )} - ${record.endOfApplicableDays}${t("common.unit.day")}`;
+                "common:unit:day"
+              )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
             },
           },
           {
@@ -666,8 +666,8 @@ function Schedules({
             width: 400,
             render: (_, record) => {
               return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
-                "common.unit.day"
-              )} - ${record.endOfApplicableDays}${t("common.unit.day")}`;
+                "common:unit:day"
+              )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
             },
           },
           {
