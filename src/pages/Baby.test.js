@@ -76,5 +76,5 @@ it("should render", () => {
   const { getByText, getByLabelText, getByTestId } = render(<Baby />);
   expect(getByText(/eeeee333/)).toBeInTheDocument();
   fireEvent.click(getByTestId("add-carer"));
-  expect(getByLabelText(/relatives/)).toBeInTheDocument();
+  expect(getByLabelText(/亲属关系/)).toBeInTheDocument();
 });

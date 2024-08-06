@@ -1,4 +1,4 @@
-import enUs from "antd/es/locale/en_US";
+import enUs from "antd/lib/locale/en_US";
 
 export default {
   signIn: {

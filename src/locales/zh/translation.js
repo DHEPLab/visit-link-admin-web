@@ -1,4 +1,4 @@
-import zhCN from "antd/es/locale/zh_CN";
+import zhCN from "antd/lib/locale/zh_CN";
 
 export default {
   signIn: {
