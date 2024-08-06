@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect,  } from "react";
 import Axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
@@ -191,10 +191,24 @@ export default function Curriculum() {
           <ReadonlyForm value={curriculum} />
         ) : (
           <Form data-testid="basic-form" form={form} onFinish={onFinish}>
-            <Form.Item label={t("curriculumName")} name="name" rules={[...Rules.Required, { max: 20 }]}>
-              <Input placeholder={t("enterCurriculumName")} />
+            <Form.Item
+              label={t("curriculumName")}
+              name="name"
+              rules={[
+                { required: true, message: t("curriculum:enterCurriculumName") },
+                { max: 20, message: t("curriculum:curriculumNameTooLong") },
+              ]}
+            >
+              <Input placeholder={t("enterCurriculumName")} style={{ width: "500px" }} />
             </Form.Item>
-            <Form.Item label={t("curriculumDescription")} name="description" rules={[...Rules.Required, { max: 50 }]}>
+            <Form.Item
+              label={t("curriculumDescription")}
+              name="description"
+              rules={[
+                { required: true, message: t("curriculum:enterCurriculumDescription") },
+                { max: 50, message: t("curriculum:curriculumDescriptionTooLong") },
+              ]}
+            >
               <Input.TextArea rows={5} placeholder={t("enterCurriculumDescription")} />
             </Form.Item>
           </Form>
@@ -356,45 +370,44 @@ function Lessons({
         <Form.Item
           label={t("sessionNumber")}
           name="number"
-          rules={[
-            ...Rules.Required,
-            () => ({
-              validator(_, number) {
-                if (
-                  !number ||
-                  CurriculumUtils.validateLessonNumber(
-                    value,
-                    number,
-                    currentEditIndex === -1 ? null : value[currentEditIndex].number
-                  )
-                ) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(t("sessionNumberDuplicate"));
-              },
-            }),
-          ]}
+          rules={[{ required: true, message: t("curriculum:enterSessionNumber") }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item label={t("sessionName")} name="name" rules={Rules.Required}>
+        <Form.Item
+          label={t("sessionName")}
+          name="name"
+          rules={[{ required: true, message: t("curriculum:enterSessionName") }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label={t("sessionDescription")} name="description" rules={Rules.Required}>
+        <Form.Item
+          label={t("sessionDescription")}
+          name="description"
+          rules={[{ required: true, message: t("curriculum:enterSessionDescription") }]}
+        >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
+        <Form.Item
+          label={t("applicableBaby")}
+          name="stage"
+          rules={[{ required: true, message: t("curriculum:enterApplicableDays") }]}
+        >
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
-        <Form.Item label={t("modulesIncluded")} name="modules" rules={Rules.Required}>
+        <Form.Item
+          label={t("modulesIncluded")}
+          name="modules"
+          rules={[{ required: true, message: t("curriculum:enterModulesIncluded") }]}
+        >
           <Select
             mode="multiple"
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
             loading={!!networks["/admin/modules"]}
-          ></Select>
+          />
         </Form.Item>
         <Form.Item label={t("survey")} name="questionnaire">
           <Select
@@ -402,7 +415,7 @@ function Lessons({
             options={questionnairesOptions}
             onFocus={loadQuestionnairesOptions}
             loading={!!networks["/admin/findAllQuestionnaires"]}
-          ></Select>
+          />
         </Form.Item>
         <Form.Item label={t("textSurvey")} name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
@@ -610,10 +623,18 @@ function Schedules({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item label={t("ruleName")} name="name" rules={Rules.Required}>
+        <Form.Item
+          label={t("ruleName")}
+          name="name"
+          rules={[{ required: true, message: t("curriculum:enterRuleName") }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
+        <Form.Item
+          label={t("applicableBaby")}
+          name="stage"
+          rules={[{ required: true, message: t("curriculum:enterApplicableDays") }]}
+        >
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
@@ -626,8 +647,6 @@ function Schedules({
           }
         >
           {({ getFieldValue, setFieldsValue }) => {
-            // filter lesson options
-            // Only lesson at the same stage are available and schedule range must contain lesson range
             const stage = getFieldValue("stage");
             const startMonths = getFieldValue("startOfApplicableDays");
             const endMonths = getFieldValue("endOfApplicableDays");
@@ -642,7 +661,11 @@ function Schedules({
             );
             setFieldsValue({ lessons: lessonArr });
             return (
-              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={Rules.Required}>
+              <Form.Item
+                label={t("sessionsIncluded")}
+                name="lessons"
+                rules={[{ required: true, message: t("curriculum:enterSessionsIncluded") }]}
+              >
                 <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
               </Form.Item>
             );
@@ -675,13 +698,12 @@ function Schedules({
             dataIndex: "lessons",
             render: renderDomain,
           },
-          scheduleOperation(disabled, handleDelete, openEditModal,t),
+          scheduleOperation(disabled, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
   );
 }
-
 const renderDomain = (h) => h.map((v) => v.label).join("、");
 
 const lessonOperation = (disabled, handleDelete, openEditModal, t) => {

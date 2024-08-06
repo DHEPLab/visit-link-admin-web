@@ -1,4 +1,4 @@
-const Required = [{ required: true }];
+const Required = [{ required: true, message: "This field is required" }];
 
 export default {
   Required,

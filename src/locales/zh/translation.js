@@ -319,12 +319,13 @@ export default {
     unpublishedDraft: "本大纲有1个尚未发布的草稿：",
     editDate: "编辑日期",
     deleteDraft: "删除草稿",
+    deleteDraftWarn: "删除草稿后将无法恢复是否继续？",
     editDraft: "继续编辑",
     curriculumInformation: "大纲基本信息",
     curriculumName: "大纲名称",
-    enterCurriculumName: "请输入大纲名称，限20个汉字",
+    enterCurriculumName: "请输入大纲名称",
     curriculumDescription: "大纲描述",
-    enterCurriculumDescription: "请输入大纲描述，限50个汉字",
+    enterCurriculumDescription: "请输入大纲描述",
     sessions: "课堂列表",
     pleaseNote: "请注意",
     sessionApplicabilityWarning: "1.课堂适用时间不符合已添加匹配规则的时间范围会导致匹配规则内已添加的课堂丢失",
@@ -365,6 +366,8 @@ export default {
     applicableDaysOverlap: "适用天数不能重叠",
     deleteRule: "删除规则",
     deleteRuleConfirmation: "您确定要删除这个规则吗？此操作不可撤销。",
+    atLeastOneMatchingPlan: "至少添加一个匹配计划",
+    atLeastOneSession: "至少添加一个课堂",
   },
   curriculums: {
     curriculumManagement: "大纲管理",
@@ -539,6 +542,26 @@ export default {
     modulePublishedMessage: "模块已发布，可在课堂编辑时关联此模块",
     passwordChangedSuccessfully: "密码修改成功",
     deleteSuccessfully: "删除成功",
+  },
+  validation: {
+    sessionNumber: {
+      required: "Please enter session number",
+    },
+    sessionName: {
+      required: "Please enter session name",
+    },
+    sessionDescription: {
+      required: "Please enter session description",
+    },
+    applicableBabyStage: {
+      required: "Please set applicable baby stage",
+    },
+    applicableDays: {
+      required: "Please enter days",
+    },
+    modulesIncluded: {
+      required: "Please enter module(s) included",
+    },
   },
   antd: zhCN,
 };
