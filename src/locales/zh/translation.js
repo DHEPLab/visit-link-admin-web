@@ -525,7 +525,8 @@ export default {
     unpublishedDraft: "本问卷有1个尚未发布的草稿：",
     surveyInformation: "问卷基本信息",
     surveyName: "问卷名称",
-    enterSurveyName: "请输入问卷名称，限40个字符",
+    enterSurveyName: "请输入问卷名称",
+    enterSurveyNameWithLimit: "请输入问卷名称，限40个字符",
     surveyContent: "问卷内容",
   },
   surveys: {

@@ -181,8 +181,12 @@ export default function Survey() {
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label={t("surveyName")} name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder={t("enterSurveyName")} />
+                <Form.Item
+                  label={t("surveyName")}
+                  name="name"
+                  rules={[{ required: true, message: t("enterSurveyName"), max: 40 }]}
+                >
+                  <Input placeholder={t("enterSurveyNameWithLimit")} />
                 </Form.Item>
               </Form>
             )}

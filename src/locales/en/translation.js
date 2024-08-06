@@ -538,7 +538,8 @@ export default {
     unpublishedDraft: "This survey has an unpublished draft:",
     surveyInformation: "Survey Information",
     surveyName: "Survey Name",
-    enterSurveyName: "Please enter survey name, no more than 40 characters",
+    enterSurveyName: "Please enter survey name",
+    enterSurveyNameWithLimit: "Please enter survey name, no more than 40 characters",
     surveyContent: "Survey Content",
   },
   surveys: {
