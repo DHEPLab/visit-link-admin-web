@@ -1,5 +1,16 @@
 import * as action from "./index";
 
+jest.mock("i18next", () => ({
+  t: (key) => {
+    const translations = {
+      "action:continueCurrentLevel": "结束选项继续本层级内容",
+      "action:jumpToAnotherModuleAndEnd": "跳转至其他模块并结束本内容模块",
+      "action:jumpToAnotherModuleAndContinue": "跳转至其他模块并继续本层级内容",
+    };
+    return translations[key];
+  },
+}));
+
 it("should action type is HTTP_REQUEST_START and clean url query params", () => {
   expect(action.httpRequestStart({ url: "/abc?a=1&b=2" })).toStrictEqual({
     type: "HTTP_REQUEST_START",
