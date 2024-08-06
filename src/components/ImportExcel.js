@@ -12,7 +12,7 @@ import { UploadButton } from "./*";
 const { Step } = Steps;
 
 export default function ImportExcel({ open, refresh, close }) {
-  const { t } = useTranslation(["common", "enum", "baby"]);
+  const { t, i18n } = useTranslation(["common", "enum", "baby"]);
 
   const [spinningLoading, setSpinningLoading] = useState(false);
   const [importData, setImportData] = useState([])
@@ -167,57 +167,58 @@ export default function ImportExcel({ open, refresh, close }) {
   }
 
   async function checkBaby(babiesjsonArray) {
+    const isLanguageZH = i18n.resolvedLanguage === 'zh'
     const babiesArray = babiesjsonArray.map((json, index) => ({ ...toBaby(json), number: (index + 1) }))
     let passArray = []
     let errorArray = []
     babiesArray.forEach(element => {
 
       if (passArray.find(ele => ele.identity === element.identity)) {
-        errorArray.push({ number: element.number, name: element.name, matters: '表内ID重复' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.duplicateId') })
         return;
       }
 
       if (!element.identity) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝ID为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyId') })
         return;
       }
 
       if (!element.name) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝姓名为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyBabyName') })
         return;
       }
 
       if (!element.gender) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝性别为空/格式错误' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidGender') })
         return;
       }
 
       if (!element.stage) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝成长阶段为空/格式错误' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidGrowthStage') })
         return;
       }
 
       if (!element.area) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝地区为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyArea') })
         return;
       }
 
       if (!element.location) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝详细地址为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyLocation') })
         return;
       }
 
       if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
-        errorArray.push({ number: element.number, name: element.name, matters: '至少添加一位主看护人' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyCaregiver') })
         return;
       }
 
-      if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
+      if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
         errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2-10个汉字' })
         return;
       }
 
-      if (element.area.split('/').length !== 4) {
+      if (isLanguageZH && element.area.split('/').length !== 4) {
         errorArray.push({ number: element.number, name: element.name, matters: '所在地区格式错误' })
         return;
       }
@@ -225,57 +226,57 @@ export default function ImportExcel({ open, refresh, close }) {
       if (element.cares.length > 0) {
         const result = element.cares.every(ele => {
           if (!ele.phone || !ele.familyTies) return false
-          if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
-          if (!new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
+          if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
+          if (isLanguageZH && !new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
           return true
         });
         if (!result) {
-          errorArray.push({ number: element.number, name: element.name, matters: '看护人信息不符合规则' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidCaregiver') })
           return;
         }
       }
 
       if (element.stage === "EDC") {
         if (!element.edc) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyEDC') })
           return
         }
 
         if (element.edc.split('-').length !== 3) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期格式错误' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidFormatDueDay') })
           return
         }
 
         element.edc = moment(element.edc).format('YYYY-MM-DD')
 
         if (moment().unix() > moment(element.edc).unix()) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期不能小于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidDueDay') })
           return
         }
         passArray.push(element)
       } else {
 
         if (!element.birthday) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyBirthDay') })
           return
         }
 
         if (element.birthday.split('-').length !== 3) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日格式错误' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidFormatBirthDay') })
           return
         }
 
         element.birthday = moment(element.birthday).format('YYYY-MM-DD')
 
         if (moment().unix() < moment(element.birthday).unix()) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日不能大于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidBirthDay') })
           return
         }
         passArray.push(element)
       }
     });
 
-    Axios.post("/admin/babies/check", passArray).then(res => {
+    Axios.post(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, passArray).then(res => {
       const { data } = res;
       const errresults = [...errorArray, ...(data || [])].sort((a, b) => parseInt(`${a.number}`) - parseInt(`${b.number}`))
       setErrData(errresults)
@@ -329,7 +330,7 @@ export default function ImportExcel({ open, refresh, close }) {
           <Column title={t('babyName')} align="left" dataIndex="name" key="name" />
           <Column title={t('errorItem')} align="left" dataIndex="matters" key="matters" render={(matters) => <span style={{ color: 'red', fontSize: 12 }}>{matters}</span>} />
         </Table>
-        <Result>{t('excel.verifiedDataCount')} {importData.length} {t('unit.item')}, {t('total')}{importData.length + errData.length} {t('unit.item')}</Result>
+        <Result>{t('excel.verifiedDataCount')} {importData.length} {t('unit.item')}, {t('total')} {importData.length + errData.length} {t('unit.item')}</Result>
         <ImportLine>
           <CloseButton type="default" size="middle" onClick={() => close()} >{t('close')}</CloseButton>
           <Button type="primary" style={{ float: 'right', width: 160 }} size="middle" onClick={importDatas} disabled={importData.length === 0} >{t('excel.importData')}</Button>
