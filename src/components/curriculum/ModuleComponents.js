@@ -128,7 +128,8 @@ function stickyScrollListener(offsetTop, onChangeStickyTop) {
 }
 
 const PageButton = styled(Button)`
-  width: 182px;
+  min-width: 200px; 
+  width: auto; 
 `;
 
 const FieldArrayContainer = styled.div`

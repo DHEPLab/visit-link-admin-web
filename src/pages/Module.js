@@ -171,22 +171,46 @@ export default function Module() {
               <ReadonlyForm value={module} />
             ) : (
               <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label={t("moduleName")} name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder={t("enterModuleName")} />
+                <Form.Item
+                  label={t("moduleName")}
+                  name="name"
+                  rules={[
+                    { required: true, message: t("enterModuleName") },
+                    { max: 40, message: t("moduleNameTooLong") },
+                  ]}
+                >
+                  <Input placeholder={t("enterModuleNameWithLimit")} />
                 </Form.Item>
-                <Form.Item label={t("moduleNumber")} name="number" rules={[...Rules.Required, { max: 20 }]}>
-                  <Input placeholder={t("enterModuleNumber")} />
+                <Form.Item
+                  label={t("moduleNumber")}
+                  name="number"
+                  rules={[
+                    { required: true, message: t("enterModuleNumber") },
+                    { max: 20, message: t("moduleNumberTooLong") },
+                  ]}
+                >
+                  <Input placeholder={t("enterModuleNumberWithLimit")} />
                 </Form.Item>
-                <Form.Item label={t("moduleDescription")} name="description" rules={[...Rules.Required, { max: 200 }]}>
-                  <Input.TextArea rows={4} placeholder={t("enterModuleDescription")} />
+                <Form.Item
+                  label={t("moduleDescription")}
+                  name="description"
+                  rules={[
+                    { required: true, message: t("enterModuleDescription") },
+                    { max: 200, message: t("moduleDescriptionTooLong") },
+                  ]}
+                >
+                  <Input.TextArea rows={4} placeholder={t("enterModuleDescriptionWithLimit")} />
                 </Form.Item>
-                <Form.Item label={t("moduleTheme")} name="topic" rules={Rules.Required}>
+                <Form.Item
+                  label={t("moduleTheme")}
+                  name="topic"
+                  rules={[{ required: true, message: t("electModuleTheme") }]}
+                >
                   <SelectEnum name="ModuleTopic" placeholder={t("selectModuleTheme")} />
                 </Form.Item>
               </Form>
             )}
           </Card>
-
           <Card title={t("moduleContent")}>
             <ModuleComponents value={values.components} readonly={readonly} />
           </Card>

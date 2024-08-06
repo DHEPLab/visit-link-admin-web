@@ -199,7 +199,7 @@ export default function Curriculum() {
                 { max: 20, message: t("curriculum:curriculumNameTooLong") },
               ]}
             >
-              <Input placeholder={t("enterCurriculumName")} style={{ width: "500px" }} />
+              <Input placeholder={t("enterCurriculumNameWithLimit")} style={{ width: "500px" }} />
             </Form.Item>
             <Form.Item
               label={t("curriculumDescription")}
@@ -209,7 +209,7 @@ export default function Curriculum() {
                 { max: 50, message: t("curriculum:curriculumDescriptionTooLong") },
               ]}
             >
-              <Input.TextArea rows={5} placeholder={t("enterCurriculumDescription")} />
+              <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} />
             </Form.Item>
           </Form>
         )}
