@@ -8,7 +8,7 @@ export default function DeleteConfirmModal(props) {
   const { t } = useTranslation(["common"]);
   const {
     title = t('delete'),
-    content = `${[t('confirm'), t('delete')].join(t('workBreak'))}?`,
+    content = `${t('confirm')} ${t('wordBreak')} ${t('delete')}?`,
     onConfirm,
     children,
     okText = t('delete'),

@@ -188,7 +188,7 @@ export default {
   user: {
     accountManagement: "Account Management",
     accountInformation: "Account Information",
-    aeleteAccount: "Delete Account",
+    deleteAccount: "Delete Account",
     chw: "CHW",
     supervisor: "Supervisor",
     username: "Username",
@@ -396,8 +396,14 @@ export default {
     operation: "Operation",
     deleteRule: "Delete Rule",
     deleteRuleConfirmation: "Are you sure you want to delete this rule? This action cannot be undone.",
-    atLeastOneMatchingPlan: "Please add at least one matching rule",
-    atLeastOneSession: "Please add at least one session",
+    atLeastOneMatchingPlan: "Please add at least one matching rule。",
+    atLeastOneSession: "Please add at least one session。",
+    matchingPlanAtLeastOneSession: "Matching rule {{name}} at lease contain a session",
+    lessonOperationWarn:
+      "Deleting a session will also result in losing this session from previously added matching rules.",
+    curriculumNameTooLong: "Curriculum Name Too Long no more than 100 characters.",
+    curriculumDescriptionTooLong: "Curriculum Description Too Long no more than 1000 characters.",
+    sessionNumberDuplicate: "Session Number cannot be identical",
   },
   curriculums: {
     curriculumManagement: "Curriculum Management",
@@ -451,6 +457,9 @@ export default {
     atLeastOneComponent: "Please add at least one component",
     unsavedChangesWarning:
       "The current page has unsaved or unsubmitted content. If you leave, you will lose the edited content. Are you sure you want to leave?",
+    moduleNameTooLong: "Module Name Too Long no more than 40 characters.",
+    moduleNumberTooLong: "Module Number Too Long no more than 20 characters.",
+    moduleDescriptionTooLong: "Module Description Too Long no more than 200 characters.",
   },
   modules: {
     moduleManagement: "Module Management",
@@ -487,9 +496,9 @@ export default {
     addTextComponent: "Add Text Component",
     addMediaComponent: "Add Media Component",
     addChoiceComponent: "Add Choice Component",
-    addPageBreakComponent: "Add Page Break Component",
+    addPageBreakComponent: "Add Pagination Divider Line",
   },
-  parseIntageFooter: {
+  pageFooter: {
     pageBreakLine: "Page Break Line",
     remove: "Remove",
   },

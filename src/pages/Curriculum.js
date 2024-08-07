@@ -370,7 +370,24 @@ function Lessons({
         <Form.Item
           label={t("sessionNumber")}
           name="number"
-          rules={[{ required: true, message: t("curriculum:enterSessionNumber") }]}
+          rules={[
+            { required: true, message: t("curriculum:enterSessionNumber") },
+            () => ({
+              validator(_, number) {
+                if (
+                  !number ||
+                  CurriculumUtils.validateLessonNumber(
+                    value,
+                    number,
+                    currentEditIndex === -1 ? null : value[currentEditIndex].number
+                  )
+                ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(t("sessionNumberDuplicate"));
+              },
+            }),
+          ]}
         >
           <Input />
         </Form.Item>
@@ -709,7 +726,16 @@ const renderDomain = (h) => h.map((v) => v.label).join("、");
 const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
   return {
-    title: t("operation"),
+    title: (
+      <>
+        {t("operation")} &nbsp;
+        {!disabled && (
+          <Tooltip title={t("lessonOperationWarn")} placement="left">
+            <InfoCircleFilled style={{ color: "#000" }} />
+          </Tooltip>
+        )}
+      </>
+    ),
     width: 200,
     align: "center",
     render(_, record, index) {

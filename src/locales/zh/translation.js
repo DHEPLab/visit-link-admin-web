@@ -185,7 +185,7 @@ export default {
   user: {
     accountManagement: "账户管理",
     accountInformation: "账户信息",
-    aeleteAccount: "注销账户",
+    deleteAccount: "注销账户",
     chw: "社区工作者",
     supervisor: "负责督导员",
     username: "账户名称",
@@ -387,6 +387,11 @@ export default {
     deleteRuleConfirmation: "您确定要删除这个规则吗？此操作不可撤销。",
     atLeastOneMatchingPlan: "至少添加一个匹配计划",
     atLeastOneSession: "至少添加一个课堂",
+    lessonOperationWarn: "删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失",
+    matchingPlanAtLeastOneSession: "匹配计划{{name}}至少包含一个课堂",
+    curriculumNameTooLong: "大纲名称最多20个字符",
+    curriculumDescriptionTooLong: "大纲描述最多50个字符",
+    sessionNumberDuplicate: "课堂序号不能重复",
   },
   curriculums: {
     curriculumManagement: "大纲管理",
@@ -439,6 +444,9 @@ export default {
     moduleContent: "模块内容",
     atLeastOneComponent: "至少添加一个组件",
     unsavedChangesWarning: "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?",
+    moduleNameTooLong: "模块名称最多40个字符",
+    moduleNumberTooLong: "模块编号最多20个字符",
+    moduleDescriptionTooLong: "模块描述最多200个字符",
   },
   modules: {
     moduleManagement: "模块管理",

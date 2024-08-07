@@ -68,12 +68,12 @@ export default function User() {
           <>
             {roleChw && (
               <Button ghost type="danger" onClick={openCloseChwAccount}>
-                {t('aeleteAccount')}
+                {t('deleteAccount')}
               </Button>
             )}
             {roleSupervisor && (
               <Button ghost type="danger" onClick={openCloseSupervisorAccount}>
-                {t('aeleteAccount')}
+                {t('deleteAccount')}
               </Button>
             )}
           </>

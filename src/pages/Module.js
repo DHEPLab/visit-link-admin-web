@@ -204,7 +204,7 @@ export default function Module() {
                 <Form.Item
                   label={t("moduleTheme")}
                   name="topic"
-                  rules={[{ required: true, message: t("electModuleTheme") }]}
+                  rules={[{ required: true, message: t("selectModuleTheme") }]}
                 >
                   <SelectEnum name="ModuleTopic" placeholder={t("selectModuleTheme")} />
                 </Form.Item>
