@@ -19,7 +19,7 @@ function formatDate(datetime) {
 }
 
 export default function Babies() {
-  const { t } = useTranslation("babies");
+  const { t, i18n } = useTranslation("babies");
   const history = useHistory();
   const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
@@ -30,7 +30,9 @@ export default function Babies() {
   }, [tab, setTab]);
 
   function handleCreateBaby(values) {
-    values.area = values.area.join("/");
+    if (i18n.resolvedLanguage === "zh") {
+      values.area = values.area.join("/");
+    }
     values.birthday = values.birthday && formatDate(values.birthday);
     values.edc = values.edc && formatDate(values.edc);
     Axios.post("/admin/babies", values).then(() => {

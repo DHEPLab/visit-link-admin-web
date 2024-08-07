@@ -7,6 +7,7 @@ import ModalForm from "./ModalForm";
 import Pcas from "../constants/pcas-code.json";
 import Rules from "../constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "../constants/enums";
+import i18n from "../i18n";
 
 export function useMethods() {
   return {
@@ -87,9 +88,17 @@ export default function BabyModalForm({ disableStage, ...props }) {
           }
         }}
       </Form.Item>
-      <Form.Item label={t('area')} name="area" rules={Rules.Required}>
-        <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
-      </Form.Item>
+      {
+        i18n.reloadResources === "zh" ? (
+          <Form.Item label={t('area')} name="area" rules={Rules.Required}>
+            <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
+          </Form.Item>
+        ) : (
+          <Form.Item label={t('area')} name="area" rules={Rules.Required}>
+            <Input />
+          </Form.Item>
+        )
+      }
       <Form.Item label={t('address')} name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
