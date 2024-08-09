@@ -7,7 +7,6 @@ import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
-import { Rules } from "../constants/*";
 import SurveyComponents from "../components/curriculum/SurveyComponents";
 import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components/*";
 import { debounce } from "lodash";

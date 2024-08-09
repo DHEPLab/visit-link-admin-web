@@ -30,13 +30,13 @@ export const FeedingPattern = {
 };
 
 export const FamilyTies = {
-  MOTHER: "妈妈",
-  FATHER: "爸爸",
-  GRANDMOTHER: "奶奶",
-  GRANDMA: "外婆",
-  GRANDFATHER: "爷爷",
-  GRANDPA: "外公",
-  OTHER: "其他",
+  MOTHER: i18n.t('RELATIVES.MOTHER', { ns: "enum" }),
+  FATHER: i18n.t('RELATIVES.FATHER', { ns: "enum" }),
+  GRANDMOTHER: i18n.t('RELATIVES.GRANDMOTHER', { ns: "enum" }),
+  GRANDMA: i18n.t('RELATIVES.GRANDMA', { ns: "enum" }),
+  GRANDFATHER: i18n.t('RELATIVES.GRANDFATHER', { ns: "enum" }),
+  GRANDPA: i18n.t('RELATIVES.GRANDPA', { ns: "enum" }),
+  OTHER: i18n.t('RELATIVES.OTHER', { ns: "enum" }),
 };
 
 export const ModuleTopic = {

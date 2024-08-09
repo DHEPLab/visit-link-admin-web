@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
 import ModuleComponents from "../components/curriculum/ModuleComponents";
-import { Rules } from "../constants/*";
 import { ModuleTopic } from "../constants/enums";
 import { DraftBar, Card, DetailHeader, SelectEnum, StaticField, DeleteConfirmModal } from "../components/*";
 import { moduleFinishActionOptions } from "../actions";
