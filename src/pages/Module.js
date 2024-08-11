@@ -18,7 +18,7 @@ export default function Module() {
   const [readonly, setReadonly] = useState();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { t } = useTranslation("module");
+  const { t,i18n } = useTranslation("module");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
@@ -93,7 +93,7 @@ export default function Module() {
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/modules/${id}`).then(() => {
+    Axios.delete(`/admin/modules/${id}?lang=${i18n.resolvedLanguage}`).then(() => {
       history.goBack();
     });
   }

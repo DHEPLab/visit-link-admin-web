@@ -371,7 +371,7 @@ function Lessons({
           label={t("sessionNumber")}
           name="number"
           rules={[
-            { required: true, message: t("curriculum:enterSessionNumber") },
+            { required: true },
             () => ({
               validator(_, number) {
                 if (
@@ -394,21 +394,21 @@ function Lessons({
         <Form.Item
           label={t("sessionName")}
           name="name"
-          rules={[{ required: true, message: t("curriculum:enterSessionName") }]}
+          rules={[{ required: true}]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           label={t("sessionDescription")}
           name="description"
-          rules={[{ required: true, message: t("curriculum:enterSessionDescription") }]}
+          rules={[{ required: true }]}
         >
           <Input.TextArea />
         </Form.Item>
         <Form.Item
           label={t("applicableBaby")}
           name="stage"
-          rules={[{ required: true, message: t("curriculum:enterApplicableDays") }]}
+          rules={[{ required: true }]}
         >
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
@@ -416,7 +416,7 @@ function Lessons({
         <Form.Item
           label={t("modulesIncluded")}
           name="modules"
-          rules={[{ required: true, message: t("curriculum:enterModulesIncluded") }]}
+          rules={[{ required: true}]}
         >
           <Select
             mode="multiple"
@@ -643,7 +643,7 @@ function Schedules({
         <Form.Item
           label={t("ruleName")}
           name="name"
-          rules={[{ required: true, message: t("curriculum:enterRuleName") }]}
+          rules={[{ required: true}]}
         >
           <Input />
         </Form.Item>
@@ -678,11 +678,7 @@ function Schedules({
             );
             setFieldsValue({ lessons: lessonArr });
             return (
-              <Form.Item
-                label={t("sessionsIncluded")}
-                name="lessons"
-                rules={[{ required: true, message: t("curriculum:enterSessionsIncluded") }]}
-              >
+              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={[{ required: true }]}>
                 <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
               </Form.Item>
             );

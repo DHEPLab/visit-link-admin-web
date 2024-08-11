@@ -171,7 +171,7 @@ function CurriculumBabiesModal({
             width: 120,
           },
           {
-            title: t("contactPhone"),
+            title: t("Operation"),
             dataIndex: "id",
             width: 100,
             align: "center",
