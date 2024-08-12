@@ -15,7 +15,7 @@ export default function Survey() {
   const { id } = useParams();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  const { t } = useTranslation("survey");
+  const { t, i18n } = useTranslation("survey");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
@@ -56,7 +56,7 @@ export default function Survey() {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(422, setStickyTop);
     }
-  }, [id, form, readonly, dispatch]);
+  }, [id, form, readonly, dispatch, i18n]);
 
   function onSubmitFormik(values) {
     setQuestions(values.questions);
