@@ -414,6 +414,7 @@ export default {
     wrongOldPassword: "旧密码错误",
     userExists: "账户名称: {{login}} 已经存在",
     idExists: "ID: {{id}} 已经存在",
+    noPrimaryCaregiver: "请至少设置一个主看护人",
   },
   module: {
     createNewModule: "创建新模块",

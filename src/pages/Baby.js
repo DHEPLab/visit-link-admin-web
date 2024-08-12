@@ -251,6 +251,7 @@ export default function Baby() {
       <Visits babyId={id} />
 
       <BabyModalForm
+        width={650}
         title={t('modifyBaby')}
         visible={visible}
         onCancel={closeModal}
@@ -525,6 +526,7 @@ function Carers({ babyId, deleted }) {
       }
     >
       <ModalForm
+        width={650}
         labelWidth={120}
         title={carer.id ? t('editCaregiver') : t('newCaregiver')}
         initialValues={carer}
