@@ -107,7 +107,7 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                           name={`${name}.options.${i}.label`}
                           validate={(value) => (value && `${value}`.trim() ? "" : t("required"))}
                           defaultValue={e.label}
-                          placeholder={t("pleaseEnter")}
+                          placeholder={t("pleaseEnterContent")}
                           style={{ width: 360 }}
                           as={Input}
                         />

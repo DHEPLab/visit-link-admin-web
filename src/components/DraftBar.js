@@ -12,7 +12,7 @@ export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt
     <Container>
       <Title>{title}</Title>
       <Flex>
-        <Label> {t("editData")}：</Label>
+        <Label> {t("editDate")}：</Label>
         <Date>{moment(lastModifiedDraftAt).format("YYYY/MM/DD")}</Date>
         <Space size="large">
           <DeleteConfirmModal title={t("deleteDraft")} content={t("deleteDraftWarn")} onConfirm={onRemove}>

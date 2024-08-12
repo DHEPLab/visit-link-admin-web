@@ -1,6 +1,10 @@
 import i18n from "../i18n";
 
-const Required = [{ required: true }];
+const Required = [{
+    required: true,
+    message: ({ label }) => `${label} is required`,
+  },
+];
 
 export default {
   Required,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
@@ -194,20 +194,14 @@ export default function Curriculum() {
             <Form.Item
               label={t("curriculumName")}
               name="name"
-              rules={[
-                { required: true, message: t("curriculum:enterCurriculumName") },
-                { max: 20, message: t("curriculum:curriculumNameTooLong") },
-              ]}
+              rules={[...Rules.Required, { max: 100, message: t("curriculum:curriculumNameTooLong") }]}
             >
               <Input placeholder={t("enterCurriculumNameWithLimit")} style={{ width: "500px" }} />
             </Form.Item>
             <Form.Item
               label={t("curriculumDescription")}
               name="description"
-              rules={[
-                { required: true, message: t("curriculum:enterCurriculumDescription") },
-                { max: 50, message: t("curriculum:curriculumDescriptionTooLong") },
-              ]}
+              rules={[...Rules.Required, { max: 1000, message: t("curriculum:curriculumDescriptionTooLong") }]}
             >
               <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} />
             </Form.Item>
@@ -371,7 +365,7 @@ function Lessons({
           label={t("sessionNumber")}
           name="number"
           rules={[
-            { required: true },
+            ...Rules.Required,
             () => ({
               validator(_, number) {
                 if (
@@ -391,33 +385,17 @@ function Lessons({
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          label={t("sessionName")}
-          name="name"
-          rules={[{ required: true}]}
-        >
+        <Form.Item label={t("sessionName")} name="name" rules={[...Rules.Required]}>
           <Input />
         </Form.Item>
-        <Form.Item
-          label={t("sessionDescription")}
-          name="description"
-          rules={[{ required: true }]}
-        >
+        <Form.Item label={t("sessionDescription")} name="description" rules={[...Rules.Required]}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item
-          label={t("applicableBaby")}
-          name="stage"
-          rules={[{ required: true }]}
-        >
+        <Form.Item label={t("applicableBaby")} name="stage" rules={[...Rules.Required]}>
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
-        <Form.Item
-          label={t("modulesIncluded")}
-          name="modules"
-          rules={[{ required: true}]}
-        >
+        <Form.Item label={t("modulesIncluded")} name="modules" rules={[...Rules.Required]}>
           <Select
             mode="multiple"
             labelInValue
@@ -640,11 +618,7 @@ function Schedules({
         onCancel={closeModal}
         onFinish={onFinish}
       >
-        <Form.Item
-          label={t("ruleName")}
-          name="name"
-          rules={[{ required: true}]}
-        >
+        <Form.Item label={t("ruleName")} name="name" rules={[...Rules.Required]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -678,7 +652,7 @@ function Schedules({
             );
             setFieldsValue({ lessons: lessonArr });
             return (
-              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={[{ required: true }]}>
+              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={[...Rules.Required]}>
                 <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
               </Form.Item>
             );

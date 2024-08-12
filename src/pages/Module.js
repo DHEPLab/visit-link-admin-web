@@ -11,6 +11,7 @@ import ModuleComponents from "../components/curriculum/ModuleComponents";
 import { ModuleTopic } from "../constants/enums";
 import { DraftBar, Card, DetailHeader, SelectEnum, StaticField, DeleteConfirmModal } from "../components/*";
 import { moduleFinishActionOptions } from "../actions";
+import Rules from "../constants/rules";
 
 export default function Module() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ export default function Module() {
   const [readonly, setReadonly] = useState();
   const history = useHistory();
   const dispatch = useDispatch();
-  const { t,i18n } = useTranslation("module");
+  const { t, i18n } = useTranslation("module");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
@@ -173,37 +174,28 @@ export default function Module() {
                 <Form.Item
                   label={t("moduleName")}
                   name="name"
-                  rules={[
-                    { required: true, message: t("enterModuleName") },
-                    { max: 40, message: t("moduleNameTooLong") },
-                  ]}
+                  rules={[...Rules.Required, { max: 40, message: t("moduleNameTooLong") }]}
                 >
                   <Input placeholder={t("enterModuleNameWithLimit")} />
                 </Form.Item>
                 <Form.Item
                   label={t("moduleNumber")}
                   name="number"
-                  rules={[
-                    { required: true, message: t("enterModuleNumber") },
-                    { max: 20, message: t("moduleNumberTooLong") },
-                  ]}
+                  rules={[...Rules.Required, { max: 20, message: t("moduleNumberTooLong") }]}
                 >
                   <Input placeholder={t("enterModuleNumberWithLimit")} />
                 </Form.Item>
                 <Form.Item
                   label={t("moduleDescription")}
                   name="description"
-                  rules={[
-                    { required: true, message: t("enterModuleDescription") },
-                    { max: 200, message: t("moduleDescriptionTooLong") },
-                  ]}
+                  rules={[...Rules.Required, { max: 200, message: t("moduleDescriptionTooLong") }]}
                 >
                   <Input.TextArea rows={4} placeholder={t("enterModuleDescriptionWithLimit")} />
                 </Form.Item>
                 <Form.Item
                   label={t("moduleTheme")}
                   name="topic"
-                  rules={[{ required: true, message: t("selectModuleTheme") }]}
+                  rules={[...Rules.Required, { message: t("selectModuleTheme") }]}
                 >
                   <SelectEnum name="ModuleTopic" placeholder={t("selectModuleTheme")} />
                 </Form.Item>

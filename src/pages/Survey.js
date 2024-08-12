@@ -183,9 +183,9 @@ export default function Survey() {
                 <Form.Item
                   label={t("surveyName")}
                   name="name"
-                  rules={[{ required: true, message: t("enterSurveyName"), max: 40 }]}
+                  rules={[{ required: true, message: t("enterSurveyNameWithLimit"), max: 40 }]}
                 >
-                  <Input placeholder={t("enterSurveyNameWithLimit")} />
+                  <Input placeholder={t("enterSurveyName")} />
                 </Form.Item>
               </Form>
             )}
