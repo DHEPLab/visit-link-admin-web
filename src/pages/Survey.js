@@ -43,7 +43,7 @@ export default function Survey() {
     if (!id) {
       setQuestions([Factory.createText()]);
     } else {
-      Axios.get(`/admin/questionnaires/${id}?lang=${i18n.resolvedLanguage}`).then(({ data, headers }) => {
+      Axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
@@ -105,7 +105,7 @@ export default function Survey() {
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/questionnaires/${id}`).then(() => {
+    Axios.delete(`/admin/questionnaires/${id}?lang=${i18n.resolvedLanguage}`).then(() => {
       history.goBack();
     });
   }
