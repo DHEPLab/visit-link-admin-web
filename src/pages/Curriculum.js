@@ -458,6 +458,16 @@ function Lessons({
 function ApplicableDays({ value, currentEditValue }) {
   const { t } = useTranslation("curriculum");
 
+  const startDateRequiredRule = {
+    required: true,
+    message: t("startDateRequired")
+  };
+
+  const endDateRequiredRule = {
+    required: true,
+    message: t("endDateRequired")
+  };
+
   return (
     <ApplicableDaysContainer>
       <Form.Item noStyle shouldUpdate={(pre, cur) => pre.stage !== cur.stage}>
@@ -469,7 +479,7 @@ function ApplicableDays({ value, currentEditValue }) {
                 labelCol={{ span: 0 }}
                 name="startOfApplicableDays"
                 rules={[
-                  ...Rules.Required,
+                  startDateRequiredRule,
                   ({ getFieldValue }) => ({
                     validator(_, startOfApplicableDays) {
                       const stage = getFieldValue("stage");
@@ -505,7 +515,7 @@ function ApplicableDays({ value, currentEditValue }) {
                 labelCol={{ span: 0 }}
                 name="endOfApplicableDays"
                 rules={[
-                  ...Rules.Required,
+                  endDateRequiredRule,
                   ({ getFieldValue }) => ({
                     validator(_, endOfApplicableDays) {
                       if (
@@ -553,7 +563,6 @@ function ApplicableDays({ value, currentEditValue }) {
     </ApplicableDaysContainer>
   );
 }
-
 const EndOfApplicableDaysFormItem = styled(Form.Item)`
   .ant-form-item-explain,
   .ant-form-item-extra {

@@ -385,6 +385,8 @@ export default {
     curriculumNameTooLong: "大纲名称最多20个字符",
     curriculumDescriptionTooLong: "大纲描述最多50个字符",
     sessionNumberDuplicate: "课堂序号不能重复",
+    startDateRequired: "请输入适用天数!",
+    endDateRequired: "请输入适用天数!",
   },
   curriculums: {
     curriculumManagement: "大纲管理",

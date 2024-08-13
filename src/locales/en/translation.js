@@ -397,6 +397,8 @@ export default {
     curriculumNameTooLong: "Curriculum Name no more than 100 characters.",
     curriculumDescriptionTooLong: "Curriculum Description no more than 1000 characters.",
     sessionNumberDuplicate: "Session Number cannot be identical",
+    startDateRequired: "Start Date is required!",
+    endDateRequired: "End Date is required!",
   },
   curriculums: {
     curriculumManagement: "Curriculum Management",
