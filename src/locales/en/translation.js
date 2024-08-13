@@ -394,8 +394,8 @@ export default {
     matchingPlanAtLeastOneSession: "Matching rule {{name}} at lease contain a session.",
     lessonOperationWarn:
       "Deleting a session will also result in losing this session from previously added matching rules.",
-    curriculumNameTooLong: "Curriculum Name Too Long no more than 100 characters.",
-    curriculumDescriptionTooLong: "Curriculum Description Too Long no more than 1000 characters.",
+    curriculumNameTooLong: "Curriculum Name no more than 100 characters.",
+    curriculumDescriptionTooLong: "Curriculum Description no more than 1000 characters.",
     sessionNumberDuplicate: "Session Number cannot be identical",
   },
   curriculums: {
@@ -448,9 +448,9 @@ export default {
     atLeastOneComponent: "Please add at least one component",
     unsavedChangesWarning:
       "The current page has unsaved or unsubmitted content. If you leave, you will lose the edited content. Are you sure you want to leave?",
-    moduleNameTooLong: "Module Name Too Long no more than 40 characters.",
-    moduleNumberTooLong: "Module Number Too Long no more than 20 characters.",
-    moduleDescriptionTooLong: "Module Description Too Long no more than 200 characters.",
+    moduleNameTooLong: "Module Name no more than 40 characters.",
+    moduleNumberTooLong: "Module Number no more than 20 characters.",
+    moduleDescriptionTooLong: "Module Description no more than 200 characters.",
   },
   modules: {
     moduleManagement: "Module Management",
@@ -556,7 +556,7 @@ export default {
     surveyInformation: "Survey Information",
     surveyName: "Survey Name",
     enterSurveyName: "Please enter survey name",
-    enterSurveyNameWithLimit: "Please enter survey name, no more than 40 characters",
+    enterSurveyNameWithLimit: "Survey Name no more than 40 characters",
     surveyContent: "Survey Content",
   },
   surveys: {

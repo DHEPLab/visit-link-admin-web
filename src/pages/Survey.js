@@ -10,6 +10,7 @@ import Factory from "../components/curriculum/factory";
 import SurveyComponents from "../components/curriculum/SurveyComponents";
 import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components/*";
 import { debounce } from "lodash";
+import Rules from "../constants/rules";
 
 export default function Survey() {
   const { id } = useParams();
@@ -179,11 +180,16 @@ export default function Survey() {
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+              <Form
+                data-testid="basic-form"
+                form={form}
+                onFinish={onSubmit}
+                validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+              >
                 <Form.Item
                   label={t("surveyName")}
                   name="name"
-                  rules={[{ required: true, message: t("enterSurveyNameWithLimit"), max: 40 }]}
+                  rules={[...Rules.Required, { message: t("enterSurveyNameWithLimit"), max: 40 }]}
                 >
                   <Input placeholder={t("enterSurveyName")} />
                 </Form.Item>

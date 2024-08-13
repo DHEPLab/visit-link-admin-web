@@ -190,7 +190,12 @@ export default function Curriculum() {
         {readonly ? (
           <ReadonlyForm value={curriculum} />
         ) : (
-          <Form data-testid="basic-form" form={form} onFinish={onFinish}>
+          <Form
+            data-testid="basic-form"
+            form={form}
+            onFinish={onFinish}
+            validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+          >
             <Form.Item
               label={t("curriculumName")}
               name="name"
@@ -360,6 +365,7 @@ function Lessons({
         initialValues={currentEditValue}
         onCancel={closeModal}
         onFinish={onFinish}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
       >
         <Form.Item
           label={t("sessionNumber")}
@@ -385,17 +391,17 @@ function Lessons({
         >
           <Input />
         </Form.Item>
-        <Form.Item label={t("sessionName")} name="name" rules={[...Rules.Required]}>
+        <Form.Item label={t("sessionName")} name="name" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label={t("sessionDescription")} name="description" rules={[...Rules.Required]}>
+        <Form.Item label={t("sessionDescription")} name="description" rules={Rules.Required}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label={t("applicableBaby")} name="stage" rules={[...Rules.Required]}>
+        <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
-        <Form.Item label={t("modulesIncluded")} name="modules" rules={[...Rules.Required]}>
+        <Form.Item label={t("modulesIncluded")} name="modules" rules={Rules.Required}>
           <Select
             mode="multiple"
             labelInValue
@@ -617,6 +623,7 @@ function Schedules({
         visible={visible}
         onCancel={closeModal}
         onFinish={onFinish}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <Form.Item label={t("ruleName")} name="name" rules={[...Rules.Required]}>
           <Input />
@@ -624,7 +631,7 @@ function Schedules({
         <Form.Item
           label={t("applicableBaby")}
           name="stage"
-          rules={[{ required: true, message: t("curriculum:enterApplicableDays") }]}
+          rules={Rules.Required}
         >
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>

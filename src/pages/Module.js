@@ -170,7 +170,12 @@ export default function Module() {
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+              <Form
+                data-testid="basic-form"
+                form={form}
+                onFinish={onSubmit}
+                validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+              >
                 <Form.Item
                   label={t("moduleName")}
                   name="name"
