@@ -276,8 +276,8 @@ export default {
     cancel: "Cancel",
     total: "Total",
     close: "Close",
-    row: "row",
-    babyName: "name",
+    row: "Row",
+    babyName: "Name",
     errorItem: "Error Item",
     searchInputByNameIDAreaPlaceholder: "Search by CHW Name/ID/Area",
     /* eslint-disable no-template-curly-in-string */
@@ -307,8 +307,8 @@ export default {
       BIRTH: "Birth",
     },
     AssistedFood: {
-      TRUE: "已添加",
-      FALSE: "未添加",
+      TRUE: "Add",
+      FALSE: "No Add",
     },
     RELATIVES: {
       MOTHER: "Mother",
