@@ -206,7 +206,7 @@ export default function Curriculum() {
             <Form.Item
               label={t("curriculumDescription")}
               name="description"
-              rules={[...Rules.Required, { max: 1000, message: t("curriculum:curriculumDescriptionTooLong") }]}
+              rules={[...Rules.Required, { max: 1000, message: t("curriculumDescriptionTooLong") }]}
             >
               <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} />
             </Form.Item>

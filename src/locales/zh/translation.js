@@ -387,6 +387,8 @@ export default {
     sessionNumberDuplicate: "课堂序号不能重复",
     startDateRequired: "请输入适用天数!",
     endDateRequired: "请输入适用天数!",
+    applicableBabyGrowthPeriod: "适用宝宝成长时期区间",
+    operation: "操作",
   },
   curriculums: {
     curriculumManagement: "大纲管理",
@@ -543,6 +545,7 @@ export default {
     unpublishedDraft: "本问卷有1个尚未发布的草稿：",
     surveyInformation: "问卷基本信息",
     surveyName: "问卷名称",
+    enterSurveyName: "请输入问卷名称",
     enterSurveyNameWithLimit: "请输入问卷名称，限40个字符",
     surveyContent: "问卷内容",
   },
