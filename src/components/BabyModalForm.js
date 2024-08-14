@@ -89,7 +89,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
         }}
       </Form.Item>
       {
-        i18n.reloadResources === "zh" ? (
+        i18n.resolvedLanguage === "zh" ? (
           <Form.Item label={t('area')} name="area" rules={Rules.Required}>
             <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
           </Form.Item>
