@@ -581,5 +581,7 @@ export default {
     passwordChangedSuccessfully: "Password Changed Successfully",
     deleteSuccessfully: "Delete Successfully",
   },
-  antd: enUs,
+  antd: {
+    local: enUs
+  },
 };

@@ -26,7 +26,7 @@ applyToken(getToken());
 export default function () {
   return (
     <I18nextProvider i18n={i18n}>
-      <ConfigProvider locale={i18n.t('antd')}>
+      <ConfigProvider locale={i18n.t('local', { ns: 'antd', returnObjects: true })}>
         <Provider store={store}>
           <AppContainer>
             <BrowserRouter>
@@ -36,7 +36,7 @@ export default function () {
             </BrowserRouter>
           </AppContainer>
         </Provider>
-       </ConfigProvider>
+      </ConfigProvider>
     </I18nextProvider>
   );
 }

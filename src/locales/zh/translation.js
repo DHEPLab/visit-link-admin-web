@@ -586,5 +586,7 @@ export default {
       required: "Please enter module(s) included",
     },
   },
-  antd: zhCN,
+  antd: {
+    local: zhCN
+  },
 };
