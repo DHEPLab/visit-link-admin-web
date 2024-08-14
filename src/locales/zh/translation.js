@@ -117,7 +117,7 @@ export default {
     no: "否",
     name: "真实姓名",
     babyName: "宝宝姓名",
-    gender: "性别",
+    gender: "宝宝性别",
     growthStage: "成长阶段",
     dueDay: "预产期",
     birthDay: "出生日期",
