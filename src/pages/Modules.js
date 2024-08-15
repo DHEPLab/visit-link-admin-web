@@ -1,66 +1,68 @@
 import React from "react";
-import {Button, Space} from "antd";
-import {useHistory} from "react-router-dom";
+import { Button, Space } from "antd";
+import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import {ModuleTopic} from "../constants/enums";
-import {WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag} from "../components/*";
+import { ModuleTopic } from "../constants/enums";
+import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components/*";
 
-function Components({historyPageState, loadData, onChangeSearch, ...props}) {
-    const history = useHistory();
+function Components({ historyPageState, loadData, onChangeSearch, ...props }) {
+  const { t } = useTranslation("modules");
+  const history = useHistory();
 
-    return (
-        <>
-            <ContentHeader title="模块管理">
-                <Space size="large">
-                    <SearchInput
-                        defaultValue={historyPageState?.search}
-                        onChange={(e) => onChangeSearch("search", e.target.value)}
-                        className="master"
-                        placeholder="请输入模块名称搜索"
-                    />
-                    <Button type="primary" onClick={() => history.push("/modules/create")}>
-                        创建新模块
-                    </Button>
-                </Space>
-            </ContentHeader>
+  return (
+    <>
+      <ContentHeader title={t("moduleManagement")}>
+        <Space size="large">
+          <SearchInput
+            defaultValue={historyPageState?.search}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
+            className="master"
+            placeholder={t("searchModulePlaceholder")}
+          />
+          <Button type="primary" onClick={() => history.push("/modules/create")}>
+            {t("createNewModule")}
+          </Button>
+        </Space>
+      </ContentHeader>
 
-            <ZebraTable
-                {...props}
-                rowKey="id"
-                className="clickable"
-                onRow={(record) => {
-                    return {
-                        onClick: () => {
-                            history.push(`/modules/${record.id}`);
-                        },
-                    };
-                }}
-                columns={[
-                    {
-                        title: "模块状态",
-                        dataIndex: "published",
-                        width: 120,
-                        align: "center",
-                        render: (h) => <StatusTag value={h}/>,
-                    },
-                    {
-                        title: "模块编号",
-                        dataIndex: "number",
-                        width: 150,
-                    },
-                    {
-                        title: "模块名称",
-                        dataIndex: "name",
-                    },
-                    {
-                        title: "模块主题",
-                        dataIndex: "topic",
-                        render: (h) => ModuleTopic[h],
-                    },
-                ]}
-            />
-        </>
-    );
+      <ZebraTable
+        {...props}
+        rowKey="id"
+        className="clickable"
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              history.push(`/modules/${record.id}`);
+            },
+          };
+        }}
+        columns={[
+          {
+            title: t("moduleStatus"),
+            dataIndex: "published",
+            width: 120,
+            align: "center",
+            render: (h) => <StatusTag value={h} />,
+          },
+          {
+            title: t("moduleNumber"),
+            dataIndex: "number",
+            width: 150,
+          },
+          {
+            title: t("moduleName"),
+            dataIndex: "name",
+          },
+          {
+            title: t("moduleTheme"),
+            dataIndex: "topic",
+            render: (h) => t(ModuleTopic[h]),
+          },
+        ]}
+      />
+    </>
+  );
 }
 
 export default WithPage(Components, "/admin/modules");

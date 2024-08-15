@@ -1,51 +1,53 @@
+import i18n from "../i18n";
+
 export const Role = {
-  ROLE_CHW: "社区工作者",
-  ROLE_SUPERVISOR: "督导员",
-  ROLE_ADMIN: "管理员",
+  ROLE_CHW: "ROLE_CHW",
+  ROLE_SUPERVISOR: "ROLE_SUPERVISOR",
+  ROLE_ADMIN: "ROLE_ADMIN",
   ROLE_SUPER_ADMIN: "超级管理员",
 };
 
 export const Gender = {
-  MALE: "男",
-  FEMALE: "女",
-  UNKNOWN: "未知",
+  MALE: i18n.t('Gender.MALE', { ns: "enum" }),
+  FEMALE: i18n.t('Gender.FEMALE', { ns: "enum" }),
+  UNKNOWN: i18n.t('Gender.UNKNOWN', { ns: "enum" }),
 };
 
 export const BabyStage = {
-  EDC: "待产期",
-  BIRTH: "已出生",
+  EDC: i18n.t('BabyStage.EDC', { ns: "enum" }),
+  BIRTH: i18n.t('BabyStage.BIRTH', { ns: "enum" }),
 };
 
 export const CurriculumBabyStage = {
-  EDC: "已怀孕",
-  BIRTH: "已出生",
+  EDC: i18n.t('CurriculumBabyStage.EDC', { ns: "enum" }),
+  BIRTH: i18n.t('CurriculumBabyStage.BIRTH', { ns: "enum" }),
 };
 
 export const FeedingPattern = {
-  BREAST_MILK: "纯母乳喂养",
-  MILK_POWDER: "纯奶粉喂养",
-  MIXED: "母乳奶粉混合喂养",
-  TERMINATED: "已终止母乳/奶粉喂养",
+  BREAST_MILK: i18n.t('FeedingPattern.BREAST_MILK', { ns: "enum" }),
+  MILK_POWDER: i18n.t('FeedingPattern.MILK_POWDER', { ns: "enum" }),
+  MIXED: i18n.t('FeedingPattern.MIXED', { ns: "enum" }),
+  TERMINATED: i18n.t('FeedingPattern.TERMINATED', { ns: "enum" }),
 };
 
 export const FamilyTies = {
-  MOTHER: "妈妈",
-  FATHER: "爸爸",
-  GRANDMOTHER: "奶奶",
-  GRANDMA: "外婆",
-  GRANDFATHER: "爷爷",
-  GRANDPA: "外公",
-  OTHER: "其他",
+  MOTHER: i18n.t('RELATIVES.MOTHER', { ns: "enum" }),
+  FATHER: i18n.t('RELATIVES.FATHER', { ns: "enum" }),
+  GRANDMOTHER: i18n.t('RELATIVES.GRANDMOTHER', { ns: "enum" }),
+  GRANDMA: i18n.t('RELATIVES.GRANDMA', { ns: "enum" }),
+  GRANDFATHER: i18n.t('RELATIVES.GRANDFATHER', { ns: "enum" }),
+  GRANDPA: i18n.t('RELATIVES.GRANDPA', { ns: "enum" }),
+  OTHER: i18n.t('RELATIVES.OTHER', { ns: "enum" }),
 };
 
 export const ModuleTopic = {
-  MOTHER_NUTRITION: "母亲营养",
-  BREASTFEEDING: "母乳喂养",
-  BABY_FOOD: "婴儿辅食",
-  INFANT_INJURY_AND_PREVENTION: "婴儿伤病和预防",
-  CAREGIVER_MENTAL_HEALTH: "照料人心理健康",
-  GOVERNMENT_SERVICES: "政府服务",
-  KNOWLEDGE_ATTITUDE_TEST: "知识态度检测",
+  MOTHER_NUTRITION: i18n.t("ModuleTopic.MOTHER_NUTRITION", { ns: "enum" }),
+  BREASTFEEDING: i18n.t("ModuleTopic.BREASTFEEDING", { ns: "enum" }),
+  BABY_FOOD: i18n.t("ModuleTopic.BABY_FOOD", { ns: "enum" }),
+  INFANT_INJURY_AND_PREVENTION: i18n.t("ModuleTopic.INFANT_INJURY_AND_PREVENTION", { ns: "enum" }),
+  CAREGIVER_MENTAL_HEALTH: i18n.t("ModuleTopic.CAREGIVER_MENTAL_HEALTH", { ns: "enum" }),
+  GOVERNMENT_SERVICES: i18n.t("ModuleTopic.GOVERNMENT_SERVICES", { ns: "enum" }),
+  KNOWLEDGE_ATTITUDE_TEST: i18n.t("ModuleTopic.KNOWLEDGE_ATTITUDE_TEST", { ns: "enum" }),
 };
 
 export const ActionFromApp = {

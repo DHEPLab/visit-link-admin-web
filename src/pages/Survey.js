@@ -4,21 +4,23 @@ import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { Form, Space, Button, Input, message } from "antd";
 import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
-import { Rules } from "../constants/*";
 import SurveyComponents from "../components/curriculum/SurveyComponents";
 import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components/*";
 import { debounce } from "lodash";
+import Rules from "../constants/rules";
 
 export default function Survey() {
   const { id } = useParams();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation("survey");
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
-  const [title, setTitle] = useState("创建新问卷");
+  const [title, setTitle] = useState(t("createNewSurvey"));
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
@@ -35,7 +37,6 @@ export default function Survey() {
     setReadonly(!pathname.includes("/surveys/edit") && !pathname.includes("/surveys/create"));
   }, [pathname, setReadonly]);
 
-  
   useEffect(() => {
     if (readonly == null) return;
 
@@ -46,7 +47,7 @@ export default function Survey() {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
-        setQuestions(data.questions.map((n, i) => ({...n, key: i})));
+        setQuestions(data.questions.map((n, i) => ({ ...n, key: i })));
         setDraftId(headers["x-draft-id"]);
         setDraftDate(headers["x-draft-date"]);
       });
@@ -56,7 +57,7 @@ export default function Survey() {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(422, setStickyTop);
     }
-  }, [id, form, readonly, dispatch]);
+  }, [id, form, readonly, dispatch, i18n]);
 
   function onSubmitFormik(values) {
     setQuestions(values.questions);
@@ -64,31 +65,31 @@ export default function Survey() {
   }
 
   function submitDraft(submit, validateForm) {
-    validateForm().then(r => {
-      const validateresult = r.questions || []
+    validateForm().then((r) => {
+      const validateresult = r.questions || [];
       if (validateresult.length > 0) {
-        message.warning('题干或选项不能为空！')
+        message.warning(t("questionOrChoiceCannotBeEmpty"));
       }
-    })
+    });
     setSubmitURL("/admin/questionnaires/draft");
     submit();
     setIsPrompt(false);
   }
 
   function submitPublish(submit, validateForm) {
-    validateForm().then(r => {
-      const validateresult = r.questions || []
+    validateForm().then((r) => {
+      const validateresult = r.questions || [];
       if (validateresult.length > 0) {
-        message.warning('题干或选项不能为空！')
+        message.warning(t("questionOrChoiceCannotBeEmpty"));
       }
-    })
+    });
     setSubmitURL("/admin/questionnaires");
     submit();
     setIsPrompt(false);
   }
 
   function onSubmit(values) {
-    if (questions.length === 0) return message.warn("至少添加一个问题");
+    if (questions.length === 0) return message.warn(t("atLeastOneQuestion"));
 
     Axios.post(submitURL, {
       id,
@@ -104,7 +105,7 @@ export default function Survey() {
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/questionnaires/${id}`).then(() => {
+    Axios.delete(`/admin/questionnaires/${id}?lang=${i18n.resolvedLanguage}`).then(() => {
       history.goBack();
     });
   }
@@ -122,14 +123,14 @@ export default function Survey() {
               if (isstop || readonly) {
                 return true;
               } else {
-                return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
+                return t("unsavedChangesWarning");
               }
             }}
           />
 
           <DetailHeader
             icon="iconwenjuan-primary"
-            menu="问卷管理"
+            menu={t("surveyManagement")}
             title={title}
             extra={
               <Space size="large">
@@ -137,28 +138,28 @@ export default function Survey() {
                   <>
                     {id && (
                       <DeleteConfirmModal
-                        title="删除问卷"
-                        content="删除后，问卷内容将无法恢复，是否继续？"
+                        title={t("deleteSurvey")}
+                        content={t("deleteSurveyWarning")}
                         onConfirm={handleDeleteModule}
                       >
                         <Button ghost type="danger">
-                          删除问卷
+                          {t("deleteSurvey")}
                         </Button>
                       </DeleteConfirmModal>
                     )}
                     {!draftId && (
                       <Button type="danger" onClick={() => history.push(`/surveys/edit/${id}`)}>
-                        编辑问卷
+                        {t("editSurvey")}
                       </Button>
                     )}
                   </>
                 ) : (
                   <>
                     <Button ghost type="danger" onClick={() => submitDraft(handleSubmit, validateForm)}>
-                      保存至草稿
+                      {t("saveToDraft")}
                     </Button>
                     <Button type="danger" onClick={() => submitPublish(handleSubmit, validateForm)}>
-                      保存并发布
+                      {t("saveAndPublish")}
                     </Button>
                   </>
                 )}
@@ -168,40 +169,48 @@ export default function Survey() {
 
           {draftId && (
             <DraftBar
-              title="本问卷有1个尚未发布的草稿："
+              title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
               onClick={() => history.push(`/surveys/edit/${draftId}`)}
             />
           )}
 
-          <Card title="问卷基本信息">
+          <Card title={t("surveyInformation")}>
             {readonly ? (
               <ReadonlyForm value={module} />
             ) : (
-              <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
-                <Form.Item label="问卷名称" name="name" rules={[...Rules.Required, { max: 40 }]}>
-                  <Input placeholder="请输入问卷名称，限40个字符" />
+              <Form
+                data-testid="basic-form"
+                form={form}
+                onFinish={onSubmit}
+                validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+              >
+                <Form.Item
+                  label={t("surveyName")}
+                  name="name"
+                  rules={[...Rules.Required, { message: t("enterSurveyNameWithLimit"), max: 40 }]}
+                >
+                  <Input placeholder={t("enterSurveyName")} />
                 </Form.Item>
               </Form>
             )}
           </Card>
 
-          <Card title="问卷内容">
+          <Card title={t("surveyContent")}>
             <SurveyComponents value={values.questions} readonly={readonly} stickyTop={stickyTop} />
           </Card>
-
         </>
       )}
     </Formik>
   );
 }
 
-
 function ReadonlyForm({ value }) {
+  const { t } = useTranslation("survey");
   return (
     <div data-testid="readonly-form">
-      <StaticField label="问卷名称">{value.name}</StaticField>
+      <StaticField label={t("surveyName")}>{value.name}</StaticField>
     </div>
   );
 }

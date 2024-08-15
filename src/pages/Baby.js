@@ -4,6 +4,7 @@ import Axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useTranslation } from 'react-i18next';
 
 import Rules from "../constants/rules";
 import Visit from "../utils/visit";
@@ -26,6 +27,7 @@ import styled from "styled-components";
 const { confirm } = Modal;
 
 export default function Baby() {
+  const { t } = useTranslation(["baby", "common"]);
   const { id } = useParams();
   const history = useHistory();
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
@@ -129,7 +131,7 @@ export default function Baby() {
   }
 
   function handleChangeChw(selected) {
-    if (selected.length === 0) message.warning("请选择一个社区工作者");
+    if (selected.length === 0) return message.warning(t('noSelectedChwWarning'));
     const [userId] = selected;
     Axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
       closeChangeChwModal();
@@ -144,13 +146,13 @@ export default function Baby() {
     if (deleted) {
       return (
         <Button ghost type="danger" onClick={openRevertAccountModal}>
-          恢复宝宝
+          {t('reactiveBaby')}
         </Button>
       );
     } else {
       return (
         <Button ghost type="danger" onClick={openCloseAccountModal}>
-          注销宝宝
+          {t('archiveBaby')}
         </Button>
       );
     }
@@ -167,9 +169,9 @@ export default function Baby() {
     <>
       <DetailHeader
         icon="iconbaby-primary"
-        menu="宝宝管理"
+        menu={t('babyManagement')}
         title={baby.name}
-        role={`宝宝ID ${baby.identity || "待核准"}`}
+        role={`${t('id')} ${baby.identity || t('waitingApproval')}`}
         extra={headerExtra()}
       />
       <CloseAccountBabyModal
@@ -201,18 +203,18 @@ export default function Baby() {
       />
 
       <Card
-        title="负责社区工作者"
+        title={t('chw')}
         extra={
           !deleted && (
             <Button type="shade" onClick={openChangeChwModal}>
-              {chw?.id ? "更改" : "分配"}人员
+              {chw?.id ? t('changeCHW') : t('assignCHW')}
             </Button>
           )
         }
       >
-        <StaticField label="社区工作者ID">{chw?.chw?.identity}</StaticField>
-        <StaticField label="真实姓名">{chw?.realName}</StaticField>
-        <StaticField label="联系电话">{chw?.phone}</StaticField>
+        <StaticField label={t('chwID')}>{chw?.chw?.identity}</StaticField>
+        <StaticField label={t('name')}>{chw?.realName}</StaticField>
+        <StaticField label={t('contactPhone')}>{chw?.phone}</StaticField>
       </Card>
 
       <PageAssignChwModalTable
@@ -223,10 +225,10 @@ export default function Baby() {
         refreshOnVisible
         rowSelectionType="radio"
         rowKey={(record) => record.user?.id}
-        title="选择社区工作者"
+        title={t('chooseCHW')}
         columns={[
           {
-            title: "姓名",
+            title: t('name'),
             dataIndex: ["user", "realName"],
             width: 120,
           },
@@ -236,7 +238,7 @@ export default function Baby() {
             width: 100,
           },
           {
-            title: "所在区域",
+            title: t('area'),
             dataIndex: ["user", "chw", "tags"],
             render: (tags) => tags && tags.join(", "),
             width: 300,
@@ -245,7 +247,7 @@ export default function Baby() {
       />
 
       <Card
-        title="宝宝信息"
+        title={t('babyInfo')}
         extra={
           !deleted && (
             <>
@@ -253,28 +255,31 @@ export default function Baby() {
                 校正位置
               </Button>
               <Button type="shade" onClick={openModal}>
-                编辑资料
+                {t('edit')}
               </Button>
             </>
           )
         }
       >
-        <StaticField label="真实姓名" history={oldValue["name"]} >{baby.name}</StaticField>
-        <StaticField label="性别" history={oldValue["gender"] && Gender[oldValue["gender"]]}>{Gender[baby.gender]}</StaticField>
-        <StaticField label="成长阶段">
-          {BabyStage[baby.stage]} {baby.days}天
+        <StaticField label={t('name')} history={oldValue["name"]}>{baby.name}</StaticField>
+        <StaticField label={t('gender')} history={oldValue["gender"] && Gender[oldValue["gender"]]}>{Gender[baby.gender]}</StaticField>
+        <StaticField label={t('growthStage')}>
+          {BabyStage[baby.stage]} {baby.days} {t('unit.day', { ns: "common" })}
         </StaticField>
+
         {baby.stage === "EDC" ? (
-          <StaticField label="预产期" history={oldValue["edc"]}>{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
+          <StaticField label={t('dueDay')} history={oldValue["edc"]} >{moment(baby.edc).format("YYYY-MM-DD")}</StaticField>
         ) : (
           <>
-            <StaticField label="出生日期" history={oldValue["birthday"]}>{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
-            <StaticField label="辅食" history={typeof oldValue["assistedFood"] === 'boolean' && (oldValue["assistedFood"] ? "已添加" : "未添加")}>{baby.assistedFood ? "已添加" : "未添加"}</StaticField>
-            <StaticField label="喂养方式" history={oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"]]}>{FeedingPattern[baby.feedingPattern]}</StaticField>
+            <StaticField label={t('birthDay')} history={oldValue["birthday"]}>{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
+            <StaticField label={t('supplementaryFood')} history={typeof oldValue["assistedFood"] === 'boolean' && (oldValue["assistedFood"] ? "已添加" : "未添加")}>{baby.assistedFood ? t('add') : t('noAdd')}</StaticField>
+            <StaticField label={t('feedingMethods')} history={oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"]]}>{FeedingPattern[baby.feedingPattern]}</StaticField>
           </>
         )}
-        <StaticField label="所在区域" history={oldValue["area"]}>{baby.area}</StaticField>
-        <StaticField label="详细地址" history={oldValue["location"]}>{baby.location}</StaticField>
+
+        <StaticField label={t('area')} history={oldValue["area"]}>{baby.area}</StaticField>
+        <StaticField label={t('address')} history={oldValue["location"]}>{baby.location}</StaticField>
+
         <StaticField
           label="经纬度"
           history={
@@ -285,10 +290,8 @@ export default function Baby() {
         >
           {baby.longitude && `${baby.longitude}，${baby.latitude}`}
         </StaticField>
-        <StaticField label="备注信息" history={oldValue["remark"]}>
-          {baby.remark}
-        </StaticField>
-        {deleted && <StaticField label="注销原因">{baby.closeAccountReason}</StaticField>}
+        <StaticField label={t('comments')} history={oldValue["remark"]}>{baby.remark}</StaticField>
+        {deleted && <StaticField label={t('archiveReason')}>{baby.closeAccountReason}</StaticField>}
       </Card>
 
       <Carers babyId={id} deleted={deleted} onModify={refreshCareModifyRecords} />
@@ -316,13 +319,15 @@ export default function Baby() {
       }} dataSource={careModifyRecords.map((e, i) => ({ ...e, number: i }))} />
 
       <BabyModalForm
-        title="修改宝宝信息"
+        width={650}
+        title={t('modifyBaby')}
         visible={visible}
         onCancel={closeModal}
         onFinish={handleChangeBaby}
         initialValues={initialValues()}
         // 一旦进入婴幼期则不可修改回待产期
         disableStage={baby.stage === "BIRTH"}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       />
     </>
   );
@@ -331,54 +336,56 @@ export default function Baby() {
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
 
 function RevertAccountBabyModal({ visible, onCancel, onOk }) {
+  const { t } = useTranslation("baby");
   return (
     <Modal
-      title="恢复宝宝"
+      title={t('reactiveBaby')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            再想想
+            {t('cancel')}
           </Button>
           <Button type="danger" onClick={onOk}>
-            恢复
+            {t('reactive')}
           </Button>
         </Space>
       }
       visible={visible}
     >
-      <p>确定要恢复宝宝？</p>
+      <p>{t('reactiveBabyConfirm')}</p>
     </Modal>
   );
 }
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
+  const { t } = useTranslation(["baby", "common"]);
   const [form] = Form.useForm();
 
   return (
     <Modal
-      title="注销宝宝"
+      title={t('archiveBaby')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            再想想
+            {t('cancel')}
           </Button>
           <Button type="danger" onClick={form.submit}>
-            注销
+            {t('archive')}
           </Button>
         </Space>
       }
       visible={visible}
     >
-      <p>注销后，社区工作者将无法继续查看，修改，拜访该宝宝。是否继续？</p>
+      <p>{t('archiveTip')}</p>
       <Form form={form} onFinish={onOk} labelCol={{ span: 0 }}>
-        <Form.Item label="注销原因" name="reason" rules={Rules.Required}>
-          <Input style={{ width: "100%" }} placeholder="请输入注销原因" />
+        <Form.Item label={t('archiveReason')} name="reason" rules={Rules.Required}>
+          <Input style={{ width: "100%" }} placeholder={`${t('enter', { ns: 'common' })}${t('archiveReason')}`} />
         </Form.Item>
       </Form>
     </Modal>
@@ -386,57 +393,59 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
 }
 
 function ApproveDeleteBabyModal({ visible, onCancel, onFinish }) {
+  const { t } = useTranslation("baby");
   return (
     <Modal
-      title="您确定要批准注销宝宝账户的申请吗？"
+      title={t('archiveBabyTitle')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            稍后再说
+            {t('later')}
           </Button>
           <Button type="danger" onClick={onFinish}>
-            批准申请
+            {t('approve')}
           </Button>
         </Space>
       }
       visible={visible}
     >
       <p>
-        请先核对社区工作者注销的宝宝账户信息。批准申请后，宝宝账户将从社区工作者 app
-        端移除，不再显示，但宝宝数据将保留在已审核宝宝列表中。
+        {t('approveArchiveTip')}
       </p>
     </Modal>
   );
 }
 
 function ApproveModifyBabyModal({ visible, onCancel, onFinish }) {
+  const { t } = useTranslation("baby");
   return (
     <Modal
-      title="您确定要批准修改宝宝信息的申请吗？"
+      title={t('modifyBabyTitle')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            稍后再说
+            {t('later')}
           </Button>
           <Button type="danger" onClick={onFinish}>
-            批准申请
+            {t('approve')}
           </Button>
         </Space>
       }
       visible={visible}
     >
-      <p>请先核对社区工作者修改的宝宝账户信息。批准申请后，宝宝账户信息将被修改。</p>
+      <p>{t('approveModifyTip')}</p>
     </Modal>
   );
 }
 
 function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
+  const { t } = useTranslation(["baby", "common"]);
   const [form] = Form.useForm();
   useEffect(() => {
     props.visible && form.resetFields();
@@ -444,29 +453,28 @@ function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
 
   return (
     <Modal
-      title="您确定要批准创建新宝宝账户的申请吗？"
+      title={t('batchNewBabiesTitle')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            稍后再说
+            {t('later')}
           </Button>
           <Button type="danger" onClick={form.submit}>
-            批准申请
+            {t('approve')}
           </Button>
         </Space>
       }
       {...props}
     >
       <p>
-        请先核对社区工作者提交的新宝宝账户信息，并设置宝宝
-        ID，即可批准该账户新建申请。一旦批准申请后，宝宝ID将不可更改。
+        {t('batchNewBabiesTip')}
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label="宝宝ID" name="identity" rules={Rules.Required}>
-          <Input autoFocus style={{ width: "100%" }} placeholder="请输入宝宝的ID" />
+        <Form.Item label={t('id')} name="identity" rules={Rules.Required}>
+          <Input autoFocus style={{ width: "100%" }} placeholder={`${t('enter', { ns: 'common' })}${t('id')}`} />
         </Form.Item>
       </Form>
     </Modal>
@@ -474,42 +482,43 @@ function ApproveCreateBabyModal({ id, onCancel, onFinish, ...props }) {
 }
 
 function Visits({ babyId }) {
+  const { t } = useTranslation("baby");
   const [dataSource] = useFetch(`/admin/babies/${babyId}/visits`, {}, []);
 
   return (
-    <Card title="家访记录" noPadding>
+    <Card title={t('visitHistory')} noPadding>
       <ZebraTable
         rowKey="id"
         dataSource={dataSource}
         pagination={false}
         columns={[
           {
-            title: "家访状态",
+            title: t('visitStatus'),
             dataIndex: "status",
             width: 140,
             align: "center",
             render: (h) => VisitStatus[h],
           },
           {
-            title: "家访时间",
+            title: t('visitTime'),
             dataIndex: "visitTime",
             width: 280,
             render: (h) => Visit.formatDateTimeCN(h),
           },
           {
-            title: "课堂内容",
+            title: t('sessionContent'),
             dataIndex: "lesson",
             width: 300,
             render: (h) => h?.modules?.map((m) => m.label).join(", "),
           },
           {
-            title: "过期/未完成原因",
+            title: t('reasonOfUncompleteOrExpired'),
             dataIndex: "remark",
           },
           {
             title: "位置信息",
             dataIndex: "distance",
-            render: (v) => `距离家访地点${v||0}(Km)`
+            render: (v) => `距离家访地点${v || 0}(Km)`
           }
         ]}
       />
@@ -527,7 +536,7 @@ function History({ title, dataSource, columnValues }) {
       case 'feedingPattern':
         return FeedingPattern[value];
       case 'master':
-        return value?"是" : "否";
+        return value ? "是" : "否";
       case 'familyTies':
         return FamilyTies[value];
       default:
@@ -562,16 +571,16 @@ function History({ title, dataSource, columnValues }) {
                 } : null;
               }).filter(e => !!e)
               return (
-                  <div>
-                      {changeValues.map((e, i) => {
-                          const obj = e || {}
-                          return (
-                              <div key={i}>
-                                  <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{obj.columnName}</BlobFont>由<BlobFont>{obj.oldValue}</BlobFont>更改为<BlobFont>{obj.newValue}</BlobFont>；
-                              </div>
-                          )
-                      })}
-                  </div>
+                <div>
+                  {changeValues.map((e, i) => {
+                    const obj = e || {}
+                    return (
+                      <div key={i}>
+                        <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{obj.columnName}</BlobFont>由<BlobFont>{obj.oldValue}</BlobFont>更改为<BlobFont>{obj.newValue}</BlobFont>；
+                      </div>
+                    )
+                  })}
+                </div>
               )
             }
           }
@@ -582,6 +591,7 @@ function History({ title, dataSource, columnValues }) {
 }
 
 function Carers({ babyId, deleted, onModify }) {
+  const { t } = useTranslation("baby");
   const [carer, setCarer] = useState({ master: false });
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carers`, {}, []);
@@ -597,7 +607,7 @@ function Carers({ babyId, deleted, onModify }) {
   };
 
   async function handleDelete({ id, master }) {
-    if (master) return message.warn("主看护人不可删除，请更换主看护人后进行此操作");
+    if (master) return message.warn(t('deleteMasterWarning'));
     await Axios.delete(`/admin/carers/${id}`);
     refresh();
   }
@@ -621,11 +631,11 @@ function Carers({ babyId, deleted, onModify }) {
   function onFinish(values) {
     if (values.master && dataSource.filter((item) => item.id !== carer.id).find((item) => item.master)) {
       Modal.confirm({
-        title: "确认",
+        title: t('confirm'),
         icon: <ExclamationCircleOutlined />,
-        content: "设置当前看护人为主看护人时会替换原来的看护人，是否继续？",
-        cancelText: "再想想",
-        okText: "继续",
+        content: t('changeMasterConfirm'),
+        cancelText: t('cancel'),
+        okText: t('proceed'),
         onOk: () => submit(values),
       });
       return;
@@ -635,20 +645,20 @@ function Carers({ babyId, deleted, onModify }) {
 
   return (
     <Card
-      title="看护人列表"
+      title={t('caregiverList')}
       noPadding
       extra={
         !deleted && (
           <>
             {dataSource.length > 3 ? (
-              <Tooltip title="看护人最多可添加4人">
+              <Tooltip title={t('maxTo4Caregiver')}>
                 <Button disabled={true} type="shade">
-                  新增看护人
+                  {t('newCaregiver')}
                 </Button>
               </Tooltip>
             ) : (
               <Button onClick={openModal} type="shade" data-testid="add-carer">
-                新增看护人
+                {t('newCaregiver')}
               </Button>
             )}
           </>
@@ -656,24 +666,26 @@ function Carers({ babyId, deleted, onModify }) {
       }
     >
       <ModalForm
+        width={650}
         labelWidth={120}
-        title={`${carer.id ? "编辑" : "新增"}看护人`}
+        title={carer.id ? t('editCaregiver') : t('newCaregiver')}
         initialValues={carer}
         visible={visible}
         onCancel={safeCloseCarer}
         onFinish={onFinish}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
-        <Form.Item label="主看护人" name="master" rules={Rules.Required}>
+        <Form.Item label={t('master')} name="master" rules={Rules.Required}>
           <Radio.Group>
-            <Radio value={true}>是</Radio>
-            <Radio value={false}>否</Radio>
+            <Radio value={true}>{t('yes')}</Radio>
+            <Radio value={false}>{t('no')}</Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="真实姓名" name="name" rules={Rules.RealName}>
+        <Form.Item label={t('name')} name="name" rules={Rules.RealName}>
           <Input autoFocus />
         </Form.Item>
         <Form.Item
-          label="亲属关系"
+          label={t('relatives')}
           name="familyTies"
           rules={[
             ...Rules.Required,
@@ -685,17 +697,17 @@ function Carers({ babyId, deleted, onModify }) {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject("亲属关系不能重复选择");
+                return Promise.reject(t('repeatRelatives'));
               },
             }),
           ]}
         >
           <SelectEnum name="FamilyTies" />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
+        <Form.Item label={t('contactPhone')} name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
-        <Form.Item label="微信号" name="wechat">
+        <Form.Item label={t('wechat')} name="wechat">
           <Input />
         </Form.Item>
       </ModalForm>
@@ -706,33 +718,33 @@ function Carers({ babyId, deleted, onModify }) {
         pagination={false}
         columns={[
           {
-            title: "主看护人",
+            title: t('master'),
             dataIndex: "master",
             width: 140,
             align: "center",
             render(h) {
-              return h ? "是" : "否";
+              return h ? t('yes') : t('no');
             },
           },
           {
-            title: "看护人姓名",
+            title: t('caregiverName'),
             dataIndex: "name",
           },
           {
-            title: "亲属关系",
+            title: t('relatives'),
             dataIndex: "familyTies",
             render: (h) => FamilyTies[h],
           },
           {
-            title: "联系电话",
+            title: t('contactPhone'),
             dataIndex: "phone",
           },
           {
-            title: "微信号",
+            title: t('wechat'),
             dataIndex: "wechat",
           },
           {
-            title: "操作",
+            title: t('operate'),
             dataIndex: "id",
             width: 200,
             align: "center",
@@ -741,16 +753,16 @@ function Carers({ babyId, deleted, onModify }) {
                 !deleted && (
                   <Space>
                     <DeleteConfirmModal
-                      title="删除看护人"
-                      content="确认要删除此看护人？"
+                      title={t('deleteCaregiver')}
+                      content={t('deleteCaregiverConfirm')}
                       onConfirm={() => handleDelete(record)}
                     >
                       <Button size="small" type="link">
-                        删除
+                        {t('delete')}
                       </Button>
                     </DeleteConfirmModal>
                     <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
-                      编辑
+                      {t('edit')}
                     </Button>
                   </Space>
                 )

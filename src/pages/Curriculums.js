@@ -1,224 +1,228 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Axios from "axios";
-import {Modal, Button, Space, Tooltip} from "antd";
-import {InfoCircleFilled} from "@ant-design/icons";
-import {useHistory} from "react-router-dom";
+import { Modal, Button, Space, Tooltip } from "antd";
+import { InfoCircleFilled } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import {Gender} from "../constants/enums";
-import {useBoolState} from "../utils";
-import {StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModalTable} from "../components/*";
+import { Gender } from "../constants/enums";
+import { useBoolState } from "../utils";
+import { StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModalTable } from "../components/*";
 
-function Curriculums({historyPageState, loadData, onChangeSearch, ...props}) {
-    const history = useHistory();
-    const [visible, openModal, closeModal] = useBoolState(false);
-    const [curriculumId, setCurriculumId] = useState();
+function Curriculums({ historyPageState, loadData, onChangeSearch, ...props }) {
+  const history = useHistory();
+  const [visible, openModal, closeModal] = useBoolState(false);
+  const [curriculumId, setCurriculumId] = useState();
+  const { t } = useTranslation("curriculums");
 
-    function openBabiesModal(id) {
-        setCurriculumId(id);
-        openModal();
-    }
+  function openBabiesModal(id) {
+    setCurriculumId(id);
+    openModal();
+  }
 
-    return (
-        <>
-            <ContentHeader title="大纲管理">
-                <Space size="large">
-                    <SearchInput
-                        defaultValue={historyPageState?.search}
-                        onChange={(e) => onChangeSearch("search", e.target.value)}
-                        className="master"
-                        placeholder="请输入大纲名称搜索"
-                    />
-                    <Button type="primary" onClick={() => history.push("/curriculums/create")}>
-                        创建新大纲
-                    </Button>
-                </Space>
-            </ContentHeader>
+  return (
+    <>
 
-            <ZebraTable
-                {...props}
-                rowKey="id"
-                className="clickable"
-                onRow={(record) => {
-                    return {
-                        onClick: (event) => {
-                            // do noting when click other target
-                            if (event.target.tagName === "TD") {
-                                history.push(`/curriculums/${record.id}`);
-                            }
-                        },
-                    };
-                }}
-                columns={[
-                    {
-                        title: "大纲状态",
-                        dataIndex: "published",
-                        width: 120,
-                        align: "center",
-                        render: (h) => <StatusTag value={h}/>,
-                    },
-                    {
-                        title: "大纲名称",
-                        dataIndex: "name",
-                    },
-                    {
-                        title: "操作",
-                        dataIndex: "id",
-                        width: 200,
-                        align: "center",
-                        render(id) {
-                            return (
-                                <Button type="link" size="small" onClick={() => openBabiesModal(id)}>
-                                    分配宝宝
-                                </Button>
-                            );
-                        },
-                    },
-                ]}
-            />
+      <ContentHeader title={t("curriculumManagement")}>
+        <Space size="large">
+          <SearchInput
+            defaultValue={historyPageState?.search}
+            onChange={(e) => onChangeSearch("search", e.target.value)}
+            className="master"
+            placeholder={t("searchByCurriculumName")}
+          />
+          <Button type="primary" onClick={() => history.push("/curriculums/create")}>
+            {t("createNewCurriculum")}
+          </Button>
+        </Space>
+      </ContentHeader>
 
-            <PageCurriculumBabiesModal curriculumId={curriculumId} visible={visible} onCancel={closeModal}/>
-        </>
-    );
+      <ZebraTable
+        {...props}
+        rowKey="id"
+        className="clickable"
+        onRow={(record) => {
+          return {
+            onClick: (event) => {
+              // do noting when click other target
+              if (event.target.tagName === "TD") {
+                history.push(`/curriculums/${record.id}`);
+              }
+            },
+          };
+        }}
+        columns={[
+          {
+            title: t("curriculumStatus"),
+            dataIndex: "published",
+            width: 120,
+            align: "center",
+            render: (h) => <StatusTag value={h} />,
+          },
+          {
+            title: t("curriculumName"),
+            dataIndex: "name",
+          },
+          {
+            title: t("action"),
+            dataIndex: "id",
+            width: 200,
+            align: "center",
+            render(id) {
+              return (
+                <Button type="link" size="small" onClick={() => openBabiesModal(id)}>
+                  {t("assignBaby")}
+                </Button>
+              );
+            },
+          },
+        ]}
+      />
+
+      <PageCurriculumBabiesModal curriculumId={curriculumId} visible={visible} onCancel={closeModal} />
+    </>
+  );
 }
 
 const PageCurriculumBabiesModal = WithPage(CurriculumBabiesModal);
 
 function CurriculumBabiesModal({
-                                   curriculumId,
-                                   visible,
-                                   onCancel,
-                                   loadData,
-                                   onChangeLoadURL,
-                                   onChangeSearch,
-                                   ...props
-                               }) {
-    const [assign, openModal, closeModal] = useBoolState();
+  curriculumId,
+  visible,
+  onCancel,
+  loadData,
+  onChangeLoadURL,
+  onChangeSearch,
+  ...props
+}) {
+  const { t } = useTranslation("curriculums");
+  const [assign, openModal, closeModal] = useBoolState();
 
-    useEffect(() => {
-        if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/babies`);
-        // eslint-disable-next-line
-    }, [curriculumId]);
+  useEffect(() => {
+    if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/babies`);
+    // eslint-disable-next-line
+  }, [curriculumId]);
 
-    function handleAssign(babyIds) {
-        Axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
-            loadData();
-            closeModal();
-        });
-    }
+  function handleAssign(babyIds) {
+    Axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
+      loadData();
+      closeModal();
+    });
+  }
 
-    function handleReleaseBaby(id) {
-        Axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
-    }
+  function handleReleaseBaby(id) {
+    Axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
+  }
 
-    return (
-        <Modal
-            title="宝宝列表"
-            visible={visible}
-            onCancel={onCancel}
-            width={1152}
-            footer={null}
-            bodyStyle={{padding: 0}}
-            style={{top: 20}}
-        >
-            <ModalHeader>
-                <Title>
-                    <label>大纲分配宝宝列表</label>
-                    <Tooltip title="宝宝将自动分配至最新发布的大纲版本" placement="right">
-                        <InfoCircleFilled/>
-                    </Tooltip>
-                </Title>
-                <Button type="shade" onClick={openModal}>
-                    添加新宝宝
+  return (
+    <Modal
+      title={t("babyList")}
+      visible={visible}
+      onCancel={onCancel}
+      width={1152}
+      footer={null}
+      bodyStyle={{ padding: 0 }}
+      style={{ top: 20 }}
+    >
+      <ModalHeader>
+        <Title>
+          <label>{t("curriculumAssignedBabyList")}</label>
+          <Tooltip title={t("babyAutoAssignTip")} placement="right">
+            <InfoCircleFilled />
+          </Tooltip>
+        </Title>
+        <Button type="shade" onClick={openModal}>
+          {t("addNewBaby")}
+        </Button>
+      </ModalHeader>
+
+      <ZebraTable
+        {...props}
+        rowKey="id"
+        columns={[
+          {
+            title: t("babyName"),
+            dataIndex: "name",
+            width: 100,
+          },
+          {
+            title: t("ID"),
+            dataIndex: "identity",
+            width: 120,
+          },
+          {
+            title: t("gender"),
+            dataIndex: "gender",
+            render: (h) => Gender[h],
+            width: 80,
+          },
+          {
+            title: t("area"),
+            dataIndex: "area",
+            width: 300,
+          },
+          {
+            title: t("primaryCaregiver"),
+            dataIndex: "masterCarerName",
+            width: 120,
+          },
+          {
+            title: t("contactPhone"),
+            dataIndex: "masterCarerPhone",
+            width: 120,
+          },
+          {
+            title: t("Operation"),
+            dataIndex: "id",
+            width: 100,
+            align: "center",
+            render(id) {
+              return (
+                <Button type="link" size="small" onClick={() => handleReleaseBaby(id)}>
+                  {t("delete")}
                 </Button>
-            </ModalHeader>
+              );
+            },
+          },
+        ]}
+      />
 
-            <ZebraTable
-                {...props}
-                rowKey="id"
-                columns={[
-                    {
-                        title: "宝宝姓名",
-                        dataIndex: "name",
-                        width: 100,
-                    },
-                    {
-                        title: "ID",
-                        dataIndex: "identity",
-                        width: 120,
-                    },
-                    {
-                        title: "性别",
-                        dataIndex: "gender",
-                        render: (h) => Gender[h],
-                        width: 80,
-                    },
-                    {
-                        title: "所在区域",
-                        dataIndex: "area",
-                        width: 300,
-                    },
-                    {
-                        title: "主照料人",
-                        dataIndex: "masterCarerName",
-                        width: 120,
-                    },
-                    {
-                        title: "联系电话",
-                        dataIndex: "masterCarerPhone",
-                        width: 120,
-                    },
-                    {
-                        title: "操作",
-                        dataIndex: "id",
-                        width: 100,
-                        align: "center",
-                        render(id) {
-                            return (
-                                <Button type="link" size="small" onClick={() => handleReleaseBaby(id)}>
-                                    删除
-                                </Button>
-                            );
-                        },
-                    },
-                ]}
-            />
-
-            <PageAssignModalTable
-                title="添加新宝宝"
-                curriculumId={curriculumId}
-                visible={assign}
-                onCancel={closeModal}
-                onFinish={handleAssign}
-                columns={[
-                    {
-                        title: "宝宝姓名",
-                        dataIndex: "name",
-                        width: 120,
-                    },
-                    {
-                        title: "ID",
-                        dataIndex: "identity",
-                        width: 100,
-                    },
-                    {
-                        title: "所在区域",
-                        dataIndex: "area",
-                        width: 300,
-                    },
-                ]}
-            />
-        </Modal>
-    );
+      <PageAssignModalTable
+        title={t("addNewBaby")}
+        curriculumId={curriculumId}
+        visible={assign}
+        onCancel={closeModal}
+        onFinish={handleAssign}
+        columns={[
+          {
+            title: t("babyName"),
+            dataIndex: "name",
+            width: 120,
+          },
+          {
+            title: "ID",
+            dataIndex: "identity",
+            width: 100,
+          },
+          {
+            title: t("area"),
+            dataIndex: "area",
+            width: 300,
+          },
+        ]}
+      />
+    </Modal >
+  );
 }
 
-function AssignModalTableContainer({curriculumId, onChangeLoadURL, ...props}) {
-    useEffect(() => {
-        if (!props.visible) return;
-        if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/not_assigned_babies`);
-        // eslint-disable-next-line
-    }, [curriculumId, props.visible]);
-    return <AssignModalTable {...props} />;
+function AssignModalTableContainer({ curriculumId, onChangeLoadURL, ...props }) {
+  useEffect(() => {
+    if (!props.visible) return;
+    if (curriculumId) onChangeLoadURL(`/admin/curriculums/${curriculumId}/not_assigned_babies`);
+    // eslint-disable-next-line
+  }, [curriculumId, props.visible]);
+  return <AssignModalTable {...props} />;
 }
 
 const PageAssignModalTable = WithPage(AssignModalTableContainer);

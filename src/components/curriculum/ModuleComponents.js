@@ -8,6 +8,7 @@ import { Space, Button } from "antd";
 import Factory from "./factory";
 import { ComponentField } from "./*";
 import { Iconfont, Card } from "../*";
+import { useTranslation } from "react-i18next";
 
 export function handleMoveUp(helpers, index, focus, setFocus) {
   if (index === 0) return;
@@ -78,10 +79,10 @@ export default function ModuleComponents({ value, readonly }) {
  */
 function ToolBar({ readonly, helpers, focus, setFocus }) {
   const [stickyTop, setStickyTop] = useState(0);
+  const { t } = useTranslation("moduleComponents");
 
   useEffect(() => {
     if (!readonly) {
-      // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(687, setStickyTop);
     }
   }, [readonly]);
@@ -91,24 +92,22 @@ function ToolBar({ readonly, helpers, focus, setFocus }) {
   return (
     <ComponentToolBar>
       <StickyContainer top={stickyTop}>
-        <Card title="添加组件：">
+        <Card title={t("addComponent")}>
           <Space direction="vertical" size="large">
             <Button type="primary" onClick={() => insertComponent(helpers, Factory.createText(), focus, setFocus)}>
-              <Iconfont type="icontext" /> 添加文本组件
+              <Iconfont type="icontext" /> {t("addTextComponent")}
             </Button>
             <Button type="primary" onClick={() => insertComponent(helpers, Factory.createMedia(), focus, setFocus)}>
-              <Iconfont type="iconmedia" />
-              添加媒体组件
+              <Iconfont type="iconmedia" /> {t("addMediaComponent")}
             </Button>
             <Button type="primary" onClick={() => insertComponent(helpers, Factory.createSwitch(), focus, setFocus)}>
-              <Iconfont type="iconswitch" />
-              添加选择组件
+              <Iconfont type="iconswitch" /> {t("addChoiceComponent")}
             </Button>
             <PageButton
               type="primary"
               onClick={() => insertComponent(helpers, Factory.createPageFooter(), focus, setFocus)}
             >
-              添加翻页分割组件
+              {t("addPageBreakComponent")}
             </PageButton>
           </Space>
         </Card>
@@ -129,7 +128,8 @@ function stickyScrollListener(offsetTop, onChangeStickyTop) {
 }
 
 const PageButton = styled(Button)`
-  width: 182px;
+  min-width: 200px;
+  width: auto;
 `;
 
 const FieldArrayContainer = styled.div`

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { Form, Modal, Button, Input, Space, Select } from "antd";
 import { useParams, useHistory } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 import Rules from "../constants/rules";
 import { useFetch, useBoolState } from "../utils";
@@ -20,6 +21,7 @@ import {
 } from "../components/*";
 
 export default function User() {
+  const { t } = useTranslation(["user", "common"]);
   const { id } = useParams();
   const history = useHistory();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
@@ -59,19 +61,19 @@ export default function User() {
     <>
       <DetailHeader
         icon="iconuser-primary"
-        menu="账户管理"
+        menu={t('accountManagement')}
         title={user.realName}
         role={role()}
         extra={
           <>
             {roleChw && (
               <Button ghost type="danger" onClick={openCloseChwAccount}>
-                注销账户
+                {t('deleteAccount')}
               </Button>
             )}
             {roleSupervisor && (
               <Button ghost type="danger" onClick={openCloseSupervisorAccount}>
-                注销账户
+                {t('deleteAccount')}
               </Button>
             )}
           </>
@@ -79,34 +81,34 @@ export default function User() {
       />
 
       {roleChw && (
-        <Card title="负责督导员">
-          <StaticField label="真实姓名">{user?.chw?.supervisor?.realName}</StaticField>
-          <StaticField label="联系电话">{user?.chw?.supervisor?.phone}</StaticField>
+        <Card title={t('supervisor')}>
+          <StaticField label={t('name')}>{user?.chw?.supervisor?.realName}</StaticField>
+          <StaticField label={t('phone')}>{user?.chw?.supervisor?.phone}</StaticField>
         </Card>
       )}
 
       <Card
-        title="用户信息"
+        title={t('generalInformation')}
         extra={
           <Button type="shade" onClick={openChangeProfile}>
-            编辑资料
+            {t('edit')}
           </Button>
         }
       >
-        <StaticField label="真实姓名">{user.realName}</StaticField>
-        <StaticField label="联系电话">{user.phone}</StaticField>
-        {roleChw && <StaticField label="所在区域">{user.chw.tags && user.chw.tags.join(", ")}</StaticField>}
+        <StaticField label={t('name')}>{user.realName}</StaticField>
+        <StaticField label={t('phone')}>{user.phone}</StaticField>
+        {roleChw && <StaticField label={t('area')}>{user.chw.tags && user.chw.tags.join(", ")}</StaticField>}
       </Card>
       <Card
-        title="账户信息"
+        title={t('accountInformation')}
         extra={
           <Button type="shade" onClick={openChangePassword}>
-            修改密码
+            {t('resetPassword')}
           </Button>
         }
       >
-        <StaticField label="账户名称">{user.username}</StaticField>
-        <StaticField label="账户密码">******</StaticField>
+        <StaticField label={t('username')}>{user.username}</StaticField>
+        <StaticField label={t('password')}>******</StaticField>
       </Card>
 
       {roleSupervisor && <AssignChw id={id} />}
@@ -127,24 +129,25 @@ export default function User() {
       />
 
       <ModalForm
-        title="修改用户信息"
+        title={t('editGeneralInformation')}
         initialValues={user}
         onFinish={handleChangeProfile}
         visible={changeProfileVisible}
         onCancel={closeChangeProfile}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
-        <Form.Item label="真实姓名" name="realName" rules={Rules.RealName}>
+        <Form.Item label={t('name')} name="realName" rules={Rules.RealName}>
           <Input />
         </Form.Item>
-        <Form.Item label="联系电话" name="phone" rules={Rules.Phone}>
+        <Form.Item label={t('phone')} name="phone" rules={Rules.Phone}>
           <Input />
         </Form.Item>
         {roleChw && (
           <>
-            <Form.Item label="ID" name={["chw", "identity"]} rules={Rules.Required}>
+            <Form.Item label={t('id')} name={["chw", "identity"]} rules={Rules.Required}>
               <Input />
             </Form.Item>
-            <Form.Item label="所在区域" name={["chw", "tags"]} rules={Rules.Area}>
+            <Form.Item label={t('area')} name={["chw", "tags"]} rules={Rules.Area}>
               <ChwTagSelector />
             </Form.Item>
           </>
@@ -155,9 +158,10 @@ export default function User() {
 }
 
 function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
+  const { t } = useTranslation(["user", "common"]);
   return (
     <Modal
-      title="注销督导员"
+      title={t('deleteSuperviser')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
@@ -165,20 +169,21 @@ function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            再想想
+            {t('cancel')}
           </Button>
           <Button type="danger" onClick={onFinish}>
-            注销账户
+            {t('delete')}
           </Button>
         </Space>
       }
     >
-      <p>注意！注销后，该账户将不可用且不可恢复，所有该督导员负责的社区工作者将处于未分配状态</p>
+      <p>{t('deleteSuperviserMessage')}</p>
     </Modal>
   );
 }
 
 function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }) {
+  const { t } = useTranslation(["user", "common"]);
   const [form] = Form.useForm();
   const [options, setOptions] = useState([]);
 
@@ -197,7 +202,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
 
   return (
     <Modal
-      title="注销社区工作者"
+      title={t('deleteChw')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
@@ -205,28 +210,28 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            再想想
+            {t('cancel')}
           </Button>
           <Button type="danger" onClick={form.submit}>
-            注销账户
+            {t('delete')}
           </Button>
         </Space>
       }
     >
       <p>
-        注意！注销后，该账户将不可用且不可恢复。
-        {!isBabiesEmpty && "请先将其负责的宝宝移交至其他社区工作者后再进行注销"}
+        {t('generalDeleteMessage')}
+        {!isBabiesEmpty && t('babyNotEmptyMessage')}
       </p>
       <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
         {!isBabiesEmpty && (
-          <Form.Item label="社区工作者" name="userId" rules={Rules.Required}>
+          <Form.Item label={t('chw')} name="userId" rules={Rules.Required}>
             <Select
               showSearch
               filterOption={false}
               onFocus={() => debounceSearch()}
               onSearch={debounceSearch}
               style={{ width: "100%" }}
-              placeholder="请选择移交宝宝的社区工作者"
+              placeholder={t('selectBabyPlaceholder')}
             >
               {options
                 .filter((o) => o.user.id !== Number(id))
@@ -244,6 +249,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
 }
 
 function ChangePasswordModal({ id, onCancel, ...props }) {
+  const { t } = useTranslation(["user", "common"]);
   const [form] = Form.useForm();
   useEffect(() => {
     props.visible && form.resetFields();
@@ -255,26 +261,26 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 
   return (
     <Modal
-      title="您确定要修改密码吗？"
+      title={t('confirmResetPassword')}
       closable={false}
       destroyOnClose
       onCancel={onCancel}
       footer={
         <Space size="large">
           <Button ghost type="danger" onClick={onCancel}>
-            放弃
+            {t('cancel', { ns: 'common' })}
           </Button>
           <Button type="danger" onClick={form.submit}>
-            确定
+            {t('confirm', { ns: 'common' })}
           </Button>
         </Space>
       }
       {...props}
     >
-      <p>请您牢记最新修改的密码，提交后将不再显示；且修改后，用户原密码将不可用</p>
-      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label="新的账户密码" name="password" rules={Rules.Password}>
-          <Input.Password style={{ width: "100%" }} placeholder="请输入新的账户密码" />
+      <p>{t('resetPasswordMessage')}</p>
+      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }} validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}>
+        <Form.Item label={t('newPassword')} name="password" rules={Rules.Password}>
+          <Input.Password style={{ width: "100%" }} placeholder={t('enter', { ns: 'common' }) + t('newPassword')} />
         </Form.Item>
       </Form>
     </Modal>
@@ -282,6 +288,7 @@ function ChangePasswordModal({ id, onCancel, ...props }) {
 }
 
 function AssignBaby({ id, onChange }) {
+  const { t } = useTranslation(["user", "common"]);
   const history = useHistory();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/users/chw/${id}/babies`, {}, []);
@@ -297,11 +304,11 @@ function AssignBaby({ id, onChange }) {
 
   return (
     <Card
-      title="负责宝宝列表"
+      title={t('babyList')}
       noPadding
       extra={
         <Button type="shade" onClick={openModal}>
-          添加新宝宝
+          {t('newBaby')}
         </Button>
       }
     >
@@ -320,43 +327,43 @@ function AssignBaby({ id, onChange }) {
         pagination={false}
         columns={[
           {
-            title: "宝宝姓名",
+            title: t('babyName'),
             dataIndex: "name",
             width: 140,
             align: "center",
           },
           {
-            title: "ID",
+            title: t('id'),
             dataIndex: "identity",
           },
           {
-            title: "性别",
+            title: t('gender'),
             dataIndex: "gender",
             render: (h) => Gender[h],
           },
           {
-            title: "主看护人",
+            title: t('master'),
             dataIndex: "masterCarerName",
           },
           {
-            title: "联系方式",
+            title: t('phone'),
             dataIndex: "masterCarerPhone",
           },
           {
-            title: "操作",
+            title: t('operate'),
             dataIndex: "id",
             width: 200,
             align: "center",
             render(babyId) {
               return (
                 <DeleteConfirmModal
-                  title="解绑宝宝"
-                  content="解绑宝宝后，该宝宝将处于未分配状态，且不会出现在社区工作者 app 端宝宝列表中，该工作者也无法对宝宝进行家访。确定要继续吗？"
+                  title={t('unbindBaby')}
+                  content={t('unbindBabyMessage')}
                   onConfirm={() => handleRelease(babyId)}
-                  okText="解绑"
+                  okText={t('unbind')}
                 >
                   <Button size="small" type="link">
-                    解绑
+                    {t('unbind')}
                   </Button>
                 </DeleteConfirmModal>
               );
@@ -373,6 +380,7 @@ const PageNotAssignedBabyModal = WithPage(NotAssignedBabyModal, "/admin/users/ch
 
 // open a new modal, assign chw to supervisor
 function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...props }) {
+  const { t } = useTranslation(["user", "common"]);
   useEffect(() => {
     if (visible) loadData();
     // eslint-disable-next-line
@@ -388,23 +396,23 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...pr
   return (
     <AssignModalTable
       {...props}
-      title="分配新宝宝"
+      title={t('assignBaby')}
       visible={visible}
       onCancel={onCancel}
       onFinish={handleAssign}
       columns={[
         {
-          title: "宝宝姓名",
+          title: t('babyName'),
           dataIndex: "name",
           width: 100,
         },
         {
-          title: "ID",
+          title: t('id'),
           dataIndex: "identity",
           width: 120,
         },
         {
-          title: "所在区域",
+          title: t('area'),
           dataIndex: "area",
           width: 300,
         },
@@ -414,6 +422,7 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...pr
 }
 
 function AssignChw({ id }) {
+  const { t } = useTranslation(["user", "common"]);
   const [visible, openModal, closeModal] = useBoolState();
   const [dataSource, refresh] = useFetch(`/admin/users/supervisor/${id}/chw`, {}, []);
 
@@ -424,11 +433,11 @@ function AssignChw({ id }) {
 
   return (
     <Card
-      title="负责社区工作者列表"
+      title={t('chw')}
       noPadding
       extra={
         <Button type="shade" onClick={openModal}>
-          分配新人员
+          {t('assignChw')}
         </Button>
       }
     >
@@ -438,39 +447,39 @@ function AssignChw({ id }) {
         pagination={false}
         columns={[
           {
-            title: "社区工作者姓名",
+            title: t('name'),
             dataIndex: "realName",
             width: 180,
             align: "center",
           },
           {
-            title: "ID",
+            title: t('id'),
             dataIndex: ["chw", "identity"],
           },
           {
-            title: "所在区域",
+            title: t('area'),
             dataIndex: ["chw", "tags"],
             render: (tags) => tags && tags.join(", "),
           },
           {
-            title: "联系电话",
+            title: t('phone'),
             dataIndex: "phone",
           },
           {
-            title: "操作",
+            title: t('operate'),
             dataIndex: "id",
             width: 200,
             align: "center",
             render(chwId) {
               return (
                 <DeleteConfirmModal
-                  title="解绑社区工作者"
-                  content="确认要解绑此社区工作者？"
-                  okText="解绑"
+                  title={t('unbindChw')}
+                  content={t('unbindChwMessage')}
+                  okText={t('unbind')}
                   onConfirm={() => handleRelease(chwId)}
                 >
                   <Button size="small" type="link">
-                    解绑
+                    {t('unbind')}
                   </Button>
                 </DeleteConfirmModal>
               );
@@ -485,6 +494,7 @@ function AssignChw({ id }) {
 
 // open a new modal, assign chw to supervisor
 function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
+  const { t } = useTranslation(["user", "common"]);
   const [dataSource, refresh] = useFetch(`/admin/users/supervisor/not_assigned/chw`, {}, []);
 
   useEffect(() => {
@@ -509,19 +519,19 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
       onCancel={onCancel}
       onFinish={handleAssign}
       dataSource={dataSource}
-      title="分配新社区工作者"
+      title={t('assignNewChw')}
       onChangeSearch={debounceRefresh}
       columns={[
         {
-          title: "社区工作者姓名",
+          title: t('chw'),
           dataIndex: "realName",
         },
         {
-          title: "ID",
+          title: t('id'),
           dataIndex: ["chw", "identity"],
         },
         {
-          title: "所在区域",
+          title: t('area'),
           dataIndex: ["chw", "tags"],
           render: (tags) => tags && tags.join(", "),
         },

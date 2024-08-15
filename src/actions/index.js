@@ -1,4 +1,5 @@
 import { cleanQueryParams } from "../utils";
+import i18n from "i18next";
 
 export function httpRequestStart(config) {
   return {
@@ -38,16 +39,16 @@ export function moduleFinishActionOptions(data) {
     type: "MODULE_FINISH_ACTION_OPTIONS",
     payload: [
       {
-        label: "结束选项继续本层级内容",
+        label: i18n.t("action:continueCurrentLevel"),
         value: "Continue",
       },
       {
-        label: "跳转至其他模块并结束本内容模块",
+        label: i18n.t("action:jumpToAnotherModuleAndEnd"),
         value: "Redirect_End",
         children: modules,
       },
       {
-        label: "跳转至其他模块并继续本层级内容",
+        label: i18n.t("action:jumpToAnotherModuleAndContinue"),
         value: "Redirect_Continue",
         children: modules,
       },

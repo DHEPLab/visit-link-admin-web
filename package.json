@@ -13,9 +13,12 @@
     "formik": "^2.1.4",
     "formik-antd": "^2.0.1",
     "qrcode.react": "^1.0.1",
+    "i18next": "^23.12.1",
+    "i18next-browser-languagedetector": "^7.0.0",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-i18next": "^15.0.0",
     "react-quill": "^2.0.0-beta.2",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
@@ -27,6 +30,10 @@
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
+    "@babel/helper-environment-visitor": "^7.24.7",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.20.7",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-react": "^7.24.7",
     "@types/jest": "^26.0.3",
     "babel-plugin-wildcard": "^6.0.0",
     "customize-cra": "^1.0.0-alpha.0",

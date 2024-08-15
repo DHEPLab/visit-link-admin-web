@@ -4,6 +4,7 @@ import { httpRequestStart, httpRequestEnd } from "./actions";
 import { clearToken } from "./utils/token";
 import store from "./store";
 import { Message } from "./components/*";
+import i18n from "./i18n";
 
 const urlInfo = {
   get: [],
@@ -11,118 +12,118 @@ const urlInfo = {
     {
       url: "/admin/curriculums/draft",
       isequals: true,
-      title: "草稿保存成功",
+      title: i18n.t("draftSaveSuccessfully", { ns: "config" }),
       context: "",
     },
     {
       url: "/admin/curriculums/",
       isequals: false,
-      title: "添加成功",
+      title: i18n.t("addSuccessfully", { ns: "config" }),
       context: "",
       endsWith: "babies",
-    }, //大纲分配宝宝列表添加新宝宝
+    },
     {
       url: "/admin/curriculums",
       isequals: true,
-      title: "发布成功",
-      context: "大纲已发布，可以添加宝宝后在app端查看",
+      title: i18n.t("publishSuccessfully", { ns: "config" }),
+      context: i18n.t("curriculumPublishedMessage", { ns: "config" }),
     },
     {
       url: "/admin/modules/draft",
       isequals: true,
-      title: "草稿保存成功",
+      title: i18n.t("draftSaveSuccessfully", { ns: "config" }),
       context: "",
     },
     {
       url: "/admin/modules",
       isequals: true,
-      title: "发布成功",
-      context: "模块已发布，可在课堂编辑时关联此模块",
+      title: i18n.t("publishSuccessfully", { ns: "config" }),
+      context: i18n.t("modulePublishedMessage", { ns: "config" }),
     },
   ],
   put: [
     {
       url: "/admin/curriculums/draft",
       isequals: true,
-      title: "草稿保存成功",
+      title: i18n.t("draftSaveSuccessfully", { ns: "config" }),
       context: "",
     },
     {
       url: "/admin/users/",
       isequals: false,
-      title: "密码修改成功",
+      title: i18n.t("passwordChangedSuccessfully", { ns: "config" }),
       context: "",
       endsWith: "/password",
     },
     {
       url: "/admin/users/",
       isequals: false,
-      title: "保存成功",
+      title: i18n.t("saveSuccessfully", { ns: "user" }),
       context: "",
       endsWith: "",
     },
     {
       url: "/admin/modules/draft",
       isequals: true,
-      title: "草稿保存成功",
+      title: i18n.t("draftSaveSuccessfully", { ns: "config" }),
       context: "",
     },
     {
       url: "/admin/curriculums",
       isequals: true,
-      title: "发布成功",
-      context: "大纲已发布，可以添加宝宝后在app端查看",
+      title: i18n.t("publishSuccessfully", { ns: "config" }),
+      context: i18n.t("curriculumPublishedMessage", { ns: "config" }),
     },
     {
       url: "/admin/modules",
       isequals: true,
-      title: "发布成功",
-      context: "模块已发布，可在课堂编辑时关联此模块",
+      title: i18n.t("publishSuccessfully", { ns: "config" }),
+      context: i18n.t("modulePublishedMessage", { ns: "config" }),
     },
   ],
   delete: [
     {
       url: "/admin/carers/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t("deleteSuccessfully", { ns: "baby" }),
       context: "",
       endsWith: "",
-    }, //删除看护人
+    },
     {
       url: "/admin/curriculums/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t("deleteSuccessfully", { ns: "config" }),
       context: "",
       endsWith: "",
-    }, //删除大纲
+    },
     {
       url: "/admin/modules/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t("deleteSuccessfully", { ns: "config" }),
       context: "",
       endsWith: "",
-    }, //删除模块
+    },
     {
       url: "/admin/babies/",
       isequals: false,
-      title: "删除成功",
+      title: i18n.t("deleteSuccessfully", { ns: "baby" }),
       context: "",
       endsWith: "curriculum",
-    }, //大纲分配宝宝列表删除宝宝
+    },
     {
       url: "/admin/babies/",
       isequals: false,
-      title: "解绑成功",
+      title: i18n.t("unbindSuccessfully", { ns: "user" }),
       context: "",
       endsWith: "chw",
-    }, //社区工作者解绑宝宝
+    },
     {
       url: "/admin/users/chw/",
       isequals: false,
-      title: "解绑成功",
+      title: i18n.t("unbindSuccessfully", { ns: "user" }),
       context: "",
       endsWith: "supervisor",
-    }, //负责社区工作者列表解绑社区工作者
+    },
   ],
 };
 
@@ -142,10 +143,10 @@ Axios.interceptors.response.use(
     if (!response) return Promise.reject(error);
     store.dispatch(httpRequestEnd(response.config));
 
-    let msg = "服务异常，请稍后重试";
+    let msg = i18n.t("serviceError", { ns: "error" });
     switch (response.status) {
       case 502:
-        msg = "网络异常，请稍后重试";
+        msg = i18n.t("networkError", { ns: "error" });
         break;
       case 500:
         break;
@@ -160,6 +161,8 @@ Axios.interceptors.response.use(
         if (data.violations) {
           // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
           msg = data.violations[0] ? `${data.violations[0]?.field} ${data.violations[0]?.message}` : "表单校验失败";
+        } else if (data.i18nErrorKey) {
+          msg = i18n.t(data.i18nErrorKey, { ...data.i18nContext, ns: "error" });
         } else if (data.detail) {
           msg = data.detail;
         }

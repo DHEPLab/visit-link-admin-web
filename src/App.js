@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import zhCN from "antd/es/locale/zh_CN";
+
 import { ConfigProvider } from "antd";
 import { QueryParamProvider } from "use-query-params";
 import "moment/locale/zh-cn";
+import { I18nextProvider, useTranslation } from "react-i18next";
+
 
 import RouteView from "./Router";
 import { Role } from "./constants/enums";
@@ -17,28 +19,32 @@ import { apiAccountProfile } from "./actions";
 
 import store from "./store";
 import "./config";
+import i18n from './i18n';
 
 applyToken(getToken());
 
 export default function () {
   return (
-    <ConfigProvider locale={zhCN}>
-      <Provider store={store}>
-        <AppContainer>
-          <BrowserRouter>
-            <QueryParamProvider ReactRouterRoute={Route}>
-              <App />
-            </QueryParamProvider>
-          </BrowserRouter>
-        </AppContainer>
-      </Provider>
-    </ConfigProvider>
+    <I18nextProvider i18n={i18n}>
+      <ConfigProvider locale={i18n.t('local', { ns: 'antd', returnObjects: true })}>
+        <Provider store={store}>
+          <AppContainer>
+            <BrowserRouter>
+              <QueryParamProvider ReactRouterRoute={Route}>
+                <App />
+              </QueryParamProvider>
+            </BrowserRouter>
+          </AppContainer>
+        </Provider>
+      </ConfigProvider>
+    </I18nextProvider>
   );
 }
 
 function App() {
   const history = useHistory();
   const { user } = useSelector((state) => state.users);
+  const { t } = useTranslation('app');
 
   const loadProfile = useCallback(() => {
     Axios.get("/api/account/profile")
@@ -51,9 +57,8 @@ function App() {
   function handleLogout() {
     clearToken();
     history.push("/sign_in");
-    Message.success("您已退出登录", "如您需进入系统，请重新登录");
+    Message.success(t('logoutSuccess'), t('logoutMessage'));
   }
-
   return (
     <>
       <Header username={user.realName} role={Role[user.role]} onNavigate={history.push} onLogout={handleLogout} />

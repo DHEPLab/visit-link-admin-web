@@ -3,21 +3,25 @@ import XLSX from 'xlsx';
 import styled from "styled-components";
 import { Steps, Button, Spin, Upload, Table, message } from "antd";
 import Column from 'antd/lib/table/Column';
-import { UploadButton } from "./*";
+import { useTranslation } from 'react-i18next';
 import moment from "moment";
 import Axios from "axios";
+
+import { UploadButton } from "./*";
+
 const { Step } = Steps;
 
 export default function ImportExcel({ open, refresh, close }) {
+  const { t, i18n } = useTranslation(["common", "enum", "baby"]);
 
   const [spinningLoading, setSpinningLoading] = useState(false);
   const [importData, setImportData] = useState([])
   const [errData, setErrData] = useState([])
 
-    useEffect(() => {
-      setImportData([])
-      setErrData([])
-    }, [open])
+  useEffect(() => {
+    setImportData([])
+    setErrData([])
+  }, [open])
 
   async function putBlob(fileInfo) {
     setSpinningLoading(true)
@@ -33,65 +37,65 @@ export default function ImportExcel({ open, refresh, close }) {
     };
   };
 
-  function getFeedingPattern (value) {
+  function getFeedingPattern(value) {
     const arr = [
-      {key: 'BREAST_MILK', value: "纯母乳喂养"},
-      {key: 'MILK_POWDER', value: "纯奶粉喂养"},
-      {key: 'MIXED', value: "母乳奶粉混合喂养"},
-      {key: 'TERMINATED', value: "已终止母乳/奶粉喂养"}
+      { key: 'BREAST_MILK', value: t('FeedingPattern.BREAST_MILK', { ns: "enum" }) },
+      { key: 'MILK_POWDER', value: t('FeedingPattern.MILK_POWDER', { ns: "enum" }) },
+      { key: 'MIXED', value: t('FeedingPattern.MIXED', { ns: "enum" }) },
+      { key: 'TERMINATED', value: t('FeedingPattern.TERMINATED', { ns: "enum" }) }
     ]
-    const find =  arr.find(ele => ele.value === value)
+    const find = arr.find(ele => ele.value === value)
     if (find) return find.key
     return null;
   };
 
-  function getBabyStage (value) {
+  function getBabyStage(value) {
     const arr = [
-      {key: 'EDC', value: "待产期"},
-      {key: 'BIRTH', value: "已出生"}
+      { key: 'EDC', value: t('BabyStage.EDC', { ns: "enum" }) },
+      { key: 'BIRTH', value: t('BabyStage.BIRTH', { ns: "enum" }) }
     ]
-    const find =  arr.find(ele => ele.value === value)
+    const find = arr.find(ele => ele.value === value)
     if (find) return find.key
     return null;
   };
 
-  function getGender (value) {
+  function getGender(value) {
     const arr = [
-      {key: 'MALE', value: "男"},
-      {key: 'FEMALE', value: "女"},
-      {key: 'UNKNOWN', value: "未知"}
+      { key: 'MALE', value: t('Gender.MALE', { ns: "enum" }) },
+      { key: 'FEMALE', value: t('Gender.FEMALE', { ns: "enum" }) },
+      { key: 'UNKNOWN', value: t('Gender.UNKNOWN', { ns: "enum" }) }
     ]
-    const find =  arr.find(ele => ele.value === value)
+    const find = arr.find(ele => ele.value === value)
     if (find) return find.key
     return null;
   };
 
-  function getAssistedFood (value) {
+  function getAssistedFood(value) {
     const arr = [
-      {key: true, value: "已添加"},
-      {key: false, value: "未添加"},
+      { key: true, value: t('AssistedFood.TRUE', { ns: "enum" }) },
+      { key: false, value: t('AssistedFood.FALSE', { ns: "enum" }) },
     ]
-    const find =  arr.find(ele => ele.value === value)
+    const find = arr.find(ele => ele.value === value)
     if (find) return find.key
     return null;
   };
 
-  function getFamilyTies (value) {
+  function getFamilyTies(value) {
     const arr = [
-      {key: 'MOTHER', value: "妈妈"},
-      {key: 'FATHER', value: "爸爸"},
-      {key: 'GRANDMOTHER', value: "奶奶"},
-      {key: 'GRANDMA', value: "外婆"},
-      {key: 'GRANDFATHER', value: "爷爷"},
-      {key: 'GRANDPA', value: "外公"},
-      {key: 'OTHER', value: "其他"}
+      { key: 'MOTHER', value: t('RELATIVES.MOTHER', { ns: "enum" }) },
+      { key: 'FATHER', value: t('RELATIVES.FATHER', { ns: "enum" }) },
+      { key: 'GRANDMOTHER', value: t('RELATIVES.GRANDMOTHER', { ns: "enum" }) },
+      { key: 'GRANDMA', value: t('RELATIVES.GRANDMA', { ns: "enum" }) },
+      { key: 'GRANDFATHER', value: t('RELATIVES.GRANDFATHER', { ns: "enum" }) },
+      { key: 'GRANDPA', value: t('RELATIVES.GRANDPA', { ns: "enum" }) },
+      { key: 'OTHER', value: t('RELATIVES.OTHER', { ns: "enum" }) }
     ]
-    const find =  arr.find(ele => ele.value === value)
+    const find = arr.find(ele => ele.value === value)
     if (find) return find.key
     return null;
   };
 
-  function getCares (babyjson) {
+  function getCares(babyjson) {
     const cares = []
     if (babyjson["Caregiver_Main_name"]) {
       cares.push({
@@ -143,136 +147,136 @@ export default function ImportExcel({ open, refresh, close }) {
     return cares;
   }
 
-  function toBaby (babyjson) {
-    console.log(babyjson, 7777)
+  function toBaby(babyjson) {
     const cares = getCares(babyjson);
     return {
-      identity: babyjson['宝宝id'] && `${babyjson['宝宝id']}`.trim(),
-      name: babyjson['宝宝姓名'] && babyjson['宝宝姓名'].trim(),
-      stage: getBabyStage(babyjson['成长阶段']),
-      gender: getGender(babyjson['宝宝性别']),
-      edc: babyjson['预产期'],
-      birthday: babyjson['出生日期'],
-      assistedFood: getAssistedFood(babyjson['辅食']),
-      feedingPattern: getFeedingPattern(babyjson['喂养方式']),
-      area: babyjson['所在地区'],
-      location: babyjson['详细地址'],
-      remark: babyjson['备注信息'],
-      chw: {chw: {identity: babyjson['CHW_ID']}},
+      identity: babyjson[t('id', { ns: 'baby' })]?.trim(),
+      name: babyjson[t('babyName', { ns: 'baby' })]?.trim(),
+      stage: getBabyStage(babyjson[t('growthStage', { ns: 'baby' })]),
+      gender: getGender(babyjson[t('gender', { ns: 'baby' })]),
+      edc: babyjson[t('dueDay', { ns: 'baby' })],
+      birthday: babyjson[t('birthDay', { ns: 'baby' })],
+      assistedFood: getAssistedFood(babyjson[t('supplementaryFood', { ns: 'baby' })]),
+      feedingPattern: getFeedingPattern(babyjson[t('feedingMethods', { ns: 'baby' })]),
+      area: babyjson[t('area', { ns: 'baby' })],
+      location: babyjson[t('address', { ns: 'baby' })],
+      remark: babyjson[t('comments', { ns: 'baby' })],
+      chw: { chw: { identity: babyjson[t('chwID', { ns: 'baby' })] } },
       cares: cares
     }
   }
 
-  async function checkBaby (babiesjsonArray) {
-    const babiesArray = babiesjsonArray.map((json, index) => ({...toBaby(json), number: (index+1)}))
+  async function checkBaby(babiesjsonArray) {
+    const isLanguageZH = i18n.resolvedLanguage === 'zh'
+    const babiesArray = babiesjsonArray.map((json, index) => ({ ...toBaby(json), number: (index + 1) }))
     let passArray = []
     let errorArray = []
     babiesArray.forEach(element => {
 
       if (passArray.find(ele => ele.identity === element.identity)) {
-        errorArray.push({ number: element.number, name: element.name, matters: '表内ID重复' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.duplicateId') })
         return;
       }
 
       if (!element.identity) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝ID为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyId') })
         return;
       }
 
       if (!element.name) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝姓名为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyBabyName') })
         return;
       }
 
       if (!element.gender) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝性别为空/格式错误' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidGender') })
         return;
       }
 
-      if (!element.stage ) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝成长阶段为空/格式错误' })
+      if (!element.stage) {
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidGrowthStage') })
         return;
       }
 
       if (!element.area) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝地区为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyArea') })
         return;
       }
 
       if (!element.location) {
-        errorArray.push({ number: element.number, name: element.name, matters: '宝宝详细地址为空' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyLocation') })
         return;
       }
 
       if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
-        errorArray.push({ number: element.number, name: element.name, matters: '至少添加一位主看护人' })
+        errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyCaregiver') })
         return;
       }
 
-      if (! new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
+      if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
         errorArray.push({ number: element.number, name: element.name, matters: '姓名必须为2-10个汉字' })
         return;
       }
 
-      if (element.area.split('/').length !== 4) {
+      if (isLanguageZH && element.area.split('/').length !== 4) {
         errorArray.push({ number: element.number, name: element.name, matters: '所在地区格式错误' })
         return;
       }
 
       if (element.cares.length > 0) {
-        const result =  element.cares.every(ele => {
+        const result = element.cares.every(ele => {
           if (!ele.phone || !ele.familyTies) return false
-          if (!new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
-          if (!new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
+          if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false
+          if (isLanguageZH && !new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false
           return true
         });
         if (!result) {
-          errorArray.push({ number: element.number, name: element.name, matters: '看护人信息不符合规则' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidCaregiver') })
           return;
         }
       }
 
       if (element.stage === "EDC") {
         if (!element.edc) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyEDC') })
           return
         }
 
         if (element.edc.split('-').length !== 3) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期格式错误' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidFormatDueDay') })
           return
         }
 
         element.edc = moment(element.edc).format('YYYY-MM-DD')
 
         if (moment().unix() > moment(element.edc).unix()) {
-          errorArray.push({ number: element.number, name: element.name, matters: '预产期不能小于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidDueDay') })
           return
         }
         passArray.push(element)
       } else {
 
         if (!element.birthday) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日为空' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.emptyBirthDay') })
           return
         }
 
         if (element.birthday.split('-').length !== 3) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日格式错误' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidFormatBirthDay') })
           return
         }
 
         element.birthday = moment(element.birthday).format('YYYY-MM-DD')
 
         if (moment().unix() < moment(element.birthday).unix()) {
-          errorArray.push({ number: element.number, name: element.name, matters: '生日不能大于当前时间' })
+          errorArray.push({ number: element.number, name: element.name, matters: t('excel.importBaby.invalidBirthDay') })
           return
         }
         passArray.push(element)
       }
     });
 
-    Axios.post("/admin/babies/check", passArray).then(res => {
+    Axios.post(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, passArray).then(res => {
       const { data } = res;
       const errresults = [...errorArray, ...(data || [])].sort((a, b) => parseInt(`${a.number}`) - parseInt(`${b.number}`))
       setErrData(errresults)
@@ -283,11 +287,11 @@ export default function ImportExcel({ open, refresh, close }) {
       setSpinningLoading(false)
     });
   }
-  
-  function importDatas () {
+
+  function importDatas() {
     setSpinningLoading(true)
     Axios.post("/admin/babies/imports", importData).then(res => {
-      message.success("导入成功")
+      message.success(t('excel.importSuccess'))
       refresh()
       close()
       setSpinningLoading(false)
@@ -299,37 +303,37 @@ export default function ImportExcel({ open, refresh, close }) {
   return (
     <Container tip="Loading..." spinning={spinningLoading}>
       <Steps progressDot current={3} size="small" >
-        <Step title="下载模板" />
-        <Step title="导入数据" />
-        <Step title="导入完成" />
+        <Step title={t('excel.downloadTemplate')} />
+        <Step title={t('excel.importData')} />
+        <Step title={t('excel.finishImport')} />
       </Steps>
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false} >
-          <UploadButton title="点击上传Excel" icon="iconimport-excel">
-            支持支持 xls/xlsx
+          <UploadButton title={t('excel.clickToUploadExcel')} icon="iconimport-excel">
+            {t('excel.support')}
             <br />
-            大小不超过5M
+            {t('excel.filesizeMaxTo5M')}
             <br />
-            单次导入数据最好不超过500条
+            {t('excel.batchImportCountSuggest')}
           </UploadButton>
         </Upload>
-        <DownLink href="/static/template/import_baby.xlsx" download >下载模板</DownLink>
+        <DownLink href={t('importBabyTemplate', { ns: 'baby' })} download >{t('excel.downloadTemplate')}</DownLink>
       </ButtonLine>
-      {(importData.length > 0 || errData.length > 0 )&& <ResultContainer>
+      {(importData.length > 0 || errData.length > 0) && <ResultContainer>
         <Table
           size="small"
-          dataSource={errData.map((element, index) => ({...element, key: index}))}
+          dataSource={errData.map((element, index) => ({ ...element, key: index }))}
           pagination={false}
           scroll={{ y: 200 }}
         >
-          <Column title="行号" align="left" dataIndex="number" key="number" width={50} />
-          <Column title="宝宝姓名" align="left" dataIndex="name" key="name" />
-          <Column title="错误事项" align="left" dataIndex="matters" key="matters" render ={(matters) => <span style={{color: 'red', fontSize: 12}}>{matters}</span>} />
+          <Column title={t('row')} align="left" dataIndex="number" key="number" width={50} />
+          <Column title={t('babyName')} align="left" dataIndex="name" key="name" />
+          <Column title={t('errorItem')} align="left" dataIndex="matters" key="matters" render={(matters) => <span style={{ color: 'red', fontSize: 12 }}>{matters}</span>} />
         </Table>
-        <Result>成功校验数据{importData.length}条， 共{importData.length+errData.length}条</Result>
+        <Result>{t('excel.verifiedDataCount')} {importData.length} {t('unit.item')}, {t('total')} {importData.length + errData.length} {t('unit.item')}</Result>
         <ImportLine>
-          <CloseButton type="default" size="middle" onClick={() => close()} >关闭</CloseButton>
-          <Button type="primary" style={{float: 'right', width: 160}} size="middle" onClick={importDatas} disabled={importData.length === 0} >导入正确数据</Button>
+          <CloseButton type="default" size="middle" onClick={() => close()} >{t('close')}</CloseButton>
+          <Button type="primary" style={{ float: 'right', width: 160 }} size="middle" onClick={importDatas} disabled={importData.length === 0} >{t('excel.importData')}</Button>
         </ImportLine>
       </ResultContainer>}
     </Container>

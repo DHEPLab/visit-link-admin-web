@@ -1,11 +1,13 @@
 import React from "react";
 import moment from "moment";
 import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
+import { useTranslation } from 'react-i18next';
 
 import ModalForm from "./ModalForm";
 import Pcas from "../constants/pcas-code.json";
 import Rules from "../constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "../constants/enums";
+import i18n from "../i18n";
 
 export function useMethods() {
   return {
@@ -20,16 +22,17 @@ export function useMethods() {
 }
 
 export default function BabyModalForm({ disableStage, ...props }) {
+  const { t } = useTranslation("baby");
   const { disabledDateForEDC } = useMethods();
   return (
     <ModalForm {...props}>
-      <Form.Item label="真实姓名" name="name" rules={Rules.RealName}>
+      <Form.Item label={t('name')} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>
-      <Form.Item label="ID" name="identity" rules={Rules.Required}>
+      <Form.Item label={t('id')} name="identity" rules={Rules.Required}>
         <Input />
       </Form.Item>
-      <Form.Item label="性别" name="gender" rules={Rules.Required}>
+      <Form.Item label={t('gender')} name="gender" rules={Rules.Required}>
         <Radio.Group>
           {Object.keys(Gender).map((key) => (
             <Radio key={key} value={key}>
@@ -38,7 +41,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
           ))}
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="成长阶段" name="stage" rules={Rules.Required}>
+      <Form.Item label={t('growthStage')} name="stage" rules={Rules.Required}>
         <Radio.Group>
           {Object.keys(BabyStage).map((key) => (
             <Radio key={key} value={key} disabled={disableStage}>
@@ -52,26 +55,26 @@ export default function BabyModalForm({ disableStage, ...props }) {
           const stage = getFieldValue("stage");
           if (stage === "EDC") {
             return (
-              <Form.Item label="预产期" name="edc" rules={Rules.Required}>
+              <Form.Item label={t('dueDay')} name="edc" rules={Rules.Required}>
                 <DatePicker disabledDate={(current) => disabledDateForEDC(current, moment())} />
               </Form.Item>
             );
           } else {
             return (
               <>
-                <Form.Item label="出生日期" name="birthday" rules={Rules.Required}>
+                <Form.Item label={t('birthDay')} name="birthday" rules={Rules.Required}>
                   <DatePicker
                     // Can not select days after today
                     disabledDate={(current) => current && current > moment().endOf("day")}
                   />
                 </Form.Item>
-                <Form.Item label="辅食" name="assistedFood" rules={Rules.Required}>
+                <Form.Item label={t('supplementaryFood')} name="assistedFood" rules={Rules.Required}>
                   <Radio.Group>
-                    <Radio value={true}>已添加</Radio>
-                    <Radio value={false}>未添加</Radio>
+                    <Radio value={true}>{t('add')}</Radio>
+                    <Radio value={false}>{t('noAdd')}</Radio>
                   </Radio.Group>
                 </Form.Item>
-                <Form.Item label="喂养方式" name="feedingPattern" rules={Rules.Required}>
+                <Form.Item label={t('feedingMethods')} name="feedingPattern" rules={Rules.Required}>
                   <Select>
                     {Object.keys(FeedingPattern || []).map((key) => (
                       <Select.Option key={key} value={key}>
@@ -85,10 +88,18 @@ export default function BabyModalForm({ disableStage, ...props }) {
           }
         }}
       </Form.Item>
-      <Form.Item label="所在区域" name="area" rules={Rules.Required}>
-        <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
-      </Form.Item>
-      <Form.Item label="详细地址" name="location" rules={Rules.Location}>
+      {
+        i18n.resolvedLanguage === "zh" ? (
+          <Form.Item label={t('area')} name="area" rules={Rules.Required}>
+            <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
+          </Form.Item>
+        ) : (
+          <Form.Item label={t('area')} name="area" rules={Rules.Required}>
+            <Input />
+          </Form.Item>
+        )
+      }
+      <Form.Item label={t('address')} name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
       <Row>
@@ -103,7 +114,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
           </Form.Item>
         </Col>
       </Row>
-      <Form.Item label="备注信息" name="remark" rules={Rules.Remark}>
+      <Form.Item label={t('comments')} name="remark" rules={Rules.Remark}>
         <Input />
       </Form.Item>
     </ModalForm>

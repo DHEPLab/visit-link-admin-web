@@ -1,8 +1,9 @@
 // Higer-Order Component to enhance the paging
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Axios from "axios";
-import {debounce} from "lodash";
-import {useHistory} from "react-router-dom";
+import { debounce } from "lodash";
+import { useHistory } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 // first page start at 0
 const page = 0;
@@ -18,6 +19,7 @@ export default function (
     loadOnMount = true
 ) {
     return function (props) {
+        const { t } = useTranslation(["common"]);
         const history = useHistory();
         const historyPageState = history?.location.state?.page?.[url]
         const [search, setSearch] = useState(historyPageState || {
@@ -38,7 +40,7 @@ export default function (
             setLoading(true)
             Axios.get(requestURL, {
                 params: newParams,
-            }).then(({data}) => {
+            }).then(({ data }) => {
                 setTotalElements(data.totalElements);
                 setContent(data.content);
 
@@ -69,14 +71,14 @@ export default function (
                 current: search.page + 1,
                 total: totalElements,
                 showTotal(total) {
-                    return `共 ${total} 条`;
+                    return `${t('total')} ${total} ${t('unit.item')}`;
                 },
             };
         }
 
         const debounceChangeSearch = debounce((key, value) => {
             setSearch((s) => {
-                const newParams = {...s, page: 0, [key]: value}
+                const newParams = { ...s, page: 0, [key]: value }
                 if (value === "") {
                     delete newParams[key]
                 }
@@ -84,7 +86,7 @@ export default function (
             });
         }, 400);
 
-        function handleChangePage({current}) {
+        function handleChangePage({ current }) {
             setSearch((s) => ({
                 ...s,
                 page: current - 1,

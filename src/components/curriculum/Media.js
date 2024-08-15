@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { Upload } from "antd";
+import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
 import { GhostInput, UploadButton } from "../*";
 import { fileFormat } from "../../utils";
 
 export default function Media({ name, value, onChange, ...props }) {
-  // temporarily stores the text value，modify the formik value on blur event to improve performance
   const [text, setText] = useState(value.text);
+  const { t } = useTranslation("media");
 
   const Name = {
     type: `${name}.type`,
@@ -61,27 +62,27 @@ export default function Media({ name, value, onChange, ...props }) {
   }
 
   return (
-    <Container icon="iconmedia-gray" title="媒体组件" {...props}>
+    <Container icon="iconmedia-gray" title={t("mediaComponent")} {...props}>
       <Flex>
         {value.file || props.readonly ? (
           <Preview type={value.type} file={value.file} />
         ) : (
           <>
             <Upload accept="image/png, image/jpeg" showUploadList={false} beforeUpload={handleUploadPicture}>
-              <UploadButton title="点击上传图片" icon="iconpicture">
-                支持JPG/PNG/GIF
+              <UploadButton title={t("clickToUploadImage")} icon="iconpicture">
+                {t("supportedImageFormats")}
                 <br />
-                大小不超过5M
+                {t("maxImageSize")}
                 <br />
-                建议尺寸为 16:10
+                {t("recommendedImageRatio")}
               </UploadButton>
             </Upload>
             <Upload accept=".mp4" showUploadList={false} beforeUpload={handleUploadVideo}>
-              <UploadButton title="点击上传视频" icon="iconvideo">
-                支持MP4 <br />
-                大小不超过1G
+              <UploadButton title={t("clickToUploadVideo")} icon="iconvideo">
+                {t("supportedVideoFormats")} <br />
+                {t("maxVideoSize")}
                 <br />
-                建议尺寸为 16:10
+                {t("recommendedVideoRatio")}
               </UploadButton>
             </Upload>
           </>
@@ -93,9 +94,8 @@ export default function Media({ name, value, onChange, ...props }) {
         onChange={(e) => setText(e.target.value)}
         onBlur={() => onChange(Name.text)(text)}
         disabled={props.readonly}
-        placeholder="请输入媒体描述文本"
+        placeholder={t("enterMediaDescription")}
       />
-      {/* <pre>{JSON.stringify(value)}</pre> */}
     </Container>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Modal, Space, Button, Table } from "antd";
+import { useTranslation } from 'react-i18next';
 
 import SearchInput from "./SearchInput";
 
@@ -15,6 +16,7 @@ export default function AssignModalTable({
   refreshOnVisible,
   ...props
 }) {
+  const { t } = useTranslation(["common"]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -34,10 +36,10 @@ export default function AssignModalTable({
       footer={
         <Space size="large" style={{ marginTop: "30px" }}>
           <Button ghost type="primary" size="large" onClick={onCancel}>
-            放弃
+            {t('cancel')}
           </Button>
           <Button type="primary" size="large" onClick={() => onFinish(selectedRowKeys)}>
-            添加
+            {t('add')}
           </Button>
         </Space>
       }
@@ -50,7 +52,7 @@ export default function AssignModalTable({
         <SearchInput
           style={{ width: "100%" }}
           onChange={(e) => onChangeSearch("search", e.target.value)}
-          placeholder="请输入姓名、ID或所在区域搜索"
+          placeholder={t('searchInputByNameIDAreaPlaceholder')}
         />
       </SearchBar>
 

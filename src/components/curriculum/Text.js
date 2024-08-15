@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ReactQuill, { Quill } from "react-quill";
 import { debounce } from "lodash";
+import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
 
@@ -14,12 +15,6 @@ const colors = {
   script: "#3490de",
   instruction: "#05bfb2",
   reference: "#6a2c70",
-};
-
-const typeLabels = {
-  script: "叙述文本",
-  instruction: "提示文本",
-  reference: "参考文本",
 };
 
 // https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
@@ -42,6 +37,14 @@ class PlainClipboard extends Clipboard {
 Quill.register("modules/clipboard", PlainClipboard, true);
 
 export default function Text({ name, onBlur, onChange, value, ...props }) {
+  const { t } = useTranslation("text");
+
+  const typeLabels = {
+    script: t("script"),
+    instruction: t("instruction"),
+    reference: t("reference"),
+  };
+
   const types = ["instruction", "script", "reference"];
   const Name = {
     html: `${name}.html`,
@@ -56,20 +59,19 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
   function toolbarContainer() {
     return props.readonly
       ? []
-      : // use quill toolbar default value echo type, put current type to first item
-        [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
+      : [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
   }
 
   return (
     <Container
       right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
       icon="icontext-gray"
-      title="文本组件"
+      title={t("textComponent")}
       name={name}
       noPadding
       {...props}
     >
-      <QuillContainer className="text-editor" readonly={props.readonly}>
+      <QuillContainer className="text-editor" readonly={props.readonly} typeLabels={typeLabels} colors={colors} t={t}>
         <ReactQuill
           readOnly={props.readonly}
           theme="snow"
@@ -82,13 +84,10 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
             },
           }}
           defaultValue={value.html}
-          // Debounce trigger that formik on change event
-          // fix typing Chinese always automatically triggers onChange
           onChange={debounce(onChange(Name.html), 1000)}
-          placeholder="请输入文本内容"
+          placeholder={t("enterTextContent")}
         />
       </QuillContainer>
-      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </Container>
   );
 }
@@ -115,22 +114,22 @@ const QuillContainer = styled.div`
 
   .ql-picker.ql-type .ql-picker-item::before,
   .ql-picker.ql-type .ql-picker-label::before {
-    content: "Type";
+    content: "${(props) => props.t("type")}";
   }
 
   .ql-picker.ql-type [data-value="script"]::before {
-    content: "${typeLabels["script"]}";
-    color: ${colors["script"]};
+    content: "${(props) => props.typeLabels.script}";
+    color: ${(props) => props.colors.script};
   }
 
   .ql-picker.ql-type [data-value="instruction"]::before {
-    content: "${typeLabels["instruction"]}";
-    color: ${colors["instruction"]};
+    content: "${(props) => props.typeLabels.instruction}";
+    color: ${(props) => props.colors.instruction};
   }
 
   .ql-picker.ql-type [data-value="reference"]::before {
-    content: "${typeLabels["reference"]}";
-    color: ${colors["reference"]};
+    content: "${(props) => props.typeLabels.reference}";
+    color: ${(props) => props.colors.reference};
   }
 
   .ql-container.ql-snow,

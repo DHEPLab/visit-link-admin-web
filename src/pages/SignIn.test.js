@@ -4,6 +4,6 @@ import SignIn from "./SignIn";
 
 test("renders button sign in page", () => {
   const { getByText } = setup(<SignIn />);
-  const text = getByText("登 录");
+  const text = getByText("login");
   expect(text).toBeInTheDocument();
 });

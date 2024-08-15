@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button, Space } from "antd";
 import { Iconfont } from "../*";
+import { useTranslation } from "react-i18next";
 
 export default function Container({
   readonly,
@@ -21,6 +22,7 @@ export default function Container({
   focus,
   onFocus,
 }) {
+  const { t } = useTranslation("container");
   return (
     <Flex>
       {!readonly && !hideMove && (
@@ -36,14 +38,14 @@ export default function Container({
       ) : (
         <StyledContainer nested={nested} focus={focus}>
           <TitleContainer>
-            <Title onClick={() => !readonly && onFocus && onFocus()}>
+            <Title onClick={() => !readonly && onFocus?.()}>
               {icon && <Iconfont type={icon} style={{ marginRight: "8px" }} />}
               <div>{title}</div>
               <ExtraContainer>{extra}</ExtraContainer>
             </Title>
             {!readonly && !hideRemove && (
               <Button size="small" type="link" onClick={onRemove}>
-                <Iconfont type="icontrash-orange" size={14} /> 移除
+                <Iconfont type="icontrash-orange" size={14} /> {t("remove")}
               </Button>
             )}
             {right}

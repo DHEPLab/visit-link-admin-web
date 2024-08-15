@@ -1,15 +1,22 @@
-const Required = [{ required: true }];
+import i18n from "../i18n";
+
+const Required = [
+  {
+    required: true,
+  },
+];
 
 export default {
   Required,
+
   Password: [{ required: true, min: 6 }],
   Phone: [
-    { required: true, message: "请输入手机号", trigger: "blur" },
-    { pattern: /^1[0-9]{10}$/, message: "请输入11位手机号码", trigger: "blur" },
+    { required: true, trigger: "blur" },
+    i18n.resolvedLanguage === "zh" && { pattern: /^1[0-9]{10}$/, message: "请输入11位手机号码", trigger: "blur" },
   ],
   RealName: [
-    { required: true, message: "请输入真实姓名", trigger: "blur" },
-    {
+    { required: true, trigger: "blur" },
+    i18n.resolvedLanguage === "zh" && {
       pattern: /^[\u4e00-\u9fa5]{2,10}$/,
       message: "请输入2个以上的汉字，最多10个字符",
       trigger: "blur",

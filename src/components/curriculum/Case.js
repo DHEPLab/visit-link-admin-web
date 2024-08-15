@@ -3,15 +3,16 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { Button, Cascader, message } from "antd";
 import { FieldArray } from "formik";
+import { useTranslation } from "react-i18next";
 
 import Factory from "./factory";
 import { Container, ComponentField } from "./*";
 import { GhostInput } from "../*";
 
 export default function Case({ name, value, index, onChange, ...props }) {
-  // temporarily stores the text value，modify the formik value on blur event to improve performance
   const [text, setText] = useState(value.text);
   const modules = useSelector((state) => state.modules);
+  const { t } = useTranslation("case");
 
   const Name = {
     text: `${name}.text`,
@@ -26,7 +27,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
   return (
     <Container
       {...props}
-      title={`选项 ${index + 1}`}
+      title={t("option", { index: index + 1 })}
       name={name}
       hideMove
       extra={
@@ -37,7 +38,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
           value={value.finishAction}
           onChange={onChangeCascader}
           size="small"
-          placeholder="请选择选项结束跳转至"
+          placeholder={t("selectOptionEndJump")}
         />
       }
     >
@@ -48,7 +49,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onBlur={() => onChange(Name.text)(text)}
-          placeholder="请输入选项文本，限20个字符"
+          placeholder={t("enterOptionText")}
         />
       </GhostInputContainer>
       <FieldArray name={Name.components}>
@@ -65,7 +66,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
           function handleAddSwitch() {
             if (name.split(".cases").length > 2) {
-              message.warn("选项组件嵌套层级最多为3级");
+              message.warn(t("maxNestedLevels"));
               return;
             }
             helpers.push(Factory.createSwitch());
@@ -88,13 +89,13 @@ export default function Case({ name, value, index, onChange, ...props }) {
               {!props.readonly && (
                 <div>
                   <Button type="link" onClick={() => helpers.push(Factory.createText())}>
-                    添加文本
+                    {t("addText")}
                   </Button>
                   <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
-                    添加媒体
+                    {t("addMedia")}
                   </Button>
                   <Button type="link" onClick={handleAddSwitch}>
-                    添加选择
+                    {t("addChoice")}
                   </Button>
                 </div>
               )}

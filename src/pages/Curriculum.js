@@ -22,15 +22,18 @@ import {
   ModalForm,
   DeleteConfirmModal,
 } from "../components/*";
+import { useTranslation } from "react-i18next";
 
 export default function Curriculum() {
   const { id } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
 
+  const { t } = useTranslation("curriculum");
+
   const [isPrompt, setIsPrompt] = useState(true);
   const [readonly, setReadonly] = useState();
-  const [title, setTitle] = useState("创建新大纲");
+  const [title, setTitle] = useState(t("createNewCurriculum"));
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
@@ -52,7 +55,7 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
-      setLessons(data.lessons.map(n => ({...n, questionnaire: n.questionnaire?.id})));
+      setLessons(data.lessons.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
       setSchedules(data.schedules);
       setCurriculum({ ...data, lessons: [], schedules: [] });
     });
@@ -72,16 +75,16 @@ export default function Curriculum() {
 
   function validate() {
     if (lessons.length === 0) {
-      message.warn("至少添加一个课堂");
+      message.warn(t("atLeastOneSession"));
       return false;
     }
     if (schedules.length === 0) {
-      message.warn("至少添加一个匹配计划");
+      message.warn(t("atLeastOneMatchingPlan"));
       return false;
     }
     for (const schedule of schedules) {
       if (!schedule.lessons || schedule.lessons.length === 0) {
-        message.warn(`匹配计划 ${schedule.name} 至少选择一个课堂`);
+        message.warn(t("matchingPlanAtLeastOneSession", { name: schedule.name }));
         return false;
       }
     }
@@ -90,7 +93,10 @@ export default function Curriculum() {
 
   function onFinish(values) {
     if (!validate()) return;
-    const lessonResult = lessons.map(n => ({...n, questionnaire: (n.questionnaire ? {id: n.questionnaire} : null)}))
+    const lessonResult = lessons.map((n) => ({
+      ...n,
+      questionnaire: n.questionnaire ? { id: n.questionnaire } : null,
+    }));
     Axios.post(submitURL, {
       id,
       ...values,
@@ -128,13 +134,13 @@ export default function Curriculum() {
           if (isstop || readonly) {
             return true;
           } else {
-            return "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?";
+            return t("unsavedChangesWarning");
           }
         }}
       />
       <DetailHeader
         icon="iconcurriculum-primary"
-        menu="大纲管理"
+        menu={t("curriculumManagement")}
         title={title}
         role={readonly && moment(curriculum.lastPublishedAt).format("YYYY/MM/DD HH:mm")}
         extra={
@@ -142,28 +148,28 @@ export default function Curriculum() {
             {readonly ? (
               <>
                 <DeleteConfirmModal
-                  title="删除大纲"
-                  content="删除大纲后，会将大纲分配的所有宝宝的待开始家访清除，这些宝宝安排家访时将找不到匹配的课堂是否继续？"
+                  title={t("deleteCurriculum")}
+                  content={t("deleteCurriculumWarning")}
                   onConfirm={handleDeleteCurriculum}
                 >
                   <Button ghost type="danger">
-                    删除大纲
+                    {t("deleteCurriculum")}
                   </Button>
                 </DeleteConfirmModal>
 
                 {!draftId && (
                   <Button type="danger" onClick={() => history.push(`/curriculums/edit/${id}`)}>
-                    编辑大纲
+                    {t("editCurriculum")}
                   </Button>
                 )}
               </>
             ) : (
               <>
                 <Button ghost type="danger" onClick={submitDraft}>
-                  保存至草稿
+                  {t("saveToDraft")}
                 </Button>
                 <Button type="danger" onClick={submitPublish}>
-                  保存并发布
+                  {t("publish")}
                 </Button>
               </>
             )}
@@ -173,23 +179,36 @@ export default function Curriculum() {
 
       {draftId && (
         <DraftBar
-          title="本大纲有1个尚未发布的草稿："
+          title={t("unpublishedDraft")}
           lastModifiedDraftAt={draftDate}
           onRemove={handleDelteDraft}
           onClick={() => history.push(`/curriculums/edit/${draftId}`)}
         />
       )}
 
-      <Card title="大纲基本信息">
+      <Card title={t("curriculumInformation")}>
         {readonly ? (
           <ReadonlyForm value={curriculum} />
         ) : (
-          <Form data-testid="basic-form" form={form} onFinish={onFinish}>
-            <Form.Item label="大纲名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
-              <Input placeholder="请输入大纲名称，限20个汉字" />
+          <Form
+            data-testid="basic-form"
+            form={form}
+            onFinish={onFinish}
+            validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+          >
+            <Form.Item
+              label={t("curriculumName")}
+              name="name"
+              rules={[...Rules.Required, { max: 100, message: t("curriculum:curriculumNameTooLong") }]}
+            >
+              <Input placeholder={t("enterCurriculumNameWithLimit")} style={{ width: "500px" }} />
             </Form.Item>
-            <Form.Item label="大纲描述" name="description" rules={[...Rules.Required, { max: 50 }]}>
-              <Input.TextArea rows={5} placeholder="请输入大纲描述，限50个汉字" />
+            <Form.Item
+              label={t("curriculumDescription")}
+              name="description"
+              rules={[...Rules.Required, { max: 1000, message: t("curriculum:curriculumDescriptionTooLong") }]}
+            >
+              <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} />
             </Form.Item>
           </Form>
         )}
@@ -200,15 +219,15 @@ export default function Curriculum() {
     </>
   );
 }
-
 const EnhancedLessons = withEdit(Lessons);
 const EnhancedSchedules = withEdit(Schedules);
 
 function ReadonlyForm({ value: { name, description } }) {
+  const { t } = useTranslation("curriculum");
   return (
     <div data-testid="readonly-form">
-      <StaticField label="大纲名称">{name}</StaticField>
-      <StaticField label="大纲描述">{description}</StaticField>
+      <StaticField label={t("curriculumName")}>{name}</StaticField>
+      <StaticField label={t("curriculumDescription")}>{description}</StaticField>
     </div>
   );
 }
@@ -275,12 +294,14 @@ function Lessons({
   visible,
 }) {
   const { networks } = useSelector((state) => state);
+  const { t } = useTranslation("curriculum");
+
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
   useEffect(() => {
-    loadQuestionnairesOptions()
-  }, [openEditModal, setQuestionnairesOptions])
+    loadQuestionnairesOptions();
+  }, [openEditModal, setQuestionnairesOptions]);
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -320,33 +341,34 @@ function Lessons({
   return (
     <Card
       noPadding
-      title="课堂列表"
+      title={t("sessions")}
       tooltip={
         !disabled && (
           <>
-            <p>请注意</p>
-            <p>1.课堂适用时间不符合已添加匹配规则的时间范围会导致匹配规则内已添加的课堂丢失</p>
-            <p>2.修改适用时间可能会导致一些拜访计划不可用，请及时通知社区工作者</p>
+            <p>{t("pleaseNote")}</p>
+            <p>{t("sessionApplicabilityWarning")}</p>
+            <p>{t("modifyApplicabilityWarning")}</p>
           </>
         )
       }
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
-            添加新课堂
+            {t("addNewSession")}
           </Button>
         )
       }
     >
       <ModalForm
-        title="编辑课堂"
+        title={t("editSession")}
         visible={visible}
         initialValues={currentEditValue}
         onCancel={closeModal}
         onFinish={onFinish}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
       >
         <Form.Item
-          label="课堂序号"
+          label={t("sessionNumber")}
           name="number"
           rules={[
             ...Rules.Required,
@@ -357,47 +379,46 @@ function Lessons({
                   CurriculumUtils.validateLessonNumber(
                     value,
                     number,
-                    // exclude origin number
                     currentEditIndex === -1 ? null : value[currentEditIndex].number
                   )
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject("课堂序号不能重复");
+                return Promise.reject(t("sessionNumberDuplicate"));
               },
             }),
           ]}
         >
           <Input />
         </Form.Item>
-        <Form.Item label="课堂名称" name="name" rules={Rules.Required}>
+        <Form.Item label={t("sessionName")} name="name" rules={Rules.Required}>
           <Input />
         </Form.Item>
-        <Form.Item label="课堂描述" name="description" rules={Rules.Required}>
+        <Form.Item label={t("sessionDescription")} name="description" rules={Rules.Required}>
           <Input.TextArea />
         </Form.Item>
-        <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
+        <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
-        <Form.Item label="包含模块" name="modules" rules={Rules.Required}>
+        <Form.Item label={t("modulesIncluded")} name="modules" rules={Rules.Required}>
           <Select
             mode="multiple"
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
             loading={!!networks["/admin/modules"]}
-          ></Select>
+          />
         </Form.Item>
-        <Form.Item label="调查问卷" name="questionnaire">
+        <Form.Item label={t("survey")} name="questionnaire">
           <Select
             showArrow={false}
             options={questionnairesOptions}
             onFocus={loadQuestionnairesOptions}
             loading={!!networks["/admin/findAllQuestionnaires"]}
-          ></Select>
+          />
         </Form.Item>
-        <Form.Item label="短信问卷" name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
+        <Form.Item label={t("textSurvey")} name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>
           <Input />
         </Form.Item>
       </ModalForm>
@@ -408,26 +429,26 @@ function Lessons({
         dataSource={value}
         columns={[
           {
-            title: "序号",
+            title: t("sessionNumber"),
             dataIndex: "number",
             width: 200,
           },
           {
-            title: "适用宝宝成长时期区间",
+            title: t("applicableBabyGrowthPeriod"),
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
-                record.endOfApplicableDays
-              }天`;
+              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
+                "common:unit:day"
+              )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
             },
           },
           {
-            title: "包含模块",
+            title: t("modulesIncluded"),
             dataIndex: "modules",
             render: renderDomain,
           },
-          lessonOperation(disabled, handleDelete, openEditModal),
+          lessonOperation(disabled, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
@@ -435,6 +456,18 @@ function Lessons({
 }
 
 function ApplicableDays({ value, currentEditValue }) {
+  const { t } = useTranslation("curriculum");
+
+  const startDateRequiredRule = {
+    required: true,
+    message: t("startDateRequired")
+  };
+
+  const endDateRequiredRule = {
+    required: true,
+    message: t("endDateRequired")
+  };
+
   return (
     <ApplicableDaysContainer>
       <Form.Item noStyle shouldUpdate={(pre, cur) => pre.stage !== cur.stage}>
@@ -442,10 +475,11 @@ function ApplicableDays({ value, currentEditValue }) {
           return (
             <>
               <Form.Item
-                label="适用天数"
+                label={t("applicableDays")}
                 labelCol={{ span: 0 }}
                 name="startOfApplicableDays"
-                rules={[...Rules.Required,
+                rules={[
+                  startDateRequiredRule,
                   ({ getFieldValue }) => ({
                     validator(_, startOfApplicableDays) {
                       const stage = getFieldValue("stage");
@@ -462,26 +496,26 @@ function ApplicableDays({ value, currentEditValue }) {
                       ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject("适用天数不能重叠");
-                    }
-                  })
+                      return Promise.reject(t("applicableDaysOverlap"));
+                    },
+                  }),
                 ]}
               >
                 <InputNumber
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}天`}
-                  parser={(value) => value.replace("天", "")}
+                  formatter={(value) => `${value}${t("common:unit.day")}`}
+                  parser={(value) => value.replace(t("common:unit.day"), "")}
                 />
               </Form.Item>
-              <ApplicableDaysConnector>至</ApplicableDaysConnector>
+              <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
               <EndOfApplicableDaysFormItem
-                label="适用天数"
+                label={t("applicableDays")}
                 labelCol={{ span: 0 }}
                 name="endOfApplicableDays"
                 rules={[
-                  ...Rules.Required,
+                  endDateRequiredRule,
                   ({ getFieldValue }) => ({
                     validator(_, endOfApplicableDays) {
                       if (
@@ -490,7 +524,7 @@ function ApplicableDays({ value, currentEditValue }) {
                       ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject("必须大于起始天数");
+                      return Promise.reject(t("endDayGreaterThanStart"));
                     },
                   }),
                   ({ getFieldValue }) => ({
@@ -509,7 +543,7 @@ function ApplicableDays({ value, currentEditValue }) {
                       ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject("适用天数不能重叠");
+                      return Promise.reject(t("applicableDaysOverlap"));
                     },
                   }),
                 ]}
@@ -518,8 +552,8 @@ function ApplicableDays({ value, currentEditValue }) {
                   min={1}
                   max={9999}
                   precision={0}
-                  formatter={(value) => `${value}天`}
-                  parser={(value) => value.replace("天", "")}
+                  formatter={(value) => `${value}${t("common:unit.day")}`}
+                  parser={(value) => value.replace(t("common:unit.day"), "")}
                 />
               </EndOfApplicableDaysFormItem>
             </>
@@ -529,7 +563,6 @@ function ApplicableDays({ value, currentEditValue }) {
     </ApplicableDaysContainer>
   );
 }
-
 const EndOfApplicableDaysFormItem = styled(Form.Item)`
   .ant-form-item-explain,
   .ant-form-item-extra {
@@ -561,12 +594,13 @@ function Schedules({
   closeModal,
   visible,
 }) {
+  const { t } = useTranslation("curriculum");
+
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(
         Arrays.concat(value, {
           ...formValues,
-          // clean lesson.value, backend will be reconnect by label
           lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
         })
       );
@@ -582,27 +616,32 @@ function Schedules({
 
   return (
     <Card
-      title="大纲区间匹配规则"
+      title={t("curriculumRangeMatchingRule")}
       extra={
         !disabled && (
           <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
-            添加规则
+            {t("addRule")}
           </Button>
         )
       }
       noPadding
     >
       <ModalForm
-        title="编辑规则"
+        title={t("editMatchingRule")}
         initialValues={currentEditValue}
         visible={visible}
         onCancel={closeModal}
         onFinish={onFinish}
+        validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
-        <Form.Item label="规则名称" name="name" rules={Rules.Required}>
+        <Form.Item label={t("ruleName")} name="name" rules={[...Rules.Required]}>
           <Input />
         </Form.Item>
-        <Form.Item label="适用宝宝" name="stage" rules={Rules.Required}>
+        <Form.Item
+          label={t("applicableBaby")}
+          name="stage"
+          rules={Rules.Required}
+        >
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
         <ApplicableDays value={value} currentEditValue={currentEditValue} />
@@ -615,8 +654,6 @@ function Schedules({
           }
         >
           {({ getFieldValue, setFieldsValue }) => {
-            // filter lesson options
-            // Only lesson at the same stage are available and schedule range must contain lesson range
             const stage = getFieldValue("stage");
             const startMonths = getFieldValue("startOfApplicableDays");
             const endMonths = getFieldValue("endOfApplicableDays");
@@ -625,16 +662,14 @@ function Schedules({
                 label: lesson.number,
                 value: lesson.number,
               })
-            )
-            const lessonArr = (currentEditValue.lessons || []).filter(a => lessonsOptions.filter(b=> a.value === b.value))
-            setFieldsValue({ lessons: lessonArr});
+            );
+            const lessonArr = (currentEditValue.lessons || []).filter((a) =>
+              lessonsOptions.filter((b) => a.value === b.value)
+            );
+            setFieldsValue({ lessons: lessonArr });
             return (
-              <Form.Item label="包含课堂" name="lessons" rules={Rules.Required}>
-                <Select
-                  mode="multiple"
-                  labelInValue
-                  options={lessonsOptions}
-                ></Select>
+              <Form.Item label={t("sessionsIncluded")} name="lessons" rules={[...Rules.Required]}>
+                <Select mode="multiple" labelInValue options={lessonsOptions}></Select>
               </Form.Item>
             );
           }}
@@ -647,42 +682,41 @@ function Schedules({
         dataSource={value}
         columns={[
           {
-            title: "规则",
+            title: t("rule"),
             dataIndex: "name",
             width: 200,
           },
           {
-            title: "适用宝宝成长时期区间",
+            title: t("applicableBabyGrowthPeriod"),
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${CurriculumBabyStage[record.stage]} ${record.startOfApplicableDays}天 - ${
-                record.endOfApplicableDays
-              }天`;
+              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
+                "common:unit:day"
+              )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
             },
           },
           {
-            title: "包含课堂",
+            title: t("sessionsIncluded"),
             dataIndex: "lessons",
             render: renderDomain,
           },
-          scheduleOperation(disabled, handleDelete, openEditModal),
+          scheduleOperation(disabled, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
   );
 }
-
 const renderDomain = (h) => h.map((v) => v.label).join("、");
 
-const lessonOperation = (disabled, handleDelete, openEditModal) => {
+const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
   return {
     title: (
       <>
-        操作 &nbsp;
+        {t("operation")} &nbsp;
         {!disabled && (
-          <Tooltip title="删除课堂同时会导致之前已添加的匹配规则中的此课堂丢失" placement="left">
+          <Tooltip title={t("lessonOperationWarn")} placement="left">
             <InfoCircleFilled style={{ color: "#000" }} />
           </Tooltip>
         )}
@@ -696,11 +730,11 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
         <Space size="large">
           <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
             <Button size="small" type="link">
-              删除
+              {t("delete")}
             </Button>
           </DeleteConfirmModal>
           <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
-            编辑
+            {t("edit")}
           </Button>
         </Space>
       );
@@ -708,23 +742,27 @@ const lessonOperation = (disabled, handleDelete, openEditModal) => {
   };
 };
 
-const scheduleOperation = (disabled, handleDelete, openEditModal) => {
+const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
   return {
-    title: <>操作</>,
+    title: t("operation"),
     width: 200,
     align: "center",
     render(_, record, index) {
       if (disabled) return null;
       return (
         <Space size="large">
-          <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
+          <DeleteConfirmModal
+            title={t("deleteRule")}
+            content={t("deleteRuleConfirmation")}
+            onConfirm={() => handleDelete(index)}
+          >
             <Button size="small" type="link">
-              删除
+              {t("delete")}
             </Button>
           </DeleteConfirmModal>
           <Button size="small" type="link" onClick={() => openEditModal(record, index)}>
-            编辑
+            {t("edit")}
           </Button>
         </Space>
       );

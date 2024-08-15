@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { Form, Modal, Space, Button } from "antd";
+import { useTranslation } from 'react-i18next';
 
-export default function ({ title, visible, onCancel, onFinish, initialValues = {}, children }) {
+export default function ({ width = 600, title, visible, onCancel, onFinish, initialValues = {}, children, validateMessages }) {
+  const { t } = useTranslation(["common"]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -13,7 +15,7 @@ export default function ({ title, visible, onCancel, onFinish, initialValues = {
 
   return (
     <Modal
-      width={600}
+      width={width}
       closable={false}
       maskClosable={false}
       destroyOnClose
@@ -22,15 +24,15 @@ export default function ({ title, visible, onCancel, onFinish, initialValues = {
       footer={
         <Space size="large">
           <Button ghost type="primary" size="large" onClick={onCancel}>
-            放弃
+            {t('cancel')}
           </Button>
           <Button type="primary" size="large" onClick={form.submit}>
-            提交
+            {t('submit')}
           </Button>
         </Space>
       }
     >
-      <Form form={form} labelCol={{ span: 4, offset: 1 }} onFinish={onFinish}>
+      <Form form={form} labelCol={{ span: 6 }} onFinish={onFinish} validateMessages={validateMessages}>
         {children}
       </Form>
     </Modal>

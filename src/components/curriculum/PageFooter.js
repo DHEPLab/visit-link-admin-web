@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
 import { Iconfont } from "../*";
@@ -22,13 +23,15 @@ export default function PageFooter(props) {
 }
 
 function PageFooterTitle({ onRemove, readonly, focus, onFocus }) {
+  const { t } = useTranslation("pageFooter");
+
   return (
     <TitleContainer focus={focus}>
-      <Title onClick={() => !readonly && onFocus()}>翻页分割线</Title>
+      <Title onClick={() => !readonly && onFocus()}>{t("pageBreakLine")}</Title>
       <SplitLine />
       {!readonly && (
         <Button size="small" type="link" onClick={onRemove}>
-          <Iconfont type="icontrash-orange" size={14} /> 移除
+          <Iconfont type="icontrash-orange" size={14} /> {t("remove")}
         </Button>
       )}
     </TitleContainer>
