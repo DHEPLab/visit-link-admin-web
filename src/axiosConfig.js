@@ -8,10 +8,8 @@ Axios.interceptors.request.use(
     const currentLang = i18n.resolvedLanguage;
 
     // Add the lang parameter to all requests
-    config.params = {
-      ...config.params,
-      lang: currentLang,
-    };
+
+    config.headers["Accept-Language"] = currentLang;
 
     return config;
   },
