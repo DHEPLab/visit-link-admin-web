@@ -233,7 +233,7 @@ export default {
     unit: {
       day: "天",
       person: "位(人)",
-      items: "条",
+      item: "条",
     },
     excel: {
       downloadTemplate: "下载模板",
