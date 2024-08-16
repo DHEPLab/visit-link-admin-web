@@ -2,7 +2,7 @@ name: Visit link admin web
 
 on:
   push:
-    branches: [ "amin" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
