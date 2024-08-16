@@ -105,7 +105,7 @@ export default function Survey() {
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/questionnaires/${id}?lang=${i18n.resolvedLanguage}`).then(() => {
+    Axios.delete(`/admin/questionnaires/${id}`).then(() => {
       history.goBack();
     });
   }
