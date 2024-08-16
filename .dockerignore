@@ -1,0 +1,9 @@
+.github
+
+node_modules
+build
+
+.idea
+ansible
+
+etc/nginx/conf.d/service.conf.template

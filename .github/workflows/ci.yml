@@ -1,0 +1,74 @@
+name: Visit link admin web
+
+on:
+  push:
+    branches: [ "amin" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Test
+        run: yarn test:ci
+
+      - name: Sonar scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      IMAGE_URI: ${{ secrets.IMAGE_URI }}
+      IMAGE_TAG: latest
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: true
+
+      - name: Build image
+        run: |
+          docker build -t $IMAGE_URI:$IMAGE_TAG .
+
+      - name: Push image to Amazon ECR
+        run: |
+          docker push $IMAGE_URI:$IMAGE_TAG
+
+      - name: Deploy to Amazon ECS
+        run: |
+          aws ecs update-service --cluster visit-link-cluster-dev --service visit-link-admin-web-service-dev --force-new-deployment 2>&1 > /dev/null
+        env:
+          AWS_REGION: us-east-1
