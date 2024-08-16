@@ -161,8 +161,6 @@ Axios.interceptors.response.use(
         if (data.violations) {
           // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
           msg = data.violations[0] ? `${data.violations[0]?.field} ${data.violations[0]?.message}` : "表单校验失败";
-        } else if (data.i18nErrorKey) {
-          msg = i18n.t(data.i18nErrorKey, { ...data.i18nContext, ns: "error" });
         } else if (data.detail) {
           msg = data.detail;
         }
