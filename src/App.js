@@ -1,12 +1,11 @@
 import React, { useEffect, useCallback } from "react";
-import Axios from "axios";
+import Axios from "./axiosConfig";
 import styled from "styled-components";
 
 import { ConfigProvider } from "antd";
 import { QueryParamProvider } from "use-query-params";
 import "moment/locale/zh-cn";
 import { I18nextProvider, useTranslation } from "react-i18next";
-
 
 import RouteView from "./Router";
 import { Role } from "./constants/enums";
@@ -59,6 +58,7 @@ function App() {
     history.push("/sign_in");
     Message.success(t('logoutSuccess'), t('logoutMessage'));
   }
+
   return (
     <>
       <Header username={user.realName} role={Role[user.role]} onNavigate={history.push} onLogout={handleLogout} />

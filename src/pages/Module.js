@@ -24,7 +24,7 @@ export default function Module(props) {
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
-  const [title, setTitle] = useState("创建新模块");
+  const [title, setTitle] = useState(t("createNewModule"));
   const [submitURL, setSubmitURL] = useState();
 
   const [module, setModule] = useState({});
@@ -139,7 +139,7 @@ export default function Module(props) {
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/modules/${id}?lang=${i18n.resolvedLanguage}`).then(() => {
+    Axios.delete(`/admin/modules/${id}`).then(() => {
       history.goBack();
     });
   }
