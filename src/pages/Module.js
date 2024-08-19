@@ -15,7 +15,7 @@ import { moduleFinishActionOptions } from "../actions";
 import QRCode from 'qrcode.react'
 
 export default function Module(props) {
-  const { t, i18n } = useTranslation("module");
+  const { t, i18n } = useTranslation(["module", "error"]);
   const { id } = useParams();
   const { pathname } = useLocation();
   const [readonly, setReadonly] = useState();
@@ -89,7 +89,7 @@ export default function Module(props) {
 
   function isValidComponent(comp) {
     if (comp.type === "Media" && !comp.value.file) {
-      message.warn("有媒体组件没有上传文件！");
+      message.warn(t('emptyMedia', { ns: 'error' }));
       return false
     }
     if (comp.type !== "Switch") {
@@ -177,7 +177,7 @@ export default function Module(props) {
                   <>
                     {id && (
                       <Button ghost type="danger" onClick={copy}>
-                        复制模块
+                        {t('copyMoudle')}
                       </Button>
                     )}
                     {id && (
@@ -262,7 +262,7 @@ export default function Module(props) {
               <Col offset={6} span={6}>
                 {readonly && (
                   <>
-                    <div style={{ fontSize: 14 }}>登录APP -&gt; 个人中心 -&gt; 扫码预览</div>
+                    <div style={{ fontSize: 14 }}>{t('loginApp')} -&gt; {t('myAccount')} -&gt; {t('scan')}</div>
                     <QRCode value={JSON.stringify({ type: QrType.MODULE_ID, data: module.id })}
                       size={200} fgColor="black" />
                   </>

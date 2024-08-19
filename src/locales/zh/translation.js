@@ -136,6 +136,7 @@ export default {
     operate: "操作",
     delete: "删除",
     edit: "编辑",
+    edc: "预产期",
     chw: "负责社区工作者",
     chwID: "社区工作者ID",
     chooseCHW: "选择社区工作者",
@@ -144,6 +145,19 @@ export default {
     reviewType: "审核类型",
     modifyDate: "修改日期",
     importBabyTemplate: "/static/template/import_baby_zh.xlsx",
+    longitude: "经度",
+    latitude: "纬度",
+    locationCorrect: "校正位置",
+    locationCorrectSuccessfully: "校正成功！",
+    locationInfo: "位置信息",
+    homeVisitDistance: '距离家访地点{{distance}}(Km)',
+    time: "时间",
+    content: "内容",
+    change: "将",
+    from: "由",
+    to: "更改为",
+    babyInfoChangeRecord: "宝宝信息变更记录",
+    caregiverInfoChangeRecord: "看护人信息变更记录"
   },
   myAccount: {
     myAccount: "个人中心",
@@ -178,9 +192,12 @@ export default {
     phone: "联系电话",
     username: "账户名称",
     password: "账户密码",
+    completion: "已完成/应完成",
+    completionRate: "完成率",
     searchChwPlaceholder: "请输入社区工作者姓名、ID或所在区域搜索",
     babyCount: "负责宝宝",
     accountInformation: "账户信息",
+    batchNewAccounts: "批量创建账户"
   },
   user: {
     accountManagement: "账户管理",
@@ -417,10 +434,12 @@ export default {
     userExists: "账户名称: {{login}} 已经存在",
     idExists: "ID: {{id}} 已经存在",
     noPrimaryCaregiver: "请至少设置一个主看护人",
+    emptyMedia: "有媒体组件没有上传文件！"
   },
   module: {
     createNewModule: "创建新模块",
     moduleManagement: "模块管理",
+    copyMoudle: "复制模块",
     deleteModule: "删除模块",
     deleteModuleWarning: "删除后模块内容将无法恢复是否继续？",
     editModule: "编辑模块",
@@ -442,6 +461,9 @@ export default {
     moduleNameTooLong: "模块名称最多40个字符",
     moduleNumberTooLong: "模块编号最多20个字符",
     moduleDescriptionTooLong: "模块描述最多200个字符",
+    loginApp: "登录APP",
+    myAccount: "个人中心",
+    scan: "扫码预览"
   },
   modules: {
     moduleManagement: "模块管理",

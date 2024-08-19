@@ -104,12 +104,12 @@ export default function BabyModalForm({ disableStage, ...props }) {
       </Form.Item>
       <Row>
         <Col span={11} offset={2} style={{ paddingLeft: 20 }}>
-          <Form.Item label="经度" name="longitude">
+          <Form.Item label={t('longitude')} name="longitude">
             <InputNumber style={{ width: 160 }} />
           </Form.Item>
         </Col>
         <Col span={11}>
-          <Form.Item label="纬度" name="latitude">
+          <Form.Item label={t('latitude')} name="latitude">
             <InputNumber style={{ width: 160 }} />
           </Form.Item>
         </Col>

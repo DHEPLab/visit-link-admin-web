@@ -160,7 +160,7 @@ export default function Baby() {
 
   function resetLocation() {
     Axios.post(`/admin/babies/reset/location/${id}`).then(() => {
-      message.success("校正成功！")
+      message.success(t('locationCorrectSuccessfully'))
       refresh();
     });
   }
@@ -252,7 +252,7 @@ export default function Baby() {
           !deleted && (
             <>
               <Button type="danger" ghost onClick={resetLocation} style={{ marginRight: 10 }}>
-                校正位置
+                {t('locationCorrect')}
               </Button>
               <Button type="shade" onClick={openModal}>
                 {t('edit')}
@@ -296,26 +296,26 @@ export default function Baby() {
 
       <Carers babyId={id} deleted={deleted} onModify={refreshCareModifyRecords} />
       <Visits babyId={id} />
-      <History title="宝宝信息变更记录" columnValues={{
-        chw: "社区工作者",
-        name: "宝宝姓名",
-        gender: "宝宝性别",
-        edc: "预产期",
-        birthday: "宝宝出生日期",
+      <History title={t('babyInfoChangeRecord')} columnValues={{
+        chw: t('chw'),
+        name: t('name'),
+        gender: t('gender'),
+        edc: t('edc'),
+        birthday: t('birthDay'),
         assistedFood: "宝宝辅食",
         feedingPattern: "宝宝喂养方式",
-        area: "宝宝所在区域",
-        location: "宝宝详细地址",
-        longitude: "宝宝经度",
-        latitude: "宝宝纬度",
-        remark: "宝宝备注"
+        area: t('area'),
+        location: t('address'),
+        longitude: t('longitude'),
+        latitude: t('latitude'),
+        remark: t('comments')
       }} dataSource={dataSource.map((e, i) => ({ ...e, number: i }))} />
-      <History title="看护人信息变更记录" columnValues={{
-        master: "主看护人",
-        name: "看护人姓名",
-        phone: "手机号",
-        wechat: "微信号",
-        familyTies: "亲属关系",
+      <History title={t('caregiverInfoChangeRecord')} columnValues={{
+        master: t('master'),
+        name: t('name'),
+        phone: t('phone'),
+        wechat: t('wechat'),
+        familyTies: t('relatives'),
       }} dataSource={careModifyRecords.map((e, i) => ({ ...e, number: i }))} />
 
       <BabyModalForm
@@ -516,9 +516,9 @@ function Visits({ babyId }) {
             dataIndex: "remark",
           },
           {
-            title: "位置信息",
+            title: t('locationInfo'),
             dataIndex: "distance",
-            render: (v) => `距离家访地点${v || 0}(Km)`
+            render: (v) => t('homeVisitDistance', { distance: v || 0 })
           }
         ]}
       />
@@ -527,16 +527,18 @@ function Visits({ babyId }) {
 }
 
 function History({ title, dataSource, columnValues }) {
+  const { t } = useTranslation(["baby", "common", "enum"]);
+
   function getValue(key, value) {
     switch (key) {
       case 'gender':
         return Gender[value];
       case 'assistedFood':
-        return value ? "已添加" : "未添加";
+        return value ? t('AssistedFood.TRUE', { ns: "enum" }) : t('AssistedFood.FALSE', { ns: "enum" });
       case 'feedingPattern':
         return FeedingPattern[value];
       case 'master':
-        return value ? "是" : "否";
+        return value ? t('yes') : t('no');
       case 'familyTies':
         return FamilyTies[value];
       default:
@@ -552,14 +554,14 @@ function History({ title, dataSource, columnValues }) {
         pagination={false}
         columns={[
           {
-            title: "时间",
+            title: t('time'),
             dataIndex: "lastModifiedAt",
             width: 200,
             align: "center",
             render: (h) => moment(h).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
-            title: "内容",
+            title: t('content'),
             dataIndex: "newValue",
             render: (h, record) => {
               const { columnName, newValue, oldValue, roleName, userName } = record;
@@ -576,7 +578,7 @@ function History({ title, dataSource, columnValues }) {
                     const obj = e || {}
                     return (
                       <div key={i}>
-                        <BlobFont>{`${roleName} ${userName}`}</BlobFont>将<BlobFont>{obj.columnName}</BlobFont>由<BlobFont>{obj.oldValue}</BlobFont>更改为<BlobFont>{obj.newValue}</BlobFont>；
+                        <BlobFont>{`${roleName} ${userName}`}</BlobFont>{t('changed')}<BlobFont>{obj.columnName}</BlobFont>{t('from')}<BlobFont>{obj.oldValue}</BlobFont>{t('to')}<BlobFont>{obj.newValue}</BlobFont>；
                       </div>
                     )
                   })}

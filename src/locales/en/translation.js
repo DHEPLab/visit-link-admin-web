@@ -60,6 +60,7 @@ export default {
     chwID: "CHW ID",
     gender: "Gender",
     area: "Area",
+    edc: "EDC",
     chw: "CHW",
     completedSession: "Completed Session(s)",
     registerDate: "Initial Date",
@@ -147,6 +148,19 @@ export default {
     reviewType: "Review Type",
     modifyDate: "Modify Date",
     importBabyTemplate: "/static/template/import_baby_en.xlsx",
+    longitude: "Long",
+    latitude: "Lat",
+    locationCorrect: "Location Correct",
+    locationCorrectSuccessfully: "Location Correct Successfully!",
+    locationInfo: "Location Information",
+    homeVisitDistance: "{{distance}} KM(s) from home visit location",
+    time: "Time",
+    content: "Content",
+    changed: "changed",
+    from: "from",
+    to: "to",
+    babyInfoChangeRecord: "Baby Information History Records",
+    caregiverInfoChangeRecord: "Caregiver Information History Records"
   },
   myAccount: {
     myAccount: "My Account",
@@ -181,9 +195,12 @@ export default {
     phone: "Phone",
     username: "Username",
     password: "Password",
+    completion: "Completed/ Expected Completion",
+    completionRate: "Completion rate",
     searchChwPlaceholder: "Search by CHW Name/ID/Area",
     babyCount: "Baby",
     accountInformation: "Account Information",
+    batchNewAccounts: "Batch New Accounts"
   },
   user: {
     accountManagement: "Account Management",
@@ -427,10 +444,12 @@ export default {
     userExists: "Username: {{login}} exsits",
     idExists: "ID: {{id}} exsits",
     noPrimaryCaregiver: "Please set at least one primary caregiver",
+    emptyMedia: "There is media component without uploaded file.",
   },
   module: {
     createNewModule: "Create New Module",
     moduleManagement: "Module Management",
+    copyMoudle: "Copy Module",
     deleteModule: "Delete Module",
     deleteModuleWarning: "After deletion, the module content cannot be recovered. Do you want to continue?",
     editModule: "Edit Module",
@@ -453,6 +472,9 @@ export default {
     moduleNameTooLong: "Module Name no more than 40 characters.",
     moduleNumberTooLong: "Module Number no more than 20 characters.",
     moduleDescriptionTooLong: "Module Description no more than 200 characters.",
+    loginApp: "Login APP",
+    myAccount: "My Account",
+    scan: "Scan"
   },
   modules: {
     moduleManagement: "Module Management",

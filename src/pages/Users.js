@@ -46,7 +46,9 @@ export default function Users() {
     <>
       <ContentHeader title={t('accountManagement')}>
         <Button style={{ marginRight: 28, borderColor: "#ff794f", color: "#ff794f" }} onClick={openImportModal}>
-          批量创建账户
+          {
+            t('batchNewAccounts')
+          }
         </Button>
         <Modal visible={importModal} title="从Excel导入" onCancel={closeImportModal} style={{ top: 50 }} footer={false} >
           <ImportUserExcel refresh={refresh} close={closeImportModal} open={importModal} />
@@ -187,13 +189,13 @@ function CHW({ historyPageState, tab, history, loadData, onChangeSearch, ...prop
           },
           username,
           {
-            title: "已完成/应完成",
+            title: t('completion'),
             width: 120,
             dataIndex: "hasFinish",
             render: (hasFinish, v) => `${hasFinish} / ${v.shouldFinish}`,
           },
           {
-            title: "完成率",
+            title: t('completionRate'),
             width: 100,
             dataIndex: "shouldFinish",
             render: (shouldFinish, v) => `${shouldFinish === 0 ? 0 : Number(v.hasFinish / shouldFinish * 100).toFixed(2) * 1}%`,
