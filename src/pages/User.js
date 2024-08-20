@@ -350,7 +350,7 @@ function AssignBaby({ id, onChange }) {
             dataIndex: "masterCarerPhone",
           },
           {
-            title: t('operate'),
+            title: t('operation'),
             dataIndex: "id",
             width: 200,
             align: "center",
@@ -466,7 +466,7 @@ function AssignChw({ id }) {
             dataIndex: "phone",
           },
           {
-            title: t('operate'),
+            title: t('operation'),
             dataIndex: "id",
             width: 200,
             align: "center",

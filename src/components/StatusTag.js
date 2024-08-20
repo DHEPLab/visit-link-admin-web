@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
-export default function StatusTag({ value }) {
+export default function StatusTag({ value, trueText, falseText }) {
   const { t } = useTranslation("statusTag");
 
   if (value) {
-    return <TrueContainer>{t("published")}</TrueContainer>;
+    return <TrueContainer>{trueText ?? t("published")}</TrueContainer>;
   }
-  return <FalseContainer>{t("draft")}</FalseContainer>;
+  return <FalseContainer>{falseText ?? t("draft")}</FalseContainer>;
 }
 
 const TrueContainer = styled.div`

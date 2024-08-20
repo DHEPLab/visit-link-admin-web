@@ -746,7 +746,7 @@ function Carers({ babyId, deleted, onModify }) {
             dataIndex: "wechat",
           },
           {
-            title: t('operate'),
+            title: t('operation'),
             dataIndex: "id",
             width: 200,
             align: "center",
