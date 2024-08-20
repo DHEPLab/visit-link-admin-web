@@ -173,7 +173,7 @@ function CurriculumBabiesModal({
             width: 120,
           },
           {
-            title: t("Operation"),
+            title: t("action"),
             dataIndex: "id",
             width: 100,
             align: "center",
