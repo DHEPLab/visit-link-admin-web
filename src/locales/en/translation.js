@@ -349,6 +349,26 @@ export default {
       GOVERNMENT_SERVICES: "Government public health services",
       KNOWLEDGE_ATTITUDE_TEST: "Knowledge and attitude assessment",
     },
+    ActionFromApp: {
+      CREATE: "CREATE",
+      MODIFY: "MODIFY",
+      DELETE: "DELETE",
+    },
+    ReviewActionFromApp: {
+      CREATE: "CREATE",
+      MODIFY: "MODIFY",
+      DELETE: "DELETE",
+    },
+    VisitStatus: {
+      NOT_STARTED: "NOT STARTED",
+      UNDONE: "UNDONE",
+      EXPIRED: "EXPIRED",
+      DONE: "DONE",
+    },
+    ProjectStatus: {
+      "1": "PUBLISHED",
+      "0": "DISABLED"
+    }
   },
   curriculum: {
     createNewCurriculum: "Create New Curriculum",
@@ -445,6 +465,7 @@ export default {
     idExists: "ID: {{id}} exsits",
     noPrimaryCaregiver: "Please set at least one primary caregiver",
     emptyMedia: "There is media component without uploaded file.",
+    formValidationFailed: "Form validation failed"
   },
   module: {
     createNewModule: "Create New Module",

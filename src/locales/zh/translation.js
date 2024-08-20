@@ -343,6 +343,26 @@ export default {
       GOVERNMENT_SERVICES: "政府服务",
       KNOWLEDGE_ATTITUDE_TEST: "知识态度检测",
     },
+    ActionFromApp: {
+      CREATE: "待审创建",
+      MODIFY: "待审修改",
+      DELETE: "待审注销",
+    },
+    ReviewActionFromApp: {
+      CREATE: "创建新宝宝账户",
+      MODIFY: "修改宝宝信息",
+      DELETE: "注销宝宝账户",
+    },
+    VisitStatus: {
+      NOT_STARTED: "待开始",
+      UNDONE: "未完成",
+      EXPIRED: "已过期",
+      DONE: "已完成",
+    },
+    ProjectStatus: {
+      "1": "发布",
+      "0": "停用"
+    }
   },
 
   curriculum: {
@@ -434,7 +454,8 @@ export default {
     userExists: "账户名称: {{login}} 已经存在",
     idExists: "ID: {{id}} 已经存在",
     noPrimaryCaregiver: "请至少设置一个主看护人",
-    emptyMedia: "有媒体组件没有上传文件！"
+    emptyMedia: "有媒体组件没有上传文件！",
+    formValidationFailed: "表单校验失败"
   },
   module: {
     createNewModule: "创建新模块",

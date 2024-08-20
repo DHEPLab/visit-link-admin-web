@@ -4,7 +4,7 @@ export const Role = {
   ROLE_CHW: "ROLE_CHW",
   ROLE_SUPERVISOR: "ROLE_SUPERVISOR",
   ROLE_ADMIN: "ROLE_ADMIN",
-  ROLE_SUPER_ADMIN: "超级管理员",
+  ROLE_SUPER_ADMIN: "ROLE_SUPER_ADMIN",
 };
 
 export const Gender = {
@@ -51,27 +51,27 @@ export const ModuleTopic = {
 };
 
 export const ActionFromApp = {
-  CREATE: "待审创建",
-  MODIFY: "待审修改",
-  DELETE: "待审注销",
+  CREATE: i18n.t("ActionFromApp.CREATE", { ns: "enum" }),
+  MODIFY: i18n.t("ActionFromApp.MODIFY", { ns: "enum" }),
+  DELETE: i18n.t("ActionFromApp.DELETE", { ns: "enum" }),
 };
 
 export const ReviewActionFromApp = {
-  CREATE: "创建新宝宝账户",
-  MODIFY: "修改宝宝信息",
-  DELETE: "注销宝宝账户",
+  CREATE: i18n.t("ReviewActionFromApp.CREATE", { ns: "enum" }),
+  MODIFY: i18n.t("ReviewActionFromApp.MODIFY", { ns: "enum" }),
+  DELETE: i18n.t("ReviewActionFromApp.DELETE", { ns: "enum" }),
 };
 
 export const VisitStatus = {
-  NOT_STARTED: "待开始",
-  UNDONE: "未完成",
-  EXPIRED: "已过期",
-  DONE: "已完成",
+  NOT_STARTED: i18n.t("VisitStatus.NOT_STARTED", { ns: "enum" }),
+  UNDONE: i18n.t("VisitStatus.UNDONE", { ns: "enum" }),
+  EXPIRED: i18n.t("VisitStatus.EXPIRED", { ns: "enum" }),
+  DONE: i18n.t("VisitStatus.DONE", { ns: "enum" }),
 };
 
 export const ProjectStatus = {
-  "1": "发布",
-  "0": "停用"
+  "1": i18n.t("ProjectStatus.1", { ns: "enum" }),
+  "0": i18n.t("ProjectStatus.0", { ns: "enum" }),
 };
 
 export const QrType = {
