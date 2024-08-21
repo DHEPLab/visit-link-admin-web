@@ -162,6 +162,7 @@ export default {
     babyInfoChangeRecord: "Baby Information History Records",
     caregiverInfoChangeRecord: "Caregiver Information History Records",
     latAndLong: "Lat & Long",
+    reject: "Reject",
     rejectTitle: "Are you sure you want to reject the application?",
     rejectContent: "After rejection, you can continue to apply for baby modification"
   },
