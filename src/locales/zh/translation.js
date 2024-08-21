@@ -157,7 +157,10 @@ export default {
     from: "由",
     to: "更改为",
     babyInfoChangeRecord: "宝宝信息变更记录",
-    caregiverInfoChangeRecord: "看护人信息变更记录"
+    caregiverInfoChangeRecord: "看护人信息变更记录",
+    latAndLong: "经纬度",
+    rejectTitle: "确定驳回申请嘛?",
+    rejectContent: "驳回后，宝宝可以继续申请修改"
   },
   myAccount: {
     myAccount: "个人中心",

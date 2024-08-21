@@ -85,8 +85,8 @@ export default function Baby() {
 
   function handleReject() {
     confirm({
-      title: '确定驳回申请嘛?',
-      content: '驳回后，宝宝可以继续申请修改',
+      title: t('rejectTitle'),
+      content: t('rejectContent'),
       onOk() {
         Axios.put(`/admin/babies/${id}/reject`, baby).then(() => {
           refresh();
@@ -272,7 +272,7 @@ export default function Baby() {
         ) : (
           <>
             <StaticField label={t('birthDay')} history={oldValue["birthday"]}>{moment(baby.birthday).format("YYYY-MM-DD")}</StaticField>
-            <StaticField label={t('supplementaryFood')} history={typeof oldValue["assistedFood"] === 'boolean' && (oldValue["assistedFood"] ? "已添加" : "未添加")}>{baby.assistedFood ? t('add') : t('noAdd')}</StaticField>
+            <StaticField label={t('supplementaryFood')} history={typeof oldValue["assistedFood"] === 'boolean' && (oldValue["assistedFood"] ? t('add') : t('noAdd'))}>{baby.assistedFood ? t('add') : t('noAdd')}</StaticField>
             <StaticField label={t('feedingMethods')} history={oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"]]}>{FeedingPattern[baby.feedingPattern]}</StaticField>
           </>
         )}
@@ -281,7 +281,7 @@ export default function Baby() {
         <StaticField label={t('address')} history={oldValue["location"]}>{baby.location}</StaticField>
 
         <StaticField
-          label="经纬度"
+          label={t('latAndLong')}
           history={
             oldValue["longitude"] || oldValue["latitude"]
               ? `${oldValue["longitude"] || baby["longitude"]}，${oldValue["latitude"] || baby["latitude"]}`
@@ -302,8 +302,8 @@ export default function Baby() {
         gender: t('gender'),
         edc: t('edc'),
         birthday: t('birthDay'),
-        assistedFood: "宝宝辅食",
-        feedingPattern: "宝宝喂养方式",
+        assistedFood: t('supplementaryFood'),
+        feedingPattern: t('feedingMethods'),
         area: t('area'),
         location: t('address'),
         longitude: t('longitude'),

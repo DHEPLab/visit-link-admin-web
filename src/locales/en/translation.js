@@ -125,7 +125,7 @@ export default {
     growthStage: "Growth Stage",
     dueDay: "Due Date",
     birthDay: "Birth Day",
-    supplementaryFood: "Infant Supplementary Food",
+    supplementaryFood: "Supplementary Food",
     add: "Add",
     noAdd: "No Add",
     feedingMethods: "Feeding Methods",
@@ -160,7 +160,10 @@ export default {
     from: "from",
     to: "to",
     babyInfoChangeRecord: "Baby Information History Records",
-    caregiverInfoChangeRecord: "Caregiver Information History Records"
+    caregiverInfoChangeRecord: "Caregiver Information History Records",
+    latAndLong: "Lat & Long",
+    rejectTitle: "Are you sure you want to reject the application?",
+    rejectContent: "After rejection, you can continue to apply for baby modification"
   },
   myAccount: {
     myAccount: "My Account",
