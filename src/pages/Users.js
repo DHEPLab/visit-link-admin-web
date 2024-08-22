@@ -50,38 +50,41 @@ export default function Users() {
             t('batchNewAccounts')
           }
         </Button>
-        <Modal visible={importModal} title="从Excel导入" onCancel={closeImportModal} style={{ top: 50 }} footer={false} >
+        <Modal visible={importModal} title={t('excel.importFromExcel', { ns: 'common' })} onCancel={closeImportModal} style={{ top: 50 }} footer={false} >
           <ImportUserExcel refresh={refresh} close={closeImportModal} open={importModal} />
         </Modal>
         <Button type="primary" onClick={openUser}>
           {t('createNewUser')}
         </Button>
-      </ContentHeader>
+      </ContentHeader >
 
-      {user.id && (
-        <CardTabs onChange={setTab} defaultActiveKey={tab}>
-          <TabPane tab={t('chw')} key="chw">
-            <PageCHW tab={tab} history={history} />
-          </TabPane>
-          {isAdmin && (
-            <>
-              <TabPane tab={t('supervisor')} key="supervisor">
-                <PageSupervisor tab={tab} history={history} />
-              </TabPane>
-              <TabPane tab={t('admin')} key="admin">
-                <PageAdmin tab={tab} history={history} />
-              </TabPane>
-            </>
-          )}
-        </CardTabs>
-      )}
+      {
+        user.id && (
+          <CardTabs onChange={setTab} defaultActiveKey={tab}>
+            <TabPane tab={t('chw')} key="chw">
+              <PageCHW tab={tab} history={history} />
+            </TabPane>
+            {isAdmin && (
+              <>
+                <TabPane tab={t('supervisor')} key="supervisor">
+                  <PageSupervisor tab={tab} history={history} />
+                </TabPane>
+                <TabPane tab={t('admin')} key="admin">
+                  <PageAdmin tab={tab} history={history} />
+                </TabPane>
+              </>
+            )}
+          </CardTabs>
+        )
+      }
 
-      <ModalForm
+      < ModalForm
         title={t('createNewUser')}
         visible={visible}
         onCancel={closeUser}
         onFinish={handleCreateUser}
-        initialValues={{ role: "ROLE_CHW" }}
+        initialValues={{ role: "ROLE_CHW" }
+        }
         validateMessages={t('validateMessages', { ns: "common", returnObjects: true })}
       >
         <h3>{t('generalInformation')}</h3>
@@ -107,7 +110,7 @@ export default function Users() {
             <>
               {getFieldValue("role") === "ROLE_CHW" && (
                 <>
-                  <Form.Item label="ID" name={["chw", "identity"]} rules={Rules.Required}>
+                  <Form.Item label={t('chwID')} name={["chw", "identity"]} rules={Rules.Required}>
                     <Input />
                   </Form.Item>
                   <Form.Item label={t('area')} name={["chw", "tags"]} rules={Rules.Area}>
@@ -128,7 +131,7 @@ export default function Users() {
         <Form.Item label={t('password')} name="password" rules={Rules.Password}>
           <Input.Password />
         </Form.Item>
-      </ModalForm>
+      </ModalForm >
     </>
   );
 }

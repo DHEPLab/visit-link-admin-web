@@ -208,6 +208,7 @@ export default {
     accountManagement: "Account Management",
     createNewUser: "Create New Account",
     chw: "CHW",
+    chwID: "CHW ID",
     supervisor: "Supervisor",
     admin: "Admin",
     generalInformation: "General Information",
@@ -282,6 +283,7 @@ export default {
       item: "item(s)",
     },
     excel: {
+      importFromExcel: "Import from Excel",
       downloadTemplate: "Download Template",
       importData: "Import Data",
       finishImport: "Finish",

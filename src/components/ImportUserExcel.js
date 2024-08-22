@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {Button, message, Spin, Steps, Table, Upload} from "antd";
+import { Button, message, Spin, Steps, Table, Upload } from "antd";
 import Column from 'antd/lib/table/Column';
-import {UploadButton} from "./*";
+import { UploadButton } from "./*";
 import Axios from "axios";
+import { useTranslation } from "react-i18next";
 
-const {Step} = Steps;
+const { Step } = Steps;
 
-export default function ImportUserExcel({open, refresh, close}) {
+export default function ImportUserExcel({ open, refresh, close }) {
+    const { t } = useTranslation(['common', "user"])
 
     const [spinningLoading, setSpinningLoading] = useState(false);
     const [result, setResult] = useState({
@@ -15,7 +17,7 @@ export default function ImportUserExcel({open, refresh, close}) {
         total: 0
     })
     const [file, setFile] = useState(null)
-    const {errData} = result
+    const { errData } = result
     const successTotal = result.total - errData.length
 
     useEffect(() => {
@@ -27,7 +29,7 @@ export default function ImportUserExcel({open, refresh, close}) {
 
     async function putBlob(fileInfo) {
         setSpinningLoading(true)
-        const {file} = fileInfo
+        const { file } = fileInfo
         setFile(file)
         checkUser(file)
     }
@@ -36,7 +38,7 @@ export default function ImportUserExcel({open, refresh, close}) {
         const formData = new FormData();
         formData.append("records", f)
         Axios.post("/admin/users/check", formData).then(res => {
-            const {data} = res;
+            const { data } = res;
             setResult(data)
             setSpinningLoading(false)
         }).catch(err => {
@@ -49,52 +51,52 @@ export default function ImportUserExcel({open, refresh, close}) {
         const formData = new FormData();
         formData.append("records", file)
         Axios.post("/admin/users/import", formData)
-            .then(({data}) => {
+            .then(({ data }) => {
                 message.success("导入成功")
                 refresh()
                 close()
                 setSpinningLoading(false)
             }).catch(err => {
-            setSpinningLoading(false)
-        });
+                setSpinningLoading(false)
+            });
     }
 
     return (
         <Container tip="Loading..." spinning={spinningLoading}>
             <Steps progressDot current={3} size="small">
-                <Step title="下载模板"/>
-                <Step title="导入数据"/>
-                <Step title="导入完成"/>
+                <Step title={t('excel.downloadTemplate')} />
+                <Step title={t('excel.importData')} />
+                <Step title={t('excel.finishImport')} />
             </Steps>
             <ButtonLine>
                 <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false}>
-                    <UploadButton title="点击上传Excel" icon="iconimport-excel">
-                        支持支持 xls/xlsx
-                        <br/>
-                        大小不超过5M
-                        <br/>
-                        单次导入数据最好不超过500条
+                    <UploadButton title={t('excel.clickToUploadExcel')} icon="iconimport-excel">
+                        {t('excel.support')}
+                        <br />
+                        {t('excel.filesizeMaxTo5M')}
+                        <br />
+                        {t('excel.batchImportCountSuggest')}
                     </UploadButton>
                 </Upload>
-                <DownLink href="/static/template/import_chw.xlsx" download>下载模板</DownLink>
+                <DownLink href="/static/template/import_chw.xlsx" download>{t('excel.downloadTemplate')}</DownLink>
             </ButtonLine>
             {(result.total > 0 || errData.length > 0) && <ResultContainer>
                 <Table
                     size="small"
-                    dataSource={errData.map((element, index) => ({...element, key: index}))}
+                    dataSource={errData.map((element, index) => ({ ...element, key: index }))}
                     pagination={false}
-                    scroll={{y: 200}}
+                    scroll={{ y: 200 }}
                 >
-                    <Column title="行号" align="left" dataIndex="number" key="number" width={50}/>
-                    <Column title="真实姓名" align="left" dataIndex="name" key="name"/>
-                    <Column title="错误事项" align="left" dataIndex="matters" key="matters"
-                            render={(matters) => <span style={{color: 'red', fontSize: 12}}>{matters}</span>}/>
+                    <Column title={t('row')} align="left" dataIndex="number" key="number" width={50} />
+                    <Column title={t('name', { ns: 'user' })} align="left" dataIndex="name" key="name" />
+                    <Column title={t('errorItem')} align="left" dataIndex="matters" key="matters"
+                        render={(matters) => <span style={{ color: 'red', fontSize: 12 }}>{matters}</span>} />
                 </Table>
-                <Result>成功校验数据{successTotal}条， 共{result.total}条</Result>
+                <Result>{t('excel.verifiedDataCount')} {successTotal} {t('unit.item')}, {t('total')} {result.total} {t('unit.item')}</Result>
                 <ImportLine>
-                    <CloseButton type="default" size="middle" onClick={() => close()}>关闭</CloseButton>
-                    <Button type="primary" style={{float: 'right', width: 160}} size="middle" onClick={importDatas}
-                            disabled={successTotal === 0}>导入正确数据</Button>
+                    <CloseButton type="default" size="middle" onClick={() => close()}>{t('close')}</CloseButton>
+                    <Button type="primary" style={{ float: 'right', width: 160 }} size="middle" onClick={importDatas}
+                        disabled={successTotal === 0}>{t('excel.importData')}</Button>
                 </ImportLine>
             </ResultContainer>}
         </Container>

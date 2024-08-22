@@ -205,6 +205,7 @@ export default {
     accountManagement: "账户管理",
     createNewUser: "创建新用户",
     chw: "社区工作者",
+    chwID: "社区工作者ID",
     supervisor: "督导员",
     admin: "管理员",
     generalInformation: "用户信息",
@@ -276,6 +277,7 @@ export default {
       item: "条",
     },
     excel: {
+      importFromExcel: "从Excel导入",
       downloadTemplate: "下载模板",
       importData: "导入数据",
       finishImport: "导入完成",
