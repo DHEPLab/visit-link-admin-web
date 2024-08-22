@@ -37,7 +37,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
     closeExportModal()
   }
 
-  async function download (requestUrl, filename) {
+  async function download(requestUrl, filename) {
     const response = await axios.get(`${requestUrl}`, {
       responseType: 'blob',
       headers: { 'x-mask-request': true }
@@ -53,8 +53,8 @@ export default function ({ username, role, onNavigate, onLogout }) {
       </Logo>
       <Content>
         <Welcome>
-          <b>{ username}</b>
-          <Role>{t(`roles:${role}`)}</Role>
+          <b>{username}</b>
+          <Role>{t(`${role}`)}</Role>
         </Welcome>
         {role === Role.ROLE_ADMIN && <StyledButton type="link" onClick={openExportModal}>
           <DownloadOutlined /> {t('exportData')}
@@ -71,7 +71,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
       <ModalForm
         title={t('exportData')}
         visible={visibleExport}
-        initialValues={{range: []}}
+        initialValues={{ range: [] }}
         onFinish={handleSaveExport}
         onCancel={closeExportModal}
       >

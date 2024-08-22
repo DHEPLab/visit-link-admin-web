@@ -38,6 +38,7 @@ export default {
     ROLE_CHW: "社区工作者",
     ROLE_SUPERVISOR: "督导员",
     ROLE_ADMIN: "管理员",
+    ROLE_SUPER_ADMIN: "超级管理员"
   },
   menu: {
     curriculumManagement: "大纲管理",
@@ -45,7 +46,7 @@ export default {
     surveyManagement: "问卷管理",
     accountManagement: "账户管理",
     babyManagement: "宝宝管理",
-    projectMagement: "项目管理"
+    projectManagement: "项目管理"
   },
   project: {
     user: "用户名",
@@ -54,13 +55,12 @@ export default {
     projectStatus: "项目状态",
     projectName: "项目名称",
     operation: "操作",
-    disable: "停用",
-    active: "已启用",
-    inactive: "已停用",
+    active: "启用",
+    inactive: "停用",
     edit: "编辑",
     editProject: "编辑项目",
-    superUsername: "管理员账户",
-    superPassword: "管理员密码",
+    adminUsername: "管理员账户",
+    adminPassword: "管理员密码",
     superadminCreatedTip: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
     confirm: "确认",
     cancel: "取消"
@@ -385,7 +385,7 @@ export default {
       DONE: "已完成",
     },
     ProjectStatus: {
-      "1": "发布",
+      "1": "启用",
       "0": "停用"
     }
   },

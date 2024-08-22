@@ -38,6 +38,7 @@ export default {
     ROLE_CHW: "CNW",
     ROLE_SUPERVISOR: "Supervisor",
     ROLE_ADMIN: "Admin",
+    ROLE_SUPER_ADMIN: "Super Admin"
   },
   menu: {
     curriculumManagement: "Curriculum Management",
@@ -54,13 +55,12 @@ export default {
     projectStatus: "Status",
     projectName: "Name",
     operation: "Operation",
-    disable: "Disable",
     active: "Active",
     inactive: "Inactive",
     edit: "Edit",
     editProject: "Edit Project",
-    superUsername: "Super Username",
-    superPassword: "Super Password",
+    adminUsername: "Admin Username",
+    adminPassword: "Admin Password",
     superadminCreatedTip: "The initial administrator account information for this project has been created (please keep the password safe)",
     confirm: "Comfirm",
     cancel: "Cancel"
@@ -391,8 +391,8 @@ export default {
       DONE: "DONE",
     },
     ProjectStatus: {
-      "1": "PUBLISHED",
-      "0": "DISABLED"
+      "1": "Active",
+      "0": "Inactive"
     }
   },
   curriculum: {

@@ -37,7 +37,7 @@ export default function Projects() {
                         title: t('superadminCreatedTip'),
                         content: (
                             <div>
-                                <p>{t('username')}：{data.username}</p>
+                                <p>{t('user')}：{data.username}</p>
                                 <p>{t('password')}：{data.password}</p>
                             </div>
                         ),
@@ -93,7 +93,7 @@ export default function Projects() {
                         width: 200,
                         align: "center",
                         render(id, v) {
-                            const title = v.status === 1 ? t('disable') : t('active');
+                            const title = v.status === 1 ? t('inactive') : t('active');
                             return (
                                 <>
                                     <Button type="link" size="small"
@@ -155,7 +155,7 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
             <>
                 <div className="ant-row ant-form-item ant-space-align-center">
                     <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
-                        <label>{t('superUsername')}：</label>
+                        <label>{t('adminUsername')}：</label>
                     </div>
                     <div className="ant-col ">
                         {admin.name}
@@ -163,7 +163,7 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
                 </div>
                 <div className="ant-row ant-form-item ant-space-align-center">
                     <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
-                        <label>{t('superPassword')}：</label>
+                        <label>{t('adminPassword')}：</label>
                     </div>
                     <div className="ant-form-item-control-input-content">
                         {admin.password}

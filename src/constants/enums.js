@@ -1,10 +1,10 @@
 import i18n from "../i18n";
 
 export const Role = {
-  ROLE_CHW: "ROLE_CHW",
-  ROLE_SUPERVISOR: "ROLE_SUPERVISOR",
-  ROLE_ADMIN: "ROLE_ADMIN",
-  ROLE_SUPER_ADMIN: "ROLE_SUPER_ADMIN",
+  ROLE_CHW: i18n.t('ROLE_CHW', { ns: 'roles' }),
+  ROLE_SUPERVISOR: i18n.t('ROLE_SUPERVISOR', { ns: 'roles' }),
+  ROLE_ADMIN: i18n.t('ROLE_ADMIN', { ns: 'roles' }),
+  ROLE_SUPER_ADMIN: i18n.t('ROLE_SUPER_ADMIN', { ns: 'roles' }),
 };
 
 export const Gender = {
