@@ -281,7 +281,7 @@ export default function Baby() {
         <StaticField label={t('address')} history={oldValue["location"]}>{baby.location}</StaticField>
 
         <StaticField
-          label={t('latAndLong')}
+          label={t('longAndLat')}
           history={
             oldValue["longitude"] || oldValue["latitude"]
               ? `${oldValue["longitude"] || baby["longitude"]}，${oldValue["latitude"] || baby["latitude"]}`
