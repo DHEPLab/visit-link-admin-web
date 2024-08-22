@@ -45,6 +45,25 @@ export default {
     surveyManagement: "问卷管理",
     accountManagement: "账户管理",
     babyManagement: "宝宝管理",
+    projectMagement: "项目管理"
+  },
+  project: {
+    user: "用户名",
+    password: "密码",
+    createProject: "新建项目",
+    projectStatus: "项目状态",
+    projectName: "项目名称",
+    operation: "操作",
+    disable: "停用",
+    active: "已启用",
+    inactive: "已停用",
+    edit: "编辑",
+    editProject: "编辑项目",
+    superUsername: "管理员账户",
+    superPassword: "管理员密码",
+    superadminCreatedTip: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
+    confirm: "确认",
+    cancel: "取消"
   },
   babies: {
     babyManagement: "宝宝管理",

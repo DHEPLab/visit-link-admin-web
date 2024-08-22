@@ -1,45 +1,47 @@
-import React, {useEffect, useState} from "react";
-import {Button, Form, Input, Modal, Popconfirm, Radio, Space} from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Modal, Popconfirm, Radio, Space } from "antd";
 import Axios from "axios";
+import { useTranslation } from "react-i18next";
 import Rules from "../constants/rules";
-import {ProjectStatus} from "../constants/enums";
+import { ProjectStatus } from "../constants/enums";
 import ContentHeader from "../components/ContentHeader";
 import ZebraTable from "../components/ZebraTable";
 import StatusTag from "../components/StatusTag";
 import ModalForm from "../components/ModalForm";
 
 export default function Projects() {
+    const { t } = useTranslation('project', 'menu', 'common');
     const [projects, setProjects] = useState([])
     const [formModal, setFormModal] = useState({
-        visible : false,
-        values: {status: 0}
+        visible: false,
+        values: { status: 0 }
     })
     const openFormModal = (values) => {
-        setFormModal({visible: true, values})
+        setFormModal({ visible: true, values })
     }
     const closeFormModal = () => {
-        setFormModal({visible: false, values: {status: 0}})
+        setFormModal({ visible: false, values: { status: 0 } })
     }
     const fetchProject = () => {
-        Axios.get("/admin/project/all").then(({data}) => {
+        Axios.get("/admin/project/all").then(({ data }) => {
             setProjects(data)
         })
     }
     const onSubmit = (value) => {
-        const {id} = formModal.values
-        const url = id? `/admin/project/update/${id}` : "/admin/project/create"
+        const { id } = formModal.values
+        const url = id ? `/admin/project/update/${id}` : "/admin/project/create"
         Axios.post(url, value)
-            .then(({data}) => {
+            .then(({ data }) => {
                 if (!id) {
                     Modal.info({
-                        title: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
+                        title: t('superadminCreatedTip'),
                         content: (
                             <div>
-                                <p>用户名：{data.username}</p>
-                                <p>密码：{data.password}</p>
+                                <p>{t('username')}：{data.username}</p>
+                                <p>{t('password')}：{data.password}</p>
                             </div>
                         ),
-                        onOk() {},
+                        onOk() { },
                     });
                 }
                 fetchProject()
@@ -47,10 +49,10 @@ export default function Projects() {
             })
     }
     const onUpdateStatus = (id, status) => {
-        Axios.post(`/admin/project/update/status/${id}`, {status})
+        Axios.post(`/admin/project/update/status/${id}`, { status })
             .then(() => setProjects(projects.map(p => {
                 if (p.id === id) {
-                    return {...p, status}
+                    return { ...p, status }
                 }
                 return p
             })))
@@ -61,10 +63,10 @@ export default function Projects() {
 
     return (
         <>
-            <ContentHeader title="项目管理">
+            <ContentHeader title={t('projectManagement', { ns: 'menu' })}>
                 <Space size="large">
-                    <Button type="primary" onClick={() => openFormModal({status: 1})}>
-                        创建新项目
+                    <Button type="primary" onClick={() => openFormModal({ status: 1 })}>
+                        {t('createProject')}
                     </Button>
                 </Space>
             </ContentHeader>
@@ -75,32 +77,32 @@ export default function Projects() {
                 className="clickable"
                 columns={[
                     {
-                        title: "项目状态",
+                        title: t('projectStatus'),
                         dataIndex: "status",
                         width: 120,
                         align: "center",
-                        render: (h) => <StatusTag value={h===1} trueText="已启用" falseText="已停用"/>,
+                        render: (h) => <StatusTag value={h === 1} trueText={t('active')} falseText={t('inactive')} />,
                     },
                     {
-                        title: "项目名称",
+                        title: t('projectName'),
                         dataIndex: "name",
                     },
                     {
-                        title: "操作",
+                        title: t('operation'),
                         dataIndex: "id",
                         width: 200,
                         align: "center",
                         render(id, v) {
-                            const title = v.status===1?"停用":"重新发布";
+                            const title = v.status === 1 ? t('disable') : t('active');
                             return (
                                 <>
                                     <Button type="link" size="small"
-                                            onClick={()=>openFormModal({...projects.find(p => p.id === id)})}>
-                                        编辑
+                                        onClick={() => openFormModal({ ...projects.find(p => p.id === id) })}>
+                                        {t('edit')}
                                     </Button>
-                                    <Popconfirm placement="leftTop" title={`确认${title}？`} okText="确认" cancelText="取消"
-                                                onConfirm={()=>onUpdateStatus(id, v.status===1? 0 : 1)}>
-                                        <Button type="link" size="small" style={{width: 50}}>
+                                    <Popconfirm placement="leftTop" title={`${t('confirm')} ${title}？`} okText={t('confirm')} cancelText={t('cancel')}
+                                        onConfirm={() => onUpdateStatus(id, v.status === 1 ? 0 : 1)}>
+                                        <Button type="link" size="small" style={{ width: 50 }}>
                                             {title}
                                         </Button>
                                     </Popconfirm>
@@ -110,7 +112,7 @@ export default function Projects() {
                     },
                 ]}
             />
-            <ProjectModalForm title={formModal.values?.id?"编辑项目":"新建项目"}
+            <ProjectModalForm title={formModal.values?.id ? t('editProject') : t('createProject')}
                 visible={formModal.visible}
                 values={formModal.values}
                 onCancel={closeFormModal}
@@ -120,26 +122,27 @@ export default function Projects() {
     )
 }
 
-function ProjectModalForm({visible, values, onCancel, onFinish}) {
+function ProjectModalForm({ visible, values, onCancel, onFinish }) {
+    const { t } = useTranslation('project', 'menu', 'common');
     const [admin, setAdmin] = useState({})
     const fetchAdminByProjectId = (id) => {
         Axios.get(`/admin/users/project/${id}`)
-            .then(({data}) => setAdmin(data))
+            .then(({ data }) => setAdmin(data))
     }
     useEffect(() => {
         values?.id && fetchAdminByProjectId(values.id)
     }, [values?.id])
-    return visible?(<ModalForm title={values?.id?"编辑项目":"新建项目"}
-                               visible={visible}
-                               initialValues={values}
-                               onCancel={onCancel}
-                               onFinish={onFinish}
+    return visible ? (<ModalForm title={values?.id ? t('editProject') : t('createProject')}
+        visible={visible}
+        initialValues={values}
+        onCancel={onCancel}
+        onFinish={onFinish}
     >
-        <Form.Item label="项目名称" name="name" rules={[...Rules.Required, { max: 20 }]}>
+        <Form.Item label={t('projectName')} name="name" rules={[...Rules.Required, { max: 20 }]}>
             <Input />
         </Form.Item>
 
-        <Form.Item label="项目状态" name="status" rules={[...Rules.Required]}>
+        <Form.Item label={t('projectStatus')} name="status" rules={[...Rules.Required]}>
             <Radio.Group>
                 {Object.keys(ProjectStatus).map((key) => (
                     <Radio key={key} value={parseInt(key)}>
@@ -152,7 +155,7 @@ function ProjectModalForm({visible, values, onCancel, onFinish}) {
             <>
                 <div className="ant-row ant-form-item ant-space-align-center">
                     <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
-                        <label>管理员账户：</label>
+                        <label>{t('superUsername')}：</label>
                     </div>
                     <div className="ant-col ">
                         {admin.name}
@@ -160,7 +163,7 @@ function ProjectModalForm({visible, values, onCancel, onFinish}) {
                 </div>
                 <div className="ant-row ant-form-item ant-space-align-center">
                     <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
-                        <label>管理员密码：</label>
+                        <label>{t('superPassword')}：</label>
                     </div>
                     <div className="ant-form-item-control-input-content">
                         {admin.password}

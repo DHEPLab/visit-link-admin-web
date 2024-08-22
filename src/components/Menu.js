@@ -17,7 +17,7 @@ export default function Menu() {
       <MenuItemGroup>
         {isSuperAdmin && (
           <li>
-            <ActivableLink title="项目管理" to="/projects" icon="iconproject" />
+            <ActivableLink title={t('projectManagement')} to="/projects" icon="iconproject" />
           </li>
         )}
         {isAdmin && (

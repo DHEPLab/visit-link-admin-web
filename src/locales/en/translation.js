@@ -45,6 +45,25 @@ export default {
     surveyManagement: "Survey Management",
     accountManagement: "Account Management",
     babyManagement: "Baby Management",
+    projectManagement: "Project Management"
+  },
+  project: {
+    user: "user",
+    password: "password",
+    createProject: "Create Project",
+    projectStatus: "Status",
+    projectName: "Name",
+    operation: "Operation",
+    disable: "Disable",
+    active: "Active",
+    inactive: "Inactive",
+    edit: "Edit",
+    editProject: "Edit Project",
+    superUsername: "Super Username",
+    superPassword: "Super Password",
+    superadminCreatedTip: "The initial administrator account information for this project has been created (please keep the password safe)",
+    confirm: "Comfirm",
+    cancel: "Cancel"
   },
   babies: {
     babyManagement: "Baby Management",
