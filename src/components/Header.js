@@ -56,7 +56,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{t(`${role}`)}</Role>
         </Welcome>
-        {role === Role.ROLE_ADMIN && <StyledButton type="link" onClick={openExportModal}>
+        {role === "Admin" && <StyledButton type="link" onClick={openExportModal}>
           <DownloadOutlined /> {t('exportData')}
         </StyledButton>}
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
