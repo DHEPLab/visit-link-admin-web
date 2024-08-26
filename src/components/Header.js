@@ -3,17 +3,20 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import styled from "styled-components";
 import { Button, DatePicker, Form, Select } from "antd";
-import { useBoolState } from "../utils";
-
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { DownloadOutlined } from '@ant-design/icons';
+
 import { Iconfont, ModalForm } from "../components/*";
 import Rules from "../constants/rules";
-import { useTranslation } from "react-i18next";
+import { useBoolState } from "../utils";
+
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 export default function ({ username, role, onNavigate, onLogout }) {
   const { t } = useTranslation(['header', 'roles']);
+  const { user } = useSelector((state) => state.users);
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false)
   const [exportType, setExportType] = useState('visit');
   async function handleSaveExport(values) {
@@ -56,9 +59,10 @@ export default function ({ username, role, onNavigate, onLogout }) {
           <b>{username}</b>
           <Role>{t(`${role}`)}</Role>
         </Welcome>
-        {role === "Admin" && <StyledButton type="link" onClick={openExportModal}>
+        {user?.role === "ROLE_ADMIN" && <StyledButton type="link" onClick={openExportModal}>
           <DownloadOutlined /> {t('exportData')}
         </StyledButton>}
+        <SplitLine />
         <StyledButton type="link" onClick={() => onNavigate("/profiles")}>
           {t('myAccount')}
         </StyledButton>
