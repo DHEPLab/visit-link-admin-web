@@ -12,7 +12,7 @@ function validateLessonNumber(lessons, number, exclude) {
 function validateLessonDateRange(lessons, lesson) {
   return !lessons
     .filter((item) => {
-      const isAdd = (item.id === undefined && lesson.id === undefined)
+      const isAdd = item.id === undefined && lesson.id === undefined;
       return (item.id !== lesson.id || isAdd) && item.stage === lesson.stage;
     })
     .find(
@@ -22,7 +22,7 @@ function validateLessonDateRange(lessons, lesson) {
         (item.startOfApplicableDays <= lesson.endOfApplicableDays &&
           item.endOfApplicableDays >= lesson.endOfApplicableDays) ||
         (lesson.startOfApplicableDays <= item.startOfApplicableDays &&
-          lesson.endOfApplicableDays >= item.endOfApplicableDays)
+          lesson.endOfApplicableDays >= item.endOfApplicableDays),
     );
 }
 
@@ -31,8 +31,8 @@ function cleanInvalidLessons(schedules, lessons) {
     ...schedule,
     lessons: schedule.lessons.filter((domain) =>
       filterLessons(lessons, schedule.stage, schedule.startOfApplicableDays, schedule.endOfApplicableDays).find(
-        (lesson) => domain.label === lesson.number
-      )
+        (lesson) => domain.label === lesson.number,
+      ),
     ),
   }));
 }

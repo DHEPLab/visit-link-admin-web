@@ -1,17 +1,16 @@
 import Axios from "axios";
 import * as utils from "./index";
-import { wait } from "@testing-library/react";
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook, act, waitFor } from "@testing-library/react";
 
-jest.mock("axios");
+vi.mock("axios");
 
 it("should fetch resource", async () => {
   Axios.get.mockResolvedValue({
     data: 2,
   });
   const { result } = renderHook(() => utils.useFetch("/api/fake"));
-  await act(async () => {
-    await wait();
+
+  await waitFor(() => {
     const [data] = result.current;
     expect(data).toBe(2);
   });
@@ -23,9 +22,9 @@ it("should manual fetch resource", async () => {
   });
   const { result } = renderHook(() => utils.useManualFetch("/api/fake"));
   const [, load] = result.current;
-  load();
-  await act(async () => {
-    await wait();
+  act(() => load());
+
+  await waitFor(() => {
     const [data] = result.current;
     expect(data).toBe(3);
   });

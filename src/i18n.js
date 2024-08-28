@@ -2,14 +2,14 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import enTranslation from "./locales/en/translation";
 import zhTranslation from "./locales/zh/translation";
-import LngDetector from 'i18next-browser-languagedetector';
+import LngDetector from "i18next-browser-languagedetector";
 
 // the translations
 // (tip move them in a JSON file and import them,
 // or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
 const resources = {
   en: enTranslation,
-  zh: zhTranslation
+  zh: zhTranslation,
 };
 
 i18n
@@ -18,12 +18,12 @@ i18n
   .init({
     resources,
     interpolation: {
-      escapeValue: false
+      escapeValue: false,
     },
-    fallbackLng: 'en',
+    fallbackLng: "en",
     detection: {
-      order: ['navigator'],
-      lookupNavigator: true
+      order: ["navigator"],
+      lookupNavigator: true,
     },
   });
 

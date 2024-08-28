@@ -3,7 +3,7 @@ import { message } from "antd";
 import { httpRequestStart, httpRequestEnd } from "./actions";
 import { clearToken } from "./utils/token";
 import store from "./store";
-import { Message } from "./components/*";
+import { Message } from "./components";
 import i18n from "./i18n";
 
 const urlInfo = {
@@ -156,27 +156,30 @@ Axios.interceptors.response.use(
           window.location.href = "/sign_in";
         }
         return Promise.reject(error);
-      default:
+      default: {
         const { data } = response;
         if (data.violations) {
           // msg = data.violations.map((e) => `${e.field} ${e.message}`).join(', ');
-          msg = data.violations[0] ? `${data.violations[0]?.field} ${data.violations[0]?.message}` : i18n.t('formValidationFailed', { ns: "error" });
+          msg = data.violations[0]
+            ? `${data.violations[0]?.field} ${data.violations[0]?.message}`
+            : i18n.t("formValidationFailed", { ns: "error" });
         } else if (data.detail) {
           msg = data.detail;
         }
+      }
     }
     message.error(msg);
     return Promise.reject(error);
-  }
+  },
 );
 
 function overallSituationTips(method, url) {
-  let infoArray = urlInfo[method];
-  let result = infoArray.filter((e) => (e["isequals"] && url === e.url) || (!e["isequals"] && url.includes(e.url)));
+  const infoArray = urlInfo[method];
+  const result = infoArray.filter((e) => (e["isequals"] && url === e.url) || (!e["isequals"] && url.includes(e.url)));
   if (result && result.length === 1) {
     Message.success(result[0].title, result[0].context);
   } else if (result && result.length > 1) {
-    let res = result.filter((e) => (!e["isequals"] && url.endsWith(e["endsWith"])) || e["isequals"] === true);
+    const res = result.filter((e) => (!e["isequals"] && url.endsWith(e["endsWith"])) || e["isequals"] === true);
     if (res && res.length > 0) {
       Message.success(res[0].title, res[0].context);
     }

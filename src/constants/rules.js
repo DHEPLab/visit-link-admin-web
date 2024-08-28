@@ -35,7 +35,7 @@ export default {
     () => ({
       validator(_, tags) {
         if (!tags) return;
-        for (let tag of tags) {
+        for (const tag of tags) {
           if (tag && tag.length > 50) {
             return Promise.reject("自定义标签不能超过50个字");
           }

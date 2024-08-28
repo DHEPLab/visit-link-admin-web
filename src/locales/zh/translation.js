@@ -38,7 +38,7 @@ export default {
     ROLE_CHW: "社区工作者",
     ROLE_SUPERVISOR: "督导员",
     ROLE_ADMIN: "管理员",
-    ROLE_SUPER_ADMIN: "超级管理员"
+    ROLE_SUPER_ADMIN: "超级管理员",
   },
   menu: {
     curriculumManagement: "大纲管理",
@@ -46,7 +46,7 @@ export default {
     surveyManagement: "问卷管理",
     accountManagement: "账户管理",
     babyManagement: "宝宝管理",
-    projectManagement: "项目管理"
+    projectManagement: "项目管理",
   },
   project: {
     user: "用户名",
@@ -63,7 +63,7 @@ export default {
     adminPassword: "管理员密码",
     superadminCreatedTip: "该项目的初始管理员账号信息已经创建完成(请妥善保管密码)",
     confirm: "确认",
-    cancel: "取消"
+    cancel: "取消",
   },
   babies: {
     babyManagement: "宝宝管理",
@@ -169,7 +169,7 @@ export default {
     locationCorrect: "校正位置",
     locationCorrectSuccessfully: "校正成功！",
     locationInfo: "位置信息",
-    homeVisitDistance: '距离家访地点{{distance}}(Km)',
+    homeVisitDistance: "距离家访地点{{distance}}(Km)",
     time: "时间",
     content: "内容",
     changed: "将",
@@ -180,7 +180,7 @@ export default {
     longAndLat: "经纬度",
     reject: "驳回申请",
     rejectTitle: "确定驳回申请嘛?",
-    rejectContent: "驳回后，宝宝可以继续申请修改"
+    rejectContent: "驳回后，宝宝可以继续申请修改",
   },
   myAccount: {
     myAccount: "个人中心",
@@ -221,7 +221,7 @@ export default {
     searchChwPlaceholder: "请输入社区工作者姓名、ID或所在区域搜索",
     babyCount: "负责宝宝",
     accountInformation: "账户信息",
-    batchNewAccounts: "批量创建账户"
+    batchNewAccounts: "批量创建账户",
   },
   user: {
     accountManagement: "账户管理",
@@ -303,7 +303,7 @@ export default {
         emptyBirthDay: "生日为空",
         invalidFormatBirthDay: "生日格式错误",
         invalidBirthDay: "生日不能大于当前时间",
-      }
+      },
     },
     confirm: "确定",
     add: "添加",
@@ -316,7 +316,7 @@ export default {
     babyName: "宝宝姓名",
     errorItem: "错误事项",
     searchInputByNameIDAreaPlaceholder: "请输入姓名、ID或所在区域搜索",
-    /* eslint-disable no-template-curly-in-string */
+
     validateMessages: {
       // node_modules/rc-field-form/lib/interface.d.ts
       required: "请输入${label}！",
@@ -385,9 +385,9 @@ export default {
       DONE: "已完成",
     },
     ProjectStatus: {
-      "1": "启用",
-      "0": "停用"
-    }
+      1: "启用",
+      0: "停用",
+    },
   },
 
   curriculum: {
@@ -481,7 +481,7 @@ export default {
     idExists: "ID: {{id}} 已经存在",
     noPrimaryCaregiver: "请至少设置一个主看护人",
     emptyMedia: "有媒体组件没有上传文件！",
-    formValidationFailed: "表单校验失败"
+    formValidationFailed: "表单校验失败",
   },
   module: {
     createNewModule: "创建新模块",
@@ -510,7 +510,7 @@ export default {
     moduleDescriptionTooLong: "模块描述最多200个字符",
     loginApp: "登录APP",
     myAccount: "个人中心",
-    scan: "扫码预览"
+    scan: "扫码预览",
   },
   modules: {
     moduleManagement: "模块管理",
@@ -659,6 +659,6 @@ export default {
     },
   },
   antd: {
-    local: zhCN
+    local: zhCN,
   },
 };

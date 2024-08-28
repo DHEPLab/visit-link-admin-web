@@ -44,28 +44,28 @@ it("should validate lesson date range cannot overlap", () => {
       stage: "EDC",
       startOfApplicableDays: 20,
       endOfApplicableDays: 30,
-    })
+    }),
   ).toBeFalsy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
-    })
+    }),
   ).toBeFalsy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 1,
       endOfApplicableDays: 30,
-    })
+    }),
   ).toBeFalsy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
       stage: "BIRTH",
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
-    })
+    }),
   ).toBeTruthy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
@@ -73,14 +73,14 @@ it("should validate lesson date range cannot overlap", () => {
       stage: "EDC",
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
-    })
+    }),
   ).toBeTruthy();
   expect(
     Curriculum.validateLessonDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 21,
       endOfApplicableDays: 30,
-    })
+    }),
   ).toBeTruthy();
 });
 
@@ -113,7 +113,7 @@ it("should clean invalid lessons from schedule", () => {
         startOfApplicableDays: 9,
         endOfApplicableDays: 100,
       },
-    ])
+    ]),
   ).toStrictEqual(cleaned);
   expect(
     Curriculum.cleanInvalidLessons(schedules, [
@@ -123,7 +123,7 @@ it("should clean invalid lessons from schedule", () => {
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },
-    ])
+    ]),
   ).toStrictEqual(schedules);
   expect(
     Curriculum.cleanInvalidLessons(schedules, [
@@ -133,7 +133,7 @@ it("should clean invalid lessons from schedule", () => {
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },
-    ])
+    ]),
   ).toStrictEqual(cleaned);
   expect(
     Curriculum.cleanInvalidLessons(schedules, [
@@ -143,6 +143,6 @@ it("should clean invalid lessons from schedule", () => {
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },
-    ])
+    ]),
   ).toStrictEqual(cleaned);
 });

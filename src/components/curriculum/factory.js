@@ -32,8 +32,8 @@ function createQuestionText() {
     type: "Text",
     key: generateKey(),
     value: {
-      title: ""
-    }
+      title: "",
+    },
   };
 }
 
@@ -43,8 +43,8 @@ function createQuestionRadio() {
     key: generateKey(),
     value: {
       title: "",
-      options: []
-    }
+      options: [],
+    },
   };
 }
 
@@ -54,8 +54,8 @@ function createQuestionCheckbox() {
     key: generateKey(),
     value: {
       title: "",
-      options: []
-    }
+      options: [],
+    },
   };
 }
 

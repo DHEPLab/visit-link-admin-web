@@ -38,7 +38,7 @@ export default {
     ROLE_CHW: "CNW",
     ROLE_SUPERVISOR: "Supervisor",
     ROLE_ADMIN: "Admin",
-    ROLE_SUPER_ADMIN: "Super Admin"
+    ROLE_SUPER_ADMIN: "Super Admin",
   },
   menu: {
     curriculumManagement: "Curriculum Management",
@@ -46,7 +46,7 @@ export default {
     surveyManagement: "Survey Management",
     accountManagement: "Account Management",
     babyManagement: "Baby Management",
-    projectManagement: "Project Management"
+    projectManagement: "Project Management",
   },
   project: {
     user: "user",
@@ -61,9 +61,10 @@ export default {
     editProject: "Edit Project",
     adminUsername: "Admin Username",
     adminPassword: "Admin Password",
-    superadminCreatedTip: "The initial administrator account information for this project has been created (please keep the password safe)",
+    superadminCreatedTip:
+      "The initial administrator account information for this project has been created (please keep the password safe)",
     confirm: "Comfirm",
-    cancel: "Cancel"
+    cancel: "Cancel",
   },
   babies: {
     babyManagement: "Baby Management",
@@ -183,7 +184,7 @@ export default {
     longAndLat: "Long & Lat",
     reject: "Reject",
     rejectTitle: "Are you sure you want to reject the application?",
-    rejectContent: "After rejection, you can continue to apply for baby modification"
+    rejectContent: "After rejection, you can continue to apply for baby modification",
   },
   myAccount: {
     myAccount: "My Account",
@@ -224,7 +225,7 @@ export default {
     searchChwPlaceholder: "Search by CHW Name/ID/Area",
     babyCount: "Baby",
     accountInformation: "Account Information",
-    batchNewAccounts: "Batch New Accounts"
+    batchNewAccounts: "Batch New Accounts",
   },
   user: {
     accountManagement: "Account Management",
@@ -309,7 +310,7 @@ export default {
         emptyBirthDay: "Birthday is empty",
         invalidFormatBirthDay: "Birthday format error",
         invalidBirthDay: "Birth day should be before the current date",
-      }
+      },
     },
     confirm: "Comfirm",
     add: "Add",
@@ -322,7 +323,7 @@ export default {
     babyName: "Name",
     errorItem: "Error Item",
     searchInputByNameIDAreaPlaceholder: "Search by CHW Name/ID/Area",
-    /* eslint-disable no-template-curly-in-string */
+
     validateMessages: {
       // node_modules/rc-field-form/lib/interface.d.ts
       required: "${label} is required!",
@@ -391,9 +392,9 @@ export default {
       DONE: "DONE",
     },
     ProjectStatus: {
-      "1": "Active",
-      "0": "Inactive"
-    }
+      1: "Active",
+      0: "Inactive",
+    },
   },
   curriculum: {
     createNewCurriculum: "Create New Curriculum",
@@ -490,7 +491,7 @@ export default {
     idExists: "ID: {{id}} exsits",
     noPrimaryCaregiver: "Please set at least one primary caregiver",
     emptyMedia: "There is media component without uploaded file.",
-    formValidationFailed: "Form validation failed"
+    formValidationFailed: "Form validation failed",
   },
   module: {
     createNewModule: "Create New Module",
@@ -520,7 +521,7 @@ export default {
     moduleDescriptionTooLong: "Module Description no more than 200 characters.",
     loginApp: "Login APP",
     myAccount: "My Account",
-    scan: "Scan"
+    scan: "Scan",
   },
   modules: {
     moduleManagement: "Module Management",
@@ -650,6 +651,6 @@ export default {
     deleteSuccessfully: "Delete Successfully",
   },
   antd: {
-    local: enUs
+    local: enUs,
   },
 };
