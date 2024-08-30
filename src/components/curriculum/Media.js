@@ -36,17 +36,16 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function upload(file) {
     return new Promise((resolve, reject) => {
-      Axios.get("/admin/oss/pre-signed-url", {
+      Axios.get("/admin/oss/upload-pre-signed-url", {
         params: {
           format: fileFormat(file),
         },
       })
         .then(({ data: { url } }) => {
-          Axios.put(url, file, {
-            headers: {
-              Authorization: "",
-              "Content-Type": "application/octet-stream",
-            },
+          fetch(url, {
+            method: "PUT",
+            body: file,
+            headers: { "Content-Type": file.type },
           })
             .then((_) => {
               resolve(path(url));
