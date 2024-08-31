@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useContext } from "react";
 import Axios from "./axiosConfig";
-import isPropValid from '@emotion/is-prop-valid';
+import isPropValid from "@emotion/is-prop-valid";
 import styled, { StyleSheetManager } from "styled-components";
 
 import { ConfigProvider, theme } from "antd";
@@ -62,7 +62,6 @@ function shouldForwardProp(propName, target) {
   // For other elements, forward all props
   return true;
 }
-
 
 function App() {
   const history = useHistory();

@@ -1,27 +1,25 @@
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-    font-size: 16px;
-    background: linear-gradient(
-            360deg,
-            rgba(251, 251, 253, 1) 0%,
-            rgba(245, 246, 250, 1) 100%
-    );
-    color: rgba(0, 0, 0, .65);
-    font-variant: tabular-nums;
-    line-height: 1.5715;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 16px;
+  background: linear-gradient(360deg, rgba(251, 251, 253, 1) 0%, rgba(245, 246, 250, 1) 100%);
+  color: rgba(0, 0, 0, 0.65);
+  font-variant: tabular-nums;
+  line-height: 1.5715;
 }
 
-a, a:active, a:focus, a:hover {
-    text-decoration: none;
+a,
+a:active,
+a:focus,
+a:hover {
+  text-decoration: none;
 }
 
 /* Antd Component Start
  Right now some of styles can not custom by ConfigProvider
 */
 .ant-cascader-picker-label {
-    padding-left: 30px;
+  padding-left: 30px;
 }
 
 /* Antd Component */

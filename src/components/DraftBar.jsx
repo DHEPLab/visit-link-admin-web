@@ -1,5 +1,5 @@
 import React from "react";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import styled from "styled-components";
 import { Space, Button } from "antd";
 import { useTranslation } from "react-i18next";

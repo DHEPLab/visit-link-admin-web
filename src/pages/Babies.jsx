@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useQueryParam, StringParam } from "use-query-params";
@@ -54,43 +54,48 @@ export default function Babies() {
     setTab(Math.random());
     setTab(origin);
   }
-  
-  const tabItems = [{
-    key: "approved",
-    label: t("approved"),
-    children: <PageApproved tab={tab} history={history} />,
-  }, {
-    key: "unreviewed",
-    label: t("unreviewed"),
-    children: <PageUnreviewed tab={tab} history={history} />,
-  }];
 
-  return (<>
-    <ContentHeader title={t("babyManagement")}>
-      <ImportButton onClick={openImpoerModal}>{t("batchNewBabies")}</ImportButton>
-      <Button type="primary" onClick={openBaby}>
-        {t("newBaby")}
-      </Button>
-    </ContentHeader>
-    <CardTabs onChange={setTab} defaultActiveKey={tab} items={tabItems} />
-    <BabyModalForm
-      title={t("newBaby")}
-      visible={visible}
-      onFinish={handleCreateBaby}
-      onCancel={closeBaby}
-      initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
-      validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
-    />
-    <Modal
-      open={impoerModal}
-      title={t("importFromExcel")}
-      onCancel={closeImpoerModal}
-      style={{ top: 50 }}
-      footer={null}
-    >
-      <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
-    </Modal>
-  </>);
+  const tabItems = [
+    {
+      key: "approved",
+      label: t("approved"),
+      children: <PageApproved tab={tab} history={history} />,
+    },
+    {
+      key: "unreviewed",
+      label: t("unreviewed"),
+      children: <PageUnreviewed tab={tab} history={history} />,
+    },
+  ];
+
+  return (
+    <>
+      <ContentHeader title={t("babyManagement")}>
+        <ImportButton onClick={openImpoerModal}>{t("batchNewBabies")}</ImportButton>
+        <Button type="primary" onClick={openBaby}>
+          {t("newBaby")}
+        </Button>
+      </ContentHeader>
+      <CardTabs onChange={setTab} defaultActiveKey={tab} items={tabItems} />
+      <BabyModalForm
+        title={t("newBaby")}
+        visible={visible}
+        onFinish={handleCreateBaby}
+        onCancel={closeBaby}
+        initialValues={{ stage: "EDC", gender: "UNKNOWN" }}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+      />
+      <Modal
+        open={impoerModal}
+        title={t("importFromExcel")}
+        onCancel={closeImpoerModal}
+        style={{ top: 50 }}
+        footer={null}
+      >
+        <ImportExcel refresh={refresh} close={closeImpoerModal} open={impoerModal} />
+      </Modal>
+    </>
+  );
 }
 
 const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);

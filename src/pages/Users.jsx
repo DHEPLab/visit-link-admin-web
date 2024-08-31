@@ -41,11 +41,13 @@ export default function Users() {
     });
   }
 
-  const tabItems = [{
-    key: "chw",
-    label: t("chw"),
-    children: <PageCHW tab={tab} history={history} />,
-  }];
+  const tabItems = [
+    {
+      key: "chw",
+      label: t("chw"),
+      children: <PageCHW tab={tab} history={history} />,
+    },
+  ];
 
   if (isAdmin) {
     tabItems.push({
@@ -56,86 +58,86 @@ export default function Users() {
     tabItems.push({
       key: "admin",
       label: t("admin"),
-      children: <PageAdmin tab={tab} history={history} />
+      children: <PageAdmin tab={tab} history={history} />,
     });
   }
 
-  return (<>
-    <ContentHeader title={t("accountManagement")}>
-      <Button style={{ marginRight: 28, borderColor: "#ff794f", color: "#ff794f" }} onClick={openImportModal}>
-        {t("batchNewAccounts")}
-      </Button>
-      <Modal
-        open={importModal}
-        title={t("excel.importFromExcel", { ns: "common" })}
-        onCancel={closeImportModal}
-        style={{ top: 50 }}
-        footer={null}
+  return (
+    <>
+      <ContentHeader title={t("accountManagement")}>
+        <Button style={{ marginRight: 28, borderColor: "#ff794f", color: "#ff794f" }} onClick={openImportModal}>
+          {t("batchNewAccounts")}
+        </Button>
+        <Modal
+          open={importModal}
+          title={t("excel.importFromExcel", { ns: "common" })}
+          onCancel={closeImportModal}
+          style={{ top: 50 }}
+          footer={null}
+        >
+          <ImportUserExcel refresh={refresh} close={closeImportModal} open={importModal} />
+        </Modal>
+        <Button type="primary" onClick={openUser}>
+          {t("createNewUser")}
+        </Button>
+      </ContentHeader>
+      {user.id && <CardTabs onChange={setTab} defaultActiveKey={tab} items={tabItems} />}
+      <ModalForm
+        title={t("createNewUser")}
+        visible={visible}
+        onCancel={closeUser}
+        onFinish={handleCreateUser}
+        initialValues={{ role: "ROLE_CHW" }}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
       >
-        <ImportUserExcel refresh={refresh} close={closeImportModal} open={importModal} />
-      </Modal>
-      <Button type="primary" onClick={openUser}>
-        {t("createNewUser")}
-      </Button>
-    </ContentHeader>
-    {user.id && (
-      <CardTabs onChange={setTab} defaultActiveKey={tab} items={tabItems} />
-    )}
-    <ModalForm
-      title={t("createNewUser")}
-      visible={visible}
-      onCancel={closeUser}
-      onFinish={handleCreateUser}
-      initialValues={{ role: "ROLE_CHW" }}
-      validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
-    >
-      <h3>{t("generalInformation")}</h3>
-      <Form.Item label={t("permissions")} name="role" rules={Rules.Required}>
-        <Radio.Group>
-          {Object.keys(Role)
-            .filter((key) => {
-              if (key === "ROLE_SUPER_ADMIN") return false;
-              if (isAdmin) return true;
-              return key === "ROLE_CHW";
-            })
-            .map((key) => (
-              <Radio key={key} value={key}>
-                {Role[key]}
-              </Radio>
-            ))}
-        </Radio.Group>
-      </Form.Item>
-      <Form.Item label={t("name")} name="realName" rules={Rules.RealName}>
-        <Input autoFocus />
-      </Form.Item>
-      <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
-        {({ getFieldValue }) => (
-          <>
-            {getFieldValue("role") === "ROLE_CHW" && (
-              <>
-                <Form.Item label={t("chwID")} name={["chw", "identity"]} rules={Rules.Required}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
-                  <ChwTagSelector />
-                </Form.Item>
-              </>
-            )}
-          </>
-        )}
-      </Form.Item>
-      <Form.Item label={t("phone")} name="phone" rules={Rules.Phone}>
-        <Input />
-      </Form.Item>
-      <h3>{t("accountInformation")}</h3>
-      <Form.Item label={t("username")} name="username" rules={Rules.Required}>
-        <Input />
-      </Form.Item>
-      <Form.Item label={t("password")} name="password" rules={Rules.Password}>
-        <Input.Password />
-      </Form.Item>
-    </ModalForm>
-  </>);
+        <h3>{t("generalInformation")}</h3>
+        <Form.Item label={t("permissions")} name="role" rules={Rules.Required}>
+          <Radio.Group>
+            {Object.keys(Role)
+              .filter((key) => {
+                if (key === "ROLE_SUPER_ADMIN") return false;
+                if (isAdmin) return true;
+                return key === "ROLE_CHW";
+              })
+              .map((key) => (
+                <Radio key={key} value={key}>
+                  {Role[key]}
+                </Radio>
+              ))}
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label={t("name")} name="realName" rules={Rules.RealName}>
+          <Input autoFocus />
+        </Form.Item>
+        <Form.Item noStyle shouldUpdate={(old, curr) => old.role !== curr.role}>
+          {({ getFieldValue }) => (
+            <>
+              {getFieldValue("role") === "ROLE_CHW" && (
+                <>
+                  <Form.Item label={t("chwID")} name={["chw", "identity"]} rules={Rules.Required}>
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
+                    <ChwTagSelector />
+                  </Form.Item>
+                </>
+              )}
+            </>
+          )}
+        </Form.Item>
+        <Form.Item label={t("phone")} name="phone" rules={Rules.Phone}>
+          <Input />
+        </Form.Item>
+        <h3>{t("accountInformation")}</h3>
+        <Form.Item label={t("username")} name="username" rules={Rules.Required}>
+          <Input />
+        </Form.Item>
+        <Form.Item label={t("password")} name="password" rules={Rules.Password}>
+          <Input.Password />
+        </Form.Item>
+      </ModalForm>
+    </>
+  );
 }
 
 const PageCHW = WithPage(CHW, "/admin/users/chw", {}, false);

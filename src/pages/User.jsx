@@ -160,7 +160,7 @@ export default function User() {
 function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
   const { t } = useTranslation(["user", "common"]);
   return (
-    (<Modal
+    <Modal
       title={t("deleteSuperviser")}
       closable={false}
       destroyOnClose
@@ -178,7 +178,7 @@ function CloseSupervisorAccountModal({ visible, onCancel, onFinish }) {
       }
     >
       <p>{t("deleteSuperviserMessage")}</p>
-    </Modal>)
+    </Modal>
   );
 }
 
@@ -203,7 +203,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
   }, 400);
 
   return (
-    (<Modal
+    <Modal
       title={t("deleteChw")}
       closable={false}
       destroyOnClose
@@ -246,7 +246,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
           </Form.Item>
         )}
       </Form>
-    </Modal>)
+    </Modal>
   );
 }
 

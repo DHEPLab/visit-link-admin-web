@@ -28,7 +28,7 @@ export default function AssignModalTable({
   }, [visible]);
 
   return (
-    (<Modal
+    <Modal
       title={title}
       open={visible}
       style={{ top: 20 }}
@@ -66,7 +66,7 @@ export default function AssignModalTable({
         columns={columns}
         {...props}
       />
-    </Modal>)
+    </Modal>
   );
 }
 

@@ -15,31 +15,33 @@ export default function DeleteConfirmModal(props) {
   } = props;
   const [visible, openModal, closeModal] = useBoolState();
 
-  return (<>
-    <div onClick={openModal}>{children}</div>
-    <Modal
-      style={{ top: "30%" }}
-      closable={false}
-      open={visible}
-      title={title}
-      footer={
-        <Space size="large">
-          <Button ghost danger onClick={closeModal}>
-            {t("cancel")}
-          </Button>
-          <Button
-            type="danger"
-            onClick={() => {
-              closeModal();
-              onConfirm();
-            }}
-          >
-            {okText}
-          </Button>
-        </Space>
-      }
-    >
-      {content}
-    </Modal>
-  </>);
+  return (
+    <>
+      <div onClick={openModal}>{children}</div>
+      <Modal
+        style={{ top: "30%" }}
+        closable={false}
+        open={visible}
+        title={title}
+        footer={
+          <Space size="large">
+            <Button ghost danger onClick={closeModal}>
+              {t("cancel")}
+            </Button>
+            <Button
+              type="danger"
+              onClick={() => {
+                closeModal();
+                onConfirm();
+              }}
+            >
+              {okText}
+            </Button>
+          </Space>
+        }
+      >
+        {content}
+      </Modal>
+    </>
+  );
 }

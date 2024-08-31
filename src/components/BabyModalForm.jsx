@@ -1,5 +1,5 @@
 import React from "react";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 

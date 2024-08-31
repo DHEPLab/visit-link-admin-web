@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Steps, Button, Spin, Upload, Table, message } from "antd";
 import Column from "antd/lib/table/Column";
 import { useTranslation } from "react-i18next";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import Axios from "axios";
 import UploadButton from "./UploadButton";
 

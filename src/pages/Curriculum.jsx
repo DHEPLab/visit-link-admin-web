@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import { useHistory, useParams, useLocation, Prompt } from "react-router-dom";
 import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from "antd";

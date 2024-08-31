@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import Axios from "axios";
 import { useParams, useHistory } from "react-router-dom";
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
@@ -372,7 +372,7 @@ const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
 function RevertAccountBabyModal({ visible, onCancel, onOk }) {
   const { t } = useTranslation("baby");
   return (
-    (<Modal
+    <Modal
       title={t("reactiveBaby")}
       closable={false}
       destroyOnClose
@@ -390,7 +390,7 @@ function RevertAccountBabyModal({ visible, onCancel, onOk }) {
       open={visible}
     >
       <p>{t("reactiveBabyConfirm")}</p>
-    </Modal>)
+    </Modal>
   );
 }
 
@@ -399,7 +399,7 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
   const [form] = Form.useForm();
 
   return (
-    (<Modal
+    <Modal
       title={t("archiveBaby")}
       closable={false}
       destroyOnClose
@@ -422,14 +422,14 @@ function CloseAccountBabyModal({ visible, onCancel, onOk }) {
           <Input style={{ width: "100%" }} placeholder={`${t("enter", { ns: "common" })}${t("archiveReason")}`} />
         </Form.Item>
       </Form>
-    </Modal>)
+    </Modal>
   );
 }
 
 function ApproveDeleteBabyModal({ visible, onCancel, onFinish }) {
   const { t } = useTranslation("baby");
   return (
-    (<Modal
+    <Modal
       title={t("archiveBabyTitle")}
       closable={false}
       destroyOnClose
@@ -447,14 +447,14 @@ function ApproveDeleteBabyModal({ visible, onCancel, onFinish }) {
       open={visible}
     >
       <p>{t("approveArchiveTip")}</p>
-    </Modal>)
+    </Modal>
   );
 }
 
 function ApproveModifyBabyModal({ visible, onCancel, onFinish }) {
   const { t } = useTranslation("baby");
   return (
-    (<Modal
+    <Modal
       title={t("modifyBabyTitle")}
       closable={false}
       destroyOnClose
@@ -472,7 +472,7 @@ function ApproveModifyBabyModal({ visible, onCancel, onFinish }) {
       open={visible}
     >
       <p>{t("approveModifyTip")}</p>
-    </Modal>)
+    </Modal>
   );
 }
 

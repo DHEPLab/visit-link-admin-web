@@ -23,7 +23,7 @@ export default function ({
   }, [visible, form, initialValues]);
 
   return (
-    (<Modal
+    <Modal
       width={width}
       closable={false}
       maskClosable={false}
@@ -44,6 +44,6 @@ export default function ({
       <Form form={form} labelCol={{ span: 6 }} onFinish={onFinish} validateMessages={validateMessages}>
         {children}
       </Form>
-    </Modal>)
+    </Modal>
   );
 }

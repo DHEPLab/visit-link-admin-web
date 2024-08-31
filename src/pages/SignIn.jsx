@@ -48,12 +48,7 @@ export default function SignIn() {
             rules={[{ required: true, message: t("username.required") }]}
             labelCol={{ span: 0 }}
           >
-            <Input
-              className="master"
-              size="large"
-              placeholder={t("username.placeholder")}
-              autoFocus
-            />
+            <Input className="master" size="large" placeholder={t("username.placeholder")} autoFocus />
           </Form.Item>
           <Form.Item
             label={t("password.label")}
