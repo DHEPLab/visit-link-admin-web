@@ -61,7 +61,8 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
               {value &&
                 value.map((component, index) => (
                   <ComponentQuestion
-                    {...{ index, readonly, component, focus: focus === index, key: component.key }}
+                    key={component.key}
+                    {...{ index, readonly, component, focus: focus === index }}
                     name="questions"
                     onRemove={() => handleRemove(helpers, index, focus, setFocus)}
                     onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}

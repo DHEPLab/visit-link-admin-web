@@ -44,7 +44,7 @@ export default function QuestionText({ name, onBlur, onChange, value, ...props }
           defaultValue={value.title}
           placeholder={t("enterText")}
           onBlur={(e) => TextChange(`${name}.title`, e.target.value)}
-          bordered={false}
+          variant="borderless"
         />
       )}
       <Field
