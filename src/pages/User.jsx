@@ -2,7 +2,7 @@ import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { Form, Modal, Button, Input, Space, Select } from "antd";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
@@ -23,7 +23,7 @@ import {
 export default function User() {
   const { t } = useTranslation(["user", "common"]);
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [user, refresh] = useFetch(`/admin/users/${id}`);
   const [isBabiesEmpty, setIsBabiesEmpty] = useState(true);
 
@@ -50,11 +50,11 @@ export default function User() {
   }
 
   function handleCloseChwAccount(data) {
-    Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => history.goBack());
+    Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => navigate(-1));
   }
 
   function handleCloseSupervisorAccount() {
-    Axios.delete(`/admin/users/supervisor/${id}`).then(() => history.goBack());
+    Axios.delete(`/admin/users/supervisor/${id}`).then(() => navigate(-1));
   }
 
   return (
@@ -299,7 +299,7 @@ function ChangePasswordModal({ id, onCancel, visible, ...props }) {
 
 function AssignBaby({ id, onChange }) {
   const { t } = useTranslation(["user", "common"]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [dataSource, refresh] = useFetch(`/admin/users/chw/${id}/babies`, {}, []);
 
@@ -329,7 +329,7 @@ function AssignBaby({ id, onChange }) {
           onClick: (event) => {
             // do noting when click other target
             if (event.target.tagName === "TD") {
-              history.push(`/babies/${record.id}`);
+              navigate(`/babies/${record.id}`);
             }
           },
         })}

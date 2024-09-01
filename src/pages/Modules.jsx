@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Space } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { ModuleTopic } from "../constants/enums";
@@ -9,7 +9,7 @@ import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }) {
   const { t } = useTranslation("modules");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -21,7 +21,7 @@ function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }
             className="master"
             placeholder={t("searchModulePlaceholder")}
           />
-          <Button type="primary" onClick={() => history.push("/modules/create")}>
+          <Button type="primary" onClick={() => navigate("/modules/create")}>
             {t("createNewModule")}
           </Button>
         </Space>
@@ -34,7 +34,7 @@ function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }
         onRow={(record) => {
           return {
             onClick: () => {
-              history.push(`/modules/${record.id}`);
+              navigate(`/modules/${record.id}`);
             },
           };
         }}

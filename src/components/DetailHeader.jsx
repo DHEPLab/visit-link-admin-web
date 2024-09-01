@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Iconfont } from "../components";
 
 export default function DetailHeader({ icon, menu, title, role, extra }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <Container>
       <Flex>
         <Iconfont type={icon} />
-        <Menu onClick={() => history.goBack()}>{menu}</Menu>
+        <Menu onClick={() => navigate(-1)}>{menu}</Menu>
         <Iconfont type="iconarrow-gray" size={10} />
         <Title>{title}</Title>
         {role && <Role>{role}</Role>}

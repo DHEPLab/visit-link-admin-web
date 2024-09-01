@@ -9,7 +9,7 @@ vi.mock("react-router-dom", async (importOriginal) => {
   return {
     ...actual,
     useParams: () => 1,
-    useHistory: vi.fn(),
+    useNavigate: vi.fn(),
   };
 });
 

@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import { Form, Space, Button, Input, message } from "antd";
-import { useLocation, useHistory, useParams, Prompt } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
@@ -11,6 +11,7 @@ import SurveyComponents from "../components/curriculum/SurveyComponents";
 import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components";
 import { debounce } from "lodash";
 import Rules from "../constants/rules";
+import usePrompt from "@/hooks/usePrompt";
 
 export default function Survey() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function Survey() {
   const [submitURL, setSubmitURL] = useState();
 
   const [form] = Form.useForm();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [module, setModule] = useState({});
   const [questions, setQuestions] = useState();
@@ -95,7 +96,7 @@ export default function Survey() {
       id,
       questions,
       ...values,
-    }).then(history.goBack);
+    }).then(() => navigate(-1));
   }
 
   function handleDelteDraft() {
@@ -106,9 +107,21 @@ export default function Survey() {
 
   function handleDeleteModule() {
     Axios.delete(`/admin/questionnaires/${id}`).then(() => {
-      history.goBack();
+      navigate(-1);
     });
   }
+
+  usePrompt({
+    when: isPrompt,
+    message: (location) => {
+      const isStop = location.pathname.startsWith("/surveys/edit/");
+      if (isStop || readonly) {
+        return true;
+      } else {
+        return t("unsavedChangesWarning");
+      }
+    },
+  });
 
   if (!questions) return null;
 
@@ -116,18 +129,6 @@ export default function Survey() {
     <Formik initialValues={{ questions }} onSubmit={onSubmitFormik}>
       {({ values, handleSubmit, validateForm }) => (
         <>
-          <Prompt
-            when={isPrompt}
-            message={(location) => {
-              const isstop = location.pathname.startsWith("/surveys/edit/");
-              if (isstop || readonly) {
-                return true;
-              } else {
-                return t("unsavedChangesWarning");
-              }
-            }}
-          />
-
           <DetailHeader
             icon="iconwenjuan-primary"
             menu={t("surveyManagement")}
@@ -148,7 +149,7 @@ export default function Survey() {
                       </DeleteConfirmModal>
                     )}
                     {!draftId && (
-                      <Button danger type="primary" onClick={() => history.push(`/surveys/edit/${id}`)}>
+                      <Button danger type="primary" onClick={() => navigate(`/surveys/edit/${id}`)}>
                         {t("editSurvey")}
                       </Button>
                     )}
@@ -172,7 +173,7 @@ export default function Survey() {
               title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
-              onClick={() => history.push(`/surveys/edit/${draftId}`)}
+              onClick={() => navigate(`/surveys/edit/${draftId}`)}
             />
           )}
 

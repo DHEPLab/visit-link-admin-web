@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Axios from "axios";
 import { debounce } from "lodash";
-import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 // first page start at 0
@@ -32,8 +32,8 @@ export default function withPage(
 ) {
   return function (props) {
     const { t } = useTranslation(["common"]);
-    const history = useHistory();
-    const historyPageState = history?.location.state?.page?.[url];
+    const location = useLocation();
+    const historyPageState = location.state?.page?.[url];
     const [search, setSearch] = useState(
       historyPageState || {
         page,
@@ -59,10 +59,10 @@ export default function withPage(
           setTotalElements(data.totalElements);
           setContent(data.content);
 
-          const hPageState = history?.location.state?.page;
+          const hPageState = location.state?.page;
           window.history.replaceState(
             {
-              key: history.location.key,
+              key: location.key,
               state: {
                 page: {
                   ...(hPageState || {}),

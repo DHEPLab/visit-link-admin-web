@@ -12,7 +12,7 @@ import { I18nextProvider, useTranslation } from "react-i18next";
 import Rooter from "./Router";
 import { Role } from "./constants/enums";
 import { Header, Menu, Message } from "./components";
-import { BrowserRouter, useHistory, Route } from "react-router-dom";
+import { BrowserRouter, Route, useNavigate } from "react-router-dom";
 import { applyToken, getToken, clearToken } from "./utils/token";
 
 import { Provider, useSelector } from "react-redux";
@@ -64,27 +64,27 @@ function shouldForwardProp(propName, target) {
 }
 
 function AppContent() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.users);
   const { t } = useTranslation("app");
 
   const loadProfile = useCallback(() => {
     Axios.get("/api/account/profile")
       .then((r) => store.dispatch(apiAccountProfile(r)))
-      .catch(() => history.push("/sign_in"));
-  }, [history]);
+      .catch(() => navigate("/sign_in"));
+  }, [navigate]);
 
   useEffect(loadProfile, [loadProfile]);
 
   function handleLogout() {
     clearToken();
-    history.push("/sign_in");
+    navigate("/sign_in");
     Message.success(t("logoutSuccess"), t("logoutMessage"));
   }
 
   return (
     <>
-      <Header username={user.realName} role={Role[user.role]} onNavigate={history.push} onLogout={handleLogout} />
+      <Header username={user.realName} role={Role[user.role]} onNavigate={navigate} onLogout={handleLogout} />
       <RouteContainer>
         <Menu />
         <Rooter />

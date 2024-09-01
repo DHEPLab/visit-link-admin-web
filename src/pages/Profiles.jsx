@@ -2,7 +2,7 @@ import React from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -15,7 +15,7 @@ import { apiAccountProfile } from "../actions";
 
 export default function Profiles() {
   const { t } = useTranslation(["myAccount", "common"]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
   const [visible, openPasswordModal, closePasswordModal] = useBoolState(false);
@@ -31,7 +31,7 @@ export default function Profiles() {
     await Axios.put("/api/account/password", values);
     Message.success(t("passwordChangedTip"), t("reLoginTip"), 1);
     clearToken();
-    history.push("/sign_in");
+    navigate("/sign_in");
   }
 
   return (

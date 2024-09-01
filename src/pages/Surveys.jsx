@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, Space } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { WithPage, ContentHeader, ZebraTable, StatusTag } from "../components";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SurveysContent({ loadData, onChangeSearch, ...props }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation("surveys");
 
   return (
@@ -19,7 +19,7 @@ function SurveysContent({ loadData, onChangeSearch, ...props }) {
             className="master"
             placeholder={t("searchSurveyPlaceholder")}
           /> */}
-          <Button type="primary" onClick={() => history.push("/surveys/create")}>
+          <Button type="primary" onClick={() => navigate("/surveys/create")}>
             {t("createNewSurvey")}
           </Button>
         </Space>
@@ -32,7 +32,7 @@ function SurveysContent({ loadData, onChangeSearch, ...props }) {
         onRow={(record) => {
           return {
             onClick: () => {
-              history.push(`/surveys/${record.id}`);
+              navigate(`/surveys/${record.id}`);
             },
           };
         }}

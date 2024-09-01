@@ -3,7 +3,7 @@ import Axios from "axios";
 import { Formik } from "formik";
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useDispatch } from "react-redux";
-import { Prompt, useHistory, useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Factory from "../components/curriculum/factory";
@@ -13,13 +13,14 @@ import { ModuleTopic, QrType } from "../constants/enums";
 import { Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticField } from "../components";
 import { moduleFinishActionOptions } from "../actions";
 import { QRCodeSVG } from "qrcode.react";
+import usePrompt from "@/hooks/usePrompt";
 
 export default function Module() {
   const { t } = useTranslation(["module", "error"]);
   const { id } = useParams();
   const { pathname } = useLocation();
   const [readonly, setReadonly] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [isPrompt, setIsPrompt] = useState(true);
@@ -130,9 +131,9 @@ export default function Module() {
       ...values,
     }).then(() => {
       if (isEdit) {
-        history.goBack();
+        navigate(-1);
       } else {
-        history.push("/modules");
+        navigate("/modules");
       }
     });
   }
@@ -145,13 +146,25 @@ export default function Module() {
 
   function handleDeleteModule() {
     Axios.delete(`/admin/modules/${id}`).then(() => {
-      history.goBack();
+      navigate(-1);
     });
   }
 
   function copy() {
-    history.push(`/modules/copy/${id}`);
+    navigate(`/modules/copy/${id}`);
   }
+
+  usePrompt({
+    when: isPrompt,
+    message: (location) => {
+      const isStop = location.pathname.startsWith("/modules/edit/");
+      if (isStop || readonly) {
+        return true;
+      } else {
+        return t("unsavedChangesWarning");
+      }
+    },
+  });
 
   if (!components || components.length === 0) {
     return null;
@@ -160,17 +173,6 @@ export default function Module() {
     <Formik initialValues={{ components }} onSubmit={onSubmitFormik}>
       {({ values, handleSubmit }) => (
         <>
-          <Prompt
-            when={isPrompt}
-            message={(location) => {
-              const isstop = location.pathname.startsWith("/modules/edit/");
-              if (isstop || readonly) {
-                return true;
-              } else {
-                return t("unsavedChangesWarning");
-              }
-            }}
-          />
           <DetailHeader
             icon="iconmodule-primary"
             menu={t("moduleManagement")}
@@ -196,7 +198,7 @@ export default function Module() {
                       </DeleteConfirmModal>
                     )}
                     {!draftId && (
-                      <Button danger type="primary" onClick={() => history.push(`/modules/edit/${id}`)}>
+                      <Button danger type="primary" onClick={() => navigate(`/modules/edit/${id}`)}>
                         {t("editModule")}
                       </Button>
                     )}
@@ -220,7 +222,7 @@ export default function Module() {
               title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
               onRemove={handleDelteDraft}
-              onClick={() => history.push(`/modules/edit/${draftId}`)}
+              onClick={() => navigate(`/modules/edit/${draftId}`)}
             />
           )}
 

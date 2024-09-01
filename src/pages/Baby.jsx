@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import Axios from "axios";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
@@ -29,7 +29,7 @@ const { confirm } = Modal;
 export default function Baby() {
   const { t } = useTranslation(["baby", "common"]);
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [baby, refresh] = useFetch(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
 
@@ -113,13 +113,13 @@ export default function Baby() {
   function handleApproveDeleteFinish() {
     Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
       closeApproveDeleteModal();
-      history.goBack();
+      navigate(-1);
     });
   }
 
   function handleCloseAccount({ reason }) {
     Axios.delete(`/admin/babies/${id}?reason=${reason}`).then(() => {
-      history.goBack();
+      navigate(-1);
     });
   }
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { Form, Input, Button } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
@@ -14,7 +14,7 @@ import LogoImage from "../assets/logo.png";
 
 export default function SignIn() {
   const { t } = useTranslation("signIn");
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const networks = useSelector((state) => state.networks);
 
@@ -31,7 +31,7 @@ export default function SignIn() {
       dispatch(apiAccountProfile(profile));
 
       Message.success(t("success.title"), t("success.message"), 1);
-      history.push("/");
+      navigate("/");
     } catch {
       setError(true);
     }

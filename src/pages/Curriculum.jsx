@@ -4,7 +4,7 @@ import Arrays from "lodash/array";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import { useHistory, useParams, useLocation, Prompt } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 
@@ -23,10 +23,11 @@ import {
   DeleteConfirmModal,
 } from "../components";
 import { useTranslation } from "react-i18next";
+import usePrompt from "@/hooks/usePrompt";
 
 export default function Curriculum() {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const { t } = useTranslation("curriculum");
@@ -102,7 +103,7 @@ export default function Curriculum() {
       ...values,
       lessons: lessonResult,
       schedules,
-    }).then(history.goBack);
+    }).then(() => navigate(-1));
   }
 
   function handleDelteDraft() {
@@ -113,7 +114,7 @@ export default function Curriculum() {
 
   function handleDeleteCurriculum() {
     Axios.delete(`/admin/curriculums/${id}`).then(() => {
-      history.goBack();
+      navigate(-1);
     });
   }
 
@@ -122,22 +123,23 @@ export default function Curriculum() {
     setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
   }
 
+  usePrompt({
+    when: isPrompt,
+    message: (location) => {
+      const isStop = location.pathname.startsWith("/curriculums/edit/");
+      if (isStop || readonly) {
+        return true;
+      } else {
+        return t("unsavedChangesWarning");
+      }
+    },
+  });
+
   // fix page flash
   if (readonly == null || (id && curriculum.name == null)) return null;
 
   return (
     <>
-      <Prompt
-        when={isPrompt}
-        message={(location) => {
-          const isstop = location.pathname.startsWith("/curriculums/edit/");
-          if (isstop || readonly) {
-            return true;
-          } else {
-            return t("unsavedChangesWarning");
-          }
-        }}
-      />
       <DetailHeader
         icon="iconcurriculum-primary"
         menu={t("curriculumManagement")}
@@ -158,7 +160,7 @@ export default function Curriculum() {
                 </DeleteConfirmModal>
 
                 {!draftId && (
-                  <Button danger type="primary" onClick={() => history.push(`/curriculums/edit/${id}`)}>
+                  <Button danger type="primary" onClick={() => navigate(`/curriculums/edit/${id}`)}>
                     {t("editCurriculum")}
                   </Button>
                 )}
@@ -182,7 +184,7 @@ export default function Curriculum() {
           title={t("unpublishedDraft")}
           lastModifiedDraftAt={draftDate}
           onRemove={handleDelteDraft}
-          onClick={() => history.push(`/curriculums/edit/${draftId}`)}
+          onClick={() => navigate(`/curriculums/edit/${draftId}`)}
         />
       )}
 

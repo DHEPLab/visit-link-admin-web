@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { StringParam, useQueryParam } from "use-query-params";
@@ -16,7 +16,7 @@ import ImportUserExcel from "../components/ImportUserExcel";
 
 export default function Users() {
   const { t } = useTranslation(["users", "common"]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openUser, closeUser] = useBoolState();
   const [importModal, openImportModal, closeImportModal] = useBoolState(false);
@@ -45,7 +45,7 @@ export default function Users() {
     {
       key: "chw",
       label: t("chw"),
-      children: <PageCHW tab={tab} history={history} />,
+      children: <PageCHW tab={tab} navigate={navigate} />,
     },
   ];
 
@@ -53,12 +53,12 @@ export default function Users() {
     tabItems.push({
       key: "supervisor",
       label: t("supervisor"),
-      children: <PageSupervisor tab={tab} history={history} />,
+      children: <PageSupervisor tab={tab} navigate={navigate} />,
     });
     tabItems.push({
       key: "admin",
       label: t("admin"),
-      children: <PageAdmin tab={tab} history={history} />,
+      children: <PageAdmin tab={tab} navigate={navigate} />,
     });
   }
 
@@ -144,7 +144,7 @@ const PageCHW = WithPage(CHW, "/admin/users/chw", {}, false);
 const PageSupervisor = WithPage(Supervisor, "/admin/users/supervisor", {}, false);
 const PageAdmin = WithPage(Admin, "/admin/users/admin?sort=id,desc", {}, false);
 
-function CHW({ historyPageState, tab, history, loadData, onChangeSearch, ...props }) {
+function CHW({ historyPageState, tab, navigate, loadData, onChangeSearch, ...props }) {
   const { t } = useTranslation(["users", "common"]);
   useEffect(() => {
     if (tab === "chw") {
@@ -170,7 +170,7 @@ function CHW({ historyPageState, tab, history, loadData, onChangeSearch, ...prop
         className="clickable"
         scroll={{ x: true }}
         rowKey={(record) => record.user.id}
-        onRow={(record) => onRow(history, record.user.id)}
+        onRow={(record) => onRow(navigate, record.user.id)}
         columns={[
           realName,
           {
@@ -227,7 +227,7 @@ const ChwBar = styled.div`
   border-bottom: 1px solid #ffc3a0;
 `;
 
-function Supervisor({ tab, history, loadData, ...props }) {
+function Supervisor({ tab, navigate, loadData, ...props }) {
   const { t } = useTranslation(["users", "common"]);
   useEffect(() => {
     if (tab === "supervisor") {
@@ -242,7 +242,7 @@ function Supervisor({ tab, history, loadData, ...props }) {
         scroll={{ x: true }}
         className="clickable"
         rowKey={(record) => record.user.id}
-        onRow={(record) => onRow(history, record.user.id)}
+        onRow={(record) => onRow(navigate, record.user.id)}
         columns={[
           realName,
           phone,
@@ -259,7 +259,7 @@ function Supervisor({ tab, history, loadData, ...props }) {
   );
 }
 
-function Admin({ tab, history, loadData, ...props }) {
+function Admin({ tab, navigate, loadData, ...props }) {
   useEffect(() => {
     if (tab === "admin") {
       loadData();
@@ -273,7 +273,7 @@ function Admin({ tab, history, loadData, ...props }) {
         scroll={{ x: true }}
         rowKey="id"
         className="clickable"
-        onRow={(record) => onRow(history, record.id)}
+        onRow={(record) => onRow(navigate, record.id)}
         columns={[
           { ...realName, dataIndex: "realName" },
           { ...phone, dataIndex: "phone" },
@@ -303,10 +303,10 @@ const username = {
   width: 200,
 };
 
-const onRow = (history, id) => {
+const onRow = (navigate, id) => {
   return {
     onClick: () => {
-      history.push(`/users/${id}`);
+      navigate(`/users/${id}`);
     },
   };
 };

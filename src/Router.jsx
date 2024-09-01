@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect, Route, Switch, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { getToken } from "./utils/token";
 
 import {
@@ -105,13 +105,13 @@ const routes = [
 export default function Router() {
   return (
     <RouteView id="route-view">
-      <Switch>
-        <PrivateRoute exact path="/" render={() => <Redirect to="/users" />} />
+      <Routes>
+        <PrivateRoute exact path="/" render={() => <Navigate to="/users" replace />} />
         <Route path="/sign_in" render={() => <SignIn />} />
         {routes.map((route) => (
           <RouteWithSubRoutes key={route.path} {...route} />
         ))}
-      </Switch>
+      </Routes>
     </RouteView>
   );
 }

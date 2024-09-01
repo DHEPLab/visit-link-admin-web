@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Axios from "axios";
 import { Modal, Button, Space, Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Gender } from "../constants/enums";
@@ -12,7 +12,7 @@ import { StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModa
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CurriculumsContent({ historyPageState, loadData, onChangeSearch, ...props }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [curriculumId, setCurriculumId] = useState();
   const { t } = useTranslation("curriculums");
@@ -32,7 +32,7 @@ function CurriculumsContent({ historyPageState, loadData, onChangeSearch, ...pro
             className="master"
             placeholder={t("searchByCurriculumName")}
           />
-          <Button type="primary" onClick={() => history.push("/curriculums/create")}>
+          <Button type="primary" onClick={() => navigate("/curriculums/create")}>
             {t("createNewCurriculum")}
           </Button>
         </Space>
@@ -47,7 +47,7 @@ function CurriculumsContent({ historyPageState, loadData, onChangeSearch, ...pro
             onClick: (event) => {
               // do noting when click other target
               if (event.target.tagName === "TD") {
-                history.push(`/curriculums/${record.id}`);
+                navigate(`/curriculums/${record.id}`);
               }
             },
           };

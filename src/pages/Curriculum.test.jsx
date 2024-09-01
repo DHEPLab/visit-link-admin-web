@@ -10,10 +10,14 @@ vi.mock("react-router-dom", async (importOriginal) => {
   return {
     ...actual,
     useParams: vi.fn(),
+    useNavigate: vi.fn(),
     useLocation: vi.fn(),
-    Prompt: () => <div />,
   };
 });
+
+vi.mock("@/hooks/usePrompt", () => ({
+  default: () => {},
+}));
 
 vi.mock("react-redux", async (importOriginal) => {
   const actual = await importOriginal();

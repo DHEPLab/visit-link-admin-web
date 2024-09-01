@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQueryParam, StringParam } from "use-query-params";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +27,7 @@ function formatDate(datetime) {
 
 export default function Babies() {
   const { t, i18n } = useTranslation("babies");
-  const history = useHistory();
+  const navigate = useNavigate();
   const [tab, setTab] = useQueryParam("tab", StringParam);
   const [visible, openBaby, closeBaby] = useBoolState(false);
   const [impoerModal, openImpoerModal, closeImpoerModal] = useBoolState(false);
@@ -59,12 +59,12 @@ export default function Babies() {
     {
       key: "approved",
       label: t("approved"),
-      children: <PageApproved tab={tab} history={history} />,
+      children: <PageApproved tab={tab} navigate={navigate} />,
     },
     {
       key: "unreviewed",
       label: t("unreviewed"),
-      children: <PageUnreviewed tab={tab} history={history} />,
+      children: <PageUnreviewed tab={tab} navigate={navigate} />,
     },
   ];
 
@@ -101,7 +101,7 @@ export default function Babies() {
 const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);
 const PageUnreviewed = WithPage(Unreviewed, "/admin/babies/unreviewed", {}, false);
 
-function Unreviewed({ historyPageState, onChangeSearch, onChangePage, tab, history, loadData, ...props }) {
+function Unreviewed({ historyPageState, onChangeSearch, onChangePage, tab, navigate, loadData, ...props }) {
   const { t } = useTranslation("babies");
   useEffect(() => {
     if (tab === "unreviewed") {
@@ -141,7 +141,7 @@ function Unreviewed({ historyPageState, onChangeSearch, onChangePage, tab, histo
         className="clickable"
         onRow={(record) => ({
           onClick: () => {
-            history.push(`/babies/${record.id}`);
+            navigate(`/babies/${record.id}`);
           },
         })}
         onChange={sorterFun}
@@ -229,7 +229,7 @@ const Tag = styled.span`
   display: inline-block;
 `;
 
-function Approved({ historyPageState, tab, history, loadData, onChangeSearch, onChangePage, ...props }) {
+function Approved({ historyPageState, tab, navigate, loadData, onChangeSearch, onChangePage, ...props }) {
   const { t } = useTranslation("babies");
   useEffect(() => {
     if (tab === "approved") {
@@ -268,7 +268,7 @@ function Approved({ historyPageState, tab, history, loadData, onChangeSearch, on
         className="clickable"
         onRow={(record) => ({
           onClick: () => {
-            history.push(`/babies/${record.id}`);
+            navigate(`/babies/${record.id}`);
           },
         })}
         onChange={sorterFun}
