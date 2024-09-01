@@ -9,7 +9,7 @@ import "./dayjsInit";
 
 import { I18nextProvider, useTranslation } from "react-i18next";
 
-import RouteView from "./Router";
+import Rooter from "./Router";
 import { Role } from "./constants/enums";
 import { Header, Menu, Message } from "./components";
 import { BrowserRouter, useHistory, Route } from "react-router-dom";
@@ -25,7 +25,7 @@ import { componentConfig, visitLinkTheme } from "./theme";
 
 applyToken(getToken());
 
-export default function () {
+export default function App() {
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
   const rootPrefixCls = getPrefixCls();
   const component = componentConfig(rootPrefixCls);
@@ -43,7 +43,7 @@ export default function () {
             <AppContainer>
               <BrowserRouter>
                 <QueryParamProvider ReactRouterRoute={Route}>
-                  <App />
+                  <AppContent />
                 </QueryParamProvider>
               </BrowserRouter>
             </AppContainer>
@@ -63,7 +63,7 @@ function shouldForwardProp(propName, target) {
   return true;
 }
 
-function App() {
+function AppContent() {
   const history = useHistory();
   const { user } = useSelector((state) => state.users);
   const { t } = useTranslation("app");
@@ -87,7 +87,7 @@ function App() {
       <Header username={user.realName} role={Role[user.role]} onNavigate={history.push} onLogout={handleLogout} />
       <RouteContainer>
         <Menu />
-        <RouteView></RouteView>
+        <Rooter />
       </RouteContainer>
     </>
   );

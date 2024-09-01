@@ -7,7 +7,7 @@ import { ModuleTopic } from "../constants/enums";
 import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Components({ historyPageState, loadData, onChangeSearch, ...props }) {
+function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }) {
   const { t } = useTranslation("modules");
   const history = useHistory();
 
@@ -66,4 +66,5 @@ function Components({ historyPageState, loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Components, "/admin/modules");
+const Modules = WithPage(ModulesContent, "/admin/modules");
+export default Modules;

@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ({ title, children }) {
+export default function ContentHeader({ title, children }) {
   return (
-    <ContentHeader>
+    <ContentHeaderContainer>
       <Title>{title}</Title>
       <div>{children}</div>
-    </ContentHeader>
+    </ContentHeaderContainer>
   );
 }
 
-const ContentHeader = styled.div`
+const ContentHeaderContainer = styled.div`
   height: 76px;
   width: 100%;
   margin-bottom: 20px;

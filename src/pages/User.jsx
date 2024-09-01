@@ -257,7 +257,7 @@ function ChangePasswordModal({ id, onCancel, visible, ...props }) {
     if (visible) {
       form.resetFields();
     }
-  }, [props, form]);
+  }, [visible, form]);
 
   function onFinish(values) {
     Axios.put(`/admin/users/${id}/password`, values).then(onCancel);

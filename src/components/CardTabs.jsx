@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { Tabs } from "antd";
 
-export default function ({ ...props }) {
-  return <CardTabs type="card" {...props} />;
+export default function CardTabs({ ...props }) {
+  return <CardTabsContainer type="card" {...props} />;
 }
 
-const CardTabs = styled(Tabs)`
+const CardTabsContainer = styled(Tabs)`
   > .ant-tabs-nav .ant-tabs-nav-wrap {
     background: #ff9472;
     padding-top: 24px;

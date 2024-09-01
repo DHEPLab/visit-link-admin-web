@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 
-export default function ({ title, tooltip, children, extra, noPadding }) {
+export default function Card({ title, tooltip, children, extra, noPadding }) {
   return (
-    <Card>
+    <CardContainer>
       <TitleContainer>
         <Title>
           <label>{title}</label>
@@ -18,11 +18,11 @@ export default function ({ title, tooltip, children, extra, noPadding }) {
         <div>{extra}</div>
       </TitleContainer>
       <Content noPadding={noPadding}>{children}</Content>
-    </Card>
+    </CardContainer>
   );
 }
 
-const Card = styled.div`
+const CardContainer = styled.div`
   background: #fff;
   margin-bottom: 20px;
 `;

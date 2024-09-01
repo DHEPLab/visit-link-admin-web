@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Modal, Space, Button } from "antd";
 import { useTranslation } from "react-i18next";
 
-export default function ({
+export default function ModalForm({
   width = 600,
   title,
   visible,

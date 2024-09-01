@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { WithPage, ContentHeader, ZebraTable, StatusTag } from "../components";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Surveys({ loadData, onChangeSearch, ...props }) {
+function SurveysContent({ loadData, onChangeSearch, ...props }) {
   const history = useHistory();
   const { t } = useTranslation("surveys");
 
@@ -54,4 +54,5 @@ function Surveys({ loadData, onChangeSearch, ...props }) {
   );
 }
 
-export default WithPage(Surveys, "/admin/questionnaires?sort=id,desc");
+const Surveys = WithPage(SurveysContent, "/admin/questionnaires?sort=id,desc");
+export default Surveys;

@@ -3,7 +3,7 @@ import { Select } from "antd";
 
 import * as Enums from "../constants/enums";
 
-export default function ({ name, ...props }) {
+export default function SelectEnum({ name, ...props }) {
   return (
     <Select {...props}>
       {Object.keys(Enums[name] || []).map((key) => (

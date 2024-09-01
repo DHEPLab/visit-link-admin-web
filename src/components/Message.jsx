@@ -4,7 +4,7 @@ import { message as AntdMessage } from "antd";
 
 import Iconfont from "./Iconfont";
 
-export default {
+const Message = {
   success: (title, message, duration) => {
     AntdMessage.success({
       duration: duration || 1,
@@ -17,12 +17,14 @@ export default {
   },
 };
 
+export default Message;
+
 function MessageContent({ title, message }) {
   return (
     <Container>
       <Iconfont type="iconsuccess" size={60} />
       <Title>{title}</Title>
-      <Message>{message}</Message>
+      <MessageBody>{message}</MessageBody>
     </Container>
   );
 }
@@ -43,7 +45,7 @@ const Title = styled.div`
   margin-top: 18px;
 `;
 
-const Message = styled.div`
+const MessageBody = styled.div`
   color: #8e8e93;
   font-size: 14px;
   margin-top: 20px;

@@ -483,7 +483,7 @@ function ApproveCreateBabyModal({ onCancel, onFinish, visible, ...props }) {
     if (visible) {
       form.resetFields();
     }
-  }, [props, form]);
+  }, [visible, form]);
 
   return (
     <Modal

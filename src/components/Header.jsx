@@ -15,7 +15,7 @@ import LogoImage from "../assets/logo.png";
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-export default function ({ username, role, onNavigate, onLogout }) {
+export default function Header({ username, role, onNavigate, onLogout }) {
   const { t } = useTranslation(["header", "roles"]);
   const { user } = useSelector((state) => state.users);
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false);
@@ -54,7 +54,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
   }
 
   return (
-    <Header>
+    <HeaderContainer>
       <Logo>
         <img src={LogoImage} alt="Logo" />
       </Logo>
@@ -99,7 +99,7 @@ export default function ({ username, role, onNavigate, onLogout }) {
           </Form.Item>
         )}
       </ModalForm>
-    </Header>
+    </HeaderContainer>
   );
 }
 
@@ -141,7 +141,7 @@ const Content = styled.div`
   padding-right: 30px;
 `;
 
-const Header = styled.header`
+const HeaderContainer = styled.header`
   height: 80px;
   width: 100%;
   background-color: white;

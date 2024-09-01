@@ -10,7 +10,19 @@ const page = 0;
 // default page size
 const size = 10;
 
-export default function (
+/**
+ * A higher-order component (HOC) that wraps a given React component and handles
+ * data loading based on an API request. The data can be loaded on mount or triggered
+ * manually based on the `loadOnMount` flag.
+ *
+ * @param {React.ComponentType} WrapperComponent - The React component to be wrapped.
+ * @param {string} [url] - The API request URL for fetching data.
+ * @param {Object} [params] - The optional parameters for the API request.
+ * @param {boolean} [loadOnMount=true] - A flag indicating whether the data should be loaded when the component mounts.
+ *
+ * @returns {React.ComponentType} - A new React component that wraps the provided `WrapperComponent`.
+ */
+export default function withPage(
   WrapperComponent,
   // api request url
   url,

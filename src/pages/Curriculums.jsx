@@ -11,7 +11,7 @@ import { useBoolState } from "../utils";
 import { StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModalTable } from "../components";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function Curriculums({ historyPageState, loadData, onChangeSearch, ...props }) {
+function CurriculumsContent({ historyPageState, loadData, onChangeSearch, ...props }) {
   const history = useHistory();
   const [visible, openModal, closeModal] = useBoolState(false);
   const [curriculumId, setCurriculumId] = useState();
@@ -246,4 +246,5 @@ const Title = styled.div`
   }
 `;
 
-export default WithPage(Curriculums, "/admin/curriculums?sort=id,desc");
+const Curriculums = WithPage(CurriculumsContent, "/admin/curriculums?sort=id,desc");
+export default Curriculums;

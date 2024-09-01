@@ -102,7 +102,7 @@ const routes = [
   },
 ];
 
-export default function () {
+export default function Router() {
   return (
     <RouteView id="route-view">
       <Switch>
