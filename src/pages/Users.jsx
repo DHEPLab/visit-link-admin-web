@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, Form, Input, Modal, Radio } from "antd";
-import { StringParam, useQueryParam } from "use-query-params";
 import { useTranslation } from "react-i18next";
 
 import i18next from "../i18n";
@@ -13,19 +12,16 @@ import { useBoolState } from "../utils";
 import { Role } from "../constants/enums";
 import { CardTabs, ChwTagSelector, ContentHeader, ModalForm, SearchInput, WithPage, ZebraTable } from "../components";
 import ImportUserExcel from "../components/ImportUserExcel";
+import useQueryParam from "@/hooks/useQueryParam";
 
 export default function Users() {
   const { t } = useTranslation(["users", "common"]);
   const navigate = useNavigate();
-  const [tab, setTab] = useQueryParam("tab", StringParam);
+  const [tab, setTab] = useQueryParam("tab", "chw");
   const [visible, openUser, closeUser] = useBoolState();
   const [importModal, openImportModal, closeImportModal] = useBoolState(false);
   const { user } = useSelector((state) => state.users);
   const isAdmin = user?.role === "ROLE_ADMIN";
-
-  useEffect(() => {
-    if (!tab) setTab("chw");
-  }, [tab, setTab]);
 
   // change tab to refresh table
   function refresh() {

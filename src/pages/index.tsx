@@ -11,3 +11,4 @@ export { default as Survey } from "./Survey";
 export { default as Surveys } from "./Surveys";
 export { default as User } from "./User";
 export { default as Users } from "./Users";
+export { default as NotFound } from "./NotFound";

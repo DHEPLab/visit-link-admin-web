@@ -3,7 +3,6 @@ import Axios from "axios";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useQueryParam, StringParam } from "use-query-params";
 import { useTranslation } from "react-i18next";
 
 import { Button, Space, Modal } from "antd";
@@ -20,6 +19,7 @@ import {
   StatusTag,
   ImportExcel,
 } from "../components";
+import useQueryParam from "@/hooks/useQueryParam";
 
 function formatDate(datetime) {
   return dayjs(datetime).format("YYYY-MM-DD");
@@ -28,13 +28,9 @@ function formatDate(datetime) {
 export default function Babies() {
   const { t, i18n } = useTranslation("babies");
   const navigate = useNavigate();
-  const [tab, setTab] = useQueryParam("tab", StringParam);
+  const [tab, setTab] = useQueryParam("tab", "approved");
   const [visible, openBaby, closeBaby] = useBoolState(false);
   const [impoerModal, openImpoerModal, closeImpoerModal] = useBoolState(false);
-
-  useEffect(() => {
-    if (!tab) setTab("approved");
-  }, [tab, setTab]);
 
   function handleCreateBaby(values) {
     if (i18n.resolvedLanguage === "zh") {

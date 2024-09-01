@@ -35,7 +35,6 @@
     "react-router-dom": "^6.26.1",
     "redux": "^4.0.5",
     "styled-components": "^6.1.12",
-    "use-query-params": "^1.1.6",
     "xlsx": "^0.17.0"
   },
   "devDependencies": {

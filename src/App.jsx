@@ -1,27 +1,21 @@
-import React, { useEffect, useCallback, useContext } from "react";
-import Axios from "./axiosConfig";
+import React, { useContext } from "react";
 import isPropValid from "@emotion/is-prop-valid";
 import styled, { StyleSheetManager } from "styled-components";
 
 import { ConfigProvider, theme } from "antd";
-import { QueryParamProvider } from "use-query-params";
 import "./dayjsInit";
 
-import { I18nextProvider, useTranslation } from "react-i18next";
+import { I18nextProvider } from "react-i18next";
+import { applyToken, getToken } from "./utils/token";
 
-import Rooter from "./Router";
-import { Role } from "./constants/enums";
-import { Header, Menu, Message } from "./components";
-import { BrowserRouter, Route, useNavigate } from "react-router-dom";
-import { applyToken, getToken, clearToken } from "./utils/token";
-
-import { Provider, useSelector } from "react-redux";
-import { apiAccountProfile } from "./actions";
+import { Provider } from "react-redux";
 
 import store from "./store";
 import "./config";
 import i18n from "./i18n";
 import { componentConfig, visitLinkTheme } from "./theme";
+import { RouterProvider } from "react-router-dom";
+import router from "./Router";
 
 applyToken(getToken());
 
@@ -41,11 +35,7 @@ export default function App() {
         >
           <Provider store={store}>
             <AppContainer>
-              <BrowserRouter>
-                <QueryParamProvider ReactRouterRoute={Route}>
-                  <AppContent />
-                </QueryParamProvider>
-              </BrowserRouter>
+              <RouterProvider router={router} />
             </AppContainer>
           </Provider>
         </ConfigProvider>
@@ -63,45 +53,10 @@ function shouldForwardProp(propName, target) {
   return true;
 }
 
-function AppContent() {
-  const navigate = useNavigate();
-  const { user } = useSelector((state) => state.users);
-  const { t } = useTranslation("app");
-
-  const loadProfile = useCallback(() => {
-    Axios.get("/api/account/profile")
-      .then((r) => store.dispatch(apiAccountProfile(r)))
-      .catch(() => navigate("/sign_in"));
-  }, [navigate]);
-
-  useEffect(loadProfile, [loadProfile]);
-
-  function handleLogout() {
-    clearToken();
-    navigate("/sign_in");
-    Message.success(t("logoutSuccess"), t("logoutMessage"));
-  }
-
-  return (
-    <>
-      <Header username={user.realName} role={Role[user.role]} onNavigate={navigate} onLogout={handleLogout} />
-      <RouteContainer>
-        <Menu />
-        <Rooter />
-      </RouteContainer>
-    </>
-  );
-}
-
 const AppContainer = styled.div`
   display: flex;
   width: 100%;
   min-width: 1100px;
   height: 100vh;
   flex-direction: column;
-`;
-
-const RouteContainer = styled.div`
-  display: flex;
-  flex: 1;
 `;

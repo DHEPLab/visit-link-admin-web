@@ -112,14 +112,10 @@ export default function Survey() {
   }
 
   usePrompt({
-    when: isPrompt,
-    message: (location) => {
-      const isStop = location.pathname.startsWith("/surveys/edit/");
-      if (isStop || readonly) {
-        return true;
-      } else {
-        return t("unsavedChangesWarning");
-      }
+    message: t("unsavedChangesWarning"),
+    when: ({ currentLocation, nextLocation }) => {
+      const gotoEditPage = nextLocation.pathname.startsWith("/surveys/edit/");
+      return isPrompt && currentLocation.pathname !== nextLocation.pathname && !(gotoEditPage || readonly);
     },
   });
 

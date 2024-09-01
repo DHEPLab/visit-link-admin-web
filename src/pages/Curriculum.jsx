@@ -124,14 +124,10 @@ export default function Curriculum() {
   }
 
   usePrompt({
-    when: isPrompt,
-    message: (location) => {
-      const isStop = location.pathname.startsWith("/curriculums/edit/");
-      if (isStop || readonly) {
-        return true;
-      } else {
-        return t("unsavedChangesWarning");
-      }
+    message: t("unsavedChangesWarning"),
+    when: ({ currentLocation, nextLocation }) => {
+      const gotoEditPage = nextLocation.pathname.startsWith("/curriculums/edit/");
+      return isPrompt && currentLocation.pathname !== nextLocation.pathname && !(gotoEditPage || readonly);
     },
   });
 

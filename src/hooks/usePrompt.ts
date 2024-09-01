@@ -1,26 +1,25 @@
-import { useBlocker, useLocation } from "react-router-dom";
-import type { Location } from "react-router-dom";
+import type { BlockerFunction } from "react-router-dom";
+import { useBlocker } from "react-router-dom";
+import { useEffect } from "react";
 
 interface usePromptParams {
-  when: boolean;
-  message: ((location: Location) => string) | string;
+  when: BlockerFunction;
+  message: string;
 }
 
 const usePrompt = ({ when, message }: usePromptParams) => {
-  const location = useLocation();
-  const messageContent = typeof message === "string" ? message : message(location);
-  const blocker = useBlocker(
-    ({ currentLocation, nextLocation }) => when && currentLocation.pathname !== nextLocation.pathname,
-  );
+  const blocker = useBlocker(when);
 
-  if (blocker.state === "blocked") {
-    const confirm = window.confirm(messageContent);
-    if (confirm) {
-      blocker.proceed();
-    } else {
-      blocker.reset();
+  useEffect(() => {
+    if (blocker.state === "blocked") {
+      const confirm = window.confirm(message);
+      if (confirm) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
     }
-  }
+  }, [blocker]);
 };
 
 export default usePrompt;
