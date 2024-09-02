@@ -25,7 +25,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
   const { t } = useTranslation("baby");
   const { disabledDateForEDC } = useMethods();
   return (
-    <ModalForm {...props} labelCol={{ span: 7 }}>
+    <ModalForm {...props} labelCol={{ span: 7 }} width={800}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>

@@ -353,7 +353,6 @@ export default function Baby() {
       />
 
       <BabyModalForm
-        width={800}
         title={t("modifyBaby")}
         visible={visible}
         onCancel={closeModal}
