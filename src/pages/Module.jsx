@@ -33,6 +33,15 @@ export default function Module() {
 
   const [draftId, setDraftId] = useState();
   const [draftDate, setDraftDate] = useState();
+  const mode = (() => {
+    const routes = {
+      "/modules/edit": "edit",
+      "/modules/copy": "copy",
+      "/modules/create": "create",
+    };
+
+    return Object.entries(routes).find(([key]) => pathname.includes(key))?.[1] || "view";
+  })();
 
   useEffect(() => {
     setReadonly(
@@ -278,7 +287,7 @@ export default function Module() {
           </Card>
 
           <Card title={t("moduleContent")}>
-            <ModuleComponents value={values.components} readonly={readonly} />
+            <ModuleComponents value={values.components} readonly={readonly} key={`model-component-${mode}`} />
           </Card>
         </>
       )}
