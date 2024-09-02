@@ -94,7 +94,9 @@ const TitleContainer = styled.div`
   border-bottom: 2px solid #eee;
 `;
 
-const StyledContainer = styled.div`
+const StyledContainer = styled("div").withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "focus",
+})`
   flex: 1;
   border: 2px solid #eee;
   border-radius: 10px;
