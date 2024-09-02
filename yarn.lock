@@ -3209,11 +3209,6 @@ react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-quilljs@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/react-quilljs/-/react-quilljs-2.0.4.tgz#16f57e93ad6f9cda6ffa13b17ccc22b8c75ae91c"
-  integrity sha512-NmXRjsCUrExIWQgCjCEB9D7o1tbNT6foiDxyj/wZrdCNmnyMTNlkIr04+gMC0oYw12po2DklN+l2BCudXybA5w==
-
 react-redux@^7.2.0:
   version "7.2.9"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.9.tgz#09488fbb9416a4efe3735b7235055442b042481d"

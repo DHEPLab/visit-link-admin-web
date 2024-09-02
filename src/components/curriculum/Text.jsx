@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useQuill } from "react-quilljs";
+import { useQuill } from "@/hooks/useQuill";
 import "quill/dist/quill.snow.css";
 import { debounce } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -42,8 +42,14 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     html: `${name}.html`,
     type: `${name}.type`,
   };
+
   const { t } = useTranslation("text");
-  const { Quill, quill, quillRef } = useQuill({ theme: "snow", modules });
+  const { Quill, quill, quillRef } = useQuill({
+    theme: "snow",
+    modules,
+    readOnly: props.readonly,
+    placeholder: t("enterTextContent"),
+  });
   const typeLabels = {
     script: t("script"),
     instruction: t("instruction"),
