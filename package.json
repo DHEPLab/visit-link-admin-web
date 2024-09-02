@@ -37,7 +37,7 @@
     "react-router-dom": "^6.26.1",
     "redux": "^4.0.5",
     "styled-components": "^6.1.12",
-    "xlsx": "^0.17.0"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
