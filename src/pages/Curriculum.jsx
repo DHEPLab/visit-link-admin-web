@@ -24,6 +24,7 @@ import {
 } from "../components";
 import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
+import i18n from "@/i18n.js";
 
 export default function Curriculum() {
   const { id } = useParams();
@@ -191,7 +192,7 @@ export default function Curriculum() {
           <Form
             data-testid="basic-form"
             form={form}
-            labelCol={{ span: 5 }}
+            labelCol={{ span: i18n.resolvedLanguage === "zh" ? 2 : 5 }}
             onFinish={onFinish}
             validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
           >
@@ -223,12 +224,13 @@ const EnhancedSchedules = withEdit(Schedules);
 
 function ReadonlyForm({ value: { name, description } }) {
   const { t } = useTranslation("curriculum");
+  const labelWidth = i18n.resolvedLanguage === "zh" ? 80 : 180;
   return (
     <div data-testid="readonly-form">
-      <StaticField label={t("curriculumName")} labelStyle={{ width: 180 }}>
+      <StaticField label={t("curriculumName")} labelStyle={{ width: labelWidth }}>
         {name}
       </StaticField>
-      <StaticField label={t("curriculumDescription")} labelStyle={{ width: 180 }}>
+      <StaticField label={t("curriculumDescription")} labelStyle={{ width: labelWidth }}>
         {description}
       </StaticField>
     </div>
