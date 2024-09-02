@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ReactQuill, { Quill } from "react-quill";
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
 import { debounce } from "lodash";
 import { useTranslation } from "react-i18next";
 
@@ -17,51 +18,66 @@ const colors = {
   reference: "#6a2c70",
 };
 
-// https://stackoverflow.com/questions/41237486/how-to-paste-plain-text-in-a-quill-based-editor
-const Clipboard = Quill.import("modules/clipboard");
-const Delta = Quill.import("delta");
-
-class PlainClipboard extends Clipboard {
-  onPaste(e) {
-    e.preventDefault();
-    const range = this.quill.getSelection();
-    const text = e.clipboardData.getData("text/plain");
-    const delta = new Delta().retain(range.index).delete(range.length).insert(text);
-    const index = text.length + range.index;
-    const length = 0;
-    this.quill.updateContents(delta, "silent");
-    this.quill.setSelection(index, length, "silent");
-    this.quill.scrollIntoView();
-  }
-}
-Quill.register("modules/clipboard", PlainClipboard, true);
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Text({ name, onBlur, onChange, value, ...props }) {
-  const { t } = useTranslation("text");
+  const types = ["instruction", "script", "reference"];
+  const modules = {
+    toolbar: {
+      container: props.readonly
+        ? []
+        : [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container],
+      handlers: {
+        type: function (args) {
+          if (!args) return;
+          onChange(Name.type)(args);
+        },
+      },
+    },
+    clipboard: {
+      matchVisual: false,
+    },
+  };
 
+  const Name = {
+    html: `${name}.html`,
+    type: `${name}.type`,
+  };
+  const { t } = useTranslation("text");
+  const { Quill, quill, quillRef } = useQuill({ theme: "snow", modules });
   const typeLabels = {
     script: t("script"),
     instruction: t("instruction"),
     reference: t("reference"),
   };
 
-  const types = ["instruction", "script", "reference"];
-  const Name = {
-    html: `${name}.html`,
-    type: `${name}.type`,
-  };
+  if (Quill && !quill) {
+    const Clipboard = Quill.import("modules/clipboard");
+    const Delta = Quill.import("delta");
 
-  function type(args) {
-    if (!args) return;
-    onChange(Name.type)(args);
+    class PlainClipboard extends Clipboard {
+      onPaste(range, { text }) {
+        const delta = new Delta().retain(range.index).delete(range.length).insert(text);
+        const index = text.length + range.index;
+        const length = 0;
+        this.quill.updateContents(delta, "user");
+        this.quill.setSelection(index, length, "silent");
+        this.quill.scrollSelectionIntoView();
+      }
+    }
+
+    Quill.register("modules/clipboard", PlainClipboard, true);
   }
 
-  function toolbarContainer() {
-    return props.readonly
-      ? []
-      : [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container];
-  }
+  const debouncedOnChange = debounce(onChange(Name.html), 1000);
+  React.useEffect(() => {
+    if (quill) {
+      quill.clipboard.dangerouslyPasteHTML(value.html);
+
+      quill.on("text-change", () => {
+        debouncedOnChange(quill.root.innerHTML);
+      });
+    }
+  }, [quill]);
 
   return (
     <Container
@@ -73,21 +89,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
       {...props}
     >
       <QuillContainer className="text-editor" readonly={props.readonly} typeLabels={typeLabels} colors={colors} t={t}>
-        <ReactQuill
-          readOnly={props.readonly}
-          theme="snow"
-          modules={{
-            toolbar: {
-              container: toolbarContainer(),
-              handlers: {
-                type,
-              },
-            },
-          }}
-          defaultValue={value.html}
-          onChange={debounce(onChange(Name.html), 1000)}
-          placeholder={t("enterTextContent")}
-        />
+        <div ref={quillRef} />
       </QuillContainer>
     </Container>
   );
@@ -108,7 +110,6 @@ const QuillContainer = styled.div`
     height: 0;
   }
   `}
-
   .ql-picker.ql-type {
     width: 90px;
   }
