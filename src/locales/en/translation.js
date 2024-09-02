@@ -35,7 +35,7 @@ export default {
     logoutMessage: "To access the system, please log in again.",
   },
   roles: {
-    ROLE_CHW: "CNW",
+    ROLE_CHW: "CHW",
     ROLE_SUPERVISOR: "Supervisor",
     ROLE_ADMIN: "Admin",
     ROLE_SUPER_ADMIN: "Super Admin",
