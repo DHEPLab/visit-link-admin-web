@@ -276,20 +276,20 @@ export default function Module() {
                         style={{ width: 560 }}
                       />
                     </Form.Item>
-                    <Form.Item
-                      label={t("moduleTheme")}
-                      name="topic"
-                      rules={[...Rules.Required, { message: t("selectModuleTheme") }]}
-                    >
-                      <CustomSelectorWrapper>
+                    <CustomSelectorWrapper>
+                      <Form.Item
+                        label={t("moduleTheme")}
+                        name="topic"
+                        rules={[...Rules.Required, { message: t("selectModuleTheme") }]}
+                      >
                         <SelectEnum
                           name="ModuleTopic"
                           placeholder={t("selectModuleTheme")}
                           style={{ width: 560 }}
                           className={"module-topic-selector"}
                         />
-                      </CustomSelectorWrapper>
-                    </Form.Item>
+                      </Form.Item>
+                    </CustomSelectorWrapper>
                   </Form>
                 )}
               </Col>
