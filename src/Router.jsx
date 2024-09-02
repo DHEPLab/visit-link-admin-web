@@ -21,7 +21,7 @@ import {
 import Layout from "./Layout";
 
 function RequireAuth({ children }) {
-  return getToken() ? children : <Navigate to="/sign_in" replace state={state} />;
+  return getToken() ? children : <Navigate to="/sign_in" replace />;
 }
 
 const router = createBrowserRouter([
