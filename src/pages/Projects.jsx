@@ -171,14 +171,14 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
       </Form.Item>
       {values?.id && (
         <>
-          <div className="ant-row ant-form-item ant-space-align-center">
+          <div className="ant-row ant-form-item ant-space-align-center" style={{ display: "flex" }}>
             <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
               <label>{t("adminUsername")}：</label>
             </div>
             <div className="ant-col ">{admin.name}</div>
           </div>
-          <div className="ant-row ant-form-item ant-space-align-center">
-            <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
+          <div className="ant-row ant-form-item ant-space-align-center" style={{ display: "flex" }}>
+            <div className="ant-col ant-col-1 ant-col-offset-1 ant-form-item-label">
               <label>{t("adminPassword")}：</label>
             </div>
             <div className="ant-form-item-control-input-content">{admin.password}</div>
