@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button, Space } from "antd";
 import { Iconfont } from "..";
 import { useTranslation } from "react-i18next";
+import isPropValid from "@emotion/is-prop-valid";
 
 export default function Container({
   readonly,
@@ -64,7 +65,7 @@ const ExtraContainer = styled.div`
 `;
 
 const IconfontButton = styled(Iconfont)`
-  cursor: point;
+  cursor: pointer;
   display: block;
 
   &:hover {
@@ -113,7 +114,9 @@ const Title = styled.div`
   cursor: pointer;
 `;
 
-const Body = styled.div`
+const Body = styled("div").withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "noPadding",
+})`
   ${({ noPadding }) => !noPadding && "padding: 10px;"}
   ${({ nested }) => nested && "margin-bottom: -20px;"}
 `;

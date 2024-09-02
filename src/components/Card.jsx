@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
+import isPropValid from "@emotion/is-prop-valid";
 
 export default function Card({ title, tooltip, children, extra, noPadding }) {
   return (
@@ -48,6 +49,8 @@ const Title = styled.div`
   }
 `;
 
-const Content = styled.div`
+const Content = styled("div").withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "noPadding",
+})`
   ${({ noPadding }) => !noPadding && "padding: 30px;"}
 `;
