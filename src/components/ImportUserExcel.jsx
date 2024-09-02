@@ -5,6 +5,7 @@ import Column from "antd/lib/table/Column";
 import UploadButton from "./UploadButton";
 import Axios from "axios";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 const { Step } = Steps;
 
@@ -54,7 +55,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
     formData.append("records", file);
     Axios.post("/admin/users/import", formData)
       .then(() => {
-        message.success("导入成功");
+        message.success(t("excel.importSuccessfully"));
         refresh();
         close();
         setSpinningLoading(false);
@@ -81,7 +82,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
             {t("excel.batchImportCountSuggest")}
           </UploadButton>
         </Upload>
-        <DownLink href="/static/template/import_chw.xlsx" download>
+        <DownLink href={`/static/template/import_chw_${i18n.resolvedLanguage}.xlsx`} download>
           {t("excel.downloadTemplate")}
         </DownLink>
       </ButtonLine>
