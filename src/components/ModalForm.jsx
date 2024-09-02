@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 export default function ModalForm({
   width = 600,
+  labelCol = { span: 6 },
   title,
   visible,
   onCancel,
@@ -41,7 +42,7 @@ export default function ModalForm({
         </Space>
       }
     >
-      <Form form={form} labelCol={{ span: 6 }} onFinish={onFinish} validateMessages={validateMessages}>
+      <Form form={form} labelCol={labelCol} onFinish={onFinish} validateMessages={validateMessages}>
         {children}
       </Form>
     </Modal>

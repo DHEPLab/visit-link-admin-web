@@ -191,6 +191,7 @@ export default function Curriculum() {
           <Form
             data-testid="basic-form"
             form={form}
+            labelCol={{ span: 5 }}
             onFinish={onFinish}
             validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
           >
@@ -199,14 +200,14 @@ export default function Curriculum() {
               name="name"
               rules={[...Rules.Required, { max: 100, message: t("curriculum:curriculumNameTooLong") }]}
             >
-              <Input placeholder={t("enterCurriculumNameWithLimit")} style={{ width: "500px" }} />
+              <Input placeholder={t("enterCurriculumNameWithLimit")} style={{ width: "600px" }} />
             </Form.Item>
             <Form.Item
               label={t("curriculumDescription")}
               name="description"
               rules={[...Rules.Required, { max: 1000, message: t("curriculumDescriptionTooLong") }]}
             >
-              <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} />
+              <Input.TextArea rows={5} placeholder={t("enterCurriculumDescriptionWithLimit")} style={{ width: 600 }} />
             </Form.Item>
           </Form>
         )}
@@ -224,8 +225,12 @@ function ReadonlyForm({ value: { name, description } }) {
   const { t } = useTranslation("curriculum");
   return (
     <div data-testid="readonly-form">
-      <StaticField label={t("curriculumName")}>{name}</StaticField>
-      <StaticField label={t("curriculumDescription")}>{description}</StaticField>
+      <StaticField label={t("curriculumName")} labelStyle={{ width: 180 }}>
+        {name}
+      </StaticField>
+      <StaticField label={t("curriculumDescription")} labelStyle={{ width: 180 }}>
+        {description}
+      </StaticField>
     </div>
   );
 }
@@ -358,6 +363,8 @@ function Lessons({
       }
     >
       <ModalForm
+        width={800}
+        labelCol={{ span: 7 }}
         title={t("editSession")}
         visible={visible}
         initialValues={currentEditValue}
@@ -393,7 +400,7 @@ function Lessons({
           <Input />
         </Form.Item>
         <Form.Item label={t("sessionDescription")} name="description" rules={Rules.Required}>
-          <Input.TextArea />
+          <Input.TextArea style={{ width: 400 }} />
         </Form.Item>
         <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
           <RadioEnum name="CurriculumBabyStage" />
@@ -468,7 +475,7 @@ function ApplicableDays({ value, currentEditValue }) {
 
   return (
     <ApplicableDaysContainer>
-      <Form.Item noStyle shouldUpdate={(pre, cur) => pre.stage !== cur.stage}>
+      <Form.Item noStyle labelCol={{ offset: 7 }} shouldUpdate={(pre, cur) => pre.stage !== cur.stage}>
         {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
         {({ getFieldValue }) => {
           return (
@@ -571,7 +578,7 @@ const EndOfApplicableDaysFormItem = styled(Form.Item)`
 
 const ApplicableDaysContainer = styled.div`
   display: flex;
-  padding-left: ${92 + 23 + 14}px;
+  padding-left: 29%;
 `;
 
 const ApplicableDaysConnector = styled.div`
@@ -626,6 +633,8 @@ function Schedules({
       noPadding
     >
       <ModalForm
+        width={800}
+        labelCol={{ span: 7 }}
         title={t("editMatchingRule")}
         initialValues={currentEditValue}
         visible={visible}

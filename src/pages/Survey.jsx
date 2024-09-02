@@ -188,7 +188,7 @@ export default function Survey() {
                   name="name"
                   rules={[...Rules.Required, { message: t("enterSurveyNameWithLimit"), max: 40 }]}
                 >
-                  <Input placeholder={t("enterSurveyName")} />
+                  <Input placeholder={t("enterSurveyName")} style={{ width: 560 }} />
                 </Form.Item>
               </Form>
             )}

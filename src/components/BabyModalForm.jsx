@@ -25,7 +25,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
   const { t } = useTranslation("baby");
   const { disabledDateForEDC } = useMethods();
   return (
-    <ModalForm {...props}>
+    <ModalForm {...props} labelCol={{ span: 7 }}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>
@@ -101,13 +101,13 @@ export default function BabyModalForm({ disableStage, ...props }) {
         <Input />
       </Form.Item>
       <Row>
-        <Col span={11} offset={2} style={{ paddingLeft: 20 }}>
-          <Form.Item label={t("longitude")} name="longitude">
+        <Col span={9} offset={4}>
+          <Form.Item label={t("longitude")} labelCol={{ span: 8 }} name="longitude">
             <InputNumber style={{ width: 160 }} />
           </Form.Item>
         </Col>
-        <Col span={11}>
-          <Form.Item label={t("latitude")} name="latitude">
+        <Col span={9} style={{ paddingLeft: 6 }}>
+          <Form.Item label={t("latitude")} labelCol={{ span: 4 }} name="latitude">
             <InputNumber style={{ width: 160 }} />
           </Form.Item>
         </Col>

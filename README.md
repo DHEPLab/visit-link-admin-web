@@ -2,7 +2,7 @@
 
 ## 本地开发
 
-NodeJS 版本 v12 LTS
+NodeJS 版本 v20 LTS
 
 ```
 $ yarn

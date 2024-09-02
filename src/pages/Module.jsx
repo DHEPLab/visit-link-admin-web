@@ -14,6 +14,13 @@ import { Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticFie
 import { moduleFinishActionOptions } from "../actions";
 import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
+import styled from "styled-components";
+
+const CustomSelectorWrapper = styled.div`
+  .ant-select.module-topic-selector .ant-select-selector {
+    width: 560px;
+  }
+`;
 
 export default function Module() {
   const { t } = useTranslation(["module", "error"]);
@@ -233,43 +240,54 @@ export default function Module() {
 
           <Card title={t("moduleInformation")}>
             <Row>
-              <Col span={12}>
+              <Col span={18}>
                 {readonly ? (
                   <ReadonlyForm value={module} />
                 ) : (
-                  <Form data-testid="basic-form" form={form} onFinish={onSubmit}>
+                  <Form data-testid="basic-form" labelCol={{ span: 6 }} form={form} onFinish={onSubmit}>
                     <Form.Item
                       label={t("moduleName")}
                       name="name"
                       rules={[...Rules.Required, { max: 40, message: t("moduleNameTooLong") }]}
                     >
-                      <Input placeholder={t("enterModuleNameWithLimit")} />
+                      <Input placeholder={t("enterModuleNameWithLimit")} style={{ width: 560 }} />
                     </Form.Item>
                     <Form.Item
                       label={t("moduleNumber")}
                       name="number"
                       rules={[...Rules.Required, { max: 20, message: t("moduleNumberTooLong") }]}
                     >
-                      <Input placeholder={t("enterModuleNumberWithLimit")} />
+                      <Input placeholder={t("enterModuleNumberWithLimit")} style={{ width: 560 }} />
                     </Form.Item>
                     <Form.Item
                       label={t("moduleDescription")}
                       name="description"
                       rules={[...Rules.Required, { max: 200, message: t("moduleDescriptionTooLong") }]}
                     >
-                      <Input.TextArea rows={4} placeholder={t("enterModuleDescriptionWithLimit")} />
+                      <Input.TextArea
+                        rows={4}
+                        placeholder={t("enterModuleDescriptionWithLimit")}
+                        style={{ width: 560 }}
+                      />
                     </Form.Item>
                     <Form.Item
                       label={t("moduleTheme")}
                       name="topic"
                       rules={[...Rules.Required, { message: t("selectModuleTheme") }]}
                     >
-                      <SelectEnum name="ModuleTopic" placeholder={t("selectModuleTheme")} />
+                      <CustomSelectorWrapper>
+                        <SelectEnum
+                          name="ModuleTopic"
+                          placeholder={t("selectModuleTheme")}
+                          style={{ width: 560 }}
+                          className={"module-topic-selector"}
+                        />
+                      </CustomSelectorWrapper>
                     </Form.Item>
                   </Form>
                 )}
               </Col>
-              <Col offset={6} span={6}>
+              <Col span={6}>
                 {readonly && (
                   <>
                     <div style={{ fontSize: 14 }}>
@@ -299,10 +317,18 @@ function ReadonlyForm({ value }) {
   const { t } = useTranslation("module");
   return (
     <div data-testid="readonly-form">
-      <StaticField label={t("moduleName")}>{value.name}</StaticField>
-      <StaticField label={t("moduleNumber")}>{value.number}</StaticField>
-      <StaticField label={t("moduleDescription")}>{value.description}</StaticField>
-      <StaticField label={t("moduleTheme")}>{t(ModuleTopic[value.topic])}</StaticField>
+      <StaticField label={t("moduleName")} labelStyle={{ width: 150 }}>
+        {value.name}
+      </StaticField>
+      <StaticField label={t("moduleNumber")} labelStyle={{ width: 150 }}>
+        {value.number}
+      </StaticField>
+      <StaticField label={t("moduleDescription")} labelStyle={{ width: 150 }}>
+        {value.description}
+      </StaticField>
+      <StaticField label={t("moduleTheme")} labelStyle={{ width: 150 }}>
+        {t(ModuleTopic[value.topic])}
+      </StaticField>
     </div>
   );
 }
