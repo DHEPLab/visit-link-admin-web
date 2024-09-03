@@ -44,7 +44,7 @@ export default function User() {
 
   function role() {
     if (roleChw) {
-      return `${Role[user.role]}ID ${user.chw.identity}`;
+      return `${Role[user.role]} ID ${user.chw.identity}`;
     }
     return Role[user.role];
   }
