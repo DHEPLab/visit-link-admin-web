@@ -652,7 +652,7 @@ function Carers({ babyId, deleted, onModify }) {
   };
 
   async function handleDelete({ id, master }) {
-    if (master) return message.warn(t("deleteMasterWarning"));
+    if (master) return message.warning(t("deleteMasterWarning"));
     await Axios.delete(`/admin/carers/${id}`);
     refresh();
   }

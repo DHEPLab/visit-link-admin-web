@@ -67,7 +67,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
 
           function handleAddSwitch() {
             if (name.split(".cases").length > 2) {
-              message.warn(t("maxNestedLevels"));
+              message.warning(t("maxNestedLevels"));
               return;
             }
             helpers.push(Factory.createSwitch());

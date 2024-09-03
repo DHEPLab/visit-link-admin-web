@@ -77,16 +77,16 @@ export default function Curriculum() {
 
   function validate() {
     if (lessons.length === 0) {
-      message.warn(t("atLeastOneSession"));
+      message.warning(t("atLeastOneSession"));
       return false;
     }
     if (schedules.length === 0) {
-      message.warn(t("atLeastOneMatchingPlan"));
+      message.warning(t("atLeastOneMatchingPlan"));
       return false;
     }
     for (const schedule of schedules) {
       if (!schedule.lessons || schedule.lessons.length === 0) {
-        message.warn(t("matchingPlanAtLeastOneSession", { name: schedule.name }));
+        message.warning(t("matchingPlanAtLeastOneSession", { name: schedule.name }));
         return false;
       }
     }

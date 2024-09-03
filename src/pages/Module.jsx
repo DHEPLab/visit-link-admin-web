@@ -111,7 +111,7 @@ export default function Module() {
 
   function isValidComponent(comp) {
     if (comp.type === "Media" && !comp.value.file) {
-      message.warn(t("emptyMedia", { ns: "error" }));
+      message.warning(t("emptyMedia", { ns: "error" }));
       return false;
     }
     if (comp.type !== "Switch") {
@@ -133,7 +133,7 @@ export default function Module() {
   }
 
   function onSubmit(values) {
-    if (components.length === 0) return message.warn(t("atLeastOneComponent"));
+    if (components.length === 0) return message.warning(t("atLeastOneComponent"));
     for (let i = 0; i < components.length; i++) {
       const comp = components[i];
       if (!isValidComponent(comp)) {

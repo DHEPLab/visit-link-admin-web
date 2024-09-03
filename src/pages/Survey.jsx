@@ -88,7 +88,7 @@ export default function Survey() {
   }
 
   function onSubmit(values) {
-    if (questions.length === 0) return message.warn(t("atLeastOneQuestion"));
+    if (questions.length === 0) return message.warning(t("atLeastOneQuestion"));
 
     Axios.post(submitURL, {
       id,
