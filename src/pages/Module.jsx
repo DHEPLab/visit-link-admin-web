@@ -13,7 +13,7 @@ import { Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticFie
 import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
 import styled from "styled-components";
-import i18n from "@/i18n.js";
+import i18n from "@/i18n";
 import { useModuleStore } from "@/store/module";
 
 const CustomSelectorWrapper = styled.div`

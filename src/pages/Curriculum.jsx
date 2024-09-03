@@ -23,7 +23,7 @@ import {
 } from "../components";
 import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
-import i18n from "@/i18n.js";
+import i18n from "@/i18n";
 import { useNetworkStore } from "@/store/network";
 
 export default function Curriculum() {
