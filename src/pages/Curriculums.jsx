@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Axios from "axios";
+import axios from "axios";
 import { Modal, Button, Space, Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -106,14 +106,14 @@ function CurriculumBabiesModal({
   }, [curriculumId]);
 
   function handleAssign(babyIds) {
-    Axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
+    axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
       loadData();
       closeModal();
     });
   }
 
   function handleReleaseBaby(id) {
-    Axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
+    axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
   }
 
   return (

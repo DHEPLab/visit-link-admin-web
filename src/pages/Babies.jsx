@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function Babies() {
     }
     values.birthday = values.birthday && formatDate(values.birthday);
     values.edc = values.edc && formatDate(values.edc);
-    Axios.post("/admin/babies", values).then(() => {
+    axios.post("/admin/babies", values).then(() => {
       refresh();
       closeBaby();
     });

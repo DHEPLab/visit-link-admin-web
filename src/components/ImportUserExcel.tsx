@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, message, Spin, Steps, Table, Upload, UploadProps } from "antd";
 import Column from "antd/lib/table/Column";
 import UploadButton from "./UploadButton";
-import Axios from "axios";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { ImportExcelCheckRes } from "@/models/res/importExcel";
@@ -41,7 +41,8 @@ const ImportUserExcel: React.FC<ImportUserExcelProps> = ({ open, refresh, close 
 
     const formData = new FormData();
     formData.append("records", file);
-    Axios.post<ImportExcelCheckRes>("/admin/users/check", formData)
+    axios
+      .post<ImportExcelCheckRes>("/admin/users/check", formData)
       .then(({ data }) => setResult(data))
       .finally(() => {
         setSpinningLoading(false);
@@ -57,7 +58,8 @@ const ImportUserExcel: React.FC<ImportUserExcelProps> = ({ open, refresh, close 
     setSpinningLoading(true);
     const formData = new FormData();
     formData.append("records", file);
-    Axios.post("/admin/users/import", formData)
+    axios
+      .post("/admin/users/import", formData)
       .then(() => {
         message.success(t("excel.importSuccessfully"));
         refresh();

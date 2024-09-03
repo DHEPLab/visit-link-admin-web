@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect } from "react";
-import Axios from "@/axiosConfig";
+import axios from "axios";
 import { clearToken } from "@/utils/token";
 import { Header, Menu, Message } from "@/components";
 import { Role } from "@/constants/enums";
@@ -18,7 +18,8 @@ const Layout = () => {
   }));
 
   const loadProfile = useCallback(() => {
-    Axios.get("/api/account/profile")
+    axios
+      .get("/api/account/profile")
       .then((r) => {
         loadProfileSuccess(r.data);
       })

@@ -1,6 +1,6 @@
 // Higer-Order Component to enhance the paging
 import React, { useCallback, useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { debounce } from "lodash";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -52,9 +52,10 @@ export default function withPage(
         ...params,
       };
       setLoading(true);
-      Axios.get(requestURL, {
-        params: newParams,
-      })
+      axios
+        .get(requestURL, {
+          params: newParams,
+        })
         .then(({ data }) => {
           setTotalElements(data.totalElements);
           setContent(data.content);

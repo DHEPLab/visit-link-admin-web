@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
 import dayjs from "dayjs";
@@ -52,7 +52,7 @@ export default function Curriculum() {
 
   useEffect(() => {
     if (readonly == null || !id) return;
-    Axios.get(`/admin/curriculums/${id}`).then(({ data, headers }) => {
+    axios.get(`/admin/curriculums/${id}`).then(({ data, headers }) => {
       if (!readonly) form.setFieldsValue(data);
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
@@ -99,22 +99,24 @@ export default function Curriculum() {
       ...n,
       questionnaire: n.questionnaire ? { id: n.questionnaire } : null,
     }));
-    Axios.post(submitURL, {
-      id,
-      ...values,
-      lessons: lessonResult,
-      schedules,
-    }).then(() => navigate(-1));
+    axios
+      .post(submitURL, {
+        id,
+        ...values,
+        lessons: lessonResult,
+        schedules,
+      })
+      .then(() => navigate(-1));
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/curriculums/${draftId}`).then(() => {
+    axios.delete(`/admin/curriculums/${draftId}`).then(() => {
       setDraftId("");
     });
   }
 
   function handleDeleteCurriculum() {
-    Axios.delete(`/admin/curriculums/${id}`).then(() => {
+    axios.delete(`/admin/curriculums/${id}`).then(() => {
       navigate(-1);
     });
   }
@@ -322,25 +324,29 @@ function Lessons({
   }
 
   function loadModuleOptions() {
-    Axios.get("/admin/modules", {
-      params: {
-        size: 1000,
-        published: true,
-      },
-    }).then(({ data }) => {
-      setModuleOptions(data.content.map(({ number, id }) => ({ label: number, value: id })));
-    });
+    axios
+      .get("/admin/modules", {
+        params: {
+          size: 1000,
+          published: true,
+        },
+      })
+      .then(({ data }) => {
+        setModuleOptions(data.content.map(({ number, id }) => ({ label: number, value: id })));
+      });
   }
 
   function loadQuestionnairesOptions() {
-    Axios.get("/admin/questionnaires", {
-      params: {
-        size: 1000,
-        published: true,
-      },
-    }).then(({ data }) => {
-      setQuestionnairesOptions(data?.content?.map(({ name, id }) => ({ label: name, value: id })));
-    });
+    axios
+      .get("/admin/questionnaires", {
+        params: {
+          size: 1000,
+          published: true,
+        },
+      })
+      .then(({ data }) => {
+        setQuestionnairesOptions(data?.content?.map(({ name, id }) => ({ label: name, value: id })));
+      });
   }
 
   return (

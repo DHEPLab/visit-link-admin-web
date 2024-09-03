@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import axios from "axios";
 import { render, act } from "@testing-library/react";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -32,7 +32,7 @@ it.skip("should render create page", () => {
 it.skip("should render readonly page", async () => {
   useParams.mockImplementation(() => ({ id: 1 }));
   useLocation.mockImplementation(() => ({ pathname: "/modules/1" }));
-  Axios.get.mockResolvedValue({
+  axios.get.mockResolvedValue({
     data: {
       name: "Module Name",
       number: "M1",
@@ -59,7 +59,7 @@ it.skip("should render readonly page", async () => {
 it.skip("should render readonly page and has draft", async () => {
   useParams.mockImplementation(() => ({ id: 2 }));
   useLocation.mockImplementation(() => ({ pathname: "/modules/2" }));
-  Axios.get.mockResolvedValue({
+  axios.get.mockResolvedValue({
     data: {
       name: "Module Name",
       number: "M1",

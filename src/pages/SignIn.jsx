@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import styled from "styled-components";
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +24,10 @@ export default function SignIn() {
   async function handleSignIn(values) {
     setError(false);
     try {
-      const auth = await Axios.post("/admin/authenticate", values);
+      const auth = await axios.post("/admin/authenticate", values);
       applyToken(auth.data.idToken);
 
-      const profile = await Axios.get("/api/account/profile");
+      const profile = await axios.get("/api/account/profile");
       loadProfileSuccess(profile.data);
 
       Message.success(t("success.title"), t("success.message"), 1);

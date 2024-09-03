@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, Popconfirm, Radio, Space } from "antd";
-import Axios from "axios";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Rules from "../constants/rules";
 import { ProjectStatus } from "../constants/enums";
@@ -23,14 +23,14 @@ export default function Projects() {
     setFormModal({ visible: false, values: { status: 0 } });
   };
   const fetchProject = () => {
-    Axios.get("/admin/project/all").then(({ data }) => {
+    axios.get("/admin/project/all").then(({ data }) => {
       setProjects(data);
     });
   };
   const onSubmit = (value) => {
     const { id } = formModal.values;
     const url = id ? `/admin/project/update/${id}` : "/admin/project/create";
-    Axios.post(url, value).then(({ data }) => {
+    axios.post(url, value).then(({ data }) => {
       if (!id) {
         Modal.info({
           title: t("superadminCreatedTip"),
@@ -52,7 +52,7 @@ export default function Projects() {
     });
   };
   const onUpdateStatus = (id, status) => {
-    Axios.post(`/admin/project/update/status/${id}`, { status }).then(() =>
+    axios.post(`/admin/project/update/status/${id}`, { status }).then(() =>
       setProjects(
         projects.map((p) => {
           if (p.id === id) {
@@ -141,7 +141,7 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
   const { t } = useTranslation("project", "menu", "common");
   const [admin, setAdmin] = useState({});
   const fetchAdminByProjectId = (id) => {
-    Axios.get(`/admin/users/project/${id}`).then(({ data }) => setAdmin(data));
+    axios.get(`/admin/users/project/${id}`).then(({ data }) => setAdmin(data));
   };
   useEffect(() => {
     if (values?.id) {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import styled from "styled-components";
 import { Upload } from "antd";
 import { useTranslation } from "react-i18next";
@@ -36,11 +36,12 @@ export default function Media({ name, value, onChange, ...props }) {
 
   function upload(file) {
     return new Promise((resolve, reject) => {
-      Axios.get("/admin/files/upload-pre-signed-url", {
-        params: {
-          format: fileFormat(file),
-        },
-      })
+      axios
+        .get("/admin/files/upload-pre-signed-url", {
+          params: {
+            format: fileFormat(file),
+          },
+        })
         .then(({ data: { url } }) => {
           fetch(url, {
             method: "PUT",

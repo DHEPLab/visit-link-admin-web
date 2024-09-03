@@ -1,11 +1,11 @@
-import Axios from "axios";
+import axios from "axios";
 import * as utils from "./index";
 import { renderHook, act, waitFor } from "@testing-library/react";
 
 vi.mock("axios");
 
 it("should fetch resource", async () => {
-  Axios.get.mockResolvedValue({
+  axios.get.mockResolvedValue({
     data: 2,
   });
   const { result } = renderHook(() => utils.useFetch("/api/fake"));
@@ -17,7 +17,7 @@ it("should fetch resource", async () => {
 });
 
 it("should manual fetch resource", async () => {
-  Axios.get.mockResolvedValue({
+  axios.get.mockResolvedValue({
     data: 3,
   });
   const { result } = renderHook(() => utils.useManualFetch("/api/fake"));

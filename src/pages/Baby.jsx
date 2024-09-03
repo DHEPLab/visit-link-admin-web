@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import Axios from "axios";
+import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -60,7 +60,7 @@ export default function Baby() {
     // format birthday and edc to string date
     values.birthday = values.birthday && dayjs(values.birthday).format("YYYY-MM-DD");
     values.edc = values.edc && dayjs(values.edc).format("YYYY-MM-DD");
-    Axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
+    axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
       refresh();
       closeModal();
       refreshHistory();

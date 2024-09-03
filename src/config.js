@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { message } from "antd";
 import { clearToken } from "./utils/token";
 import { Message } from "./components";
@@ -128,12 +128,13 @@ const urlInfo = {
 
 const { httpRequestStart, httpRequestEnd } = useNetworkStore.getState();
 
-Axios.interceptors.request.use((config) => {
+axios.interceptors.request.use((config) => {
   httpRequestStart(config.url);
+  config.headers["Accept-Language"] = i18n.resolvedLanguage;
   return config;
 });
 
-Axios.interceptors.response.use(
+axios.interceptors.response.use(
   (response) => {
     httpRequestEnd(response.config.url);
     overallSituationTips(response.config.method, response.config.url);

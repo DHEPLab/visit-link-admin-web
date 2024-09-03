@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { Formik } from "formik";
 import { Form, Space, Button, Input, message } from "antd";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
@@ -42,7 +42,7 @@ export default function Survey() {
     if (!id) {
       setQuestions([Factory.createText()]);
     } else {
-      Axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
+      axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
@@ -90,21 +90,23 @@ export default function Survey() {
   function onSubmit(values) {
     if (questions.length === 0) return message.warning(t("atLeastOneQuestion"));
 
-    Axios.post(submitURL, {
-      id,
-      questions,
-      ...values,
-    }).then(() => navigate(-1));
+    axios
+      .post(submitURL, {
+        id,
+        questions,
+        ...values,
+      })
+      .then(() => navigate(-1));
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/questionnaires/${draftId}`).then(() => {
+    axios.delete(`/admin/questionnaires/${draftId}`).then(() => {
       setDraftId("");
     });
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/questionnaires/${id}`).then(() => {
+    axios.delete(`/admin/questionnaires/${id}`).then(() => {
       navigate(-1);
     });
   }

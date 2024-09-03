@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { Form, Modal, Button, Input, Space, Select } from "antd";
@@ -36,7 +36,7 @@ export default function User() {
   const roleSupervisor = user?.role === "ROLE_SUPERVISOR";
 
   function handleChangeProfile(values) {
-    Axios.put(`/admin/users/${id}`, values).then(() => {
+    axios.put(`/admin/users/${id}`, values).then(() => {
       refresh();
       closeChangeProfile();
     });
@@ -50,11 +50,11 @@ export default function User() {
   }
 
   function handleCloseChwAccount(data) {
-    Axios.delete(`/admin/users/chw/${id}`, { data }).then(() => navigate(-1));
+    axios.delete(`/admin/users/chw/${id}`, { data }).then(() => navigate(-1));
   }
 
   function handleCloseSupervisorAccount() {
-    Axios.delete(`/admin/users/supervisor/${id}`).then(() => navigate(-1));
+    axios.delete(`/admin/users/supervisor/${id}`).then(() => navigate(-1));
   }
 
   return (
@@ -194,12 +194,14 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
   }, [visible, form]);
 
   const debounceSearch = debounce((search) => {
-    Axios.get("/admin/users/chw", {
-      params: {
-        search,
-        size: 10,
-      },
-    }).then((response) => setOptions(response.data.content));
+    axios
+      .get("/admin/users/chw", {
+        params: {
+          search,
+          size: 10,
+        },
+      })
+      .then((response) => setOptions(response.data.content));
   }, 400);
 
   return (
@@ -260,7 +262,7 @@ function ChangePasswordModal({ id, onCancel, visible, ...props }) {
   }, [visible, form]);
 
   function onFinish(values) {
-    Axios.put(`/admin/users/${id}/password`, values).then(onCancel);
+    axios.put(`/admin/users/${id}/password`, values).then(onCancel);
   }
 
   return (
@@ -305,7 +307,7 @@ function AssignBaby({ id, onChange }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(babyId) {
-    Axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
+    axios.delete(`/admin/babies/${babyId}/chw`).then(() => refresh());
   }
 
   useEffect(() => {
@@ -397,7 +399,7 @@ function NotAssignedBabyModal({ id, onFinish, onCancel, visible, loadData, ...pr
   }, [visible]);
 
   async function handleAssign(babyIds) {
-    await Axios.post(`/admin/users/chw/${id}/babies`, babyIds);
+    await axios.post(`/admin/users/chw/${id}/babies`, babyIds);
     loadData();
     onFinish();
     onCancel();
@@ -438,7 +440,7 @@ function AssignChw({ id }) {
 
   // release chw, set chw's supervisor to null
   function handleRelease(chwId) {
-    Axios.delete(`/admin/users/chw/${chwId}/supervisor`).then(() => refresh());
+    axios.delete(`/admin/users/chw/${chwId}/supervisor`).then(() => refresh());
   }
 
   return (
@@ -515,7 +517,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
   }, [visible]);
 
   async function handleAssign(chwIds) {
-    await Axios.post(`/admin/users/supervisor/${id}/chw`, chwIds);
+    await axios.post(`/admin/users/supervisor/${id}/chw`, chwIds);
     refresh();
     onFinish();
     onCancel();

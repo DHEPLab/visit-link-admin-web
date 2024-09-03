@@ -5,7 +5,7 @@ import { Steps, Button, Spin, Upload, Table, message } from "antd";
 import Column from "antd/lib/table/Column";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import Axios from "axios";
+import axios from "axios";
 import UploadButton from "./UploadButton";
 
 const { Step } = Steps;
@@ -293,7 +293,8 @@ export default function ImportExcel({ open, refresh, close }) {
       }
     });
 
-    Axios.post(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, passArray)
+    axios
+      .post(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, passArray)
       .then((res) => {
         const { data } = res;
         const errresults = [...errorArray, ...(data || [])].sort(
@@ -311,7 +312,8 @@ export default function ImportExcel({ open, refresh, close }) {
 
   function importDatas() {
     setSpinningLoading(true);
-    Axios.post("/admin/babies/imports", importData)
+    axios
+      .post("/admin/babies/imports", importData)
       .then(() => {
         message.success(t("excel.importSuccessfully"));
         refresh();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { Formik } from "formik";
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -66,7 +66,7 @@ export default function Module() {
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
-      Axios.get(`/admin/modules/${id}`).then(({ data, headers }) => {
+      axios.get(`/admin/modules/${id}`).then(({ data, headers }) => {
         const formValue = pathname.includes("/modules/edit")
           ? data
           : {
@@ -84,12 +84,14 @@ export default function Module() {
       });
     }
 
-    Axios.get("/admin/modules", {
-      params: {
-        size: 1000,
-        published: true,
-      },
-    }).then((response) => moduleFinishActionOptions(response.data));
+    axios
+      .get("/admin/modules", {
+        params: {
+          size: 1000,
+          published: true,
+        },
+      })
+      .then((response) => moduleFinishActionOptions(response.data));
   }, [id, form, readonly, pathname, moduleFinishActionOptions]);
 
   function onSubmitFormik(values) {
@@ -141,27 +143,29 @@ export default function Module() {
       }
     }
     const isEdit = pathname.includes("/modules/edit");
-    Axios.post(submitURL, {
-      id: isEdit ? id : null,
-      components,
-      ...values,
-    }).then(() => {
-      if (isEdit) {
-        navigate(-1);
-      } else {
-        navigate("/modules");
-      }
-    });
+    axios
+      .post(submitURL, {
+        id: isEdit ? id : null,
+        components,
+        ...values,
+      })
+      .then(() => {
+        if (isEdit) {
+          navigate(-1);
+        } else {
+          navigate("/modules");
+        }
+      });
   }
 
   function handleDelteDraft() {
-    Axios.delete(`/admin/modules/${draftId}`).then(() => {
+    axios.delete(`/admin/modules/${draftId}`).then(() => {
       setDraftId("");
     });
   }
 
   function handleDeleteModule() {
-    Axios.delete(`/admin/modules/${id}`).then(() => {
+    axios.delete(`/admin/modules/${id}`).then(() => {
       navigate(-1);
     });
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import axios from "axios";
 import styled from "styled-components";
 
 import { Select, Button } from "antd";
@@ -11,7 +11,7 @@ export default function TagSelect({ onChange, ...props }) {
   function handleDelete(option) {
     setTimeout(() => {
       // delete database tag
-      Axios.delete(`/admin/tags/${option.id}`).then(() => refresh());
+      axios.delete(`/admin/tags/${option.id}`).then(() => refresh());
       // delete value from props.value
       onChange(props.value?.filter((v) => v !== option.name));
     }, 20);

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Modal, Radio } from "antd";
@@ -39,7 +39,7 @@ export default function Users() {
   }
 
   function handleCreateUser(value) {
-    Axios.post("/admin/users", value).then(() => {
+    axios.post("/admin/users", value).then(() => {
       refresh();
       closeUser();
     });

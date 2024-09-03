@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
@@ -24,14 +24,14 @@ export default function Profiles() {
   }));
 
   async function handleChangeProfile(values) {
-    await Axios.put("/api/account/profile", values);
-    const res = await Axios.get("/api/account/profile");
+    await axios.put("/api/account/profile", values);
+    const res = await axios.get("/api/account/profile");
     loadProfileSuccess(res.data);
     closeProfileModal();
   }
 
   async function handleChangePassword(values) {
-    await Axios.put("/api/account/password", values);
+    await axios.put("/api/account/password", values);
     Message.success(t("passwordChangedTip"), t("reLoginTip"), 1);
     clearToken();
     navigate("/sign_in");
