@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useQuill } from "@/hooks/useQuill";
 import "quill/dist/quill.snow.css";
-import { debounce } from "lodash";
+import { debounce } from "@/utils/debounce";
 import { useTranslation } from "react-i18next";
 
 import Container from "./Container";

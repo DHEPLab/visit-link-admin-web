@@ -15,7 +15,6 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom"],
           antd: ["antd"],
-          lodash: ["lodash"],
           xlsx: ["xlsx"],
           quill: ["quill"],
           styled: ["@emotion/css", "@emotion/react", "@emotion/styled", "styled-components"],

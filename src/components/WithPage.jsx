@@ -1,7 +1,7 @@
 // Higer-Order Component to enhance the paging
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { debounce } from "lodash";
+import { debounce } from "@/utils/debounce";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Arrays from "lodash/array";
+import lodashPullAt from "lodash.pullat";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -245,7 +245,7 @@ function withEdit(Wrapper) {
 
     function pullAt(array, index) {
       const clone = [...array];
-      Arrays.pullAt(clone, [index]);
+      lodashPullAt(clone, [index]);
       return clone;
     }
 
@@ -310,7 +310,7 @@ function Lessons({
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
-      onChange(Arrays.concat(value, formValues));
+      onChange(value.concat(formValues));
     } else {
       onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
     }
@@ -612,7 +612,7 @@ function Schedules({
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
       onChange(
-        Arrays.concat(value, {
+        value.concat({
           ...formValues,
           lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
         }),

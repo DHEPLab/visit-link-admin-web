@@ -12,7 +12,7 @@ import Card from "@/components/Card";
 import DetailHeader from "@/components/DetailHeader";
 import StaticField from "@/components/StaticField";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
-import { debounce } from "lodash";
+import { debounce } from "@/utils/debounce";
 import Rules from "../constants/rules";
 import usePrompt from "@/hooks/usePrompt";
 

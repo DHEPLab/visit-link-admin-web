@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { debounce } from "lodash";
 
 import { FieldArray } from "formik";
 import { Space, Button } from "antd";
@@ -10,6 +9,7 @@ import ComponentField from "./ComponentField";
 import Iconfont from "../Iconfont";
 import Card from "../Card";
 import { useTranslation } from "react-i18next";
+import { debounce } from "@/utils/debounce";
 
 export function handleMoveUp(helpers, index, focus, setFocus) {
   if (index === 0) return;

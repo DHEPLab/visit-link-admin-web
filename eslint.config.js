@@ -23,5 +23,10 @@ export default tseslint.config(
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
   },
+  {
+    rules: {
+      "@typescript-eslint/no-this-alias": ["error", { allowedNames: ["self"] }],
+    },
+  },
   eslintConfigPrettier,
 );

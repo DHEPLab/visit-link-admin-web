@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { debounce } from "lodash";
+import { debounce } from "@/utils/debounce";
 import { Button, Form, Input, Modal, Select, Space } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
