@@ -30,3 +30,5 @@ service.conf
 
 .history/
 .idea
+
+*.xlsx
