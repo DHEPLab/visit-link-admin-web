@@ -152,7 +152,6 @@ const Result = styled.div`
   text-align: right;
   font-size: 14px;
   line-height: 30px;
-  font-family: fantasy;
 `;
 
 const ButtonLine = styled.div`
