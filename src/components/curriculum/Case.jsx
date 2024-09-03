@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 import { Button, Cascader, message } from "antd";
 import { FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
@@ -9,10 +8,11 @@ import Factory from "./factory";
 import ComponentField from "./ComponentField";
 import Container from "./Container";
 import { GhostInput } from "..";
+import { useModuleStore } from "@/store/module";
 
 export default function Case({ name, value, index, onChange, ...props }) {
   const [text, setText] = useState(value.text);
-  const modules = useSelector((state) => state.modules);
+  const options = useModuleStore((state) => state.options);
   const { t } = useTranslation("case");
 
   const Name = {
@@ -35,7 +35,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
         <StyledCascader
           allowClear={false}
           disabled={props.readonly}
-          options={modules}
+          options={options}
           value={value.finishAction}
           onChange={onChangeCascader}
           size="small"

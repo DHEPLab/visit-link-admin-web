@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { Formik } from "formik";
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
-import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -11,11 +10,11 @@ import ModuleComponents from "../components/curriculum/ModuleComponents";
 import Rules from "../constants/rules";
 import { ModuleTopic, QrType } from "../constants/enums";
 import { Card, DeleteConfirmModal, DetailHeader, DraftBar, SelectEnum, StaticField } from "../components";
-import { moduleFinishActionOptions } from "../actions";
 import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
 import styled from "styled-components";
 import i18n from "@/i18n.js";
+import { useModuleStore } from "@/store/module";
 
 const CustomSelectorWrapper = styled.div`
   .ant-select.module-topic-selector .ant-select-selector {
@@ -29,7 +28,7 @@ export default function Module() {
   const { pathname } = useLocation();
   const [readonly, setReadonly] = useState();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const moduleFinishActionOptions = useModuleStore((state) => state.moduleFinishActionOptions);
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
@@ -90,8 +89,8 @@ export default function Module() {
         size: 1000,
         published: true,
       },
-    }).then((response) => dispatch(moduleFinishActionOptions(response.data)));
-  }, [id, form, readonly, pathname, dispatch]);
+    }).then((response) => moduleFinishActionOptions(response.data));
+  }, [id, form, readonly, pathname, moduleFinishActionOptions]);
 
   function onSubmitFormik(values) {
     setComponents(values.components);
