@@ -1,22 +1,23 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { RequireAuth } from "@/components";
-import {
-  Babies,
-  Baby,
-  Curriculum,
-  Curriculums,
-  Module,
-  Modules,
-  NotFound,
-  Profiles,
-  Projects,
-  SignIn,
-  Survey,
-  Surveys,
-  User,
-  Users,
-} from "./pages";
 import Layout from "./Layout";
+import React from "react";
+
+const SignIn = React.lazy(() => import("@/pages/SignIn"));
+const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const Projects = React.lazy(() => import("@/pages/Projects"));
+const Modules = React.lazy(() => import("@/pages/Modules"));
+const Module = React.lazy(() => import("@/pages/Module"));
+const Babies = React.lazy(() => import("@/pages/Babies"));
+const Baby = React.lazy(() => import("@/pages/Baby"));
+const Users = React.lazy(() => import("@/pages/Users"));
+const User = React.lazy(() => import("@/pages/User"));
+const Surveys = React.lazy(() => import("@/pages/Surveys"));
+const Survey = React.lazy(() => import("@/pages/Survey"));
+const Curriculums = React.lazy(() => import("@/pages/Curriculums"));
+const Curriculum = React.lazy(() => import("@/pages/Curriculum"));
+const Profiles = React.lazy(() => import("@/pages/Profiles"));
 
 const router = createBrowserRouter([
   {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import isPropValid from "@emotion/is-prop-valid";
 import styled, { StyleSheetManager } from "styled-components";
 
@@ -31,7 +31,9 @@ export default function App() {
           {...component}
         >
           <AppContainer>
-            <RouterProvider router={router} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <RouterProvider router={router} />
+            </Suspense>
           </AppContainer>
         </ConfigProvider>
       </StyleSheetManager>
