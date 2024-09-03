@@ -1,22 +1,22 @@
-# Healthy Future Admin Frontend
+# Visit Link Admin Frontend
 
-## 本地开发
+![main workflow](https://github.com/DHEPLab/visit-link-admin-web/actions/workflows/ci.yml/badge.svg)
 
-NodeJS 版本 v20 LTS
+## Local Development
+
+NodeJS Version v20 LTS
 
 ```
 $ yarn
 $ yarn start
 ```
 
-## 外部依赖
-
-healthy-future-backend，反向代理配置在 `package.json` proxy 属性
-
-## 部署脚本
-
+By default the app will proxy all the api to localhost:8080, you can change the target by running with `BACKEND_PROXY_TARGET` env variable.
+```shell
+$ BACKEND_PROXY_TARGET=<url> yarn start
 ```
-$ ansible/build.sh
-$ ansible/package.sh
-$ DEPLOY_GROUP=prod ansible/deploy.sh
-```
+
+## External Dependencies
+
+The visit-link-backend service, with reverse proxy configuration in vite.config.ts
+
