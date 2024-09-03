@@ -129,14 +129,20 @@ const urlInfo = {
 const { httpRequestStart, httpRequestEnd } = useNetworkStore.getState();
 
 axios.interceptors.request.use((config) => {
-  httpRequestStart(config.url);
+  if (config.url) {
+    httpRequestStart(config.url);
+  }
+
   config.headers["Accept-Language"] = i18n.resolvedLanguage;
   return config;
 });
 
 axios.interceptors.response.use(
   (response) => {
-    httpRequestEnd(response.config.url);
+    if (response.config.url) {
+      httpRequestEnd(response.config.url);
+    }
+
     overallSituationTips(response.config.method, response.config.url);
     return response;
   },
@@ -175,13 +181,17 @@ axios.interceptors.response.use(
   },
 );
 
-function overallSituationTips(method, url) {
-  const infoArray = urlInfo[method];
+function overallSituationTips(method?: string, url?: string) {
+  if (!method || !url) return;
+
+  const infoArray = urlInfo[method as keyof typeof urlInfo];
   const result = infoArray.filter((e) => (e["isequals"] && url === e.url) || (!e["isequals"] && url.includes(e.url)));
   if (result && result.length === 1) {
     Message.success(result[0].title, result[0].context);
   } else if (result && result.length > 1) {
-    const res = result.filter((e) => (!e["isequals"] && url.endsWith(e["endsWith"])) || e["isequals"] === true);
+    const res = result.filter(
+      (e) => (!e["isequals"] && e["endsWith"] && url.endsWith(e["endsWith"])) || e["isequals"] === true,
+    );
     if (res && res.length > 0) {
       Message.success(res[0].title, res[0].context);
     }
