@@ -3,7 +3,6 @@ import Axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { useSelector } from "react-redux";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
@@ -25,6 +24,7 @@ import {
 import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
 import i18n from "@/i18n.js";
+import { useNetworkStore } from "@/store/network";
 
 export default function Curriculum() {
   const { id } = useParams();
@@ -298,7 +298,7 @@ function Lessons({
   closeModal,
   visible,
 }) {
-  const { networks } = useSelector((state) => state);
+  const requests = useNetworkStore((state) => state.requests);
   const { t } = useTranslation("curriculum");
 
   const [moduleOptions, setModuleOptions] = useState([]);
@@ -414,7 +414,7 @@ function Lessons({
             labelInValue
             options={moduleOptions}
             onFocus={loadModuleOptions}
-            loading={!!networks["/admin/modules"]}
+            loading={!!requests["/admin/modules"]}
           />
         </Form.Item>
         <Form.Item label={t("survey")} name="questionnaire">
@@ -422,7 +422,7 @@ function Lessons({
             suffixIcon={null}
             options={questionnairesOptions}
             onFocus={loadQuestionnairesOptions}
-            loading={!!networks["/admin/findAllQuestionnaires"]}
+            loading={!!requests["/admin/findAllQuestionnaires"]}
           />
         </Form.Item>
         <Form.Item label={t("textSurvey")} name="smsQuestionnaireAddress" rules={[{ max: 100 }]}>

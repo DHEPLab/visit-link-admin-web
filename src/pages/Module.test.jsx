@@ -16,15 +16,6 @@ vi.mock("react-router-dom", async (importOriginal) => {
 
 vi.mock("axios");
 
-vi.mock("react-redux", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useDispatch: vi.fn(),
-    useSelector: vi.fn(),
-  };
-});
-
 it.skip("should render create page", () => {
   useParams.mockImplementation(() => ({}));
   useLocation.mockImplementation(() => ({ pathname: "/modules/create" }));

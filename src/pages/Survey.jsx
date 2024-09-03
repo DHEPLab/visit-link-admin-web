@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Formik } from "formik";
-import { useDispatch } from "react-redux";
 import { Form, Space, Button, Input, message } from "antd";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -16,7 +15,6 @@ import usePrompt from "@/hooks/usePrompt";
 export default function Survey() {
   const { id } = useParams();
   const { pathname } = useLocation();
-  const dispatch = useDispatch();
   const { t, i18n } = useTranslation("survey");
 
   const [isPrompt, setIsPrompt] = useState(true);
@@ -58,7 +56,7 @@ export default function Survey() {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(422, setStickyTop);
     }
-  }, [id, form, readonly, dispatch, i18n]);
+  }, [id, form, readonly, i18n]);
 
   function onSubmitFormik(values) {
     setQuestions(values.questions);

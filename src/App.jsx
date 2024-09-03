@@ -8,9 +8,6 @@ import "./dayjsInit";
 import { I18nextProvider } from "react-i18next";
 import { applyToken, getToken } from "./utils/token";
 
-import { Provider } from "react-redux";
-
-import store from "./store";
 import "./config";
 import i18n from "./i18n";
 import { componentConfig, visitLinkTheme } from "./theme";
@@ -33,11 +30,9 @@ export default function App() {
           theme={visitLinkTheme(themeToken.token)}
           {...component}
         >
-          <Provider store={store}>
-            <AppContainer>
-              <RouterProvider router={router} />
-            </AppContainer>
-          </Provider>
+          <AppContainer>
+            <RouterProvider router={router} />
+          </AppContainer>
         </ConfigProvider>
       </StyleSheetManager>
     </I18nextProvider>

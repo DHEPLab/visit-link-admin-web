@@ -19,14 +19,6 @@ vi.mock("@/hooks/usePrompt", () => ({
   default: () => {},
 }));
 
-vi.mock("react-redux", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useSelector: () => ({ networks: {} }),
-  };
-});
-
 vi.mock("axios");
 
 test("should render create page", async () => {
