@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button, message, Spin, Steps, Table, Upload } from "antd";
+import { Button, message, Spin, Steps, Table, Upload, UploadProps } from "antd";
 import Column from "antd/lib/table/Column";
 import UploadButton from "./UploadButton";
 import Axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
+import { ImportExcelCheckRes } from "@/models/res/importExcel";
 
 const { Step } = Steps;
 
-export default function ImportUserExcel({ open, refresh, close }) {
+interface ImportUserExcelProps {
+  open: boolean;
+  refresh: () => void;
+  close: () => void;
+}
+
+const ImportUserExcel: React.FC<ImportUserExcelProps> = ({ open, refresh, close }) => {
   const { t } = useTranslation(["common", "user"]);
 
   const [spinningLoading, setSpinningLoading] = useState(false);
-  const [result, setResult] = useState({
+  const [result, setResult] = useState<ImportExcelCheckRes>({
     errData: [],
     total: 0,
   });
-  const [file, setFile] = useState(null);
   const { errData } = result;
+  const [file, setFile] = useState<Blob | null>(null);
   const successTotal = result.total - errData.length;
 
   useEffect(() => {
@@ -28,28 +35,25 @@ export default function ImportUserExcel({ open, refresh, close }) {
     });
   }, [open]);
 
-  async function putBlob(fileInfo) {
+  const checkUser: UploadProps["customRequest"] = ({ file }) => {
     setSpinningLoading(true);
-    const { file } = fileInfo;
-    setFile(file);
-    checkUser(file);
-  }
+    setFile(file as Blob);
 
-  async function checkUser(f) {
     const formData = new FormData();
-    formData.append("records", f);
-    Axios.post("/admin/users/check", formData)
-      .then((res) => {
-        const { data } = res;
-        setResult(data);
-        setSpinningLoading(false);
-      })
-      .catch(() => {
+    formData.append("records", file);
+    Axios.post<ImportExcelCheckRes>("/admin/users/check", formData)
+      .then(({ data }) => setResult(data))
+      .finally(() => {
         setSpinningLoading(false);
       });
-  }
+  };
 
-  function importDatas() {
+  function onImportDataButtonClicked() {
+    if (file === null) {
+      message.warning(t("excel.importFileIsMissing"));
+      return;
+    }
+
     setSpinningLoading(true);
     const formData = new FormData();
     formData.append("records", file);
@@ -58,12 +62,13 @@ export default function ImportUserExcel({ open, refresh, close }) {
         message.success(t("excel.importSuccessfully"));
         refresh();
         close();
-        setSpinningLoading(false);
       })
-      .catch(() => {
+      .finally(() => {
         setSpinningLoading(false);
       });
   }
+
+  const showResult = result.total > 0 || errData.length > 0;
 
   return (
     <Container tip="Loading..." spinning={spinningLoading}>
@@ -73,7 +78,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
         <Step title={t("excel.finishImport")} />
       </Steps>
       <ButtonLine>
-        <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false}>
+        <Upload customRequest={checkUser} accept=".xls,.xlsx,.csv" showUploadList={false}>
           <UploadButton title={t("excel.clickToUploadExcel")} icon="iconimport-excel">
             {t("excel.support")}
             <br />
@@ -86,7 +91,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
           {t("excel.downloadTemplate")}
         </DownLink>
       </ButtonLine>
-      {(result.total > 0 || errData.length > 0) && (
+      {showResult && (
         <ResultContainer>
           <Table
             size="small"
@@ -115,7 +120,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
               type="primary"
               style={{ float: "right", width: 160 }}
               size="middle"
-              onClick={importDatas}
+              onClick={onImportDataButtonClicked}
               disabled={successTotal === 0}
             >
               {t("excel.importData")}
@@ -125,7 +130,7 @@ export default function ImportUserExcel({ open, refresh, close }) {
       )}
     </Container>
   );
-}
+};
 
 const CloseButton = styled(Button)`
   border-color: #ff794f;
@@ -142,7 +147,7 @@ const Container = styled(Spin)`
 
 const ImportLine = styled.div`
   margin-top: 10px;
-  padding: 0px 60px;
+  padding: 0 60px;
   height: 30px;
 `;
 
@@ -163,3 +168,5 @@ const DownLink = styled.a`
   position: relative;
   bottom: -30px;
 `;
+
+export default ImportUserExcel;

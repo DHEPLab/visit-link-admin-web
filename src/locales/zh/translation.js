@@ -282,6 +282,7 @@ export default {
       importData: "导入数据",
       finishImport: "导入完成",
       importSuccessfully: "导入成功",
+      importFileIsMissing: "上传文件已丢失",
       clickToUploadExcel: "点击上传Excel",
       support: "支持 xls/xlsx",
       filesizeMaxTo5M: "大小不超过5M",

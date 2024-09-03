@@ -10,8 +10,16 @@ import i18next from "../i18n";
 import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
 import { Role } from "../constants/enums";
-import { CardTabs, ChwTagSelector, ContentHeader, ModalForm, SearchInput, WithPage, ZebraTable } from "../components";
-import ImportUserExcel from "../components/ImportUserExcel";
+import {
+  CardTabs,
+  ChwTagSelector,
+  ContentHeader,
+  ModalForm,
+  SearchInput,
+  WithPage,
+  ZebraTable,
+  ImportUserExcel,
+} from "../components";
 import useQueryParam from "@/hooks/useQueryParam";
 
 export default function Users() {

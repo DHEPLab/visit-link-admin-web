@@ -289,6 +289,7 @@ export default {
       importData: "Import Data",
       finishImport: "Finish",
       importSuccessfully: "Import Successfully",
+      importFileIsMissing: "Import file is missing",
       clickToUploadExcel: "Click to upload Excel",
       support: "Support xls/xlsx",
       filesizeMaxTo5M: "Max size up to 5M",
