@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
+import browserslistToEsbuild from "browserslist-to-esbuild";
 
 // https://vitejs.dev/config/build. rollupOptions. output. manualChunks
 export default defineConfig({
@@ -26,6 +27,7 @@ export default defineConfig({
         },
       },
     },
+    target: browserslistToEsbuild(),
   },
   server: {
     port: 3000,
