@@ -1,7 +1,5 @@
-import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { getToken } from "./utils/token";
-
+import { RequireAuth } from "@/components";
 import {
   Babies,
   Baby,
@@ -19,10 +17,6 @@ import {
   Users,
 } from "./pages";
 import Layout from "./Layout";
-
-function RequireAuth({ children }) {
-  return getToken() ? children : <Navigate to="/sign_in" replace />;
-}
 
 const router = createBrowserRouter([
   {
