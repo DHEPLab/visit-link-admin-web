@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { SwapRightOutlined } from "@ant-design/icons";
 
-export default function StaticField({ label, labelStyle= {}, children, history = "" }) {
+export default function StaticField({ label, labelStyle = {}, children, history = "" }) {
   return (
     <Container>
       <Label style={labelStyle}>{label}</Label>
