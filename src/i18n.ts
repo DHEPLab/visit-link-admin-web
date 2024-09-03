@@ -12,7 +12,7 @@ const resources = {
   zh: zhTranslation,
 };
 
-i18n
+await i18n
   .use(initReactI18next)
   .use(LngDetector)
   .init({
@@ -22,8 +22,7 @@ i18n
     },
     fallbackLng: "en",
     detection: {
-      order: ["navigator"],
-      lookupNavigator: true,
+      order: ["navigator", "htmlTag"],
     },
   });
 
