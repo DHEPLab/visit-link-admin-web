@@ -1,23 +1,27 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import React, { useCallback, useEffect } from "react";
 import Axios from "@/axiosConfig";
-import store from "@/store";
-import { apiAccountProfile } from "@/actions";
 import { clearToken } from "@/utils/token";
 import { Header, Menu, Message } from "@/components";
 import { Role } from "@/constants/enums";
 import styled from "styled-components";
+import { useUserStore } from "@/store/user";
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.users);
   const { t } = useTranslation("app");
+
+  const { user, loadProfileSuccess } = useUserStore((state) => ({
+    user: state.user,
+    loadProfileSuccess: state.loadProfileSuccess,
+  }));
 
   const loadProfile = useCallback(() => {
     Axios.get("/api/account/profile")
-      .then((r) => store.dispatch(apiAccountProfile(r)))
+      .then((r) => {
+        loadProfileSuccess(r.data);
+      })
       .catch(() => navigate("/sign_in"));
   }, [navigate]);
 

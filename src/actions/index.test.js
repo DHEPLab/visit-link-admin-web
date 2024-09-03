@@ -13,27 +13,6 @@ vi.mock("i18next", () => ({
   },
 }));
 
-it("should action type is HTTP_REQUEST_START and clean url query params", () => {
-  expect(action.httpRequestStart({ url: "/abc?a=1&b=2" })).toStrictEqual({
-    type: "HTTP_REQUEST_START",
-    payload: "/abc",
-  });
-});
-
-it("should action type is HTTP_REQUEST_END and clean url query params", () => {
-  expect(action.httpRequestEnd({ url: "/abc?a=1&b=2" })).toStrictEqual({
-    type: "HTTP_REQUEST_END",
-    payload: "/abc",
-  });
-});
-
-it("should action type is LOAD_PROFILE_SUCCESS", () => {
-  expect(action.apiAccountProfile({ data: 1 })).toStrictEqual({
-    type: "LOAD_PROFILE_SUCCESS",
-    payload: 1,
-  });
-});
-
 it("should action type is ACTIVE_COMPONENT", () => {
   expect(action.activeComponent("Tom")).toStrictEqual({
     type: "ACTIVE_COMPONENT",

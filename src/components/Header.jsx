@@ -3,7 +3,6 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 import styled from "styled-components";
 import { Button, DatePicker, Form, Select } from "antd";
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { DownloadOutlined } from "@ant-design/icons";
 
@@ -11,13 +10,14 @@ import { Iconfont, ModalForm } from "../components";
 import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
 import LogoImage from "../assets/logo.png";
+import { useUserStore } from "@/store/user";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 export default function Header({ username, role, onNavigate, onLogout }) {
   const { t } = useTranslation(["header", "roles"]);
-  const { user } = useSelector((state) => state.users);
+  const user = useUserStore((state) => state.user);
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false);
   const [exportType, setExportType] = useState("visit");
 

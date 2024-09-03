@@ -1,27 +1,4 @@
-import { cleanQueryParams } from "../utils";
 import i18n from "i18next";
-
-export function httpRequestStart(config) {
-  return {
-    type: "HTTP_REQUEST_START",
-    payload: cleanQueryParams(config.url),
-  };
-}
-
-export function httpRequestEnd(config) {
-  return {
-    type: "HTTP_REQUEST_END",
-    payload: cleanQueryParams(config.url),
-  };
-}
-
-export function apiAccountProfile({ data }) {
-  return {
-    type: "LOAD_PROFILE_SUCCESS",
-    payload: data,
-  };
-}
-
 export function activeComponent(name) {
   return {
     type: "ACTIVE_COMPONENT",

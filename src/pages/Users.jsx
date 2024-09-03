@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +20,7 @@ import {
   ImportUserExcel,
 } from "../components";
 import useQueryParam from "@/hooks/useQueryParam";
+import { useUserStore } from "@/store/user";
 
 export default function Users() {
   const { t } = useTranslation(["users", "common"]);
@@ -28,7 +28,7 @@ export default function Users() {
   const [tab, setTab] = useQueryParam("tab", "chw");
   const [visible, openUser, closeUser] = useBoolState();
   const [importModal, openImportModal, closeImportModal] = useBoolState(false);
-  const { user } = useSelector((state) => state.users);
+  const user = useUserStore((state) => state.user);
   const isAdmin = user?.role === "ROLE_ADMIN";
 
   // change tab to refresh table

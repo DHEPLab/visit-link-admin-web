@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import { Form, Input, Button } from "antd";
+import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import { applyToken } from "../utils/token";
-import { apiAccountProfile } from "../actions";
 import SignInBg from "../assets/signin-bg.png";
 import { Message } from "../components";
 import LogoImage from "../assets/logo.png";
+import { useUserStore } from "@/store/user";
+import { useNetworkStore } from "@/store/network";
 
 export default function SignIn() {
   const { t } = useTranslation("signIn");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const networks = useSelector((state) => state.networks);
+  const requests = useNetworkStore((state) => state.requests);
+  const loadProfileSuccess = useUserStore((state) => state.loadProfileSuccess);
 
   const [form] = Form.useForm();
   const [error, setError] = useState(false);
@@ -28,7 +28,7 @@ export default function SignIn() {
       applyToken(auth.data.idToken);
 
       const profile = await Axios.get("/api/account/profile");
-      dispatch(apiAccountProfile(profile));
+      loadProfileSuccess(profile.data);
 
       Message.success(t("success.title"), t("success.message"), 1);
       navigate("/");
@@ -74,7 +74,7 @@ export default function SignIn() {
           size="large"
           type="shade"
           onClick={form.submit}
-          loading={networks["/admin/authenticate"] > 0 || networks["/api/account/profile"] > 0}
+          loading={requests["/admin/authenticate"] > 0 || requests["/api/account/profile"] > 0}
         >
           {t("login")}
         </Button>

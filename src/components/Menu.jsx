@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 import Iconfont from "./Iconfont";
 import { useTranslation } from "react-i18next";
+import { useUserStore } from "@/store/user";
 
 export default function Menu() {
-  const { user } = useSelector((state) => state.users);
+  const user = useUserStore((state) => state.user);
   const isAdmin = user?.role === "ROLE_ADMIN";
   const isSuperAdmin = user?.role === "ROLE_SUPER_ADMIN";
   const { t } = useTranslation("menu");

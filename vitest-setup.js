@@ -22,3 +22,5 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 global.i18n = i18n;
 i18n.changeLanguage("en");
+
+vi.mock("zustand");

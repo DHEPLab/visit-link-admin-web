@@ -1,10 +1,9 @@
 import Axios from "axios";
 import { message } from "antd";
-import { httpRequestStart, httpRequestEnd } from "./actions";
 import { clearToken } from "./utils/token";
-import store from "./store";
 import { Message } from "./components";
 import i18n from "./i18n";
+import { useNetworkStore } from "@/store/network";
 
 const urlInfo = {
   get: [],
@@ -127,21 +126,23 @@ const urlInfo = {
   ],
 };
 
+const { httpRequestStart, httpRequestEnd } = useNetworkStore.getState();
+
 Axios.interceptors.request.use((config) => {
-  store.dispatch(httpRequestStart(config));
+  httpRequestStart(config.url);
   return config;
 });
 
 Axios.interceptors.response.use(
   (response) => {
-    store.dispatch(httpRequestEnd(response.config));
+    httpRequestEnd(response.config.url);
     overallSituationTips(response.config.method, response.config.url);
     return response;
   },
   (error) => {
     const { response } = error;
     if (!response) return Promise.reject(error);
-    store.dispatch(httpRequestEnd(response.config));
+    httpRequestEnd(response.config.url);
 
     let msg = i18n.t("serviceError", { ns: "error" });
     switch (response.status) {

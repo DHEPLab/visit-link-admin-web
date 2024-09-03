@@ -1,7 +1,6 @@
 import React from "react";
 import Axios from "axios";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
@@ -11,19 +10,23 @@ import { useBoolState } from "../utils";
 import { Role } from "../constants/enums";
 import { clearToken } from "../utils/token";
 import { Card, StaticField, ModalForm, Message } from "../components";
-import { apiAccountProfile } from "../actions";
+import { useUserStore } from "@/store/user";
 
 export default function Profiles() {
   const { t } = useTranslation(["myAccount", "common"]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.users);
   const [visible, openPasswordModal, closePasswordModal] = useBoolState(false);
   const [visibleProfile, openProfileModal, closeProfileModal] = useBoolState(false);
 
+  const { user, loadProfileSuccess } = useUserStore((state) => ({
+    user: state.user,
+    loadProfileSuccess: state.loadProfileSuccess,
+  }));
+
   async function handleChangeProfile(values) {
     await Axios.put("/api/account/profile", values);
-    dispatch(apiAccountProfile(await Axios.get("/api/account/profile")));
+    const res = await Axios.get("/api/account/profile");
+    loadProfileSuccess(res.data);
     closeProfileModal();
   }
 
