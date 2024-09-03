@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
-import { Form, Space, Button, Input, message } from "antd";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { Button, Form, Input, message, Space } from "antd";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import Factory from "../components/curriculum/factory";
-import SurveyComponents from "../components/curriculum/SurveyComponents";
-import { DraftBar, Card, DetailHeader, StaticField, DeleteConfirmModal } from "../components";
+import Factory from "@/components/curriculum/factory";
+import SurveyComponents from "@/components/curriculum/SurveyComponents";
+import DraftBar from "@/components/DraftBar";
+import Card from "@/components/Card";
+import DetailHeader from "@/components/DetailHeader";
+import StaticField from "@/components/StaticField";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { debounce } from "lodash";
 import Rules from "../constants/rules";
 import usePrompt from "@/hooks/usePrompt";

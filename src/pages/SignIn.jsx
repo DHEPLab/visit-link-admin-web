@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { applyToken } from "../utils/token";
 import SignInBg from "../assets/signin-bg.png";
-import { Message } from "../components";
+import Message from "@/components/Message";
 import LogoImage from "../assets/logo.png";
 import { useUserStore } from "@/store/user";
 import { useNetworkStore } from "@/store/network";

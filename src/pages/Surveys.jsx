@@ -3,7 +3,10 @@ import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { WithPage, ContentHeader, ZebraTable, StatusTag } from "../components";
+import WithPage from "@/components/WithPage";
+import ContentHeader from "@/components/ContentHeader";
+import ZebraTable from "@/components/ZebraTable";
+import StatusTag from "@/components/StatusTag";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SurveysContent({ loadData, onChangeSearch, ...props }) {

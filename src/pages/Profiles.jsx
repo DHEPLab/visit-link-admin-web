@@ -9,7 +9,10 @@ import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
 import { Role } from "../constants/enums";
 import { clearToken } from "../utils/token";
-import { Card, StaticField, ModalForm, Message } from "../components";
+import Card from "@/components/Card";
+import StaticField from "@/components/StaticField";
+import ModalForm from "@/components/ModalForm";
+import Message from "@/components/Message";
 import { useUserStore } from "@/store/user";
 
 export default function Profiles() {

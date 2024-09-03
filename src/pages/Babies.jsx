@@ -5,20 +5,18 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { Button, Space, Modal } from "antd";
+import { Button, Modal, Space } from "antd";
 
 import { useBoolState } from "../utils";
-import { Gender, ActionFromApp } from "../constants/enums";
-import {
-  WithPage,
-  ContentHeader,
-  CardTabs,
-  ZebraTable,
-  BabyModalForm,
-  SearchInput,
-  StatusTag,
-  ImportExcel,
-} from "../components";
+import { ActionFromApp, Gender } from "../constants/enums";
+import WithPage from "@/components/WithPage";
+import ContentHeader from "@/components/ContentHeader";
+import CardTabs from "@/components/CardTabs";
+import ZebraTable from "@/components/ZebraTable";
+import BabyModalForm from "@/components/BabyModalForm";
+import SearchInput from "@/components/SearchInput";
+import StatusTag from "@/components/StatusTag";
+import ImportExcel from "@/components/ImportExcel";
 import useQueryParam from "@/hooks/useQueryParam";
 
 function formatDate(datetime) {

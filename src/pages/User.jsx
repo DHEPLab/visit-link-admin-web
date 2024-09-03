@@ -1,24 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { Form, Modal, Button, Input, Space, Select } from "antd";
-import { useParams, useNavigate } from "react-router-dom";
+import { Button, Form, Input, Modal, Select, Space } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
-import { useFetch, useBoolState } from "../utils";
-import { Role, Gender } from "../constants/enums";
-import {
-  Card,
-  ZebraTable,
-  ModalForm,
-  StaticField,
-  DetailHeader,
-  AssignModalTable,
-  DeleteConfirmModal,
-  ChwTagSelector,
-  WithPage,
-} from "../components";
+import { useBoolState, useFetch } from "../utils";
+import { Gender, Role } from "../constants/enums";
+import Card from "@/components/Card";
+import ZebraTable from "@/components/ZebraTable";
+import ModalForm from "@/components/ModalForm";
+import StaticField from "@/components/StaticField";
+import DetailHeader from "@/components/DetailHeader";
+import AssignModalTable from "@/components/AssignModalTable";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal";
+import WithPage from "@/components/WithPage";
+import ChwTagSelector from "@/components/ChwTagSelector";
 
 export default function User() {
   const { t } = useTranslation(["user", "common"]);

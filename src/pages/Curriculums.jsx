@@ -8,7 +8,12 @@ import { useTranslation } from "react-i18next";
 
 import { Gender } from "../constants/enums";
 import { useBoolState } from "../utils";
-import { StatusTag, WithPage, ContentHeader, ZebraTable, SearchInput, AssignModalTable } from "../components";
+import StatusTag from "@/components/StatusTag";
+import WithPage from "@/components/WithPage";
+import ContentHeader from "@/components/ContentHeader";
+import ZebraTable from "@/components/ZebraTable";
+import SearchInput from "@/components/SearchInput";
+import AssignModalTable from "@/components/AssignModalTable";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CurriculumsContent({ historyPageState, loadData, onChangeSearch, ...props }) {

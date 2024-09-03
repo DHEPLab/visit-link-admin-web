@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { ModuleTopic } from "../constants/enums";
-import { WithPage, ContentHeader, ZebraTable, SearchInput, StatusTag } from "../components";
+import WithPage from "@/components/WithPage";
+import ContentHeader from "@/components/ContentHeader";
+import ZebraTable from "@/components/ZebraTable";
+import SearchInput from "@/components/SearchInput";
+import StatusTag from "@/components/StatusTag";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }) {

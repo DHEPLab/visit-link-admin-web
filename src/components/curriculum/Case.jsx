@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import Factory from "./factory";
 import ComponentField from "./ComponentField";
 import Container from "./Container";
-import { GhostInput } from "..";
+import GhostInput from "../GhostInput";
 import { useModuleStore } from "@/store/module";
 
 export default function Case({ name, value, index, onChange, ...props }) {

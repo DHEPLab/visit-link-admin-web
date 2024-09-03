@@ -7,7 +7,8 @@ import { Space, Button } from "antd";
 
 import Factory from "./factory";
 import ComponentField from "./ComponentField";
-import { Iconfont, Card } from "..";
+import Iconfont from "../Iconfont";
+import Card from "../Card";
 import { useTranslation } from "react-i18next";
 
 export function handleMoveUp(helpers, index, focus, setFocus) {

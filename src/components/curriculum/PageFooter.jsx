@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
-import { Iconfont } from "..";
+import Iconfont from "../Iconfont";
 
 export default function PageFooter(props) {
   return (

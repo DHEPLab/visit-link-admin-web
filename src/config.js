@@ -1,7 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 import { clearToken } from "./utils/token";
-import { Message } from "./components";
+import Message from "@/components/Message";
 import i18n from "./i18n";
 import { useNetworkStore } from "@/store/network";
 

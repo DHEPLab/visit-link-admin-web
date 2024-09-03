@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Arrays from "lodash/array";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { Tooltip, Form, Space, Button, Input, InputNumber, Select, message } from "antd";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Button, Form, Input, InputNumber, message, Select, Space, Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 
 import Rules from "../constants/rules";
 import CurriculumUtils from "../utils/curriculum";
 import { CurriculumBabyStage } from "../constants/enums";
 import { useBoolState } from "../utils";
-import {
-  StaticField,
-  RadioEnum,
-  Card,
-  DetailHeader,
-  DraftBar,
-  ZebraTable,
-  ModalForm,
-  DeleteConfirmModal,
-} from "../components";
+import StaticField from "@/components/StaticField";
+import RadioEnum from "@/components/RadioEnum";
+import Card from "@/components/Card";
+import DetailHeader from "@/components/DetailHeader";
+import DraftBar from "@/components/DraftBar";
+import ZebraTable from "@/components/ZebraTable";
+import ModalForm from "@/components/ModalForm";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
 import i18n from "@/i18n";
@@ -577,6 +575,7 @@ function ApplicableDays({ value, currentEditValue }) {
     </ApplicableDaysContainer>
   );
 }
+
 const EndOfApplicableDaysFormItem = styled(Form.Item)`
   .ant-form-item-explain,
   .ant-form-item-extra {
@@ -719,6 +718,7 @@ function Schedules({
     </Card>
   );
 }
+
 const renderDomain = (h) => h.map((v) => v.label).join("、");
 
 const lessonOperation = (disabled, handleDelete, openEditModal, t) => {

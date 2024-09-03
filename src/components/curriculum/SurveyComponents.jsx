@@ -5,7 +5,8 @@ import { FieldArray } from "formik";
 import { Space, Button, message } from "antd";
 
 import Factory from "./factory";
-import { Iconfont, Card } from "..";
+import Iconfont from "../Iconfont";
+import Card from "../Card";
 import { useTranslation } from "react-i18next";
 import ComponentQuestion from "./ComponentQuestion";
 

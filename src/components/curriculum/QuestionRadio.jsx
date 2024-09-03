@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Input, Row, Col, Button } from "antd";
 import { useFormikContext, FieldArray, Field } from "formik";
 import { Checkbox } from "formik-antd";
-import { QuestionButton, Iconfont } from "..";
+import QuestionButton from "../QuestionButton";
+import Iconfont from "../Iconfont";
 import { useTranslation } from "react-i18next";
 
 import Container from "./Container";

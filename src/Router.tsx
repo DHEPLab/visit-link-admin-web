@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { RequireAuth } from "@/components";
+import RequireAuth from "@/components/RequireAuth";
 import Layout from "./Layout";
 import React from "react";
 

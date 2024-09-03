@@ -9,16 +9,14 @@ import i18next from "../i18n";
 import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
 import { Role } from "../constants/enums";
-import {
-  CardTabs,
-  ChwTagSelector,
-  ContentHeader,
-  ModalForm,
-  SearchInput,
-  WithPage,
-  ZebraTable,
-  ImportUserExcel,
-} from "../components";
+import CardTabs from "@/components/CardTabs";
+import ContentHeader from "@/components/ContentHeader";
+import ModalForm from "@/components/ModalForm";
+import SearchInput from "@/components/SearchInput";
+import WithPage from "@/components/WithPage";
+import ZebraTable from "@/components/ZebraTable";
+import ImportUserExcel from "@/components/ImportUserExcel";
+import ChwTagSelector from "@/components/ChwTagSelector";
 import useQueryParam from "@/hooks/useQueryParam";
 import { useUserStore } from "@/store/user";
 

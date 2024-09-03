@@ -6,7 +6,8 @@ import { Button, DatePicker, Form, Select } from "antd";
 import { useTranslation } from "react-i18next";
 import { DownloadOutlined } from "@ant-design/icons";
 
-import { Iconfont, ModalForm } from "../components";
+import Iconfont from "@/components/Iconfont";
+import ModalForm from "@/components/ModalForm";
 import Rules from "../constants/rules";
 import { useBoolState } from "../utils";
 import LogoImage from "../assets/logo.png";

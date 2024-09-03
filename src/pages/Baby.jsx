@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import { Modal, Form, Button, Space, Input, Radio, message, Tooltip } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, Form, Input, message, Modal, Radio, Space, Tooltip } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
 import dateUtils from "../utils/dateUtils";
-import { useFetch, useBoolState } from "../utils";
-import { Gender, BabyStage, FamilyTies, FeedingPattern, VisitStatus } from "../constants/enums";
-import {
-  Card,
-  ZebraTable,
-  BabyModalForm,
-  StaticField,
-  ModalForm,
-  DetailHeader,
-  DeleteConfirmModal,
-  SelectEnum,
-  BabyReviewBar,
-  AssignModalTable,
-  WithPage,
-} from "../components";
+import { useBoolState, useFetch } from "../utils";
+import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "../constants/enums";
+import Card from "@/components/Card";
+import ZebraTable from "@/components/ZebraTable";
+import BabyModalForm from "@/components/BabyModalForm";
+import StaticField from "@/components/StaticField";
+import ModalForm from "@/components/ModalForm";
+import DetailHeader from "@/components/DetailHeader";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal";
+import SelectEnum from "@/components/SelectEnum";
+import BabyReviewBar from "@/components/BabyReviewBar";
+import AssignModalTable from "@/components/AssignModalTable";
+import WithPage from "@/components/WithPage";
 import styled from "styled-components";
+
 const { confirm } = Modal;
 
 export default function Baby() {

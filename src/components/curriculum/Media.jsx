@@ -5,7 +5,8 @@ import { Upload } from "antd";
 import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
-import { GhostInput, UploadButton } from "..";
+import GhostInput from "../GhostInput";
+import UploadButton from "../UploadButton";
 import { fileFormat } from "../../utils";
 
 export default function Media({ name, value, onChange, ...props }) {
