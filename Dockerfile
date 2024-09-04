@@ -7,7 +7,7 @@ RUN NODE_OPTIONS=--openssl-legacy-provider yarn build
 
 FROM nginx:stable-alpine
 
-COPY --from=builder /app/build /data/www
+COPY --from=builder /app/dist /data/www
 COPY --from=builder /app/etc/nginx /etc/nginx
 
 EXPOSE 3000

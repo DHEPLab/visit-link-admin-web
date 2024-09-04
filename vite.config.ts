@@ -8,7 +8,6 @@ export default defineConfig({
   publicDir: "./public",
   plugins: [react(), tsconfigPaths()],
   build: {
-    outDir: "build",
     emptyOutDir: true,
     rollupOptions: {
       output: {

@@ -9,7 +9,7 @@ export default mergeConfig(
       environment: "jsdom",
       coverage: {
         reporter: ["html", "text", "json", "lcov"],
-        exclude: ["build", "scripts", "src/models/**", "**/__mocks__/**", ...coverageConfigDefaults.exclude],
+        exclude: ["dist", "scripts", "src/models/**", "**/__mocks__/**", ...coverageConfigDefaults.exclude],
       },
       setupFiles: ["./vitest-setup.js"],
     },
