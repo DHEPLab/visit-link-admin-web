@@ -1,4 +1,4 @@
-import { useNetworkStore } from "../network";
+import { useNetworkStore } from "./network";
 
 describe("Network store", () => {
   const { httpRequestStart, httpRequestEnd } = useNetworkStore.getState();

@@ -1,4 +1,4 @@
-import Curriculum from "../curriculum";
+import Curriculum from "./curriculum";
 
 it("should filter lesson by stage, start months, end months", () => {
   const lessons = [

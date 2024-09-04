@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as utils from "../index";
+import * as utils from "./index";
 import { renderHook, act, waitFor } from "@testing-library/react";
 
 vi.mock("axios");

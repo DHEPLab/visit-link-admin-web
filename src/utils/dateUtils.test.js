@@ -1,4 +1,4 @@
-import dateUtils from "../dateUtils";
+import dateUtils from "./dateUtils";
 import { mockDate, unmockDate } from "proxy-date";
 
 describe("Date Utils", () => {

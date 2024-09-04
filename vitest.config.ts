@@ -1,4 +1,4 @@
-import { defineConfig, mergeConfig } from "vitest/config";
+import { coverageConfigDefaults, defineConfig, mergeConfig } from "vitest/config";
 import viteConfig from "./vite.config";
 
 export default mergeConfig(
@@ -8,10 +8,10 @@ export default mergeConfig(
       globals: true,
       environment: "jsdom",
       coverage: {
-        reporter: ["html", "text", "json", "lcov"]
+        reporter: ["html", "text", "json", "lcov"],
+        exclude: ["build", "scripts", "src/models/**", "**/__mocks__/**", ...coverageConfigDefaults.exclude],
       },
       setupFiles: ["./vitest-setup.js"],
-      exclude: ["**/node_modules/**", "**/dist/**", "**/.{idea,git,cache,output,temp}/**", "./src/config/**"],
     },
-  })
+  }),
 );

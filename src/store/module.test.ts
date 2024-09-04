@@ -1,4 +1,4 @@
-import { useModuleStore } from "../module";
+import { useModuleStore } from "./module";
 
 describe("Module store", () => {
   const { moduleFinishActionOptions } = useModuleStore.getState();
