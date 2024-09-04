@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const KEY = "HEALTHY_FUTURE_JWT";
+const KEY = "VISIT_LINK_JWT";
 
 export function applyToken(token) {
   if (token) {
