@@ -1,6 +1,5 @@
 import { useBoolState } from "@/utils";
 import React, { useState } from "react";
-import lodashPullAt from "lodash.pullat";
 
 export default function withEdit(Wrapper) {
   return function (props) {
@@ -10,13 +9,13 @@ export default function withEdit(Wrapper) {
 
     function pullAt(array, index) {
       const clone = [...array];
-      lodashPullAt(clone, [index]);
+      clone.splice(index, 1);
       return clone;
     }
 
     function replace(array, index, object) {
       const clone = [...array];
-      clone[index] = object;
+      clone.splice(index, 1, object);
       return clone;
     }
 
