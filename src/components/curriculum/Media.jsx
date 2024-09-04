@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import Container from "./Container";
 import GhostInput from "../GhostInput";
 import UploadButton from "../UploadButton";
-import { fileFormat } from "../../utils";
 
 export default function Media({ name, value, onChange, ...props }) {
   const [text, setText] = useState(value.text);
@@ -40,7 +39,7 @@ export default function Media({ name, value, onChange, ...props }) {
       axios
         .get("/admin/files/upload-pre-signed-url", {
           params: {
-            format: fileFormat(file),
+            format: file.name ? file.name.split(".").pop().toLowerCase() : undefined,
           },
         })
         .then(({ data: { url } }) => {
