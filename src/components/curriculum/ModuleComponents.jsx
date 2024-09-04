@@ -9,7 +9,7 @@ import ComponentField from "./ComponentField";
 import Iconfont from "../Iconfont";
 import Card from "../Card";
 import { useTranslation } from "react-i18next";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "radash";
 
 export function handleMoveUp(helpers, index, focus, setFocus) {
   if (index === 0) return;
@@ -119,10 +119,10 @@ function ToolBar({ readonly, helpers, focus, setFocus }) {
 }
 
 function stickyScrollListener(offsetTop, onChangeStickyTop) {
-  const onScroll = debounce((event) => {
+  const onScroll = debounce({ delay: 100 }, (event) => {
     const diffTop = event.target.scrollTop - offsetTop;
     onChangeStickyTop(diffTop > 0 ? diffTop : 0);
-  }, 100);
+  });
   document.getElementById("route-view").addEventListener("scroll", onScroll);
   return () => {
     document.getElementById("route-view").removeEventListener("scroll", onScroll);

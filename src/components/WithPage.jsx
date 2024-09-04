@@ -1,7 +1,7 @@
 // Higer-Order Component to enhance the paging
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "radash";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -97,7 +97,7 @@ export default function withPage(
       };
     }
 
-    const debounceChangeSearch = debounce((key, value) => {
+    const debounceChangeSearch = debounce({ delay: 400 }, (key, value) => {
       setSearch((s) => {
         const newParams = { ...s, page: 0, [key]: value };
         if (value === "") {
@@ -105,7 +105,7 @@ export default function withPage(
         }
         return newParams;
       });
-    }, 400);
+    });
 
     function handleChangePage({ current }) {
       setSearch((s) => ({

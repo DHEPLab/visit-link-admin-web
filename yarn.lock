@@ -2812,6 +2812,11 @@ quill@^2.0.2:
     parchment "^3.0.0"
     quill-delta "^5.1.0"
 
+radash@^12.1.0:
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-12.1.0.tgz#a15a5d745bfe3c3a6428148a606000aefd238560"
+  integrity sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==
+
 rc-cascader@~3.27.0:
   version "3.27.0"
   resolved "https://registry.yarnpkg.com/rc-cascader/-/rc-cascader-3.27.0.tgz#efb1a3c20e0d834b5b0b0b5dd3a9abf16ffa3860"

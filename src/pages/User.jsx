@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "radash";
 import { Button, Form, Input, Modal, Select, Space } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -191,7 +191,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
     }
   }, [visible, form]);
 
-  const debounceSearch = debounce((search) => {
+  const debounceSearch = debounce({ delay: 400 }, (search) => {
     axios
       .get("/admin/users/chw", {
         params: {
@@ -200,7 +200,7 @@ function CloseChwAccountModal({ id, visible, isBabiesEmpty, onCancel, onFinish }
         },
       })
       .then((response) => setOptions(response.data.content));
-  }, 400);
+  });
 
   return (
     <Modal
@@ -521,7 +521,7 @@ function NotAssignedChwModal({ id, visible, onCancel, onFinish }) {
     onCancel();
   }
 
-  const debounceRefresh = debounce((_, search) => refresh({ search }), 400);
+  const debounceRefresh = debounce({ delay: 400 }, (_, search) => refresh({ search }));
 
   return (
     <AssignModalTable

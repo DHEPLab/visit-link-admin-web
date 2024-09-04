@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useQuill } from "@/hooks/useQuill";
 import "quill/dist/quill.snow.css";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "radash";
 import { useTranslation } from "react-i18next";
 
 import Container from "./Container";
@@ -74,7 +74,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     Quill.register("modules/clipboard", PlainClipboard, true);
   }
 
-  const debouncedOnChange = debounce(onChange(Name.html), 1000);
+  const debouncedOnChange = debounce({ delay: 1000 }, onChange(Name.html));
   React.useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value.html);
