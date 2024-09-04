@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import i18next from "../i18n";
 import Rules from "../constants/rules";
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import { Role } from "../constants/enums";
 import CardTabs from "@/components/CardTabs";
 import ContentHeader from "@/components/ContentHeader";

@@ -29,16 +29,3 @@ it("should manual fetch resource", async () => {
     expect(data).toBe(3);
   });
 });
-
-it("should use bool state", async () => {
-  const { result } = renderHook(() => utils.useBoolState());
-  const [, setTrue, setFalse] = result.current;
-  act(() => {
-    setTrue();
-  });
-  expect(result.current[0]).toBeTruthy();
-  act(() => {
-    setFalse();
-  });
-  expect(result.current[0]).toBeFalsy();
-});

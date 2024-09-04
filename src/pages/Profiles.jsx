@@ -6,7 +6,7 @@ import { Button, Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import { Role } from "../constants/enums";
 import { clearToken } from "../utils/token";
 import Card from "@/components/Card";

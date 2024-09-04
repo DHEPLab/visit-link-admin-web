@@ -6,7 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
-import { useBoolState, useFetch } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
+import { useFetch } from "../utils";
 import { Gender, Role } from "../constants/enums";
 import Card from "@/components/Card";
 import ZebraTable from "@/components/ZebraTable";

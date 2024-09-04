@@ -41,14 +41,3 @@ export function fileFormat(file) {
   const array = file.name.split(".");
   return array[array.length - 1];
 }
-
-export function useBoolState(initialState = false) {
-  const [bool, setBool] = useState(initialState);
-  const setBoolTrue = () => {
-    setBool(true);
-  };
-  const setBoolFalse = () => {
-    setBool(false);
-  };
-  return [bool, setBoolTrue, setBoolFalse];
-}

@@ -1,4 +1,4 @@
-import { useBoolState } from "@/utils";
+import useBoolState from "@/hooks/useBoolState";
 import React, { useState } from "react";
 
 export default function withEdit(Wrapper) {

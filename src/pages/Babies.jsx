@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, Modal, Space } from "antd";
 
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import { ActionFromApp, Gender } from "../constants/enums";
 import WithPage from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";

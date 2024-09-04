@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Gender } from "../constants/enums";
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import StatusTag from "@/components/StatusTag";
 import WithPage from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import { Space, Button, Modal } from "antd";
 
 export default function DeleteConfirmModal(props) {

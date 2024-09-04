@@ -9,7 +9,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import Iconfont from "@/components/Iconfont";
 import ModalForm from "@/components/ModalForm";
 import Rules from "../constants/rules";
-import { useBoolState } from "../utils";
+import useBoolState from "@/hooks/useBoolState";
 import LogoImage from "../assets/logo.png";
 import { useUserStore } from "@/store/user";
 
