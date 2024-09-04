@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import React, { useCallback, useEffect } from "react";
+import React, { Suspense, useCallback, useEffect } from "react";
 import axios from "axios";
 import { clearToken } from "@/utils/token";
 import Header from "@/components/Header";
@@ -9,6 +9,7 @@ import Message from "@/components/Message";
 import { Role } from "@/constants/enums";
 import styled from "styled-components";
 import { useUserStore } from "@/store/user";
+import { Flex, Spin } from "antd";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -41,9 +42,17 @@ const Layout = () => {
       <Header username={user.realName} role={Role[user.role]} onNavigate={navigate} onLogout={handleLogout} />
       <RouteContainer>
         <Menu />
-        <Main id="route-view">
-          <Outlet />
-        </Main>
+        <Suspense
+          fallback={
+            <Flex align="center" justify="center" style={{ width: "100%" }}>
+              <Spin size="large" />
+            </Flex>
+          }
+        >
+          <Main id="route-view">
+            <Outlet />
+          </Main>
+        </Suspense>
       </RouteContainer>
     </>
   );
