@@ -52,8 +52,3 @@ export function useBoolState(initialState = false) {
   };
   return [bool, setBoolTrue, setBoolFalse];
 }
-
-// return file path without query params
-export function cleanQueryParams(path) {
-  return path.split("?")[0];
-}

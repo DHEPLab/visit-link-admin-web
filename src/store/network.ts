@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { middlewares } from "./middlewares";
-import { cleanQueryParams } from "@/utils";
 
 interface NetworkState {
   total: number;
@@ -18,7 +17,7 @@ export const useNetworkStore = create<NetworkState>()(
       requests: {},
       httpRequestStart: (url: string) =>
         set((state) => {
-          const path = cleanQueryParams(url);
+          const path = new URL(url, window.location.origin).pathname;
           return {
             total: state.total + 1,
             requests: {
@@ -29,7 +28,7 @@ export const useNetworkStore = create<NetworkState>()(
         }),
       httpRequestEnd: (url: string) =>
         set((state) => {
-          const path = cleanQueryParams(url);
+          const path = new URL(url, window.location.origin).pathname;
           return {
             total: state.total - 1,
             requests: {
