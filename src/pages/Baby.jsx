@@ -87,7 +87,7 @@ export default function Baby() {
       title: t("rejectTitle"),
       content: t("rejectContent"),
       onOk() {
-        Axios.put(`/admin/babies/${id}/reject`, baby).then(() => {
+        axios.put(`/admin/babies/${id}/reject`, baby).then(() => {
           refresh();
         });
       },
@@ -96,34 +96,34 @@ export default function Baby() {
   }
 
   function handleApproveCreateFinish(values) {
-    Axios.put(`/admin/babies/${id}/approve`, values).then(() => {
+    axios.put(`/admin/babies/${id}/approve`, values).then(() => {
       closeApproveCreateModal();
       refresh();
     });
   }
 
   function handleApproveModifyFinish() {
-    Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
+    axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
       closeApproveModifyModal();
       refresh();
     });
   }
 
   function handleApproveDeleteFinish() {
-    Axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
+    axios.put(`/admin/babies/${id}/approve`, {}).then(() => {
       closeApproveDeleteModal();
       navigate(-1);
     });
   }
 
   function handleCloseAccount({ reason }) {
-    Axios.delete(`/admin/babies/${id}?reason=${reason}`).then(() => {
+    axios.delete(`/admin/babies/${id}?reason=${reason}`).then(() => {
       navigate(-1);
     });
   }
 
   function handleRevertAccount() {
-    Axios.put(`/admin/babies/${id}/revert`).then(() => {
+    axios.put(`/admin/babies/${id}/revert`).then(() => {
       closeRevertAccountModal();
       refresh();
     });
@@ -132,7 +132,7 @@ export default function Baby() {
   function handleChangeChw(selected) {
     if (selected.length === 0) return message.warning(t("noSelectedChwWarning"));
     const [userId] = selected;
-    Axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
+    axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
       closeChangeChwModal();
       refresh();
     });
@@ -158,7 +158,7 @@ export default function Baby() {
   }
 
   function resetLocation() {
-    Axios.post(`/admin/babies/reset/location/${id}`).then(() => {
+    axios.post(`/admin/babies/reset/location/${id}`).then(() => {
       message.success(t("locationCorrectSuccessfully"));
       refresh();
     });
@@ -652,14 +652,14 @@ function Carers({ babyId, deleted, onModify }) {
 
   async function handleDelete({ id, master }) {
     if (master) return message.warning(t("deleteMasterWarning"));
-    await Axios.delete(`/admin/carers/${id}`);
+    await axios.delete(`/admin/carers/${id}`);
     refresh();
   }
 
   async function submit(values) {
     const { id } = carer;
     const method = id ? "put" : "post";
-    await Axios[method](`/admin/carers${id ? `/${id}` : ""}`, {
+    await axios[method](`/admin/carers${id ? `/${id}` : ""}`, {
       baby: {
         id: babyId,
       },
