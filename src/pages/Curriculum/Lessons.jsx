@@ -6,7 +6,7 @@ import Card from "@/components/Card";
 import { Button, Form, Input, Select, Space, Tooltip } from "antd";
 import ModalForm from "@/components/ModalForm";
 import Rules from "@/constants/rules";
-import CurriculumUtils from "@/utils/curriculum";
+import { validateLessonNumber } from "./utils";
 import RadioEnum from "@/components/RadioEnum";
 import ZebraTable from "@/components/ZebraTable";
 import { CurriculumBabyStage } from "@/constants/enums";
@@ -150,11 +150,7 @@ function Lessons({
               validator(_, number) {
                 if (
                   !number ||
-                  CurriculumUtils.validateLessonNumber(
-                    value,
-                    number,
-                    currentEditIndex === -1 ? null : value[currentEditIndex].number,
-                  )
+                  validateLessonNumber(value, number, currentEditIndex === -1 ? null : value[currentEditIndex].number)
                 ) {
                   return Promise.resolve();
                 }

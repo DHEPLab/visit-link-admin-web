@@ -1,15 +1,26 @@
-function filterLessons(lessons, stage, startDays, endDays) {
-  if (!stage || startDays == null || startDays === "" || endDays == null || endDays === "") return [];
+import { LessonFormValue } from "./schema/Lesson";
+import { ScheduleFormValue } from "./schema/Schedule";
+import { STAGE_TYPE } from "./schema/common";
+
+export function filterLessons(lessons: LessonFormValue[], stage: STAGE_TYPE, startDays?: number, endDays?: number) {
+  if (!stage || !startDays || !endDays) return [];
   return lessons.filter((lesson) => {
     return lesson.stage === stage && lesson.startOfApplicableDays >= startDays && lesson.endOfApplicableDays <= endDays;
   });
 }
 
-function validateLessonNumber(lessons, number, exclude) {
+export function validateLessonNumber(lessons: LessonFormValue[], number: string, exclude: string | null) {
   return !lessons.filter((item) => item.number !== exclude).find((item) => item.number === number);
 }
 
-function validateLessonDateRange(lessons, lesson) {
+type ValidateLessonDateRangeLesson = {
+  id?: number;
+  stage: STAGE_TYPE;
+  startOfApplicableDays: number;
+  endOfApplicableDays: number;
+};
+
+export function validateLessonDateRange(lessons: LessonFormValue[], lesson: ValidateLessonDateRangeLesson) {
   return !lessons
     .filter((item) => {
       const isAdd = item.id === undefined && lesson.id === undefined;
@@ -26,7 +37,7 @@ function validateLessonDateRange(lessons, lesson) {
     );
 }
 
-function cleanInvalidLessons(schedules, lessons) {
+export function cleanInvalidLessons(schedules: ScheduleFormValue[], lessons: LessonFormValue[]) {
   return schedules.map((schedule) => ({
     ...schedule,
     lessons: schedule.lessons.filter((domain) =>
@@ -36,10 +47,3 @@ function cleanInvalidLessons(schedules, lessons) {
     ),
   }));
 }
-
-export default {
-  filterLessons,
-  validateLessonNumber,
-  validateLessonDateRange,
-  cleanInvalidLessons,
-};

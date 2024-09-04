@@ -4,7 +4,7 @@ import { Button, Form, Input, Select, Space } from "antd";
 import ModalForm from "@/components/ModalForm";
 import Rules from "@/constants/rules";
 import RadioEnum from "@/components/RadioEnum";
-import CurriculumUtils from "@/utils/curriculum";
+import { filterLessons } from "./utils";
 import ZebraTable from "@/components/ZebraTable";
 import { CurriculumBabyStage } from "@/constants/enums";
 import React from "react";
@@ -115,12 +115,10 @@ function Schedules({
             const stage = getFieldValue("stage");
             const startMonths = getFieldValue("startOfApplicableDays");
             const endMonths = getFieldValue("endOfApplicableDays");
-            const lessonsOptions = CurriculumUtils.filterLessons(lessonOptions, stage, startMonths, endMonths).map(
-              (lesson) => ({
-                label: lesson.number,
-                value: lesson.number,
-              }),
-            );
+            const lessonsOptions = filterLessons(lessonOptions, stage, startMonths, endMonths).map((lesson) => ({
+              label: lesson.number,
+              value: lesson.number,
+            }));
             const lessonArr = (currentEditValue.lessons || []).filter((a) =>
               lessonsOptions.filter((b) => a.value === b.value),
             );

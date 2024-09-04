@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Form, InputNumber } from "antd";
-import CurriculumUtils from "@/utils/curriculum";
+import { validateLessonDateRange } from "./utils";
 import styled from "styled-components";
 import React from "react";
 
@@ -37,7 +37,7 @@ export default function ApplicableDays({ value, currentEditValue }) {
                       startOfApplicableDays = Number(startOfApplicableDays);
                       if (
                         !startOfApplicableDays ||
-                        CurriculumUtils.validateLessonDateRange(value, {
+                        validateLessonDateRange(value, {
                           id: currentEditValue.id,
                           stage,
                           endOfApplicableDays,
@@ -84,7 +84,7 @@ export default function ApplicableDays({ value, currentEditValue }) {
                       endOfApplicableDays = Number(endOfApplicableDays);
                       if (
                         !endOfApplicableDays ||
-                        CurriculumUtils.validateLessonDateRange(value, {
+                        validateLessonDateRange(value, {
                           id: currentEditValue.id,
                           stage,
                           startOfApplicableDays,

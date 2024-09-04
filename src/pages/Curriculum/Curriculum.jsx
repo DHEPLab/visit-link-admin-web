@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Input, message, Space } from "antd";
 
 import Rules from "@/constants/rules";
-import CurriculumUtils from "@/utils/curriculum";
+import { cleanInvalidLessons } from "./utils";
 import Card from "@/components/Card";
 import DetailHeader from "@/components/DetailHeader";
 import DraftBar from "@/components/DraftBar";
@@ -114,7 +114,7 @@ export default function Curriculum() {
 
   function onChangeLessons(_lessons) {
     setLessons(_lessons);
-    setSchedules(CurriculumUtils.cleanInvalidLessons(schedules, _lessons));
+    setSchedules(cleanInvalidLessons(schedules, _lessons));
   }
 
   usePrompt({
