@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
 import useBoolState from "@/hooks/useBoolState";
-import { useFetch } from "../utils";
+import useFetch from "@/hooks/useFetch";
 import { Gender, Role } from "../constants/enums";
 import Card from "@/components/Card";
 import ZebraTable from "@/components/ZebraTable";

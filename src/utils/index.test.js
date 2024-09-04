@@ -4,18 +4,6 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 
 vi.mock("axios");
 
-it("should fetch resource", async () => {
-  axios.get.mockResolvedValue({
-    data: 2,
-  });
-  const { result } = renderHook(() => utils.useFetch("/api/fake"));
-
-  await waitFor(() => {
-    const [data] = result.current;
-    expect(data).toBe(2);
-  });
-});
-
 it("should manual fetch resource", async () => {
   axios.get.mockResolvedValue({
     data: 3,
