@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, Popconfirm, Radio, Space } from "antd";
+import { Button, Col, Form, Input, Modal, Popconfirm, Radio, Row, Space } from "antd";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import Rules from "../constants/rules";
@@ -150,6 +150,7 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
   }, [values?.id]);
   return visible ? (
     <ModalForm
+      width={620}
       title={values?.id ? t("editProject") : t("createProject")}
       visible={visible}
       initialValues={values}
@@ -171,18 +172,18 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
       </Form.Item>
       {values?.id && (
         <>
-          <div className="ant-row ant-form-item ant-space-align-center" style={{ display: "flex" }}>
-            <div className="ant-col ant-col-4 ant-col-offset-1 ant-form-item-label">
+          <Row>
+            <Col span={6}>
               <label>{t("adminUsername")}：</label>
-            </div>
-            <div className="ant-col ">{admin.name}</div>
-          </div>
-          <div className="ant-row ant-form-item ant-space-align-center" style={{ display: "flex" }}>
-            <div className="ant-col ant-col-1 ant-col-offset-1 ant-form-item-label">
+            </Col>
+            <Col>{admin.name}</Col>
+          </Row>
+          <Row>
+            <Col span={6}>
               <label>{t("adminPassword")}：</label>
-            </div>
-            <div className="ant-form-item-control-input-content">{admin.password}</div>
-          </div>
+            </Col>
+            <Col>{admin.password}</Col>
+          </Row>
         </>
       )}
     </ModalForm>
