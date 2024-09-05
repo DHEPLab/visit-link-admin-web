@@ -4,7 +4,7 @@ import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 
 describe("useFetch", () => {
-  const response = { message: "Hello" };
+  const response = { message: "from server" };
   const server = setupServer(
     http.get("/greeting", () => {
       return HttpResponse.json(response);
@@ -53,6 +53,28 @@ describe("useFetch", () => {
 
     await waitFor(() => {
       expect(result.current[0]).toEqual({ message: "request lang is ch" });
+    });
+  });
+
+  it("should not auto-fetch when manualFetch is true", async () => {
+    const dispatchRequest = vi.fn();
+    server.events.on("request:start", dispatchRequest);
+    const { result } = renderHook(() => useFetch("/greeting", {}, { message: "init value" }, true));
+
+    expect(result.current[0]).toEqual({ message: "init value" });
+
+    await waitFor(() => {
+      expect(result.current[0]).toEqual({ message: "init value" });
+      expect(dispatchRequest).not.toHaveBeenCalled();
+    });
+
+    act(() => {
+      result.current[1]();
+    });
+
+    await waitFor(() => {
+      expect(result.current[0]).toEqual(response);
+      expect(dispatchRequest).toHaveBeenCalledTimes(1);
     });
   });
 });

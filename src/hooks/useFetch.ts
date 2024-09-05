@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function useFetch<T>(url: string, params = {}, initialState: T = {} as T): [T, (search: any) => void] {
+export default function useFetch<T>(
+  url: string,
+  params = {},
+  initialState: T = {} as T,
+  manualFetch = false,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): [T, (search?: any) => void] {
   const [data, setData] = useState<T>(initialState);
 
   function load(search = {}) {
@@ -16,6 +21,10 @@ export default function useFetch<T>(url: string, params = {}, initialState: T = 
       .then((r) => setData(r.data));
   }
 
-  useEffect(load, []);
+  useEffect(() => {
+    if (!manualFetch) {
+      load();
+    }
+  }, []);
   return [data, load];
 }

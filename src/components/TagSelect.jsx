@@ -3,10 +3,10 @@ import axios from "axios";
 import styled from "styled-components";
 
 import { Select, Button } from "antd";
-import { useManualFetch } from "../utils";
+import useFetch from "@/hooks/useFetch";
 
 export default function TagSelect({ onChange, ...props }) {
-  const [options, refresh] = useManualFetch("/admin/tags", {}, []);
+  const [options, refresh] = useFetch("/admin/tags", {}, [], true);
 
   function handleDelete(option) {
     setTimeout(() => {
