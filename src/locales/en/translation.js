@@ -652,6 +652,12 @@ export default {
     passwordChangedSuccessfully: "Password Changed Successfully",
     deleteSuccessfully: "Delete Successfully",
   },
+  form: {
+    rules: {
+      nameInvalid: "Please enter 1-50 characters",
+      phoneInvalid: "Please enter 5-20 numbers",
+    },
+  },
   antd: {
     local: enUs,
   },

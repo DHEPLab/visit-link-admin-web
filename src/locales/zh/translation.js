@@ -640,6 +640,7 @@ export default {
     passwordChangedSuccessfully: "密码修改成功",
     deleteSuccessfully: "删除成功",
   },
+  // TODO: check this validation, where to use them
   validation: {
     sessionNumber: {
       required: "Please enter session number",
@@ -658,6 +659,12 @@ export default {
     },
     modulesIncluded: {
       required: "Please enter module(s) included",
+    },
+  },
+  form: {
+    rules: {
+      nameInvalid: "请输入1-50个字符",
+      phoneInvalid: "请输入5-20位手机号码",
     },
   },
   antd: {
