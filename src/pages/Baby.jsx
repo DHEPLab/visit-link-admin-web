@@ -7,7 +7,6 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 import Rules from "../constants/rules";
-import dateUtils from "../utils/dateUtils";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
 import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "../constants/enums";
@@ -535,7 +534,7 @@ function Visits({ babyId }) {
             title: t("visitTime"),
             dataIndex: "visitTime",
             width: 280,
-            render: (h) => dateUtils.formatDateTimeCN(h),
+            render: (h) => dayjs(h).format("LLLL"),
           },
           {
             title: t("sessionContent"),
