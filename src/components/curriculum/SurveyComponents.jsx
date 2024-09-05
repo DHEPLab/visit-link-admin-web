@@ -36,9 +36,9 @@ export function handleRemove(helpers, index, focus, setFocus) {
   }
 }
 
-export function insertComponent(length, helpers, component, focus, setFocus) {
+export function insertComponent(length, helpers, component, focus, setFocus, warningText) {
   if (length > 20) {
-    message.warning("题目数量最多添加二十个！");
+    message.warning(warningText);
     return;
   }
   if (focus === -1) {
@@ -81,7 +81,14 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                       <Button
                         type="primary"
                         onClick={() =>
-                          insertComponent(value.length, helpers, Factory.createQuestionText(), focus, setFocus)
+                          insertComponent(
+                            value.length,
+                            helpers,
+                            Factory.createQuestionText(),
+                            focus,
+                            setFocus,
+                            t("maxQuestions"),
+                          )
                         }
                       >
                         <Iconfont type="iconquestion-text" /> {t("addTextQuestion")}
@@ -89,7 +96,14 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                       <Button
                         type="primary"
                         onClick={() =>
-                          insertComponent(value.length, helpers, Factory.createQuestionRadio(), focus, setFocus)
+                          insertComponent(
+                            value.length,
+                            helpers,
+                            Factory.createQuestionRadio(),
+                            focus,
+                            setFocus,
+                            t("maxQuestions"),
+                          )
                         }
                       >
                         <Iconfont type="iconquestion-radio" /> {t("addSingleChoiceQuestion")}
@@ -97,7 +111,14 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                       <Button
                         type="primary"
                         onClick={() =>
-                          insertComponent(value.length, helpers, Factory.createQuestionCheckbox(), focus, setFocus)
+                          insertComponent(
+                            value.length,
+                            helpers,
+                            Factory.createQuestionCheckbox(),
+                            focus,
+                            setFocus,
+                            t("maxQuestions"),
+                          )
                         }
                       >
                         <Iconfont type="iconquestion-checkbox" /> {t("addMultipleChoiceQuestion")}

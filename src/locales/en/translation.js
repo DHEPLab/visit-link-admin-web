@@ -591,6 +591,7 @@ export default {
     addTextQuestion: "Add Text Question",
     addSingleChoiceQuestion: "Add Single Choice Question",
     addMultipleChoiceQuestion: "Add Multiple Choice Question",
+    maxQuestions: "The number of questions should be no more than 20!",
   },
   switch: {
     choiceComponent: "Choice Component",

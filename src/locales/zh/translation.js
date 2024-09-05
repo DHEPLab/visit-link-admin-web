@@ -580,6 +580,7 @@ export default {
     addTextQuestion: "添加文本问题",
     addSingleChoiceQuestion: "添加单选问题",
     addMultipleChoiceQuestion: "添加多选问题",
+    maxQuestions: "题目数量最多添加二十个！",
   },
   switch: {
     choiceComponent: "选择组件",
