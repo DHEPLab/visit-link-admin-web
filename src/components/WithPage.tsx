@@ -1,47 +1,50 @@
-// Higer-Order Component to enhance the paging
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { debounce } from "radash";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 
-// first page start at 0
-const page = 0;
-// default page size
-const size = 10;
+interface SearchValues {
+  page?: number;
+  size?: number;
+  search?: string;
+}
 
-/**
- * A higher-order component (HOC) that wraps a given React component and handles
- * data loading based on an API request. The data can be loaded on mount or triggered
- * manually based on the `loadOnMount` flag.
- *
- * @param {React.ComponentType} WrapperComponent - The React component to be wrapped.
- * @param {string} [url] - The API request URL for fetching data.
- * @param {Object} [params] - The optional parameters for the API request.
- * @param {boolean} [loadOnMount=true] - A flag indicating whether the data should be loaded when the component mounts.
- *
- * @returns {React.ComponentType} - A new React component that wraps the provided `WrapperComponent`.
- */
-export default function withPage(
-  WrapperComponent,
-  // api request url
-  url,
-  // api request params
-  params,
+interface Pagination {
+  showSizeChanger: boolean;
+  pageSize: number;
+  current: number;
+  total: number;
+  showTotal: (total: number) => string;
+}
+
+export interface WithPageProps {
+  loading: boolean;
+  historyPageState?: SearchValues;
+  pagination: Pagination;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dataSource: any[];
+  loadData: VoidFunction;
+  onChangeLoadURL: (url: string) => void;
+  onChangeSearch: (key: string, value: string | null) => void;
+  onChangePage: (pagination: { current?: number }) => void;
+  onChange: (pagination: { current?: number }) => void;
+}
+
+const defaultSearchValues: SearchValues = { page: 0, size: 10 };
+
+export default function withPage<T extends WithPageProps>(
+  WrapperComponent: React.ComponentType<T>,
+  apiRequestUrl: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  apiRequestParams: Record<string, any>,
   loadOnMount = true,
 ) {
-  return function (props) {
-    const { t } = useTranslation(["common"]);
+  return function (props: Omit<T, keyof WithPageProps>): JSX.Element {
     const location = useLocation();
     const navigate = useNavigate();
-    const historyPageState = location.state?.page?.[url];
-    const [search, setSearch] = useState(
-      historyPageState || {
-        page,
-        size,
-      },
-    );
-    const [requestURL, setRequestURL] = useState(url);
+    const historyPageState = location.state?.page?.[apiRequestUrl] as SearchValues;
+    const [search, setSearch] = useState<SearchValues>(historyPageState || defaultSearchValues);
+    const [requestURL, setRequestURL] = useState(apiRequestUrl);
     const [totalElements, setTotalElements] = useState(0);
     const [content, setContent] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -50,7 +53,7 @@ export default function withPage(
       if (!requestURL) return;
       const newParams = {
         ...search,
-        ...params,
+        ...apiRequestParams,
       };
       setLoading(true);
       axios
@@ -67,7 +70,7 @@ export default function withPage(
             state: {
               page: {
                 ...(hPageState || {}),
-                [url]: newParams,
+                [apiRequestUrl]: newParams,
               },
             },
           });
@@ -83,44 +86,38 @@ export default function withPage(
 
     function pagination() {
       return {
-        // 是否展示 pageSize 切换器，当 total 大于 50 时默认为 true
         showSizeChanger: false,
-        pageSize: size,
-        current: search.page + 1,
+        pageSize: defaultSearchValues.size,
+        current: (search.page ?? 0) + 1,
         total: totalElements,
-        showTotal(total) {
-          return `${t("total")} ${total} ${t("unit.item")}`;
-        },
       };
     }
 
-    const debounceChangeSearch = debounce({ delay: 400 }, (key, value) => {
+    const debounceChangeSearch = debounce({ delay: 400 }, (key: string, value: string | number | null) => {
       setSearch((s) => {
         const newParams = { ...s, page: 0, [key]: value };
         if (value === "") {
-          delete newParams[key];
+          delete newParams[key as keyof SearchValues];
         }
         return newParams;
       });
     });
 
-    function handleChangePage({ current }) {
+    function handleChangePage({ current }: { current: number }) {
       setSearch((s) => ({
         ...s,
         page: current - 1,
       }));
     }
 
-    function handleChangeLoadURL(url) {
+    function handleChangeLoadURL(url: string) {
       setRequestURL(url);
-      setSearch({
-        page,
-        size,
-      });
+      setSearch(defaultSearchValues);
     }
 
     return (
       <WrapperComponent
+        {...(props as T)}
         loading={loading}
         historyPageState={historyPageState}
         pagination={pagination()}
@@ -130,7 +127,6 @@ export default function withPage(
         onChangeSearch={debounceChangeSearch}
         onChangePage={handleChangePage}
         onChange={handleChangePage}
-        {...props}
       />
     );
   };
