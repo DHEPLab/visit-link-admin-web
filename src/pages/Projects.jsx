@@ -8,6 +8,14 @@ import ContentHeader from "../components/ContentHeader";
 import ZebraTable from "../components/ZebraTable";
 import StatusTag from "../components/StatusTag";
 import ModalForm from "../components/ModalForm";
+import styled from "@emotion/styled";
+
+const Label = styled.label`
+  display: inline-block;
+  width: 100%;
+  padding-right: 4px;
+  text-align: end;
+`;
 
 export default function Projects() {
   const { t } = useTranslation("project", "menu", "common");
@@ -150,7 +158,7 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
   }, [values?.id]);
   return visible ? (
     <ModalForm
-      width={620}
+      width={630}
       title={values?.id ? t("editProject") : t("createProject")}
       visible={visible}
       initialValues={values}
@@ -173,14 +181,14 @@ function ProjectModalForm({ visible, values, onCancel, onFinish }) {
       {values?.id && (
         <>
           <Row>
-            <Col span={6}>
-              <label>{t("adminUsername")}：</label>
+            <Col span={6} flex={{}}>
+              <Label>{t("adminUsername")}：</Label>
             </Col>
             <Col>{admin.name}</Col>
           </Row>
           <Row>
             <Col span={6}>
-              <label>{t("adminPassword")}：</label>
+              <Label>{t("adminPassword")}：</Label>
             </Col>
             <Col>{admin.password}</Col>
           </Row>
