@@ -12,7 +12,6 @@ import DraftBar from "@/components/DraftBar";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
-import i18n from "@/i18n";
 import Schedules from "./Schedules";
 import Lessons from "./Lessons";
 import ReadonlyForm from "./ReadonlyForm";
@@ -186,7 +185,7 @@ export default function Curriculum() {
           <Form
             data-testid="basic-form"
             form={form}
-            labelCol={{ span: i18n.resolvedLanguage === "zh" ? 2 : 5 }}
+            labelCol={{ span: 5 }}
             onFinish={onFinish}
             validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
           >

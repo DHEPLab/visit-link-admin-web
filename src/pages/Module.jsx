@@ -18,7 +18,6 @@ import StaticField from "@/components/StaticField";
 import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
 import styled from "styled-components";
-import i18n from "@/i18n";
 import { useModuleStore } from "@/store/module";
 
 const CustomSelectorWrapper = styled.div`
@@ -254,12 +253,7 @@ export default function Module() {
                 {readonly ? (
                   <ReadonlyForm value={module} />
                 ) : (
-                  <Form
-                    data-testid="basic-form"
-                    labelCol={{ span: i18n.resolvedLanguage === "zh" ? 3 : 6 }}
-                    form={form}
-                    onFinish={onSubmit}
-                  >
+                  <Form data-testid="basic-form" labelCol={{ span: 6 }} form={form} onFinish={onSubmit}>
                     <Form.Item
                       label={t("moduleName")}
                       name="name"
@@ -330,19 +324,19 @@ export default function Module() {
 
 function ReadonlyForm({ value }) {
   const { t } = useTranslation("module");
-  const labelWidth = i18n.resolvedLanguage === "zh" ? 80 : 150;
+
   return (
     <div data-testid="readonly-form">
-      <StaticField label={t("moduleName")} labelStyle={{ width: labelWidth }}>
+      <StaticField label={t("moduleName")} labelStyle={{ width: 150 }}>
         {value.name}
       </StaticField>
-      <StaticField label={t("moduleNumber")} labelStyle={{ width: labelWidth }}>
+      <StaticField label={t("moduleNumber")} labelStyle={{ width: 150 }}>
         {value.number}
       </StaticField>
-      <StaticField label={t("moduleDescription")} labelStyle={{ width: labelWidth }}>
+      <StaticField label={t("moduleDescription")} labelStyle={{ width: 150 }}>
         {value.description}
       </StaticField>
-      <StaticField label={t("moduleTheme")} labelStyle={{ width: labelWidth }}>
+      <StaticField label={t("moduleTheme")} labelStyle={{ width: 150 }}>
         {t(ModuleTopic[value.topic])}
       </StaticField>
     </div>
