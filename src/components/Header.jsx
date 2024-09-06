@@ -28,11 +28,11 @@ export default function Header({ username, role, onNavigate, onLogout }) {
         const params = `startDay=${values?.range[0].format("YYYY-MM-DD")}&endDay=${values?.range[1].format(
           "YYYY-MM-DD",
         )}`;
-        download(`/admin/report?${params}`, "visit");
+        download(`/admin/report?${params}`, "completed_visits");
         break;
       }
       case "visit2":
-        download("/api/visits/notStartVisit", "not finished visit");
+        download("/api/visits/notStartVisit", "incomplete_visits");
         break;
       case "chw":
         download("/admin/report/chwReport", "chw");
