@@ -656,10 +656,8 @@ export default {
     deleteSuccessfully: "Delete Successfully",
   },
   form: {
-    rules: {
-      nameInvalid: "Only allow 1-50 characters without special characters",
-      phoneInvalid: "Please enter 5-20 numbers",
-    },
+    nameInvalid: "Only allow 1-50 characters without special characters",
+    phoneInvalid: "Please enter 5-20 numbers",
   },
   antd: {
     local: enUs,

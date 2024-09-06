@@ -665,10 +665,8 @@ export default {
     },
   },
   form: {
-    rules: {
-      nameInvalid: "请输入1-50个字符",
-      phoneInvalid: "请输入5-20位手机号码",
-    },
+    nameInvalid: "请输入1-50个字符",
+    phoneInvalid: "请输入5-20位手机号码",
   },
   antd: {
     local: zhCN,

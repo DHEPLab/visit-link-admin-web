@@ -4,6 +4,8 @@ import i18n from "@/i18n";
 const NAME_REGEX = /^[\p{L}\p{M}\p{Zs}’'·-]{1,50}$/u;
 const PHONE_REGEX = /^[0-9]{5,20}$/;
 
+const t = i18n.getFixedT(null, "form");
+
 // Notes:
 // Antd Rule use the rc-field-form, and the validateTrigger not work
 // It should config the validateTrigger prop on the Form.Item
@@ -12,12 +14,12 @@ const PHONE_REGEX = /^[0-9]{5,20}$/;
 const Rules: { [key: string]: Rule[] } = {
   Required: [{ required: true }],
   Password: [{ required: true, min: 6 }],
-  Phone: [{ required: true }, { pattern: PHONE_REGEX, message: i18n.t("rules.phoneInvalid", { ns: "form" }) }],
+  Phone: [{ required: true }, { pattern: PHONE_REGEX, message: t("phoneInvalid") }],
   RealName: [
     { required: true },
     {
       pattern: NAME_REGEX,
-      message: i18n.t("rules.nameInvalid", { ns: "form" }),
+      message: t("nameInvalid"),
     },
   ],
   Area: [
