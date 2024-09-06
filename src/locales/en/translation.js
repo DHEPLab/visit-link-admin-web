@@ -657,7 +657,7 @@ export default {
   },
   form: {
     nameInvalid: "Only allow 1-50 characters without special characters",
-    phoneInvalid: "Please enter 5-20 numbers",
+    phoneInvalid: "Only allow 5-20 numbers",
   },
   antd: {
     local: enUs,

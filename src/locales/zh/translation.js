@@ -665,8 +665,8 @@ export default {
     },
   },
   form: {
-    nameInvalid: "请输入1-50个字符",
-    phoneInvalid: "请输入5-20位手机号码",
+    nameInvalid: "只允许1-50个字符，不包含特殊字符",
+    phoneInvalid: "只允许5-20个数字",
   },
   antd: {
     local: zhCN,
