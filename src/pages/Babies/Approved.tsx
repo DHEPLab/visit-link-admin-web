@@ -14,13 +14,13 @@ import useTableSort from "./useTableSort";
 
 type ApprovedProps = ZebraTableProps &
   WithPageProps & {
-    tab: string;
+    refreshKey: number;
     navigate: NavigateFunction;
   };
 
 const Approved: React.FC<ApprovedProps> = ({
   historyPageState,
-  tab,
+  refreshKey,
   navigate,
   loadData,
   onChangeSearch,
@@ -29,10 +29,8 @@ const Approved: React.FC<ApprovedProps> = ({
 }) => {
   const { t } = useTranslation("babies");
   useEffect(() => {
-    if (tab === "approved") {
-      loadData();
-    }
-  }, [tab, loadData]);
+    loadData();
+  }, [refreshKey, loadData]);
 
   const { sorterFun } = useTableSort({ onChangePage, onChangeSearch });
 

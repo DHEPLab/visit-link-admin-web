@@ -1,29 +1,35 @@
-import React from "react";
 import dayjs from "dayjs";
 import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 
-import ModalForm from "./ModalForm";
-import Pcas from "../constants/pcas-code.json";
-import Rules from "../constants/rules";
-import { Gender, BabyStage, FeedingPattern } from "../constants/enums";
-import i18n from "../i18n";
+import ModalForm, { ModalFormProps } from "@/components/ModalForm";
+import Pcas from "@/constants/pcas-code.json";
+import Rules from "@/constants/rules";
+import { Gender, BabyStage, FeedingPattern, enumKeysIterator } from "@/constants/enums";
+import i18n from "@/i18n";
+import { disabledDateForEDC } from "./utils/dateLogic";
 
-export function useMethods() {
-  return {
-    disabledDateForEDC(date, baseline) {
-      if (!date) return false;
-      const start = dayjs(baseline).format("YYYY-MM-DD");
-      // days of edc is 280
-      const end = dayjs(baseline).add(280, "day").format("YYYY-MM-DD");
-      return !dayjs(dayjs(date).format("YYYY-MM-DD")).isBetween(start, end, undefined, "(]");
-    },
-  };
+export interface BabyModalFormValues {
+  name: string;
+  identity: string;
+  gender: string;
+  stage: "EDC" | "BIRTH";
+  edc?: string;
+  birthday?: string;
+  assistedFood?: boolean;
+  feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
+  area: string | string[];
+  location: string;
+  longitude?: number;
+  latitude?: number;
+  remark?: string;
 }
 
-export default function BabyModalForm({ disableStage, ...props }) {
+export type BabyModalFormProps = ModalFormProps<BabyModalFormValues> & { disableStage?: boolean };
+
+const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   const { t } = useTranslation("baby");
-  const { disabledDateForEDC } = useMethods();
+
   return (
     <ModalForm {...props} labelCol={{ span: 7 }} width={800}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
@@ -34,7 +40,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
       </Form.Item>
       <Form.Item label={t("gender")} name="gender" rules={Rules.Required}>
         <Radio.Group>
-          {Object.keys(Gender).map((key) => (
+          {enumKeysIterator(Gender).map((key) => (
             <Radio key={key} value={key}>
               {Gender[key]}
             </Radio>
@@ -43,7 +49,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
       </Form.Item>
       <Form.Item label={t("growthStage")} name="stage" rules={Rules.Required}>
         <Radio.Group>
-          {Object.keys(BabyStage).map((key) => (
+          {enumKeysIterator(BabyStage).map((key) => (
             <Radio key={key} value={key} disabled={disableStage}>
               {BabyStage[key]}
             </Radio>
@@ -76,7 +82,7 @@ export default function BabyModalForm({ disableStage, ...props }) {
                 </Form.Item>
                 <Form.Item label={t("feedingMethods")} name="feedingPattern" rules={Rules.Required}>
                   <Select>
-                    {Object.keys(FeedingPattern || []).map((key) => (
+                    {enumKeysIterator(FeedingPattern).map((key) => (
                       <Select.Option key={key} value={key}>
                         {FeedingPattern[key]}
                       </Select.Option>
@@ -117,4 +123,6 @@ export default function BabyModalForm({ disableStage, ...props }) {
       </Form.Item>
     </ModalForm>
   );
-}
+};
+
+export default BabyModalForm;
