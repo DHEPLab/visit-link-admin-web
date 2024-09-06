@@ -657,7 +657,7 @@ export default {
   },
   form: {
     rules: {
-      nameInvalid: "Please enter 1-50 characters",
+      nameInvalid: "Only allow 1-50 characters without special characters",
       phoneInvalid: "Please enter 5-20 numbers",
     },
   },
