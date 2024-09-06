@@ -30,7 +30,8 @@ export default function DeleteConfirmModal(props) {
               {cancelText}
             </Button>
             <Button
-              type="danger"
+              danger
+              type="primary"
               onClick={() => {
                 closeModal();
                 onConfirm();
