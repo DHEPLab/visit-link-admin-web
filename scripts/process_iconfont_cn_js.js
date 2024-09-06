@@ -2,7 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import https from "node:https";
 
-// Usage: node ./scripts/process_fonticon_cn_js.js --res=https://at.alicdn.com/t/font_1901605_1mrmcd6g6xr.js --output=./src/icons
+/* Usage: node ./scripts/process_iconfont_cn_js.js --res=https://at.alicdn.com/t/font_1901605_1mrmcd6g6xr.js --output=./src/icons
+ *   Note: previous all the svg icons hosting in iconfont.cn, but we lost the management for this project, also the iconfont.cn is not friendly for global usage.
+ *   Origin iconfont.cn project: https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=1901605
+ */
 
 const args = process.argv.slice(2);
 let resUrl = "";
