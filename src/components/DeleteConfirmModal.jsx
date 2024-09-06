@@ -12,6 +12,7 @@ export default function DeleteConfirmModal(props) {
     onConfirm,
     children,
     okText = t("delete"),
+    cancelText = t("cancel"),
   } = props;
   const [visible, openModal, closeModal] = useBoolState();
 
@@ -26,7 +27,7 @@ export default function DeleteConfirmModal(props) {
         footer={
           <Space size="large">
             <Button ghost danger onClick={closeModal}>
-              {t("cancel")}
+              {cancelText}
             </Button>
             <Button
               type="danger"

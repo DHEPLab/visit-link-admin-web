@@ -212,6 +212,7 @@ export default function Module() {
                         title={t("deleteModule")}
                         content={t("deleteModuleWarning")}
                         onConfirm={handleDeleteModule}
+                        cancelText={t("cancelDeleteModule")}
                       >
                         <Button ghost danger>
                           {t("deleteModule")}

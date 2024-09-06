@@ -143,6 +143,7 @@ export default function Curriculum() {
                   title={t("deleteCurriculum")}
                   content={t("deleteCurriculumWarning")}
                   onConfirm={handleDeleteCurriculum}
+                  cancelText={t("cancelDeleteCurriculum")}
                 >
                   <Button ghost danger>
                     {t("deleteCurriculum")}

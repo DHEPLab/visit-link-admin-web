@@ -142,6 +142,7 @@ export default function Survey() {
                         title={t("deleteSurvey")}
                         content={t("deleteSurveyWarning")}
                         onConfirm={handleDeleteModule}
+                        cancelText={t("cancelDeleteSurvey")}
                       >
                         <Button ghost danger>
                           {t("deleteSurvey")}

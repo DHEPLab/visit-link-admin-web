@@ -434,6 +434,7 @@ export default {
     deleteCurriculum: "删除大纲",
     deleteCurriculumWarning:
       "删除大纲后，会将大纲分配的所有宝宝的待开始家访清除，这些宝宝安排家访时将找不到匹配的课堂是否继续？",
+    cancelDeleteCurriculum: "再想想",
     editCurriculum: "编辑大纲",
     unsavedChangesWarning: "当前页面有未保存或未提交的内容，离开后将丢失已编辑内容，您确定要离开吗?",
     applicableDays: "适用天数",
@@ -490,6 +491,7 @@ export default {
     copyMoudle: "复制模块",
     deleteModule: "删除模块",
     deleteModuleWarning: "删除后模块内容将无法恢复是否继续？",
+    cancelDeleteModule: "再想想",
     editModule: "编辑模块",
     saveToDraft: "保存至草稿",
     saveAndPublish: "保存并发布",
@@ -610,6 +612,7 @@ export default {
     surveyManagement: "问卷管理",
     deleteSurvey: "删除问卷",
     deleteSurveyWarning: "删除后，问卷内容将无法恢复，是否继续？",
+    cancelDeleteSurvey: "再想想",
     editSurvey: "编辑问卷",
     saveToDraft: "保存至草稿",
     saveAndPublish: "保存并发布",

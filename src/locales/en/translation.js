@@ -442,6 +442,7 @@ export default {
     deleteCurriculum: "Delete Curriculum",
     deleteCurriculumWarning:
       "After deleting the curriculum, all scheduled home visits for the babies assigned to the curriculum will be cleared. These babies will not be able to find matching session(s) when scheduling home visits. Do you want to continue?",
+    cancelDeleteCurriculum: "Cancel",
     editCurriculum: "Edit Curriculum",
     unsavedChangesWarning:
       "The current page has unsaved or unsubmitted content. If you leave, you will lose the edited content. Are you sure you want to leave?",
@@ -500,6 +501,7 @@ export default {
     copyMoudle: "Copy Module",
     deleteModule: "Delete Module",
     deleteModuleWarning: "After deletion, the module content cannot be recovered. Do you want to continue?",
+    cancelDeleteModule: "Cancel",
     editModule: "Edit Module",
     saveToDraft: "Save to Draft",
     saveAndPublish: "Save and Publish",
@@ -622,6 +624,7 @@ export default {
     surveyManagement: "Survey Management",
     deleteSurvey: "Delete Survey",
     deleteSurveyWarning: "After deletion, the survey content cannot be recovered. Do you want to continue?",
+    cancelDeleteSurvey: "Cancel",
     editSurvey: "Edit Survey",
     saveToDraft: "Save to Draft",
     saveAndPublish: "Save and Publish",
