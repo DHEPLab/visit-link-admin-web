@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@spiriit/vite-plugin-svg-spritemap": "^2.2.4",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.0",

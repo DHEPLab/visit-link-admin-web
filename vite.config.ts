@@ -3,10 +3,22 @@ import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import browserslistToEsbuild from "browserslist-to-esbuild";
 import path from "node:path";
+import VitePluginSvgSpritemap from "@spiriit/vite-plugin-svg-spritemap";
 
 export default defineConfig({
   publicDir: "./public",
-  plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    VitePluginSvgSpritemap("./src/icons/*.svg", {
+      prefix: false,
+      output: {
+        view: false,
+        use: false,
+      },
+      idify: (name) => name,
+    }),
+  ],
   build: {
     emptyOutDir: true,
     rollupOptions: {
