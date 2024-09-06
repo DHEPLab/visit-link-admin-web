@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { debounce } from "radash";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 // first page start at 0
@@ -33,6 +33,7 @@ export default function withPage(
   return function (props) {
     const { t } = useTranslation(["common"]);
     const location = useLocation();
+    const navigate = useNavigate();
     const historyPageState = location.state?.page?.[url];
     const [search, setSearch] = useState(
       historyPageState || {
@@ -61,19 +62,15 @@ export default function withPage(
           setContent(data.content);
 
           const hPageState = location.state?.page;
-          window.history.replaceState(
-            {
-              key: location.key,
-              state: {
-                page: {
-                  ...(hPageState || {}),
-                  [url]: newParams,
-                },
+          navigate(location.pathname, {
+            replace: true,
+            state: {
+              page: {
+                ...(hPageState || {}),
+                [url]: newParams,
               },
             },
-            null,
-            window.location.href,
-          );
+          });
         })
         .finally(() => setLoading(false));
     }, [search, requestURL]);
