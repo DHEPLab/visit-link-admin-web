@@ -50,4 +50,18 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    host: true,
+    open: true,
+    proxy: {
+      "/api": {
+        target: process.env.BACKEND_PROXY_TARGET || "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/admin": {
+        target: process.env.BACKEND_PROXY_TARGET || "http://localhost:8080",
+        changeOrigin: true,
+      },
+    },
+  },
 });

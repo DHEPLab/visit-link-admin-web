@@ -16,6 +16,11 @@ By default the app will proxy all the api to localhost:8080, you can change the 
 $ BACKEND_PROXY_TARGET=<url> yarn start
 ```
 
+You can also use the `serve` script to running as production preview mode:
+```shell
+$ BACKEND_PROXY_TARGET=<url> yarn serve
+```
+
 ## External Dependencies
 
 The visit-link-backend service, with reverse proxy configuration in vite.config.ts
