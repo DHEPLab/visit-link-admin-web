@@ -19,6 +19,7 @@ import AssignModalTable from "@/components/AssignModalTable";
 import WithPage from "@/components/WithPage";
 import styled from "styled-components";
 import Carers from "./Carers";
+import RevertAccountBabyModal from "./RevertAccountBabyModal";
 
 const { confirm } = Modal;
 
@@ -363,31 +364,6 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function RevertAccountBabyModal({ visible, onCancel, onOk }) {
-  const { t } = useTranslation("baby");
-  return (
-    <Modal
-      title={t("reactiveBaby")}
-      closable={false}
-      destroyOnClose
-      onCancel={onCancel}
-      footer={
-        <Space size="large">
-          <Button ghost danger onClick={onCancel}>
-            {t("cancel")}
-          </Button>
-          <Button danger type="primary" onClick={onOk}>
-            {t("reactive")}
-          </Button>
-        </Space>
-      }
-      open={visible}
-    >
-      <p>{t("reactiveBabyConfirm")}</p>
-    </Modal>
-  );
-}
 
 function CloseAccountBabyModal({ visible, onCancel, onOk }) {
   const { t } = useTranslation(["baby", "common"]);
