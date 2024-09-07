@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Form, Input, message, Modal, Radio, Space, Tooltip } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, Form, Input, message, Modal, Space } from "antd";
 import { useTranslation } from "react-i18next";
 
-import Rules from "../constants/rules";
+import Rules from "@/constants/rules";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
-import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "../constants/enums";
+import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "@/constants/enums";
 import Card from "@/components/Card";
 import ZebraTable from "@/components/ZebraTable";
 import BabyModalForm from "@/components/BabyModalForm";
 import StaticField from "@/components/StaticField";
-import ModalForm from "@/components/ModalForm";
 import DetailHeader from "@/components/DetailHeader";
-import DeleteConfirmModal from "@/components/DeleteConfirmModal";
-import SelectEnum from "@/components/SelectEnum";
 import BabyReviewBar from "@/components/BabyReviewBar";
 import AssignModalTable from "@/components/AssignModalTable";
 import WithPage from "@/components/WithPage";
 import styled from "styled-components";
+import Carers from "./Carers";
 
 const { confirm } = Modal;
 
@@ -625,191 +622,6 @@ function History({ title, dataSource, columnValues }) {
                     );
                   })}
                 </div>
-              );
-            },
-          },
-        ]}
-      />
-    </Card>
-  );
-}
-
-function Carers({ babyId, deleted, onModify }) {
-  const { t } = useTranslation("baby");
-  const [carer, setCarer] = useState({ master: false });
-  const [visible, openModal, closeModal] = useBoolState(false);
-  const [dataSource, refresh] = useFetch(`/admin/babies/${babyId}/carers`, {}, []);
-
-  const openCarerEdit = (record) => {
-    setCarer(record);
-    openModal();
-  };
-
-  const safeCloseCarer = () => {
-    setCarer({ master: false });
-    closeModal();
-  };
-
-  async function handleDelete({ id, master }) {
-    if (master) return message.warning(t("deleteMasterWarning"));
-    await axios.delete(`/admin/carers/${id}`);
-    refresh();
-  }
-
-  async function submit(values) {
-    const { id } = carer;
-    const method = id ? "put" : "post";
-    await axios[method](`/admin/carers${id ? `/${id}` : ""}`, {
-      baby: {
-        id: babyId,
-      },
-      ...values,
-    });
-    refresh();
-    safeCloseCarer();
-    if (id) {
-      onModify?.();
-    }
-  }
-
-  function onFinish(values) {
-    if (values.master && dataSource.filter((item) => item.id !== carer.id).find((item) => item.master)) {
-      Modal.confirm({
-        title: t("confirm"),
-        icon: <ExclamationCircleOutlined />,
-        content: t("changeMasterConfirm"),
-        cancelText: t("cancel"),
-        okText: t("proceed"),
-        onOk: () => submit(values),
-      });
-      return;
-    }
-    submit(values);
-  }
-
-  return (
-    <Card
-      title={t("caregiverList")}
-      noPadding
-      extra={
-        !deleted && (
-          <>
-            {dataSource.length > 3 ? (
-              <Tooltip title={t("maxTo4Caregiver")}>
-                <Button disabled={true} type="shade">
-                  {t("newCaregiver")}
-                </Button>
-              </Tooltip>
-            ) : (
-              <Button onClick={openModal} type="shade" data-testid="add-carer">
-                {t("newCaregiver")}
-              </Button>
-            )}
-          </>
-        )
-      }
-    >
-      <ModalForm
-        width={650}
-        labelWidth={120}
-        title={carer.id ? t("editCaregiver") : t("newCaregiver")}
-        initialValues={carer}
-        visible={visible}
-        onCancel={safeCloseCarer}
-        onFinish={onFinish}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
-      >
-        <Form.Item label={t("master")} name="master" rules={Rules.Required}>
-          <Radio.Group>
-            <Radio value={true}>{t("yes")}</Radio>
-            <Radio value={false}>{t("no")}</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
-          <Input autoFocus />
-        </Form.Item>
-        <Form.Item
-          label={t("relatives")}
-          name="familyTies"
-          rules={[
-            ...Rules.Required,
-            () => ({
-              validator: (_, value) => {
-                if (
-                  !value ||
-                  !dataSource.filter((item) => item.id !== carer.id).find((item) => item.familyTies === value)
-                ) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(t("repeatRelatives"));
-              },
-            }),
-          ]}
-        >
-          <SelectEnum name="FamilyTies" />
-        </Form.Item>
-        <Form.Item label={t("contactPhone")} name="phone" rules={Rules.Phone}>
-          <Input />
-        </Form.Item>
-        <Form.Item label={t("wechat")} name="wechat">
-          <Input />
-        </Form.Item>
-      </ModalForm>
-
-      <ZebraTable
-        rowKey="id"
-        dataSource={dataSource}
-        pagination={false}
-        columns={[
-          {
-            title: t("master"),
-            dataIndex: "master",
-            width: 140,
-            align: "center",
-            render(h) {
-              return h ? t("yes") : t("no");
-            },
-          },
-          {
-            title: t("caregiverName"),
-            dataIndex: "name",
-          },
-          {
-            title: t("relatives"),
-            dataIndex: "familyTies",
-            render: (h) => FamilyTies[h],
-          },
-          {
-            title: t("contactPhone"),
-            dataIndex: "phone",
-          },
-          {
-            title: t("wechat"),
-            dataIndex: "wechat",
-          },
-          {
-            title: t("operation"),
-            dataIndex: "id",
-            width: 200,
-            align: "center",
-            render(_, record) {
-              return (
-                !deleted && (
-                  <Space>
-                    <DeleteConfirmModal
-                      title={t("deleteCaregiver")}
-                      content={t("deleteCaregiverConfirm")}
-                      onConfirm={() => handleDelete(record)}
-                    >
-                      <Button size="small" type="link">
-                        {t("delete")}
-                      </Button>
-                    </DeleteConfirmModal>
-                    <Button size="small" type="link" onClick={() => openCarerEdit(record)}>
-                      {t("edit")}
-                    </Button>
-                  </Space>
-                )
               );
             },
           },
