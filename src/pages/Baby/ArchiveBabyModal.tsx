@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, Space } from "antd";
 import Rules from "@/constants/rules.ts";
 import React, { MouseEventHandler } from "react";
 
-interface ArchiveBabyFormValues {
+export interface ArchiveBabyFormValues {
   reason: string;
 }
 

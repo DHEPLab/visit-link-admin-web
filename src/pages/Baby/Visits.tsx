@@ -8,7 +8,7 @@ import React from "react";
 import { VisitsResponse } from "@/models/res/Visit";
 import { Lesson } from "@/models/res/Lesson";
 
-const Visits: React.FC<{ babyId: string }> = ({ babyId }) => {
+const Visits: React.FC<{ babyId?: string }> = ({ babyId }) => {
   const { t } = useTranslation("baby");
   const [dataSource] = useFetch<VisitsResponse>(`/admin/babies/${babyId}/visits`, {}, []);
 

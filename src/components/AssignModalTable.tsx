@@ -4,6 +4,7 @@ import { Button, Modal, Space, Table, TableProps } from "antd";
 import { useTranslation } from "react-i18next";
 
 import SearchInput from "./SearchInput";
+import { WithPageProps } from "@/components/WithPage";
 
 type AssignModalTableProps<T> = {
   title: string;
@@ -14,7 +15,8 @@ type AssignModalTableProps<T> = {
   onChangeSearch: (field: string, value: string) => void;
   rowSelectionType: "checkbox" | "radio";
   refreshOnVisible?: boolean;
-} & TableProps<T>;
+} & WithPageProps &
+  TableProps<T>;
 
 const AssignModalTable = <T,>({
   title,

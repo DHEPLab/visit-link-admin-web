@@ -20,9 +20,9 @@ export interface BabyModalFormValues {
   feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
   area: string | string[];
   location: string;
-  longitude?: number;
-  latitude?: number;
-  remark?: string;
+  longitude: number | null;
+  latitude: number | null;
+  remark: string | null;
 }
 
 export type BabyModalFormProps = ModalFormProps<BabyModalFormValues> & { disableStage?: boolean };

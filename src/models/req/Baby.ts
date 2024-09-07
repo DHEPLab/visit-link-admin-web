@@ -9,7 +9,7 @@ export interface NewBabyRequest {
   feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
   area: string;
   location: string;
-  longitude?: number;
-  latitude?: number;
-  remark?: string;
+  longitude: number | null;
+  latitude: number | null;
+  remark: string | null;
 }

@@ -17,7 +17,7 @@ import { CarerFormValues } from "./schema/Carer";
 import { Carer, CarersResponse } from "@/models/res/Carer";
 
 interface CarersProps {
-  babyId: number;
+  babyId?: string;
   deleted: boolean;
   onModify: VoidFunction;
 }

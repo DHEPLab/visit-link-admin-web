@@ -2,13 +2,13 @@ import React from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, message, Modal } from "antd";
+import { Button, FormProps, message, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
 import { BabyStage, FeedingPattern, Gender } from "@/constants/enums";
 import Card from "@/components/Card";
-import BabyModalForm from "@/components/BabyModalForm";
+import BabyModalForm, { BabyModalFormValues } from "@/components/BabyModalForm";
 import StaticField from "@/components/StaticField";
 import DetailHeader from "@/components/DetailHeader";
 import BabyReviewBar from "@/components/BabyReviewBar";
@@ -16,22 +16,28 @@ import AssignModalTable from "@/components/AssignModalTable";
 import WithPage from "@/components/WithPage";
 import Carers from "./Carers";
 import ReactiveBabyModal from "./ReactiveBabyModal";
-import ArchiveBabyModal from "./ArchiveBabyModal";
+import ArchiveBabyModal, { ArchiveBabyFormValues } from "./ArchiveBabyModal";
 import ApproveDeleteBabyModal from "./ApproveDeleteBabyModal";
 import ApproveModifyBabyModal from "./ApproveModifyBabyModal";
-import ApproveCreateBabyModal from "./ApproveCreateBabyModal";
+import ApproveCreateBabyModal, { ApproveCreateBabyFormValues } from "./ApproveCreateBabyModal";
 import Visits from "./Visits";
 import History from "./History";
+import { BabyResponse } from "@/models/res/Baby";
+import { ModifyRecordsResponse } from "@/models/res/ModifyRecord";
+import ShadeButton from "@/components/ShadeButton";
+import { toNewBabyRequest } from "@/pages/Babies/schema/BabyForm.ts";
+import { omit } from "radash";
+import { ChwUser } from "@/models/res/User.ts";
 
 const { confirm } = Modal;
 
-const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
+const PageAssignChwModalTable = WithPage(AssignModalTable<ChwUser>, "/admin/users/chw");
 
 export default function Baby() {
-  const { t } = useTranslation(["baby", "common"]);
+  const { t, i18n } = useTranslation(["baby", "common"]);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [baby, refresh] = useFetch(`/admin/babies/${id}`);
+  const [baby, refresh] = useFetch<BabyResponse>(`/admin/babies/${id}`);
   const [visible, openModal, closeModal] = useBoolState();
 
   const [approveCreateVisible, openApproveCreateModal, closeApproveCreateModal] = useBoolState();
@@ -42,29 +48,39 @@ export default function Baby() {
   const [changeChwVisible, openChangeChwModal, closeChangeChwModal] = useBoolState();
 
   const { chw, approved, actionFromApp, deleted } = baby;
-  const [dataSource, refreshHistory] = useFetch("/admin/babies/modify-records", { babyId: id }, []);
-  const [careModifyRecords, refreshCareModifyRecords] = useFetch("/admin/carers/modify-records", { babyId: id }, []);
+  const [babyModifyRecords, refreshBabyModifyRecords] = useFetch<ModifyRecordsResponse>(
+    "/admin/babies/modify-records",
+    { babyId: id },
+    [],
+  );
+  const [carerModifyRecords, refreshCarerModifyRecords] = useFetch<ModifyRecordsResponse>(
+    "/admin/carers/modify-records",
+    { babyId: id },
+    [],
+  );
   const oldValue =
-    !dataSource || dataSource.length === 0
+    !babyModifyRecords || babyModifyRecords.length === 0
       ? {}
-      : Object.fromEntries((dataSource[0].columnName || []).map((e, i) => [e, dataSource[0].oldValue[i]]));
-  const initialValues = () => ({
-    ...baby,
-    chw: null,
-    area: (baby.area && baby.area.split("/")) || [],
-    edc: baby.edc && dayjs(baby.edc),
-    birthday: baby.birthday && dayjs(baby.birthday),
-  });
+      : Object.fromEntries(
+          (babyModifyRecords[0].columnName || []).map((e, i) => [e, babyModifyRecords[0].oldValue[i]]),
+        );
+  const initialValues = () => {
+    const formValues: BabyModalFormValues = {
+      ...baby,
+      area: (baby.area && baby.area.split("/")) || [],
+      edc: baby.edc ? dayjs(baby.edc) : undefined,
+      birthday: baby.birthday ? dayjs(baby.birthday) : undefined,
+      feedingPattern: baby.feedingPattern ? baby.feedingPattern : undefined,
+    };
+    return formValues;
+  };
 
-  function handleChangeBaby(values) {
-    values.area = values.area.join("/");
-    // format birthday and edc to string date
-    values.birthday = values.birthday && dayjs(values.birthday).format("YYYY-MM-DD");
-    values.edc = values.edc && dayjs(values.edc).format("YYYY-MM-DD");
-    axios.put(`/admin/babies/${id}`, { ...baby, ...values }).then(() => {
+  function handleChangeBaby(values: BabyModalFormValues) {
+    const requestValues: BabyModalFormValues = { ...omit(baby, ["edc", "birthday", "feedingPattern"]), ...values };
+    axios.put(`/admin/babies/${id}`, toNewBabyRequest(requestValues, i18n.resolvedLanguage)).then(() => {
       refresh();
       closeModal();
-      refreshHistory();
+      refreshBabyModifyRecords();
     });
   }
 
@@ -97,7 +113,7 @@ export default function Baby() {
     });
   }
 
-  function handleApproveCreateFinish(values) {
+  function handleApproveCreateFinish(values: ApproveCreateBabyFormValues) {
     axios.put(`/admin/babies/${id}/approve`, values).then(() => {
       closeApproveCreateModal();
       refresh();
@@ -118,7 +134,7 @@ export default function Baby() {
     });
   }
 
-  function handleCloseAccount({ reason }) {
+  function handleCloseAccount({ reason }: ArchiveBabyFormValues) {
     axios.delete(`/admin/babies/${id}?reason=${reason}`).then(() => {
       navigate(-1);
     });
@@ -131,7 +147,7 @@ export default function Baby() {
     });
   }
 
-  function handleChangeChw(selected) {
+  function handleChangeChw(selected: React.Key[]) {
     if (selected.length === 0) return message.warning(t("noSelectedChwWarning"));
     const [userId] = selected;
     axios.put(`/admin/babies/${id}/chw/${userId}`).then(() => {
@@ -199,9 +215,7 @@ export default function Baby() {
         title={t("chw")}
         extra={
           !deleted && (
-            <Button type="shade" onClick={openChangeChwModal}>
-              {chw?.id ? t("changeCHW") : t("assignCHW")}
-            </Button>
+            <ShadeButton onClick={openChangeChwModal}>{chw?.id ? t("changeCHW") : t("assignCHW")}</ShadeButton>
           )
         }
       >
@@ -211,13 +225,13 @@ export default function Baby() {
       </Card>
 
       <PageAssignChwModalTable
-        id={chw?.id}
+        id={chw?.id.toString()} // CHW id is number, unknown why give this value to Table id
         visible={changeChwVisible}
         onCancel={closeChangeChwModal}
         onFinish={handleChangeChw}
         refreshOnVisible
         rowSelectionType="radio"
-        rowKey={(record) => record.user?.id}
+        rowKey={(record: ChwUser) => record.user?.id.toString()}
         title={t("chooseCHW")}
         columns={[
           {
@@ -247,9 +261,7 @@ export default function Baby() {
               <Button danger ghost onClick={resetLocation} style={{ marginRight: 10 }}>
                 {t("locationCorrect")}
               </Button>
-              <Button type="shade" onClick={openModal}>
-                {t("edit")}
-              </Button>
+              <ShadeButton onClick={openModal}>{t("edit")}</ShadeButton>
             </>
           )
         }
@@ -257,7 +269,10 @@ export default function Baby() {
         <StaticField label={t("name")} history={oldValue["name"]}>
           {baby.name}
         </StaticField>
-        <StaticField label={t("gender")} history={oldValue["gender"] && Gender[oldValue["gender"]]}>
+        <StaticField
+          label={t("gender")}
+          history={oldValue["gender"] && Gender[oldValue["gender"] as keyof typeof Gender]}
+        >
           {Gender[baby.gender]}
         </StaticField>
         <StaticField label={t("growthStage")}>
@@ -276,16 +291,18 @@ export default function Baby() {
             <StaticField
               label={t("supplementaryFood")}
               history={
-                typeof oldValue["assistedFood"] === "boolean" && (oldValue["assistedFood"] ? t("add") : t("noAdd"))
+                typeof oldValue["assistedFood"] === "boolean" ? (oldValue["assistedFood"] ? t("add") : t("noAdd")) : ""
               }
             >
               {baby.assistedFood ? t("add") : t("noAdd")}
             </StaticField>
             <StaticField
               label={t("feedingMethods")}
-              history={oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"]]}
+              history={
+                oldValue["feedingPattern"] && FeedingPattern[oldValue["feedingPattern"] as keyof typeof FeedingPattern]
+              }
             >
-              {FeedingPattern[baby.feedingPattern]}
+              {FeedingPattern[baby.feedingPattern as keyof typeof FeedingPattern]}
             </StaticField>
           </>
         )}
@@ -313,7 +330,7 @@ export default function Baby() {
         {deleted && <StaticField label={t("archiveReason")}>{baby.closeAccountReason}</StaticField>}
       </Card>
 
-      <Carers babyId={id} deleted={deleted} onModify={refreshCareModifyRecords} />
+      <Carers babyId={id} deleted={deleted} onModify={refreshCarerModifyRecords} />
       <Visits babyId={id} />
       <History
         title={t("babyInfoChangeRecord")}
@@ -331,7 +348,7 @@ export default function Baby() {
           latitude: t("latitude"),
           remark: t("comments"),
         }}
-        dataSource={dataSource.map((e, i) => ({ ...e, number: i }))}
+        dataSource={babyModifyRecords.map((modifyRecord, index) => ({ ...modifyRecord, number: index }))}
       />
       <History
         title={t("caregiverInfoChangeRecord")}
@@ -342,7 +359,7 @@ export default function Baby() {
           wechat: t("wechat"),
           familyTies: t("relatives"),
         }}
-        dataSource={careModifyRecords.map((e, i) => ({ ...e, number: i }))}
+        dataSource={carerModifyRecords.map((modifyRecord, index) => ({ ...modifyRecord, number: index }))}
       />
 
       <BabyModalForm
@@ -353,7 +370,7 @@ export default function Baby() {
         initialValues={initialValues()}
         // 一旦进入婴幼期则不可修改回待产期
         disableStage={baby.stage === "BIRTH"}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       />
     </>
   );

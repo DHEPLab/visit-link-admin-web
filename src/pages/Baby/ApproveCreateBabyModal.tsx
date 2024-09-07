@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, ModalProps, Space } from "antd";
 import React, { MouseEventHandler, useEffect } from "react";
 import Rules from "@/constants/rules";
 
-interface ApproveCreateBabyFormValues {
+export interface ApproveCreateBabyFormValues {
   identity: string;
 }
 

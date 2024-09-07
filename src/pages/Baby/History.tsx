@@ -9,7 +9,7 @@ import { ModifyRecord } from "@/models/res/ModifyRecord";
 
 interface HistoryProps {
   title: string;
-  dataSource: { number: number } & ModifyRecord[];
+  dataSource: (ModifyRecord & { number: number })[];
   columnValues: { [key: string]: string };
 }
 
