@@ -6,7 +6,7 @@ import { Button, message, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
-import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "@/constants/enums";
+import { BabyStage, FamilyTies, FeedingPattern, Gender } from "@/constants/enums";
 import Card from "@/components/Card";
 import ZebraTable from "@/components/ZebraTable";
 import BabyModalForm from "@/components/BabyModalForm";
@@ -22,6 +22,7 @@ import ArchiveBabyModal from "./ArchiveBabyModal";
 import ApproveDeleteBabyModal from "./ApproveDeleteBabyModal";
 import ApproveModifyBabyModal from "./ApproveModifyBabyModal";
 import ApproveCreateBabyModal from "./ApproveCreateBabyModal";
+import Visits from "./Visits";
 
 const { confirm } = Modal;
 
@@ -358,51 +359,6 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function Visits({ babyId }) {
-  const { t } = useTranslation("baby");
-  const [dataSource] = useFetch(`/admin/babies/${babyId}/visits`, {}, []);
-
-  return (
-    <Card title={t("visitHistory")} noPadding>
-      <ZebraTable
-        rowKey="id"
-        dataSource={dataSource}
-        pagination={false}
-        columns={[
-          {
-            title: t("visitStatus"),
-            dataIndex: "status",
-            width: 140,
-            align: "center",
-            render: (h) => VisitStatus[h],
-          },
-          {
-            title: t("visitTime"),
-            dataIndex: "visitTime",
-            width: 280,
-            render: (h) => dayjs(h).format("LLLL"),
-          },
-          {
-            title: t("sessionContent"),
-            dataIndex: "lesson",
-            width: 300,
-            render: (h) => h?.modules?.map((m) => m.label).join(", "),
-          },
-          {
-            title: t("reasonOfUncompleteOrExpired"),
-            dataIndex: "remark",
-          },
-          {
-            title: t("locationInfo"),
-            dataIndex: "distance",
-            render: (v) => t("homeVisitDistance", { distance: v || 0 }),
-          },
-        ]}
-      />
-    </Card>
-  );
-}
 
 function History({ title, dataSource, columnValues }) {
   const { t } = useTranslation(["baby", "common", "enum"]);
