@@ -81,12 +81,17 @@ const server = setupServer(
     return HttpResponse.json({});
   }),
 );
+const dispatchRequest = vi.fn();
+server.events.on("request:start", dispatchRequest);
 
 const user = userEvent.setup();
 
 describe("Babies Page", () => {
   beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
+  afterEach(() => {
+    server.resetHandlers();
+    dispatchRequest.mockReset();
+  });
   afterAll(() => server.close());
 
   test("renders with correct tabs and default tab", () => {
@@ -97,6 +102,15 @@ describe("Babies Page", () => {
 
     const approvedTab = screen.getByRole("tab", { name: "Approved" }).closest("div.ant-tabs-tab");
     expect(approvedTab).toHaveClass("ant-tabs-tab-active");
+
+    expect(dispatchRequest).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        request: expect.objectContaining({
+          url: expect.stringMatching(/admin\/babies\/approved\?page=0&size=10$/),
+        }),
+      }),
+    );
   });
 
   test("opens and closes BabyModalForm correctly", async () => {
@@ -122,7 +136,24 @@ describe("Babies Page", () => {
 
     await userEvent.click(screen.getByText("Submit"));
 
+    expect(dispatchRequest).toHaveBeenCalledWith(
+      expect.objectContaining({
+        request: expect.objectContaining({
+          method: "POST",
+          url: expect.stringMatching(/admin\/babies$/),
+        }),
+      }),
+    );
+
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    expect(dispatchRequest).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        request: expect.objectContaining({
+          url: expect.stringMatching(/admin\/babies\/approved\?page=0&size=10$/),
+        }),
+      }),
+    );
   });
 
   test("switches between tabs and refreshes the content", async () => {
