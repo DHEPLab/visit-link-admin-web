@@ -14,8 +14,8 @@ export interface BabyModalFormValues {
   identity: string;
   gender: string;
   stage: "EDC" | "BIRTH";
-  edc?: string;
-  birthday?: string;
+  edc?: dayjs.Dayjs;
+  birthday?: dayjs.Dayjs;
   assistedFood?: boolean;
   feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
   area: string | string[];

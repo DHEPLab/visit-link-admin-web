@@ -130,6 +130,7 @@ describe("Babies Page", () => {
 
     await user.type(screen.getByRole("textbox", { name: "Name" }), "Tom");
     await user.type(screen.getByRole("textbox", { name: "Baby ID" }), "123456789");
+    // TODO: The data picker will log waring use this way input the value
     await user.type(screen.getByRole("textbox", { name: "Due Date" }), dayjs().add(2, "days").format("YYYY-MM-DD"));
     await user.type(screen.getByRole("textbox", { name: "Area" }), "LA");
     await user.type(screen.getByRole("textbox", { name: "Address" }), "st 123");

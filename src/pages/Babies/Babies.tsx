@@ -1,7 +1,5 @@
 import axios from "axios";
-import dayjs from "dayjs";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Button, FormProps, Modal } from "antd";
@@ -15,28 +13,22 @@ import useQueryParam from "@/hooks/useQueryParam";
 import PageApproved from "./Approved";
 import PageUnreviewed from "./Unreviewed";
 import { useState } from "react";
+import { toNewBabyRequest } from "@/models/req/Baby";
 
 export default function Babies() {
   const { t, i18n } = useTranslation("babies");
-  const navigate = useNavigate();
   const [tab, setTab] = useQueryParam("tab", "approved");
-  const [visible, openBaby, closeBaby] = useBoolState(false);
-  const [importModal, openImportModal, closeImportModal] = useBoolState(false);
+  const [showNewBabyModal, openNewBabyModal, closeNewBabyModal] = useBoolState(false);
+  const [showImportModal, openImportModal, closeImportModal] = useBoolState(false);
   const [refreshKey, setRefreshKey] = useState({ approved: 0, unreviewed: 0 });
 
   function handleCreateBaby(values: BabyModalFormValues) {
-    if (i18n.resolvedLanguage === "zh" && Array.isArray(values.area)) {
-      values.area = values.area.join("/");
-    }
-    values.birthday = values.birthday && dayjs(values.birthday).format("YYYY-MM-DD");
-    values.edc = values.edc && dayjs(values.edc).format("YYYY-MM-DD");
-    axios.post("/admin/babies", values).then(() => {
+    axios.post("/admin/babies", toNewBabyRequest(values, i18n.resolvedLanguage)).then(() => {
       refresh();
-      closeBaby();
+      closeNewBabyModal();
     });
   }
 
-  // change tab to refresh table
   function refresh() {
     const newRefreshKey = {
       ...refreshKey,
@@ -49,12 +41,12 @@ export default function Babies() {
     {
       key: "approved",
       label: t("approved"),
-      children: <PageApproved navigate={navigate} refreshKey={refreshKey.approved} />,
+      children: <PageApproved refreshKey={refreshKey.approved} />,
     },
     {
       key: "unreviewed",
       label: t("unreviewed"),
-      children: <PageUnreviewed navigate={navigate} refreshKey={refreshKey.unreviewed} />,
+      children: <PageUnreviewed refreshKey={refreshKey.unreviewed} />,
     },
   ];
 
@@ -62,27 +54,27 @@ export default function Babies() {
     <>
       <ContentHeader title={t("babyManagement")}>
         <ImportButton onClick={openImportModal}>{t("batchNewBabies")}</ImportButton>
-        <Button type="primary" onClick={openBaby}>
+        <Button type="primary" onClick={openNewBabyModal}>
           {t("newBaby")}
         </Button>
       </ContentHeader>
       <CardTabs onChange={setTab} activeKey={tab} items={tabItems} />
       <BabyModalForm
         title={t("newBaby")}
-        visible={visible}
+        visible={showNewBabyModal}
         onFinish={handleCreateBaby}
-        onCancel={closeBaby}
+        onCancel={closeNewBabyModal}
         initialValues={{ stage: "EDC", gender: "UNKNOWN" } as BabyModalFormValues}
         validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       />
       <Modal
-        open={importModal}
+        open={showImportModal}
         title={t("importFromExcel")}
         onCancel={closeImportModal}
         style={{ top: 50 }}
         footer={null}
       >
-        <ImportExcel refresh={refresh} close={closeImportModal} open={importModal} />
+        <ImportExcel refresh={refresh} close={closeImportModal} open={showImportModal} />
       </Modal>
     </>
   );

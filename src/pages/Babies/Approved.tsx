@@ -9,25 +9,24 @@ import SearchBar from "./SearchBar";
 import { Gender } from "@/constants/enums";
 import dayjs from "dayjs";
 import WithPage, { WithPageProps } from "@/components/WithPage";
-import { NavigateFunction } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useTableSort from "./useTableSort";
 
 type ApprovedProps = ZebraTableProps &
   WithPageProps & {
     refreshKey: number;
-    navigate: NavigateFunction;
   };
 
 const Approved: React.FC<ApprovedProps> = ({
   historyPageState,
   refreshKey,
-  navigate,
   loadData,
   onChangeSearch,
   onChangePage,
   ...props
 }) => {
   const { t } = useTranslation("babies");
+  const navigate = useNavigate();
   useEffect(() => {
     loadData();
   }, [refreshKey, loadData]);

@@ -6,7 +6,7 @@ import ZebraTable, { type ZebraTableProps } from "@/components/ZebraTable";
 import { ActionFromApp, Gender } from "@/constants/enums";
 import WithPage, { WithPageProps } from "@/components/WithPage";
 import styled from "styled-components";
-import { NavigateFunction } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
 import useTableSort from "./useTableSort";
@@ -15,7 +15,6 @@ import isPropValid from "@emotion/is-prop-valid";
 type ApprovedProps = ZebraTableProps &
   WithPageProps & {
     refreshKey: number;
-    navigate: NavigateFunction;
   };
 
 const Unreviewed: React.FC<ApprovedProps> = ({
@@ -23,11 +22,11 @@ const Unreviewed: React.FC<ApprovedProps> = ({
   onChangeSearch,
   onChangePage,
   refreshKey,
-  navigate,
   loadData,
   ...props
 }) => {
   const { t } = useTranslation("babies");
+  const navigate = useNavigate();
   useEffect(() => {
     loadData();
   }, [refreshKey, loadData]);
