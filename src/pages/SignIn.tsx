@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +11,12 @@ import Message from "@/components/Message";
 import LogoImage from "../assets/logo.png";
 import { useUserStore } from "@/store/user";
 import { useNetworkStore } from "@/store/network";
+import ShadeButton from "@/components/ShadeButton";
+
+interface SignInFormValues {
+  username: string;
+  password: string;
+}
 
 export default function SignIn() {
   const { t } = useTranslation("signIn");
@@ -21,7 +27,7 @@ export default function SignIn() {
   const [form] = Form.useForm();
   const [error, setError] = useState(false);
 
-  async function handleSignIn(values) {
+  async function handleSignIn(values: SignInFormValues) {
     setError(false);
     try {
       const auth = await axios.post("/admin/authenticate", values);
@@ -70,14 +76,13 @@ export default function SignIn() {
           </Button> */}
         </ForgetPassword>
         {error && <ErrorMessage>{t("errorMessage")}</ErrorMessage>}
-        <Button
+        <ShadeButton
           size="large"
-          type="shade"
           onClick={form.submit}
           loading={requests["/admin/authenticate"] > 0 || requests["/api/account/profile"] > 0}
         >
           {t("login")}
-        </Button>
+        </ShadeButton>
       </Container>
     </AbsoluteContainer>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import setup from "../tests/setup";
 import SignIn from "./SignIn";
 
