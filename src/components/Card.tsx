@@ -1,10 +1,17 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 import isPropValid from "@emotion/is-prop-valid";
 
-export default function Card({ title, tooltip, children, extra, noPadding }) {
+export interface CardProps {
+  title: string;
+  tooltip?: string;
+  extra?: React.ReactNode;
+  noPadding?: boolean;
+}
+
+const Card: React.FC<PropsWithChildren<CardProps>> = ({ title, tooltip, children, extra, noPadding }) => {
   return (
     <CardContainer>
       <TitleContainer>
@@ -21,7 +28,7 @@ export default function Card({ title, tooltip, children, extra, noPadding }) {
       <Content noPadding={noPadding}>{children}</Content>
     </CardContainer>
   );
-}
+};
 
 const CardContainer = styled.div`
   background: #fff;
@@ -51,6 +58,8 @@ const Title = styled.div`
 
 const Content = styled("div").withConfig({
   shouldForwardProp: (prop) => isPropValid(prop) && prop !== "noPadding",
-})`
+})<{ noPadding?: boolean }>`
   ${({ noPadding }) => !noPadding && "padding: 30px;"}
 `;
+
+export default Card;
