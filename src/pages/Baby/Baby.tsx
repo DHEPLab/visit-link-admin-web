@@ -254,6 +254,7 @@ export default function Baby() {
       />
 
       <Card
+        data-testid="baby-info"
         title={t("babyInfo")}
         extra={
           !deleted && (

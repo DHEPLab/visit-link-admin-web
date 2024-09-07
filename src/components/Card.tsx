@@ -4,16 +4,16 @@ import { Tooltip } from "antd";
 import { InfoCircleFilled } from "@ant-design/icons";
 import isPropValid from "@emotion/is-prop-valid";
 
-export interface CardProps {
+type CardProps = {
   title: string;
   tooltip?: string;
   extra?: React.ReactNode;
   noPadding?: boolean;
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 
-const Card: React.FC<PropsWithChildren<CardProps>> = ({ title, tooltip, children, extra, noPadding }) => {
+const Card: React.FC<PropsWithChildren<CardProps>> = ({ title, tooltip, children, extra, noPadding, ...rest }) => {
   return (
-    <CardContainer>
+    <CardContainer {...rest}>
       <TitleContainer>
         <Title>
           <label>{title}</label>
