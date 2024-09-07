@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Form, Input, message, Modal, Space } from "antd";
+import { Button, message, Modal } from "antd";
 import { useTranslation } from "react-i18next";
-
-import Rules from "@/constants/rules";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
 import { BabyStage, FamilyTies, FeedingPattern, Gender, VisitStatus } from "@/constants/enums";
@@ -23,6 +21,7 @@ import ReactiveBabyModal from "./ReactiveBabyModal";
 import ArchiveBabyModal from "./ArchiveBabyModal";
 import ApproveDeleteBabyModal from "./ApproveDeleteBabyModal";
 import ApproveModifyBabyModal from "./ApproveModifyBabyModal";
+import ApproveCreateBabyModal from "./ApproveCreateBabyModal";
 
 const { confirm } = Modal;
 
@@ -359,44 +358,6 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function ApproveCreateBabyModal({ onCancel, onFinish, visible, ...props }) {
-  const { t } = useTranslation(["baby", "common"]);
-  const [form] = Form.useForm();
-  useEffect(() => {
-    if (visible) {
-      form.resetFields();
-    }
-  }, [visible, form]);
-
-  return (
-    <Modal
-      title={t("batchNewBabiesTitle")}
-      closable={false}
-      destroyOnClose
-      onCancel={onCancel}
-      footer={
-        <Space size="large">
-          <Button ghost danger onClick={onCancel}>
-            {t("later")}
-          </Button>
-          <Button danger type="primary" onClick={form.submit}>
-            {t("approve")}
-          </Button>
-        </Space>
-      }
-      open={visible}
-      {...props}
-    >
-      <p>{t("batchNewBabiesTip")}</p>
-      <Form form={form} onFinish={onFinish} labelCol={{ span: 0 }}>
-        <Form.Item label={t("id")} name="identity" rules={Rules.Required}>
-          <Input autoFocus style={{ width: "100%" }} placeholder={`${t("enter", { ns: "common" })}${t("id")}`} />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-}
 
 function Visits({ babyId }) {
   const { t } = useTranslation("baby");
