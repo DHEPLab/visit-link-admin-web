@@ -25,7 +25,6 @@ export default function Babies() {
   const [refreshKey, setRefreshKey] = useState({ approved: 0, unreviewed: 0 });
 
   function handleCreateBaby(values: BabyModalFormValues) {
-    console.log(values);
     if (i18n.resolvedLanguage === "zh" && Array.isArray(values.area)) {
       values.area = values.area.join("/");
     }

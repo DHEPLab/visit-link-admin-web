@@ -1,6 +1,9 @@
 import "@testing-library/jest-dom/vitest";
 import i18n from "./src/i18n";
 import "./src/dayjsInit";
+import { configure } from "@testing-library/react";
+
+configure({ reactStrictMode: true });
 
 global.matchMedia =
   global.matchMedia ||
