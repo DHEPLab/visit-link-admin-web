@@ -6,16 +6,14 @@ import { Button, message, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import useBoolState from "@/hooks/useBoolState";
 import useFetch from "@/hooks/useFetch";
-import { BabyStage, FamilyTies, FeedingPattern, Gender } from "@/constants/enums";
+import { BabyStage, FeedingPattern, Gender } from "@/constants/enums";
 import Card from "@/components/Card";
-import ZebraTable from "@/components/ZebraTable";
 import BabyModalForm from "@/components/BabyModalForm";
 import StaticField from "@/components/StaticField";
 import DetailHeader from "@/components/DetailHeader";
 import BabyReviewBar from "@/components/BabyReviewBar";
 import AssignModalTable from "@/components/AssignModalTable";
 import WithPage from "@/components/WithPage";
-import styled from "styled-components";
 import Carers from "./Carers";
 import ReactiveBabyModal from "./ReactiveBabyModal";
 import ArchiveBabyModal from "./ArchiveBabyModal";
@@ -23,8 +21,11 @@ import ApproveDeleteBabyModal from "./ApproveDeleteBabyModal";
 import ApproveModifyBabyModal from "./ApproveModifyBabyModal";
 import ApproveCreateBabyModal from "./ApproveCreateBabyModal";
 import Visits from "./Visits";
+import History from "./History";
 
 const { confirm } = Modal;
+
+const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
 
 export default function Baby() {
   const { t } = useTranslation(["baby", "common"]);
@@ -357,88 +358,3 @@ export default function Baby() {
     </>
   );
 }
-
-const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function History({ title, dataSource, columnValues }) {
-  const { t } = useTranslation(["baby", "common", "enum"]);
-
-  function getValue(key, value) {
-    switch (key) {
-      case "gender":
-        return Gender[value];
-      case "assistedFood":
-        return value ? t("AssistedFood.TRUE", { ns: "enum" }) : t("AssistedFood.FALSE", { ns: "enum" });
-      case "feedingPattern":
-        return FeedingPattern[value];
-      case "master":
-        return value ? t("yes") : t("no");
-      case "familyTies":
-        return FamilyTies[value];
-      default:
-        return value;
-    }
-  }
-
-  return (
-    <Card title={title} noPadding>
-      <ZebraTable
-        rowKey="number"
-        dataSource={dataSource}
-        pagination={false}
-        columns={[
-          {
-            title: t("time"),
-            dataIndex: "lastModifiedAt",
-            width: 200,
-            align: "center",
-            render: (h) => dayjs(h).format("YYYY-MM-DD HH:mm:ss"),
-          },
-          {
-            title: t("content"),
-            dataIndex: "newValue",
-            render: (h, record) => {
-              const { columnName, newValue, oldValue, roleName, userName } = record;
-              const changeValues = (columnName || [])
-                .filter((e) => e !== "chw")
-                .map((e, i) => {
-                  return columnValues[e]
-                    ? {
-                        columnName: columnValues[e],
-                        oldValue: getValue(e, oldValue[i]),
-                        newValue: getValue(e, newValue[i]),
-                      }
-                    : null;
-                })
-                .filter((e) => !!e);
-              return (
-                <div>
-                  {changeValues.map((e, i) => {
-                    const obj = e || {};
-                    return (
-                      <div key={i}>
-                        <BlobFont>{`${roleName} ${userName}`}</BlobFont>
-                        {t("changed")}
-                        <BlobFont>{obj.columnName}</BlobFont>
-                        {t("from")}
-                        <BlobFont>{obj.oldValue}</BlobFont>
-                        {t("to")}
-                        <BlobFont>{obj.newValue}</BlobFont>；
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            },
-          },
-        ]}
-      />
-    </Card>
-  );
-}
-
-const BlobFont = styled.span`
-  font-weight: bold;
-  color: #ff9c78;
-  margin: 0px 2px;
-`;
