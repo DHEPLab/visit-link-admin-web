@@ -9,6 +9,10 @@ const ShadeButton = styled(Button)`
     position: relative;
   }
 
+  &[disabled] {
+    opacity: 0.5;
+  }
+
   &::before {
     content: "";
     background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
@@ -19,8 +23,8 @@ const ShadeButton = styled(Button)`
     border-radius: inherit;
   }
 
-  &:focus::before,
-  &:hover::before {
+  &:not([disabled]):focus::before,
+  &:not([disabled]):hover::before {
     opacity: 0.8;
   }
 `;
