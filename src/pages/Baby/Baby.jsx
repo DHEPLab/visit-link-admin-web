@@ -19,7 +19,8 @@ import AssignModalTable from "@/components/AssignModalTable";
 import WithPage from "@/components/WithPage";
 import styled from "styled-components";
 import Carers from "./Carers";
-import RevertAccountBabyModal from "./RevertAccountBabyModal";
+import ReactiveBabyModal from "./ReactiveBabyModal.js";
+import ArchiveBabyModal from "./ArchiveBabyModal";
 
 const { confirm } = Modal;
 
@@ -171,16 +172,8 @@ export default function Baby() {
         role={`${t("id")} ${baby.identity || t("waitingApproval")}`}
         extra={headerExtra()}
       />
-      <CloseAccountBabyModal
-        visible={closeAccountVisible}
-        onCancel={closeCloseAccountModal}
-        onOk={handleCloseAccount}
-      />
-      <RevertAccountBabyModal
-        visible={revertAccountVisible}
-        onCancel={closeRevertAccountModal}
-        onOk={handleRevertAccount}
-      />
+      <ArchiveBabyModal visible={closeAccountVisible} onCancel={closeCloseAccountModal} onOk={handleCloseAccount} />
+      <ReactiveBabyModal visible={revertAccountVisible} onCancel={closeRevertAccountModal} onOk={handleRevertAccount} />
 
       {!approved && <BabyReviewBar baby={baby} onApprove={handleApprove} onReject={handleReject} />}
       <ApproveCreateBabyModal
@@ -364,38 +357,6 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function CloseAccountBabyModal({ visible, onCancel, onOk }) {
-  const { t } = useTranslation(["baby", "common"]);
-  const [form] = Form.useForm();
-
-  return (
-    <Modal
-      title={t("archiveBaby")}
-      closable={false}
-      destroyOnClose
-      onCancel={onCancel}
-      footer={
-        <Space size="large">
-          <Button ghost danger onClick={onCancel}>
-            {t("cancel")}
-          </Button>
-          <Button danger type="primary" onClick={form.submit}>
-            {t("archive")}
-          </Button>
-        </Space>
-      }
-      open={visible}
-    >
-      <p>{t("archiveTip")}</p>
-      <Form form={form} onFinish={onOk} labelCol={{ span: 0 }}>
-        <Form.Item label={t("archiveReason")} name="reason" rules={Rules.Required}>
-          <Input style={{ width: "100%" }} placeholder={`${t("enter", { ns: "common" })}${t("archiveReason")}`} />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-}
 
 function ApproveDeleteBabyModal({ visible, onCancel, onFinish }) {
   const { t } = useTranslation("baby");

@@ -2,13 +2,13 @@ import { useTranslation } from "react-i18next";
 import { Button, Modal, Space } from "antd";
 import React, { MouseEventHandler } from "react";
 
-interface RevertAccountBabyModalProps {
+interface ReactiveBabyModalProps {
   visible?: boolean;
   onCancel?: MouseEventHandler;
   onOk?: MouseEventHandler;
 }
 
-const RevertAccountBabyModal: React.FC<RevertAccountBabyModalProps> = ({ visible, onCancel, onOk }) => {
+const ReactiveBabyModal: React.FC<ReactiveBabyModalProps> = ({ visible, onCancel, onOk }) => {
   const { t } = useTranslation("baby");
   return (
     <Modal
@@ -33,4 +33,4 @@ const RevertAccountBabyModal: React.FC<RevertAccountBabyModalProps> = ({ visible
   );
 };
 
-export default RevertAccountBabyModal;
+export default ReactiveBabyModal;
