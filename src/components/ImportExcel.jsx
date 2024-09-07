@@ -328,10 +328,10 @@ export default function ImportExcel({ open, refresh, close }) {
       title: t("excel.downloadTemplate"),
     },
     {
-      title: t("excel.downloadTemplate"),
+      title: t("excel.importData"),
     },
     {
-      title: t("excel.downloadTemplate"),
+      title: t("excel.finishImport"),
     },
   ];
 
