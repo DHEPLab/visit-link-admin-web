@@ -1,8 +1,19 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { SwapRightOutlined } from "@ant-design/icons";
 
-export default function StaticField({ label, labelStyle = {}, children, history = "" }) {
+interface StaticFieldProps {
+  label: string;
+  labelStyle?: React.CSSProperties;
+  history?: string;
+}
+
+const StaticField: React.FC<PropsWithChildren<StaticFieldProps>> = ({
+  label,
+  labelStyle = {},
+  children,
+  history = "",
+}) => {
   return (
     <Container>
       <Label style={labelStyle}>{label}</Label>
@@ -17,13 +28,14 @@ export default function StaticField({ label, labelStyle = {}, children, history 
       </Value>
     </Container>
   );
-}
+};
 
 const History = styled.span`
   color: #b2b2b2;
   font-weight: 400;
   font-size: 18px;
   margin-right: 10px;
+
   .anticon-swap-right {
     font-size: 24px;
   }
@@ -32,6 +44,7 @@ const History = styled.span`
 const Container = styled.div`
   display: flex;
   width: 100%;
+
   & + & {
     margin-top: 20px;
   }
@@ -53,3 +66,5 @@ const Value = styled.div`
   word-break: break-all;
   flex-wrap: wrap;
 `;
+
+export default StaticField;
