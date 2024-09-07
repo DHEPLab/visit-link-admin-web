@@ -10,6 +10,7 @@ import { NavigateFunction } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import dayjs from "dayjs";
 import useTableSort from "./useTableSort";
+import isPropValid from "@emotion/is-prop-valid";
 
 type ApprovedProps = ZebraTableProps &
   WithPageProps & {
@@ -124,7 +125,9 @@ const Unreviewed: React.FC<ApprovedProps> = ({
   );
 };
 
-const Tag = styled.span<{ actionFromApp: "CREATE" | "MODIFY" }>`
+const Tag = styled.span.withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "actionFromApp",
+})<{ actionFromApp: "CREATE" | "MODIFY" }>`
   ${(props) => {
     switch (props.actionFromApp) {
       case "CREATE":
