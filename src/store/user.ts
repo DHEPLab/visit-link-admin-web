@@ -3,7 +3,7 @@ import { Profile } from "@/models/res/Profile";
 import { middlewares } from "./middlewares";
 
 interface UserState {
-  user: unknown;
+  user: Profile;
   authorized: boolean;
   loadProfileSuccess: (profile: Profile) => void;
 }
@@ -11,7 +11,7 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   middlewares(
     (set) => ({
-      user: {},
+      user: {} as Profile,
       authorized: false,
       loadProfileSuccess: (profile: Profile) => set(() => ({ user: profile, authorized: true })),
     }),

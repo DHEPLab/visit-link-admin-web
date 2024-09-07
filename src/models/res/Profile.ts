@@ -1,5 +1,5 @@
 export interface Profile {
-  chw: null | string;
+  chw: null;
   createdAt: string;
   createdBy: string;
   id: number;

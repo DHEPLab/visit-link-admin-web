@@ -1,19 +1,30 @@
-import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input } from "antd";
+import { Button, Form, FormProps, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
-import Rules from "../constants/rules";
+import Rules from "@/constants/rules";
 import useBoolState from "@/hooks/useBoolState";
-import { Role } from "../constants/enums";
-import { clearToken } from "../utils/token";
+import { Role } from "@/constants/enums";
+import { clearToken } from "@/utils/token";
 import Card from "@/components/Card";
 import StaticField from "@/components/StaticField";
 import ModalForm from "@/components/ModalForm";
 import Message from "@/components/Message";
 import { useUserStore } from "@/store/user";
+import ShadeButton from "@/components/ShadeButton.tsx";
+
+interface EditProfileFormValues {
+  realName: string;
+  phone: string;
+}
+
+interface ResetPasswordFormValues {
+  oldPassword: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export default function Profiles() {
   const { t } = useTranslation(["myAccount", "common"]);
@@ -26,14 +37,14 @@ export default function Profiles() {
     loadProfileSuccess: state.loadProfileSuccess,
   }));
 
-  async function handleChangeProfile(values) {
+  async function handleChangeProfile(values: EditProfileFormValues) {
     await axios.put("/api/account/profile", values);
     const res = await axios.get("/api/account/profile");
     loadProfileSuccess(res.data);
     closeProfileModal();
   }
 
-  async function handleChangePassword(values) {
+  async function handleChangePassword(values: ResetPasswordFormValues) {
     await axios.put("/api/account/password", values);
     Message.success(t("passwordChangedTip"), t("reLoginTip"), 1);
     clearToken();
@@ -42,19 +53,12 @@ export default function Profiles() {
 
   return (
     <>
-      <ContentHeader title={t("myAccount")} />
+      <ContentHeaderView>{t("myAccount")}</ContentHeaderView>
 
-      <Card
-        title={t("generalInformation")}
-        extra={
-          <Button type="shade" onClick={openProfileModal}>
-            {t("edit")}
-          </Button>
-        }
-      >
+      <Card title={t("generalInformation")} extra={<ShadeButton onClick={openProfileModal}>{t("edit")}</ShadeButton>}>
         <StaticField label={t("name")}>{user.realName}</StaticField>
         <StaticField label={t("phoneNumber")}>{user.phone}</StaticField>
-        <StaticField label={t("permissions")}>{Role[user.role]}</StaticField>
+        <StaticField label={t("permissions")}>{Role[user.role as keyof typeof Role]}</StaticField>
       </Card>
 
       <Card
@@ -75,7 +79,7 @@ export default function Profiles() {
         initialValues={user}
         onFinish={handleChangeProfile}
         onCancel={closeProfileModal}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       >
         <Form.Item label={t("name")} name="realName" rules={Rules.RealName}>
           <Input />
@@ -90,7 +94,7 @@ export default function Profiles() {
         visible={visible}
         onFinish={handleChangePassword}
         onCancel={closePasswordModal}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       >
         <Form.Item label={t("oldPassword")} name="oldPassword" rules={Rules.Required}>
           <Input.Password></Input.Password>
@@ -118,10 +122,6 @@ export default function Profiles() {
       </ModalForm>
     </>
   );
-}
-
-function ContentHeader({ title }) {
-  return <ContentHeaderView>{title}</ContentHeaderView>;
 }
 
 const ContentHeaderView = styled.div`
