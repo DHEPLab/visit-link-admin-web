@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import XLSX from "xlsx";
 import styled from "styled-components";
-import { Steps, Button, Spin, Upload, Table, message } from "antd";
+import { Button, message, Spin, Steps, Table, Upload } from "antd";
 import Column from "antd/lib/table/Column";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import axios from "axios";
 import UploadButton from "./UploadButton";
-
-const { Step } = Steps;
 
 export default function ImportExcel({ open, refresh, close }) {
   const { t, i18n } = useTranslation(["common", "enum", "baby"]);
@@ -325,13 +323,21 @@ export default function ImportExcel({ open, refresh, close }) {
       });
   }
 
+  const stepItems = [
+    {
+      title: t("excel.downloadTemplate"),
+    },
+    {
+      title: t("excel.downloadTemplate"),
+    },
+    {
+      title: t("excel.downloadTemplate"),
+    },
+  ];
+
   return (
     <Container tip="Loading..." spinning={spinningLoading}>
-      <Steps progressDot current={3} size="small">
-        <Step title={t("excel.downloadTemplate")} />
-        <Step title={t("excel.importData")} />
-        <Step title={t("excel.finishImport")} />
-      </Steps>
+      <Steps progressDot current={3} size="small" items={stepItems} />
       <ButtonLine>
         <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false}>
           <UploadButton title={t("excel.clickToUploadExcel")} icon="iconimport-excel">
