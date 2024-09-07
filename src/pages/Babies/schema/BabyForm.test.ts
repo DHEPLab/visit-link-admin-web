@@ -1,6 +1,6 @@
 import { BabyModalFormValues } from "@/components/BabyModalForm";
 import dayjs from "dayjs";
-import { toNewBabyRequest } from "./Baby";
+import { toNewBabyRequest } from "./BabyForm";
 
 describe("toNewBabyRequest", () => {
   const formValues = {

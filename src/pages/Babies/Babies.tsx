@@ -13,7 +13,7 @@ import useQueryParam from "@/hooks/useQueryParam";
 import PageApproved from "./Approved";
 import PageUnreviewed from "./Unreviewed";
 import { useState } from "react";
-import { toNewBabyRequest } from "@/models/req/Baby";
+import { toNewBabyRequest } from "./schema/BabyForm";
 
 export default function Babies() {
   const { t, i18n } = useTranslation("babies");
