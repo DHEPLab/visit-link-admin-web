@@ -22,6 +22,7 @@ import Carers from "./Carers";
 import ReactiveBabyModal from "./ReactiveBabyModal";
 import ArchiveBabyModal from "./ArchiveBabyModal";
 import ApproveDeleteBabyModal from "./ApproveDeleteBabyModal";
+import ApproveModifyBabyModal from "./ApproveModifyBabyModal";
 
 const { confirm } = Modal;
 
@@ -358,31 +359,6 @@ export default function Baby() {
 }
 
 const PageAssignChwModalTable = WithPage(AssignModalTable, "/admin/users/chw");
-
-function ApproveModifyBabyModal({ visible, onCancel, onFinish }) {
-  const { t } = useTranslation("baby");
-  return (
-    <Modal
-      title={t("modifyBabyTitle")}
-      closable={false}
-      destroyOnClose
-      onCancel={onCancel}
-      footer={
-        <Space size="large">
-          <Button ghost danger onClick={onCancel}>
-            {t("later")}
-          </Button>
-          <Button danger type="primary" onClick={onFinish}>
-            {t("approve")}
-          </Button>
-        </Space>
-      }
-      open={visible}
-    >
-      <p>{t("approveModifyTip")}</p>
-    </Modal>
-  );
-}
 
 function ApproveCreateBabyModal({ onCancel, onFinish, visible, ...props }) {
   const { t } = useTranslation(["baby", "common"]);
