@@ -1,7 +1,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, FormProps, Input } from "antd";
+import { Form, FormProps, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
 import Rules from "@/constants/rules";
@@ -13,7 +13,7 @@ import StaticField from "@/components/StaticField";
 import ModalForm from "@/components/ModalForm";
 import Message from "@/components/Message";
 import { useUserStore } from "@/store/user";
-import ShadeButton from "@/components/ShadeButton.tsx";
+import ShadeButton from "@/components/ShadeButton";
 
 interface EditProfileFormValues {
   realName: string;
@@ -63,11 +63,7 @@ export default function Profiles() {
 
       <Card
         title={t("accountInformation")}
-        extra={
-          <Button type="shade" onClick={openPasswordModal}>
-            {t("resetPassword")}
-          </Button>
-        }
+        extra={<ShadeButton onClick={openPasswordModal}>{t("resetPassword")}</ShadeButton>}
       >
         <StaticField label={t("username")}>{user.username}</StaticField>
         <StaticField label={t("password")}>******</StaticField>
