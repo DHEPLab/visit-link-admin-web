@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Modal, Space, Button, Table } from "antd";
+import { Button, Modal, Space, Table, TableProps } from "antd";
 import { useTranslation } from "react-i18next";
 
 import SearchInput from "./SearchInput";
 
-export default function AssignModalTable({
+type AssignModalTableProps<T> = {
+  title: string;
+  columns: TableProps<T>["columns"];
+  visible: boolean;
+  onCancel: () => void;
+  onFinish: (selectedRowKeys: React.Key[]) => void;
+  onChangeSearch: (field: string, value: string) => void;
+  rowSelectionType: "checkbox" | "radio";
+  refreshOnVisible?: boolean;
+} & TableProps<T>;
+
+const AssignModalTable = <T,>({
   title,
   columns,
   visible,
@@ -15,9 +26,9 @@ export default function AssignModalTable({
   rowSelectionType,
   refreshOnVisible,
   ...props
-}) {
+}: AssignModalTableProps<T>) => {
   const { t } = useTranslation(["common"]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     if (visible) {
@@ -68,9 +79,10 @@ export default function AssignModalTable({
       />
     </Modal>
   );
-}
+};
 
 const SearchBar = styled.div`
-  padding: 30px 20px;
-  padding-bottom: 10px;
+  padding: 30px 20px 10px;
 `;
+
+export default AssignModalTable;

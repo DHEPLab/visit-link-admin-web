@@ -36,7 +36,7 @@ export default function withPage<T extends WithPageProps>(
   WrapperComponent: React.ComponentType<T>,
   apiRequestUrl: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  apiRequestParams: Record<string, any>,
+  apiRequestParams?: Record<string, any>,
   loadOnMount = true,
 ) {
   return function (props: Omit<T, keyof WithPageProps>): JSX.Element {
