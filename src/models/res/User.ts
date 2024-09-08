@@ -46,3 +46,13 @@ export interface ChwUser {
   shouldFinish: number;
   hasFinish: number;
 }
+
+export interface AssignBaby {
+  id: number;
+  name: string;
+  identity: string;
+  gender: string;
+  area: string;
+  masterCarerName: string;
+  masterCarerPhone: string;
+}

@@ -23,7 +23,7 @@ export interface WithPageProps {
   pagination: Pagination;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource: any[];
-  loadData: VoidFunction;
+  loadData?: VoidFunction;
   onChangeLoadURL: (url: string) => void;
   onChangeSearch: (key: string, value: string | null) => void;
   onChangePage: (pagination: { current?: number }) => void;

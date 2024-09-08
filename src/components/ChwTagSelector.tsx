@@ -4,18 +4,20 @@ import { Cascader } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
 import Pcas from "../constants/pcas-code.json";
-import TagSelect from "./TagSelect";
+import TagSelect, { TagSelectProps } from "./TagSelect";
 
-export default function ChwTagSelector({ onChange, ...props }) {
+type ChwTagSelector = TagSelectProps;
+
+const ChwTagSelector: React.FC<ChwTagSelector> = ({ onChange, ...props }) => {
   // tmp cascader value
   const [value] = useState([]);
 
-  function onChangeCascader(values) {
+  function onChangeCascader(values: string[]) {
     // fill the village to the selector
     if (props?.value) {
-      onChange(props.value.concat(values[3]));
+      onChange?.(props.value.concat(values[3]));
     } else {
-      onChange([values[3]]);
+      onChange?.([values[3]]);
     }
   }
 
@@ -34,7 +36,7 @@ export default function ChwTagSelector({ onChange, ...props }) {
       </CascaderContainer>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   position: relative;
@@ -45,3 +47,5 @@ const CascaderContainer = styled.div`
   right: 34px;
   top: 8px;
 `;
+
+export default ChwTagSelector;

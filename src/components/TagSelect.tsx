@@ -1,19 +1,23 @@
-import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-import { Select, Button } from "antd";
+import { Select, Button, SelectProps } from "antd";
 import useFetch from "@/hooks/useFetch";
+import { Tag } from "@/models/res/Tag";
 
-export default function TagSelect({ onChange, ...props }) {
-  const [options, refresh] = useFetch("/admin/tags", {}, [], true);
+export type TagSelectProps<ValueType = string[]> = SelectProps<ValueType> & {
+  onChange?: (value?: string[]) => void;
+};
 
-  function handleDelete(option) {
+const TagSelect = <ValueType extends string[]>({ onChange, ...props }: TagSelectProps<ValueType>) => {
+  const [options, refresh] = useFetch<Tag[]>("/admin/tags", {}, [], true);
+
+  function handleDelete(option: Tag) {
     setTimeout(() => {
       // delete database tag
       axios.delete(`/admin/tags/${option.id}`).then(() => refresh());
       // delete value from props.value
-      onChange(props.value?.filter((v) => v !== option.name));
+      onChange?.(props.value?.filter((v) => v !== option.name));
     }, 20);
     return false;
   }
@@ -34,7 +38,7 @@ export default function TagSelect({ onChange, ...props }) {
       ))}
     </Select>
   );
-}
+};
 
 const Option = styled.div`
   display: flex;
@@ -47,3 +51,5 @@ const Option = styled.div`
     white-space: nowrap;
   }
 `;
+
+export default TagSelect;

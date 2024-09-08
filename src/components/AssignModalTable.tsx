@@ -6,17 +6,17 @@ import { useTranslation } from "react-i18next";
 import SearchInput from "./SearchInput";
 import { WithPageProps } from "@/components/WithPage";
 
-type AssignModalTableProps<T> = {
-  title: string;
-  columns: TableProps<T>["columns"];
-  visible: boolean;
-  onCancel: () => void;
-  onFinish: (selectedRowKeys: React.Key[]) => void;
-  onChangeSearch: (field: string, value: string) => void;
-  rowSelectionType: "checkbox" | "radio";
-  refreshOnVisible?: boolean;
-} & WithPageProps &
-  TableProps<T>;
+type AssignModalTableProps<T> = Partial<WithPageProps> &
+  Omit<TableProps<T>, "title"> & {
+    title: string;
+    columns: TableProps<T>["columns"];
+    visible: boolean;
+    onCancel: () => void;
+    onFinish: (selectedRowKeys: React.Key[]) => void;
+    onChangeSearch: (field: string, value: string) => void;
+    rowSelectionType?: "checkbox" | "radio";
+    refreshOnVisible?: boolean;
+  };
 
 const AssignModalTable = <T,>({
   title,
