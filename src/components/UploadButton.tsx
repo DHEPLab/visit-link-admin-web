@@ -1,8 +1,13 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import Iconfont from "./Iconfont";
 
-export default function UploadButton({ icon, title, children }) {
+interface UploadButtonProps {
+  icon: string;
+  title: string;
+}
+
+const UploadButton: React.FC<PropsWithChildren<UploadButtonProps>> = ({ icon, title, children }) => {
   return (
     <Container>
       <Iconfont type={icon} size={40} />
@@ -10,7 +15,7 @@ export default function UploadButton({ icon, title, children }) {
       <Placeholder>{children}</Placeholder>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   width: 188px;
@@ -36,3 +41,5 @@ const Placeholder = styled.div`
   font-size: 12px;
   margin: 0 auto;
 `;
+
+export default UploadButton;
