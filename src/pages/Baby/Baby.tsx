@@ -25,9 +25,9 @@ import History from "./History";
 import { BabyResponse } from "@/models/res/Baby";
 import { ModifyRecordsResponse } from "@/models/res/ModifyRecord";
 import ShadeButton from "@/components/ShadeButton";
-import { toNewBabyRequest } from "@/pages/Babies/schema/BabyForm.ts";
+import { toNewBabyRequest } from "@/pages/Babies/schema/BabyForm";
 import { omit } from "radash";
-import { ChwUser } from "@/models/res/User.ts";
+import { ChwUser } from "@/models/res/User";
 
 const { confirm } = Modal;
 

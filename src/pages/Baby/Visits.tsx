@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import useFetch from "@/hooks/useFetch.ts";
-import Card from "@/components/Card.tsx";
+import useFetch from "@/hooks/useFetch";
+import Card from "@/components/Card";
 import ZebraTable from "@/components/ZebraTable";
 import { VisitStatus } from "@/constants/enums";
 import dayjs from "dayjs";

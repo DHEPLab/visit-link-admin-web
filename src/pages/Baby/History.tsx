@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { FamilyTies, FeedingPattern, Gender } from "@/constants/enums.ts";
-import Card from "@/components/Card.tsx";
-import ZebraTable from "@/components/ZebraTable.tsx";
+import { FamilyTies, FeedingPattern, Gender } from "@/constants/enums";
+import Card from "@/components/Card";
+import ZebraTable from "@/components/ZebraTable";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import React from "react";

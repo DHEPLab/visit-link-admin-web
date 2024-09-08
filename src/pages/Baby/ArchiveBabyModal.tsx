@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button, Form, Input, Modal, Space } from "antd";
-import Rules from "@/constants/rules.ts";
+import Rules from "@/constants/rules";
 import React, { MouseEventHandler } from "react";
 
 export interface ArchiveBabyFormValues {

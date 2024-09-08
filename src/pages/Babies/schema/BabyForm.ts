@@ -1,6 +1,6 @@
-import { BabyModalFormValues } from "@/components/BabyModalForm.tsx";
+import { BabyModalFormValues } from "@/components/BabyModalForm";
 import { omit } from "radash";
-import { NewBabyRequest } from "@/models/req/Baby.ts";
+import { NewBabyRequest } from "@/models/req/Baby";
 
 export const toNewBabyRequest = (values: BabyModalFormValues, lang: string = "en"): NewBabyRequest => {
   const request: NewBabyRequest = {
