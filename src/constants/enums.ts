@@ -78,7 +78,3 @@ export const QrType = {
   MODULE_DATA: "MODULE_DATA", // module原始数据
   MODULE_ID: "MODULE_ID", // module的id
 };
-
-export const enumKeysIterator = <T extends object>(enums: T): Array<keyof T> => {
-  return Object.keys(enums) as Array<keyof T>;
-};

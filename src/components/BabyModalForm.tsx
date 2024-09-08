@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import ModalForm, { ModalFormProps } from "@/components/ModalForm";
 import Pcas from "@/constants/pcas-code.json";
 import Rules from "@/constants/rules";
-import { Gender, BabyStage, FeedingPattern, enumKeysIterator } from "@/constants/enums";
+import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
 import i18n from "@/i18n";
 import { disabledDateForEDC } from "./utils/dateLogic";
+import { enumKeysIterator } from "@/utils/enumUtils";
 
 export interface BabyModalFormValues {
   name: string;

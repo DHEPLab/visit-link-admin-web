@@ -4,10 +4,11 @@ import axios from "axios";
 import { Col, Form, Input, Radio, Row } from "antd";
 import ModalForm from "@/components/ModalForm";
 import Rules from "@/constants/rules";
-import { enumKeysIterator, ProjectStatus } from "@/constants/enums";
+import { ProjectStatus } from "@/constants/enums";
 import styled from "@emotion/styled";
 import { Admin } from "@/models/res/Admin";
 import { Project } from "@/models/res/Project";
+import { enumKeysIterator } from "@/utils/enumUtils";
 
 export interface ProjectFromValues {
   name: string;
