@@ -1,9 +1,11 @@
+import { ModuleMediaComponent, ModuleTextComponent } from "@/models/res/Moduel";
+
 // React render key
 function generateKey() {
   return Date.now();
 }
 
-function createMedia() {
+function createMedia(): ModuleMediaComponent {
   return {
     type: "Media",
     key: generateKey(),
@@ -15,7 +17,7 @@ function createMedia() {
   };
 }
 
-function createText() {
+function createText(): ModuleTextComponent {
   return {
     type: "Text",
     key: generateKey(),
@@ -86,7 +88,7 @@ function createCase() {
   };
 }
 
-export default {
+const Factory = {
   createText,
   createMedia,
   createSwitch,
@@ -96,3 +98,5 @@ export default {
   createCase,
   createPageFooter,
 };
+
+export default Factory;

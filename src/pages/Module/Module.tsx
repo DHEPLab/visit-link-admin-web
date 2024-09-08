@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Formik } from "formik";
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import Factory from "../components/curriculum/factory";
-import ModuleComponents from "../components/curriculum/ModuleComponents";
-import Rules from "../constants/rules";
-import { ModuleTopic, QrType } from "../constants/enums";
+import Factory from "@/components/curriculum/factory";
+import ModuleComponents from "@/components/curriculum/ModuleComponents";
+import Rules from "@/constants/rules";
+import { ModuleTopic, QrType } from "@/constants/enums";
 import Card from "@/components/Card";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import DetailHeader from "@/components/DetailHeader";
 import DraftBar from "@/components/DraftBar";
 import SelectEnum from "@/components/SelectEnum";
-import StaticField from "@/components/StaticField";
 import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
 import styled from "styled-components";
 import { useModuleStore } from "@/store/module";
+import ReadonlyForm from "./ReadonlyForm";
+import { ModuleResponse, ModuleComponentType } from "@/models/res/Moduel";
+import { FormikHandlers } from "formik/dist/types";
 
 const CustomSelectorWrapper = styled.div`
   .ant-select.module-topic-selector .ant-select-selector {
@@ -26,23 +28,31 @@ const CustomSelectorWrapper = styled.div`
   }
 `;
 
+interface ModuleInformationFormValues {
+  id?: string;
+  description: string;
+  name: string;
+  number: string;
+  topic: keyof typeof ModuleTopic;
+}
+
 export default function Module() {
   const { t } = useTranslation(["module", "error"]);
   const { id } = useParams();
   const { pathname } = useLocation();
-  const [readonly, setReadonly] = useState();
+  const [readonly, setReadonly] = useState<boolean>(true);
   const navigate = useNavigate();
   const moduleFinishActionOptions = useModuleStore((state) => state.moduleFinishActionOptions);
 
   const [isPrompt, setIsPrompt] = useState(true);
   const [form] = Form.useForm();
   const [title, setTitle] = useState(t("createNewModule"));
-  const [submitURL, setSubmitURL] = useState();
+  const [submitURL, setSubmitURL] = useState<string>("");
 
-  const [module, setModule] = useState({});
-  const [components, setComponents] = useState([]);
+  const [module, setModule] = useState<ModuleResponse>({} as ModuleResponse);
+  const [components, setComponents] = useState<ModuleComponentType[]>([]);
 
-  const [draftId, setDraftId] = useState();
+  const [draftId, setDraftId] = useState<string>("");
   const [draftDate, setDraftDate] = useState();
   const mode = (() => {
     const routes = {
@@ -70,7 +80,7 @@ export default function Module() {
     if (!id) {
       setComponents([Factory.createText()]);
     } else {
-      axios.get(`/admin/modules/${id}`).then(({ data, headers }) => {
+      axios.get<ModuleResponse>(`/admin/modules/${id}`).then(({ data, headers }) => {
         const formValue = pathname.includes("/modules/edit")
           ? data
           : {
@@ -98,24 +108,24 @@ export default function Module() {
       .then((response) => moduleFinishActionOptions(response.data));
   }, [id, form, readonly, pathname, moduleFinishActionOptions]);
 
-  function onSubmitFormik(values) {
+  function onSubmitFormik(values: { components: ModuleComponentType[] }) {
     setComponents(values.components);
     form.submit();
   }
 
-  function submitDraft(submit) {
+  function submitDraft(submit: FormikHandlers["handleSubmit"]) {
     setSubmitURL("/admin/modules/draft");
     submit();
     setIsPrompt(false);
   }
 
-  function submitPublish(submit) {
+  function submitPublish(submit: FormikHandlers["handleSubmit"]) {
     setSubmitURL("/admin/modules");
     submit();
     setIsPrompt(false);
   }
 
-  function isValidComponent(comp) {
+  function isValidComponent(comp: ModuleComponentType) {
     if (comp.type === "Media" && !comp.value.file) {
       message.warning(t("emptyMedia", { ns: "error" }));
       return false;
@@ -138,7 +148,7 @@ export default function Module() {
     return true;
   }
 
-  function onSubmit(values) {
+  function onSubmit(values: ModuleInformationFormValues) {
     if (components.length === 0) return message.warning(t("atLeastOneComponent"));
     for (let i = 0; i < components.length; i++) {
       const comp = components[i];
@@ -162,7 +172,7 @@ export default function Module() {
       });
   }
 
-  function handleDelteDraft() {
+  function handleDeleteDraft() {
     axios.delete(`/admin/modules/${draftId}`).then(() => {
       setDraftId("");
     });
@@ -242,7 +252,7 @@ export default function Module() {
             <DraftBar
               title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
-              onRemove={handleDelteDraft}
+              onRemove={handleDeleteDraft}
               onClick={() => navigate(`/modules/edit/${draftId}`)}
             />
           )}
@@ -319,26 +329,5 @@ export default function Module() {
         </>
       )}
     </Formik>
-  );
-}
-
-function ReadonlyForm({ value }) {
-  const { t } = useTranslation("module");
-
-  return (
-    <div data-testid="readonly-form">
-      <StaticField label={t("moduleName")} labelStyle={{ width: 150 }}>
-        {value.name}
-      </StaticField>
-      <StaticField label={t("moduleNumber")} labelStyle={{ width: 150 }}>
-        {value.number}
-      </StaticField>
-      <StaticField label={t("moduleDescription")} labelStyle={{ width: 150 }}>
-        {value.description}
-      </StaticField>
-      <StaticField label={t("moduleTheme")} labelStyle={{ width: 150 }}>
-        {t(ModuleTopic[value.topic])}
-      </StaticField>
-    </div>
   );
 }

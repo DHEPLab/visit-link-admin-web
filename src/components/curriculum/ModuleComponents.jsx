@@ -123,9 +123,9 @@ function stickyScrollListener(offsetTop, onChangeStickyTop) {
     const diffTop = event.target.scrollTop - offsetTop;
     onChangeStickyTop(diffTop > 0 ? diffTop : 0);
   });
-  document.getElementById("route-view").addEventListener("scroll", onScroll);
+  document.getElementById("route-view")?.addEventListener("scroll", onScroll);
   return () => {
-    document.getElementById("route-view").removeEventListener("scroll", onScroll);
+    document.getElementById("route-view")?.removeEventListener("scroll", onScroll);
   };
 }
 
