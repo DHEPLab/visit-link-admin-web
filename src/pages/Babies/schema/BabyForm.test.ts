@@ -19,7 +19,7 @@ describe("toNewBabyRequest", () => {
       identity: "123456789",
       gender: "FEMALE",
       stage: "EDC",
-      edc: "2024-09-09",
+      edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
       area: "Some Area",
       location: "Some Location",
     });
@@ -38,7 +38,7 @@ describe("toNewBabyRequest", () => {
       identity: "123456789",
       gender: "FEMALE",
       stage: "EDC",
-      edc: "2024-09-09",
+      edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
       area: "Area1/Area2/Area3",
       location: "Some Location",
     });
@@ -61,7 +61,7 @@ describe("toNewBabyRequest", () => {
       identity: "123456789",
       gender: "FEMALE",
       stage: "BIRTH",
-      birthday: "2024-09-09",
+      birthday: dayjs().add(2, "days").format("YYYY-MM-DD"),
       assistedFood: true,
       feedingPattern: "BREAST_MILK",
       area: "Some Area",
