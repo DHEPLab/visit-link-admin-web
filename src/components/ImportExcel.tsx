@@ -6,45 +6,59 @@ import Column from "antd/lib/table/Column";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import UploadButton from "./UploadButton";
-import { checkBabies } from "@/components/utils/importChecker";
+import { checkBabies, ImportBabyType } from "@/components/utils/importChecker";
+import { CheckError } from "@/models/res/importExcel";
+import { UploadProps } from "antd/es/upload/interface";
 
-export default function ImportExcel({ open, refresh, close }) {
+interface ImportExcelProps {
+  open: boolean;
+  refresh: VoidFunction;
+  close: VoidFunction;
+}
+
+const ImportExcel: React.FC<ImportExcelProps> = ({ open, refresh, close }) => {
   const { t, i18n } = useTranslation(["common", "enum", "baby"]);
 
   const [spinningLoading, setSpinningLoading] = useState(false);
-  const [importData, setImportData] = useState([]);
-  const [errData, setErrData] = useState([]);
+  const [importData, setImportData] = useState<ImportBabyType[]>([]);
+  const [errData, setErrData] = useState<CheckError[]>([]);
 
   useEffect(() => {
     setImportData([]);
     setErrData([]);
   }, [open]);
 
-  async function putBlob(fileInfo) {
+  const processFile: UploadProps["customRequest"] = (fileInfo) => {
     setSpinningLoading(true);
     const { file } = fileInfo;
     const reader = new FileReader();
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file as Blob);
     reader.onload = function (e) {
-      const data = e.target.result;
-      const wb = XLSX.read(data, { type: "binary" });
-      const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-      const arr = json.length > 1 ? json.slice(1) : [];
-      checkBaby(arr);
+      if (e.target && e.target.result) {
+        const data = new Uint8Array(e.target.result as ArrayBuffer);
+        const wb = XLSX.read(data, { type: "array" });
+        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]) as Record<string, string>[];
+        const arr = json.length > 1 ? json.slice(1) : [];
+        checkBaby(arr);
+      }
     };
-  }
+    reader.onerror = function () {
+      console.error("File reading failed");
+      setSpinningLoading(false);
+    };
+  };
 
-  async function checkBaby(babies) {
+  async function checkBaby(babies: Record<string, string>[]) {
     const { validBabies, errors } = checkBabies(babies);
 
     axios
-      .post(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, validBabies)
+      .post<CheckError[]>(`/admin/babies/check?lang=${i18n.resolvedLanguage}`, validBabies)
       .then((res) => {
         const { data } = res;
-        const errresults = [...errors, ...(data || [])].sort(
+        const errorResults = [...errors, ...(data || [])].sort(
           (a, b) => parseInt(`${a.number}`) - parseInt(`${b.number}`),
         );
-        setErrData(errresults);
+        setErrData(errorResults);
         const successResults = validBabies.filter(
           (element) => !(data || []).find((baby) => baby.name === element.name),
         );
@@ -55,7 +69,7 @@ export default function ImportExcel({ open, refresh, close }) {
       });
   }
 
-  function importDatas() {
+  function startImport() {
     setSpinningLoading(true);
     axios
       .post("/admin/babies/imports", importData)
@@ -86,7 +100,7 @@ export default function ImportExcel({ open, refresh, close }) {
     <Container tip="Loading..." spinning={spinningLoading}>
       <Steps progressDot current={3} size="small" items={stepItems} />
       <ButtonLine>
-        <Upload customRequest={putBlob} accept=".xls,.xlsx,.csv" showUploadList={false}>
+        <Upload customRequest={processFile} accept=".xls,.xlsx,.csv" showUploadList={false}>
           <UploadButton title={t("excel.clickToUploadExcel")} icon="iconimport-excel">
             {t("excel.support")}
             <br />
@@ -129,7 +143,7 @@ export default function ImportExcel({ open, refresh, close }) {
               type="primary"
               style={{ float: "right", width: 160 }}
               size="middle"
-              onClick={importDatas}
+              onClick={startImport}
               disabled={importData.length === 0}
             >
               {t("excel.importData")}
@@ -139,7 +153,7 @@ export default function ImportExcel({ open, refresh, close }) {
       )}
     </Container>
   );
-}
+};
 
 const CloseButton = styled(Button)`
   border-color: #ff794f;
@@ -177,3 +191,5 @@ const DownLink = styled.a`
   position: relative;
   bottom: -30px;
 `;
+
+export default ImportExcel;

@@ -1,8 +1,10 @@
+export interface CheckError {
+  number: number;
+  name: string;
+  matters: string;
+}
+
 export interface ImportExcelCheckRes {
-  errData: {
-    number: number;
-    name: string;
-    matters: string;
-  }[];
+  errData: CheckError[];
   total: number;
 }
