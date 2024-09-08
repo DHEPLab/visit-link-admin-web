@@ -70,8 +70,8 @@ export const VisitStatus = {
 };
 
 export const ProjectStatus = {
-  1: i18n.t("ProjectStatus.1", { ns: "enum" }),
-  0: i18n.t("ProjectStatus.0", { ns: "enum" }),
+  "1": i18n.t("ProjectStatus.1", { ns: "enum" }),
+  "0": i18n.t("ProjectStatus.0", { ns: "enum" }),
 };
 
 export const QrType = {

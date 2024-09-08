@@ -6,7 +6,7 @@ import React from "react";
 
 const SignIn = React.lazy(() => import("@/pages/SignIn"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
-const Projects = React.lazy(() => import("@/pages/Projects"));
+const Projects = React.lazy(() => import("@/pages/Projects/Projects"));
 const Modules = React.lazy(() => import("@/pages/Modules"));
 const Module = React.lazy(() => import("@/pages/Module"));
 const Babies = React.lazy(() => import("@/pages/Babies/Babies"));
