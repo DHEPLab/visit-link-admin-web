@@ -1,55 +1,24 @@
 import dayjs from "dayjs";
 import i18n from "@/i18n";
+import * as Enums from "@/constants/enums";
+import { partial } from "radash";
 
 const t = i18n.getFixedT(null, ["common", "enum", "baby"]);
+type EnumType = (typeof Enums)[keyof typeof Enums];
 
-function getFeedingPattern(value: string): string | null {
-  const arr = [
-    { key: "BREAST_MILK", value: t("FeedingPattern.BREAST_MILK", { ns: "enum" }) },
-    { key: "MILK_POWDER", value: t("FeedingPattern.MILK_POWDER", { ns: "enum" }) },
-    { key: "MIXED", value: t("FeedingPattern.MIXED", { ns: "enum" }) },
-    { key: "TERMINATED", value: t("FeedingPattern.TERMINATED", { ns: "enum" }) },
-  ];
-  const find = arr.find((ele) => ele.value === value);
-  if (find) return find.key;
+function getEnumValue(enumType: EnumType, enumValue: string): string | null {
+  for (const [key, value] of Object.entries(enumType)) {
+    if (value === enumValue) {
+      return key;
+    }
+  }
   return null;
 }
 
-function getBabyStage(value?: string): string | null {
-  const arr = [
-    { key: "EDC", value: t("BabyStage.EDC", { ns: "enum" }) },
-    { key: "BIRTH", value: t("BabyStage.BIRTH", { ns: "enum" }) },
-  ];
-  const find = arr.find((ele) => ele.value === value);
-  if (find) return find.key;
-  return null;
-}
-
-function getGender(value?: string): string | null {
-  const arr = [
-    { key: "MALE", value: t("Gender.MALE", { ns: "enum" }) },
-    { key: "FEMALE", value: t("Gender.FEMALE", { ns: "enum" }) },
-    { key: "UNKNOWN", value: t("Gender.UNKNOWN", { ns: "enum" }) },
-  ];
-  const find = arr.find((ele) => ele.value === value);
-  if (find) return find.key;
-  return null;
-}
-
-function getFamilyTies(value: string): string | null {
-  const arr = [
-    { key: "MOTHER", value: t("RELATIVES.MOTHER", { ns: "enum" }) },
-    { key: "FATHER", value: t("RELATIVES.FATHER", { ns: "enum" }) },
-    { key: "GRANDMOTHER", value: t("RELATIVES.GRANDMOTHER", { ns: "enum" }) },
-    { key: "GRANDMA", value: t("RELATIVES.GRANDMA", { ns: "enum" }) },
-    { key: "GRANDFATHER", value: t("RELATIVES.GRANDFATHER", { ns: "enum" }) },
-    { key: "GRANDPA", value: t("RELATIVES.GRANDPA", { ns: "enum" }) },
-    { key: "OTHER", value: t("RELATIVES.OTHER", { ns: "enum" }) },
-  ];
-  const find = arr.find((ele) => ele.value === value);
-  if (find) return find.key;
-  return null;
-}
+const getBabyStage = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.BabyStage);
+const getGender = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.Gender);
+const getFeedingPattern = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.FeedingPattern);
+const getFamilyTies = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.FamilyTies);
 
 function getAssistedFood(value: string): boolean | null {
   const arr = [
@@ -69,56 +38,30 @@ type Care = {
   wechat: string;
 };
 
+function buildCare(baby: Record<string, string>, prefix = "Caregiver_Main", isMaster = true): Care {
+  return {
+    master: isMaster,
+    name: baby[`${prefix}_name`],
+    familyTies: getFamilyTies(baby[`${prefix}_relationship`]),
+    phone: baby[`${prefix}_phone`],
+    wechat: baby[`${prefix}_Wechat`],
+  };
+}
+
 function getCares(baby: Record<string, string>): Care[] {
-  const cares: Care[] = [];
-  if (baby["Caregiver_Main_name"]) {
-    cares.push({
-      master: true,
-      name: baby["Caregiver_Main_name"] && baby["Caregiver_Main_name"].trim(),
-      familyTies: getFamilyTies(baby["Caregiver_Main_relationship"]),
-      phone: baby["Caregiver_Main_phone"],
-      wechat: baby["Caregiver_Main_Wechat"],
-    });
-  } else {
-    return cares;
-  }
+  const caregivers = [
+    { prefix: "Caregiver_Main", isMaster: true },
+    { prefix: "Caregiver_II", isMaster: false },
+    { prefix: "Caregiver_III", isMaster: false },
+    { prefix: "Caregiver_IV", isMaster: false },
+  ];
 
-  if (baby["Caregiver_II_name"]) {
-    cares.push({
-      master: false,
-      name: baby["Caregiver_II_name"],
-      familyTies: getFamilyTies(baby["Caregiver_II_relationship"]),
-      phone: baby["Caregiver_II_phone"],
-      wechat: baby["Caregiver_II_Wechat"],
-    });
-  } else {
+  return caregivers.reduce<Care[]>((cares, { prefix, isMaster }) => {
+    if (baby[`${prefix}_name`]) {
+      cares.push(buildCare(baby, prefix, isMaster));
+    }
     return cares;
-  }
-
-  if (baby["Caregiver_III_name"]) {
-    cares.push({
-      master: false,
-      name: baby["Caregiver_III_name"],
-      familyTies: getFamilyTies(baby["Caregiver_III_relationship"]),
-      phone: baby["Caregiver_III_phone"],
-      wechat: baby["Caregiver_III_Wechat"],
-    });
-  } else {
-    return cares;
-  }
-
-  if (baby["Caregiver_IV_name"]) {
-    cares.push({
-      master: false,
-      name: baby["Caregiver_IV_name"],
-      familyTies: getFamilyTies(baby["Caregiver_IV_relationship"]),
-      phone: baby["Caregiver_IV_phone"],
-      wechat: baby["Caregiver_IV_Wechat"],
-    });
-  } else {
-    return cares;
-  }
-  return cares;
+  }, []);
 }
 
 export type ImportBabyType = {
@@ -148,7 +91,6 @@ export type ImportBabyError = {
 };
 
 function toBaby(baby: Record<string, string>) {
-  const cares = getCares(baby);
   return {
     identity: baby[t("id", { ns: "baby" })]?.trim(),
     name: baby[t("babyName", { ns: "baby" })]?.trim(),
@@ -162,7 +104,7 @@ function toBaby(baby: Record<string, string>) {
     location: baby[t("address", { ns: "baby" })],
     remark: baby[t("comments", { ns: "baby" })],
     chw: { chw: { identity: baby[t("chwID", { ns: "baby" })] } },
-    cares: cares,
+    cares: getCares(baby),
   };
 }
 
