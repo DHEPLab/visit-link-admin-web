@@ -1,18 +1,25 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { Space, Button } from "antd";
 import { useTranslation } from "react-i18next";
 
-import { ReviewActionFromApp } from "../constants/enums";
+import { ReviewActionFromApp } from "@/constants/enums";
+import { BabyResponse } from "@/models/res/Baby";
 
-export default function BabyReviewBar({ baby, onApprove, onReject }) {
+interface BabyReviewBarProps {
+  baby: BabyResponse;
+  onApprove: MouseEventHandler;
+  onReject: MouseEventHandler;
+}
+
+const BabyReviewBar: React.FC<BabyReviewBarProps> = ({ baby, onApprove, onReject }) => {
   const { t } = useTranslation("baby");
 
   return (
     <Container>
       <Title>
-        {t("reviewType")}：{ReviewActionFromApp[baby.actionFromApp]}{" "}
+        {t("reviewType")}：{ReviewActionFromApp[baby.actionFromApp as keyof typeof ReviewActionFromApp]}{" "}
       </Title>
       <Flex>
         {baby.closeAccountReason && <Label>{t("archiveReason")}：</Label>}
@@ -32,7 +39,7 @@ export default function BabyReviewBar({ baby, onApprove, onReject }) {
       </Flex>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: flex;
@@ -69,3 +76,5 @@ const EditButton = styled(Button)`
     border: none;
   }
 `;
+
+export default BabyReviewBar;

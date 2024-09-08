@@ -1,8 +1,7 @@
-import React from "react";
 import styled from "styled-components";
-import { Tabs } from "antd";
+import { Tabs, TabsProps } from "antd";
 
-export default function CardTabs({ ...props }) {
+export default function CardTabs(props: TabsProps) {
   return <CardTabsContainer type="card" {...props} />;
 }
 

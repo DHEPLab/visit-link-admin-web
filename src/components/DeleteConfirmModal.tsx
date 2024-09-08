@@ -1,10 +1,18 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
 import useBoolState from "@/hooks/useBoolState";
 import { Space, Button, Modal } from "antd";
 
-export default function DeleteConfirmModal(props) {
+interface DeleteConfirmModalProps {
+  title?: string;
+  content?: string;
+  onConfirm: VoidFunction;
+  okText?: string;
+  cancelText?: string;
+}
+
+const DeleteConfirmModal: React.FC<PropsWithChildren<DeleteConfirmModalProps>> = (props) => {
   const { t } = useTranslation(["common"]);
   const {
     title = t("delete"),
@@ -46,4 +54,6 @@ export default function DeleteConfirmModal(props) {
       </Modal>
     </>
   );
-}
+};
+
+export default DeleteConfirmModal;

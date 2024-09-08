@@ -1,11 +1,18 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { Space, Button } from "antd";
 import { useTranslation } from "react-i18next";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
-export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt }) {
+interface DraftBarProps {
+  title: string;
+  onClick: MouseEventHandler;
+  onRemove: VoidFunction;
+  lastModifiedDraftAt: string;
+}
+
+const DraftBar: React.FC<DraftBarProps> = ({ title, onClick, onRemove, lastModifiedDraftAt }) => {
   const { t } = useTranslation("curriculum");
   return (
     <Container>
@@ -24,7 +31,7 @@ export default function DraftBar({ title, onClick, onRemove, lastModifiedDraftAt
       </Flex>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   display: flex;
@@ -68,3 +75,5 @@ const DeleteButton = styled(Button)`
     color: #fff !important;
   }
 `;
+
+export default DraftBar;

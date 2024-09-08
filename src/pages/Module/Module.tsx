@@ -53,7 +53,7 @@ export default function Module() {
   const [components, setComponents] = useState<ModuleComponentType[]>([]);
 
   const [draftId, setDraftId] = useState<string>("");
-  const [draftDate, setDraftDate] = useState();
+  const [draftDate, setDraftDate] = useState<string>("");
   const mode = (() => {
     const routes = {
       "/modules/edit": "edit",

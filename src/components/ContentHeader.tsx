@@ -1,14 +1,14 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 
-export default function ContentHeader({ title, children }) {
+const ContentHeader: React.FC<PropsWithChildren<{ title: string }>> = ({ title, children }) => {
   return (
     <ContentHeaderContainer>
       <Title>{title}</Title>
       <div>{children}</div>
     </ContentHeaderContainer>
   );
-}
+};
 
 const ContentHeaderContainer = styled.div`
   height: 76px;
@@ -27,3 +27,5 @@ const Title = styled.div`
   font-size: 24px;
   font-weight: bold;
 `;
+
+export default ContentHeader;

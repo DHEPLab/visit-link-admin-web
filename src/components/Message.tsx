@@ -5,7 +5,7 @@ import { message as AntdMessage } from "antd";
 import Iconfont from "./Iconfont";
 
 const Message = {
-  success: (title, message, duration) => {
+  success: (title: string, message: string, duration: number) => {
     AntdMessage.success({
       duration: duration || 1,
       content: <MessageContent {...{ title, message }} />,
@@ -17,9 +17,7 @@ const Message = {
   },
 };
 
-export default Message;
-
-function MessageContent({ title, message }) {
+const MessageContent: React.FC<{ title: string; message: string }> = ({ title, message }) => {
   return (
     <Container>
       <Iconfont type="iconsuccess" size={60} />
@@ -27,7 +25,7 @@ function MessageContent({ title, message }) {
       <MessageBody>{message}</MessageBody>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   text-align: center;
@@ -50,3 +48,5 @@ const MessageBody = styled.div`
   font-size: 14px;
   margin-top: 20px;
 `;
+
+export default Message;

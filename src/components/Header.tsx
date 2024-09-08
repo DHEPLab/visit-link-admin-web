@@ -12,17 +12,29 @@ import Rules from "../constants/rules";
 import useBoolState from "@/hooks/useBoolState";
 import LogoImage from "../assets/logo.png";
 import { useUserStore } from "@/store/user";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-export default function Header({ username, role, onNavigate, onLogout }) {
+interface HeaderProps {
+  username: string;
+  role: string;
+  onNavigate: (path: string) => void;
+  onLogout: () => void;
+}
+
+interface ExportFormValues {
+  range: dayjs.Dayjs[];
+}
+
+const Header: React.FC<HeaderProps> = ({ username, role, onNavigate, onLogout }) => {
   const { t } = useTranslation(["header", "roles"]);
   const user = useUserStore((state) => state.user);
   const [visibleExport, openExportModal, closeExportModal] = useBoolState(false);
   const [exportType, setExportType] = useState("visit");
 
-  async function handleSaveExport(values) {
+  async function handleSaveExport(values: ExportFormValues) {
     switch (exportType) {
       case "visit": {
         const params = `startDay=${values?.range[0].format("YYYY-MM-DD")}&endDay=${values?.range[1].format(
@@ -46,7 +58,7 @@ export default function Header({ username, role, onNavigate, onLogout }) {
     closeExportModal();
   }
 
-  async function download(requestUrl, filename) {
+  async function download(requestUrl: string, filename: string) {
     const response = await axios.get(`${requestUrl}`, {
       responseType: "blob",
       headers: { "x-mask-request": true },
@@ -102,7 +114,7 @@ export default function Header({ username, role, onNavigate, onLogout }) {
       </ModalForm>
     </HeaderContainer>
   );
-}
+};
 
 const SplitLine = styled.div`
   width: 1px;
@@ -161,3 +173,5 @@ const Logo = styled.div`
     margin-left: 40px;
   }
 `;
+
+export default Header;

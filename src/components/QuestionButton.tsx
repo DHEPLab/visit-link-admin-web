@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Iconfont from "./Iconfont";
 
-export default function QuestionButton({ icon, title }) {
+const QuestionButton: React.FC<{ icon: string; title: string }> = ({ icon, title }) => {
   return (
     <Container>
       <Line>
@@ -11,7 +11,7 @@ export default function QuestionButton({ icon, title }) {
       </Line>
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   background: #fff9f5;
@@ -37,3 +37,5 @@ const Line = styled.div`
   justify-content: center;
   text-align: justify;
 `;
+
+export default QuestionButton;
