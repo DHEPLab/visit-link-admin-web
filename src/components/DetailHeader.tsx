@@ -4,7 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 import Iconfont from "@/components/Iconfont";
 
-export default function DetailHeader({ icon, menu, title, role, extra }) {
+interface DetailHeaderProps {
+  icon: string;
+  menu: string;
+  title: string;
+  role?: string;
+  extra?: React.ReactNode;
+}
+
+const DetailHeader: React.FC<DetailHeaderProps> = ({ icon, menu, title, role, extra }) => {
   const navigate = useNavigate();
   return (
     <Container>
@@ -18,7 +26,7 @@ export default function DetailHeader({ icon, menu, title, role, extra }) {
       {extra}
     </Container>
   );
-}
+};
 
 const Container = styled.div`
   height: 76px;
@@ -55,3 +63,5 @@ const Title = styled.div`
   font-weight: bold;
   margin-left: 10px;
 `;
+
+export default DetailHeader;
