@@ -5,7 +5,7 @@ import { message as AntdMessage } from "antd";
 import Iconfont from "./Iconfont";
 
 const Message = {
-  success: (title: string, message: string, duration: number) => {
+  success: (title: string, message: string, duration?: number) => {
     AntdMessage.success({
       duration: duration || 1,
       content: <MessageContent {...{ title, message }} />,
