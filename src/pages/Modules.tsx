@@ -3,15 +3,17 @@ import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { ModuleTopic } from "../constants/enums";
-import WithPage from "@/components/WithPage";
+import { ModuleTopic } from "@/constants/enums";
+import WithPage, { WithPageProps } from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";
 import ZebraTable from "@/components/ZebraTable";
 import SearchInput from "@/components/SearchInput";
 import StatusTag from "@/components/StatusTag";
 
+type ModulesContentProps = WithPageProps;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }) {
+const ModulesContent: React.FC<ModulesContentProps> = ({ historyPageState, loadData, onChangeSearch, ...props }) => {
   const { t } = useTranslation("modules");
   const navigate = useNavigate();
 
@@ -62,13 +64,13 @@ function ModulesContent({ historyPageState, loadData, onChangeSearch, ...props }
           {
             title: t("moduleTheme"),
             dataIndex: "topic",
-            render: (h) => t(ModuleTopic[h]),
+            render: (h) => t(ModuleTopic[h as keyof typeof ModuleTopic]),
           },
         ]}
       />
     </>
   );
-}
+};
 
 const Modules = WithPage(ModulesContent, "/admin/modules");
 export default Modules;
