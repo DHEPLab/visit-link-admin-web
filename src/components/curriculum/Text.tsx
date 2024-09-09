@@ -99,6 +99,7 @@ const Text: React.FC<TextProps> = ({ name, onBlur, onChange, value, ...props }) 
 
   return (
     <Container
+      data-testid={`${name}_text_component`}
       right={
         props.readonly && (
           <TextType color={colors[value.type as TextType]}>{typeLabels[value.type as TextType]}</TextType>

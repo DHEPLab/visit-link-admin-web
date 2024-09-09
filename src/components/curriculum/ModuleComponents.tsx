@@ -5,8 +5,14 @@ import { FieldArray } from "formik";
 import ComponentField from "./ComponentField";
 import { handleMoveDown, handleMoveUp, handleRemove } from "./utils/moduleComponentsUtils";
 import ToolBar from "./ToolBar";
+import { ModuleComponentType } from "@/models/res/Moduel";
 
-export default function ModuleComponents({ value, readonly }) {
+type ModuleComponentsProps = {
+  value: ModuleComponentType[];
+  readonly: boolean;
+};
+
+const ModuleComponents: React.FC<ModuleComponentsProps> = ({ value, readonly }) => {
   const [focus, setFocus] = useState(-1);
 
   return (
@@ -17,9 +23,12 @@ export default function ModuleComponents({ value, readonly }) {
             <ComponentForm>
               {value.map((component, index) => (
                 <ComponentField
-                  key={component.key}
-                  {...{ index, readonly, component, focus: focus === index }}
                   name="components"
+                  key={component.key}
+                  index={index}
+                  readonly={readonly}
+                  component={component}
+                  focus={focus === index}
                   onRemove={() => handleRemove(helpers, index, focus, setFocus)}
                   onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
                   onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, value.length)}
@@ -33,7 +42,7 @@ export default function ModuleComponents({ value, readonly }) {
       }}
     </FieldArray>
   );
-}
+};
 
 const FieldArrayContainer = styled.div`
   display: flex;
@@ -42,3 +51,5 @@ const FieldArrayContainer = styled.div`
 const ComponentForm = styled.div`
   flex: 1;
 `;
+
+export default ModuleComponents;

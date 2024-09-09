@@ -5,12 +5,11 @@ import Iconfont from "../Iconfont";
 import { useTranslation } from "react-i18next";
 import isPropValid from "@emotion/is-prop-valid";
 
-export interface ContainerProps {
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly?: boolean;
   icon?: string;
   title?: string;
   extra?: React.ReactNode;
-  children?: React.ReactNode;
   nested?: boolean;
   hideMove?: boolean;
   hideRemove?: boolean;
@@ -24,27 +23,30 @@ export interface ContainerProps {
   onFocus?: () => void;
 }
 
-const Container: React.FC<ContainerProps> = ({
-  readonly,
-  icon,
-  title,
-  extra,
-  children,
-  nested,
-  hideMove,
-  hideRemove,
-  onRemove,
-  onMoveUp,
-  onMoveDown,
-  noPadding,
-  component,
-  right,
-  focus,
-  onFocus,
-}) => {
+const Container: React.FC<ContainerProps> = (props) => {
+  const {
+    readonly,
+    icon,
+    title,
+    extra,
+    children,
+    nested,
+    hideMove,
+    hideRemove,
+    onRemove,
+    onMoveUp,
+    onMoveDown,
+    noPadding,
+    component,
+    right,
+    focus,
+    onFocus,
+    ...rest
+  } = props;
+
   const { t } = useTranslation("container");
   return (
-    <Flex>
+    <Flex {...rest}>
       {!readonly && !hideMove && (
         <MoveContainer data-testid="move">
           <Space direction="vertical">

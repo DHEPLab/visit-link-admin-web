@@ -45,7 +45,7 @@ const ToolBar: React.FC<ToolBarProps> = ({ readonly, helpers, focus, setFocus })
   if (readonly) return null;
 
   return (
-    <ComponentToolBar>
+    <ComponentToolBar data-testid={"module-components-toolbar"}>
       <StickyContainer top={stickyTop}>
         <Card title={t("addComponent")}>
           <Space direction="vertical" size="large">
