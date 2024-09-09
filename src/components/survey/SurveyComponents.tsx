@@ -9,6 +9,7 @@ import ComponentQuestion from "./ComponentQuestion";
 import { handleMoveDown, handleMoveUp, handleRemove, insertComponent } from "@/components/utils/fieldArrayUtils";
 import { SurveyComponentType } from "@/models/res/Survey";
 import QuestionOperationBar from "@/components/survey/QuestionOperationBar";
+import { ArrayHelpers } from "formik/dist/FieldArray";
 
 type SurveyComponentsProps = {
   questions: SurveyComponentType[];
@@ -16,9 +17,13 @@ type SurveyComponentsProps = {
   stickyTop: number;
 };
 
-const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions, readonly, stickyTop }) => {
+const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions = [], readonly, stickyTop }) => {
   const [focus, setFocus] = useState(-1);
   const { t } = useTranslation("surveyComponents");
+
+  const addQuestion = (helpers: ArrayHelpers<SurveyComponentType[]>, question: SurveyComponentType) => {
+    insertComponent(helpers, question, focus, setFocus, questions.length, t("maxQuestions"));
+  };
 
   return (
     <FieldArray name="questions">
@@ -26,56 +31,28 @@ const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions, readonly
         return (
           <FieldArrayContainer>
             <ComponentForm>
-              {questions &&
-                questions.map((question, index) => (
-                  <ComponentQuestion
-                    key={question.key}
-                    index={index}
-                    readonly={readonly}
-                    component={question}
-                    focus={focus === index}
-                    name="questions"
-                    onRemove={() => handleRemove(helpers, index, focus, setFocus)}
-                    onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
-                    onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, questions.length)}
-                    onFocus={() => setFocus(index)}
-                  />
-                ))}
+              {questions.map((question, index) => (
+                <ComponentQuestion
+                  key={question.key}
+                  index={index}
+                  readonly={readonly}
+                  component={question}
+                  focus={focus === index}
+                  name="questions"
+                  onRemove={() => handleRemove(helpers, index, focus, setFocus)}
+                  onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
+                  onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, questions.length)}
+                  onFocus={() => setFocus(index)}
+                />
+              ))}
             </ComponentForm>
 
             {!readonly && (
               <QuestionOperationBar
                 stickyTop={stickyTop}
-                onAddTextQuestion={() =>
-                  insertComponent(
-                    helpers,
-                    SurveyFactory.createQuestionText(),
-                    focus,
-                    setFocus,
-                    questions.length,
-                    t("maxQuestions"),
-                  )
-                }
-                onAddRadioQuestion={() =>
-                  insertComponent(
-                    helpers,
-                    SurveyFactory.createQuestionRadio(),
-                    focus,
-                    setFocus,
-                    questions.length,
-                    t("maxQuestions"),
-                  )
-                }
-                onAddCheckboxQuestion={() =>
-                  insertComponent(
-                    helpers,
-                    SurveyFactory.createQuestionCheckbox(),
-                    focus,
-                    setFocus,
-                    questions.length,
-                    t("maxQuestions"),
-                  )
-                }
+                onAddTextQuestion={() => addQuestion(helpers, SurveyFactory.createQuestionText())}
+                onAddRadioQuestion={() => addQuestion(helpers, SurveyFactory.createQuestionRadio())}
+                onAddCheckboxQuestion={() => addQuestion(helpers, SurveyFactory.createQuestionCheckbox())}
               />
             )}
           </FieldArrayContainer>
