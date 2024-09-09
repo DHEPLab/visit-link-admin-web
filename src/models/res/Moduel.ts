@@ -9,14 +9,16 @@ export interface ModuleTextComponent {
   };
 }
 
+export interface ModuleMediaValue {
+  type: string;
+  file: string;
+  text: string;
+}
+
 export interface ModuleMediaComponent {
   type: "Media";
   key: number;
-  value: {
-    type: string;
-    file: string;
-    text: string;
-  };
+  value: ModuleMediaValue;
 }
 
 export interface ModuleSwitchComponent {

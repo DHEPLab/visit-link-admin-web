@@ -7,8 +7,18 @@ import { useTranslation } from "react-i18next";
 import Container from "./Container";
 import GhostInput from "../GhostInput";
 import UploadButton from "../UploadButton";
+import MediaPreview from "./MediaPreview";
+import { RcFile } from "antd/es/upload/interface";
+import { ModuleMediaValue } from "@/models/res/Moduel";
 
-export default function Media({ name, value, onChange, ...props }) {
+type MediaProps = {
+  name: string;
+  value: ModuleMediaValue;
+  onChange: (name: string) => (value: string) => void;
+  readonly?: boolean;
+};
+
+const Media: React.FC<MediaProps> = ({ name, value, onChange, ...props }) => {
   const [text, setText] = useState(value.text);
   const { t } = useTranslation("media");
 
@@ -18,7 +28,7 @@ export default function Media({ name, value, onChange, ...props }) {
     text: `${name}.text`,
   };
 
-  function handleUploadPicture(file) {
+  function handleUploadPicture(file: RcFile) {
     upload(file).then((filePath) => {
       onChange(Name.type)("PICTURE");
       onChange(Name.file)(filePath);
@@ -26,7 +36,7 @@ export default function Media({ name, value, onChange, ...props }) {
     return false;
   }
 
-  function handleUploadVideo(file) {
+  function handleUploadVideo(file: RcFile) {
     upload(file).then((filePath) => {
       onChange(Name.type)("VIDEO");
       onChange(Name.file)(filePath);
@@ -34,12 +44,12 @@ export default function Media({ name, value, onChange, ...props }) {
     return false;
   }
 
-  function upload(file) {
+  function upload(file: RcFile): Promise<string> {
     return new Promise((resolve, reject) => {
       axios
         .get("/admin/files/upload-pre-signed-url", {
           params: {
-            format: file.name ? file.name.split(".").pop().toLowerCase() : undefined,
+            format: file.name ? file.name.split(".").pop()?.toLowerCase() : undefined,
           },
         })
         .then(({ data: { url } }) => {
@@ -49,7 +59,7 @@ export default function Media({ name, value, onChange, ...props }) {
             headers: { "Content-Type": file.type },
           })
             .then(() => {
-              resolve(path(url));
+              resolve(new URL(url).pathname);
             })
             .catch(reject);
         })
@@ -57,15 +67,11 @@ export default function Media({ name, value, onChange, ...props }) {
     });
   }
 
-  function path(url) {
-    return new URL(url).pathname;
-  }
-
   return (
     <Container icon="iconmedia-gray" title={t("mediaComponent")} {...props}>
       <Flex>
         {value.file || props.readonly ? (
-          <Preview type={value.type} file={value.file} />
+          <MediaPreview type={value.type} file={value.file} />
         ) : (
           <>
             <Upload accept="image/png, image/jpeg" showUploadList={false} beforeUpload={handleUploadPicture}>
@@ -98,47 +104,12 @@ export default function Media({ name, value, onChange, ...props }) {
       />
     </Container>
   );
-}
-
-function Preview({ type, file }) {
-  if (type === "PICTURE") {
-    return <PreviewImage url={`/api/files${file}`} />;
-  }
-  return (
-    <PreviewVideo>
-      <video src={`/api/files${file}`} controls />
-    </PreviewVideo>
-  );
-}
-
-const PreviewImage = styled.div`
-  width: 400px;
-  height: 250px;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 8px;
-  background-image: url(${({ url }) => url});
-`;
-
-const PreviewVideo = styled.div`
-  width: 400px;
-  height: 250px;
-  border-radius: 8px;
-  background: #000;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  display: flex;
-
-  video {
-    /* width: 400px; */
-    height: 250px;
-  }
-`;
+};
 
 const Flex = styled.div`
   display: flex;
   justify-content: center;
   padding-top: 20px;
 `;
+
+export default Media;
