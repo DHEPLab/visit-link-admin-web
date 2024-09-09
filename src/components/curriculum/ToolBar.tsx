@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { debounce } from "radash";
 import styled from "styled-components";
 import Iconfont from "../Iconfont";
 import { Button, Card, Space } from "antd";
@@ -8,6 +7,7 @@ import { insertComponent } from "@/components/utils/fieldArrayUtils";
 import CurriculumFactory from "@/components/curriculum/curriculumFactory";
 import isPropValid from "@emotion/is-prop-valid";
 import { ArrayHelpers } from "formik/dist/FieldArray";
+import { stickyScrollListener } from "@/utils/domUtils";
 
 /**
  * Use a new Component to solve the issue where changing the stickyTop causes the entire Form to re-render when the
@@ -20,17 +20,6 @@ type ToolBarProps = {
   focus: number;
   setFocus: React.Dispatch<React.SetStateAction<number>>;
 };
-
-function stickyScrollListener(offsetTop: number, onChangeStickyTop: (stickyTop: number) => void) {
-  const onScroll = debounce({ delay: 100 }, (event) => {
-    const diffTop = event.target.scrollTop - offsetTop;
-    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
-  });
-  document.getElementById("route-view")?.addEventListener("scroll", onScroll);
-  return () => {
-    document.getElementById("route-view")?.removeEventListener("scroll", onScroll);
-  };
-}
 
 const ToolBar: React.FC<ToolBarProps> = ({ readonly, helpers, focus, setFocus }) => {
   const [stickyTop, setStickyTop] = useState(0);

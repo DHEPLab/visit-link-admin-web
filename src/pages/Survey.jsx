@@ -11,10 +11,10 @@ import DraftBar from "@/components/DraftBar";
 import Card from "@/components/Card";
 import DetailHeader from "@/components/DetailHeader";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
-import { debounce } from "radash";
 import Rules from "../constants/rules";
 import usePrompt from "@/hooks/usePrompt";
 import ReadonlyForm from "@/components/ReadonlyForm";
+import { stickyScrollListener } from "@/utils/domUtils";
 
 export default function Survey() {
   const { id } = useParams();
@@ -215,15 +215,4 @@ export default function Survey() {
       )}
     </Formik>
   );
-}
-
-function stickyScrollListener(offsetTop, onChangeStickyTop) {
-  const onScroll = debounce({ delay: 100 }, (event) => {
-    const diffTop = event.target.scrollTop - offsetTop;
-    onChangeStickyTop(diffTop > 0 ? diffTop : 0);
-  });
-  document.getElementById("route-view").addEventListener("scroll", onScroll);
-  return () => {
-    document.getElementById("route-view").removeEventListener("scroll", onScroll);
-  };
 }
