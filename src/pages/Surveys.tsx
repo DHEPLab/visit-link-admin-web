@@ -3,13 +3,15 @@ import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import WithPage from "@/components/WithPage";
+import WithPage, { WithPageProps } from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";
 import ZebraTable from "@/components/ZebraTable";
 import StatusTag from "@/components/StatusTag";
 
+type SurveysContentProps = WithPageProps;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function SurveysContent({ loadData, onChangeSearch, ...props }) {
+const SurveysContent: React.FC<SurveysContentProps> = ({ loadData, onChangeSearch, ...props }) => {
   const navigate = useNavigate();
   const { t } = useTranslation("surveys");
 
@@ -55,7 +57,7 @@ function SurveysContent({ loadData, onChangeSearch, ...props }) {
       />
     </>
   );
-}
+};
 
 const Surveys = WithPage(SurveysContent, "/admin/questionnaires?sort=id,desc");
 export default Surveys;
