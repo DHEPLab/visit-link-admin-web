@@ -1,4 +1,9 @@
-import { ModuleMediaComponent, ModuleTextComponent } from "@/models/res/Moduel";
+import {
+  ModuleMediaComponent,
+  ModulePageFooterComponent,
+  ModuleSwitchComponent,
+  ModuleTextComponent,
+} from "@/models/res/Moduel";
 
 // React render key
 function generateKey() {
@@ -61,7 +66,7 @@ function createQuestionCheckbox() {
   };
 }
 
-function createSwitch() {
+function createSwitch(): ModuleSwitchComponent {
   return {
     type: "Switch",
     key: generateKey(),
@@ -72,7 +77,7 @@ function createSwitch() {
   };
 }
 
-function createPageFooter() {
+function createPageFooter(): ModulePageFooterComponent {
   return {
     type: "PageFooter",
     key: generateKey(),

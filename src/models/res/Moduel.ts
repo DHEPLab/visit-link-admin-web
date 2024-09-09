@@ -23,19 +23,31 @@ export interface ModuleSwitchComponent {
   type: "Switch";
   key: number;
   value: {
-    question: string;
+    question: {
+      type: "script" | "instruction" | "reference";
+      html: string;
+    };
     cases: SwitchCase[];
   };
+}
+
+export interface ModulePageFooterComponent {
+  type: "PageFooter";
+  key: number;
 }
 
 interface SwitchCase {
   key: number;
   text: string;
   finishAction: string[];
-  components: ModuleSwitchComponent[];
+  components: ModuleTextComponent[];
 }
 
-export type ModuleComponentType = ModuleTextComponent | ModuleMediaComponent | ModuleSwitchComponent;
+export type ModuleComponentType =
+  | ModuleTextComponent
+  | ModuleMediaComponent
+  | ModuleSwitchComponent
+  | ModulePageFooterComponent;
 
 export interface ModuleResponse {
   branch: "MASTER" | "DRAFT";
