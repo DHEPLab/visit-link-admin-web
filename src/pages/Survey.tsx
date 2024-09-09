@@ -230,7 +230,7 @@ export default function Survey() {
           </Card>
 
           <Card title={t("surveyContent")}>
-            <SurveyComponents value={values.questions} readonly={readonly} stickyTop={stickyTop} />
+            <SurveyComponents questions={values.questions} readonly={readonly} stickyTop={stickyTop} />
           </Card>
         </>
       )}

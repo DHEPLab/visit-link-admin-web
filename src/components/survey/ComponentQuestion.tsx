@@ -40,7 +40,6 @@ const ComponentQuestion: React.FC<ComponentQuestionProps> = (props) => {
         name={`${name}.${index}.value`}
         index={index}
         readonly={readonly}
-        component={component}
         focus={focus}
         onFocus={onFocus}
         onRemove={onRemove}
