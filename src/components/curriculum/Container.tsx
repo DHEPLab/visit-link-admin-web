@@ -5,7 +5,26 @@ import Iconfont from "../Iconfont";
 import { useTranslation } from "react-i18next";
 import isPropValid from "@emotion/is-prop-valid";
 
-export default function Container({
+interface ContainerProps {
+  readonly?: boolean;
+  icon?: string;
+  title?: string;
+  extra?: React.ReactNode;
+  children?: React.ReactNode;
+  nested?: boolean;
+  hideMove?: boolean;
+  hideRemove?: boolean;
+  onRemove?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  noPadding?: boolean;
+  component?: React.ReactNode;
+  right?: React.ReactNode;
+  focus?: boolean;
+  onFocus?: () => void;
+}
+
+const Container: React.FC<ContainerProps> = ({
   readonly,
   icon,
   title,
@@ -22,12 +41,12 @@ export default function Container({
   right,
   focus,
   onFocus,
-}) {
+}) => {
   const { t } = useTranslation("container");
   return (
     <Flex>
       {!readonly && !hideMove && (
-        <MoveContainer testid="move">
+        <MoveContainer data-testid="move">
           <Space direction="vertical">
             <IconfontButton type="iconup" size={24} onClick={onMoveUp} />
             <IconfontButton type="icondown" size={24} onClick={onMoveDown} />
@@ -58,7 +77,7 @@ export default function Container({
       )}
     </Flex>
   );
-}
+};
 
 const ExtraContainer = styled.div`
   margin-left: 20px;
@@ -95,8 +114,11 @@ const TitleContainer = styled.div`
 `;
 
 const StyledContainer = styled("div").withConfig({
-  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "focus",
-})`
+  shouldForwardProp: (prop) => isPropValid(prop) && ["focus", "nested"].indexOf(prop) < 0,
+})<{
+  nested?: boolean;
+  focus?: boolean;
+}>`
   flex: 1;
   border: 2px solid #eee;
   border-radius: 10px;
@@ -117,8 +139,13 @@ const Title = styled.div`
 `;
 
 const Body = styled("div").withConfig({
-  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "noPadding",
-})`
+  shouldForwardProp: (prop) => isPropValid(prop) && ["noPadding", "nested"].indexOf(prop) < 0,
+})<{
+  noPadding?: boolean;
+  nested?: boolean;
+}>`
   ${({ noPadding }) => !noPadding && "padding: 10px;"}
   ${({ nested }) => nested && "margin-bottom: -20px;"}
 `;
+
+export default Container;
