@@ -3,9 +3,11 @@ import styled from "@emotion/styled";
 import { useQuill } from "@/hooks/useQuill";
 import "quill/dist/quill.snow.css";
 import { debounce } from "radash";
-import { useTranslation } from "react-i18next";
+import { useTranslation, UseTranslationResponse } from "react-i18next";
 
-import Container from "./Container";
+import Container, { ContainerProps } from "./Container";
+import isPropValid from "@emotion/is-prop-valid";
+import { Range } from "quill/core/selection";
 
 const container = [
   ["bold", "italic"],
@@ -18,16 +20,26 @@ const colors = {
   reference: "#6a2c70",
 };
 
+type TextType = "script" | "instruction" | "reference";
+
+type TextProps = {
+  name: string;
+  onBlur?: (value: string) => void;
+  onChange: (name: string) => (value: string) => void;
+  value: { html: string; type: string };
+  readonly?: boolean;
+} & ContainerProps;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function Text({ name, onBlur, onChange, value, ...props }) {
-  const types = ["instruction", "script", "reference"];
+const Text: React.FC<TextProps> = ({ name, onBlur, onChange, value, ...props }) => {
+  const types: TextType[] = ["instruction", "script", "reference"];
   const modules = {
     toolbar: {
       container: props.readonly
         ? []
         : [[{ type: [value.type, ...types.filter((item) => item !== value.type)] }], ...container],
       handlers: {
-        type: function (args) {
+        type: function (args: TextType) {
           if (!args) return;
           onChange(Name.type)(args);
         },
@@ -61,9 +73,9 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
     const Delta = Quill.import("delta");
 
     class PlainClipboard extends Clipboard {
-      onPaste(range, { text }) {
+      onPaste(range: Range, { text }: { text?: string }) {
         const delta = new Delta().retain(range.index).delete(range.length).insert(text);
-        const index = text.length + range.index;
+        const index = (text?.length ?? 0) + range.index;
         const length = 0;
         this.quill.updateContents(delta, "user");
         this.quill.setSelection(index, length, "silent");
@@ -87,10 +99,13 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
 
   return (
     <Container
-      right={props.readonly && <TextType color={colors[value.type]}>{typeLabels[value.type]}</TextType>}
+      right={
+        props.readonly && (
+          <TextType color={colors[value.type as TextType]}>{typeLabels[value.type as TextType]}</TextType>
+        )
+      }
       icon="icontext-gray"
       title={t("textComponent")}
-      name={name}
       noPadding
       {...props}
     >
@@ -99,7 +114,7 @@ export default function Text({ name, onBlur, onChange, value, ...props }) {
       </QuillContainer>
     </Container>
   );
-}
+};
 
 const TextType = styled.div`
   font-weight: bold;
@@ -107,7 +122,14 @@ const TextType = styled.div`
   color: ${({ color }) => color};
 `;
 
-const QuillContainer = styled.div`
+const QuillContainer = styled("div", {
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "noPadding",
+})<{
+  readonly?: boolean;
+  t: UseTranslationResponse<"text", undefined>["t"];
+  colors: Record<TextType, string>;
+  typeLabels: Record<TextType, string>;
+}>`
   ${({ readonly }) =>
     readonly &&
     `
@@ -153,3 +175,5 @@ const QuillContainer = styled.div`
     min-height: 126px;
   }
 `;
+
+export default Text;

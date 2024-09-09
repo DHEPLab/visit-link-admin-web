@@ -5,7 +5,7 @@ import Iconfont from "../Iconfont";
 import { useTranslation } from "react-i18next";
 import isPropValid from "@emotion/is-prop-valid";
 
-interface ContainerProps {
+export interface ContainerProps {
   readonly?: boolean;
   icon?: string;
   title?: string;
