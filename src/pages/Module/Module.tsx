@@ -18,7 +18,7 @@ import { QRCodeSVG } from "qrcode.react";
 import usePrompt from "@/hooks/usePrompt";
 import styled from "styled-components";
 import { useModuleStore } from "@/store/module";
-import ReadonlyForm from "./ReadonlyForm";
+import ReadonlyForm from "@/components/ReadonlyForm";
 import { ModuleResponse, ModuleComponentType } from "@/models/res/Moduel";
 import { FormikHandlers } from "formik/dist/types";
 
@@ -196,6 +196,15 @@ export default function Module() {
     },
   });
 
+  const readonlyFormFields = readonly
+    ? [
+        { label: t("moduleName"), value: module.name },
+        { label: t("moduleNumber"), value: module.number },
+        { label: t("moduleDescription"), value: module.description },
+        { label: t("moduleTheme"), value: t(ModuleTopic[module.topic as keyof typeof ModuleTopic]) },
+      ]
+    : [];
+
   if (!components || components.length === 0) {
     return null;
   }
@@ -261,7 +270,7 @@ export default function Module() {
             <Row>
               <Col span={18}>
                 {readonly ? (
-                  <ReadonlyForm value={module} />
+                  <ReadonlyForm fields={readonlyFormFields} labelWidth={150} />
                 ) : (
                   <Form data-testid="basic-form" labelCol={{ span: 6 }} form={form} onFinish={onSubmit}>
                     <Form.Item

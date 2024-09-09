@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import usePrompt from "@/hooks/usePrompt";
 import Schedules from "./Schedules";
 import Lessons from "./Lessons";
-import ReadonlyForm from "./ReadonlyForm";
+import ReadonlyForm from "@/components/ReadonlyForm";
 
 export default function Curriculum() {
   const { id } = useParams();
@@ -124,6 +124,19 @@ export default function Curriculum() {
     },
   });
 
+  const readonlyFormFields = readonly
+    ? [
+        {
+          label: t("curriculumName"),
+          value: curriculum.name,
+        },
+        {
+          label: t("curriculumDescription"),
+          value: curriculum.description,
+        },
+      ]
+    : [];
+
   // fix page flash
   if (readonly == null || (id && curriculum.name == null)) return null;
 
@@ -180,7 +193,7 @@ export default function Curriculum() {
 
       <Card title={t("curriculumInformation")}>
         {readonly ? (
-          <ReadonlyForm value={curriculum} />
+          <ReadonlyForm fields={readonlyFormFields} labelWidth={180} />
         ) : (
           <Form
             data-testid="basic-form"

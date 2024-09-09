@@ -10,11 +10,11 @@ import SurveyComponents from "@/components/survey/SurveyComponents";
 import DraftBar from "@/components/DraftBar";
 import Card from "@/components/Card";
 import DetailHeader from "@/components/DetailHeader";
-import StaticField from "@/components/StaticField";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import { debounce } from "radash";
 import Rules from "../constants/rules";
 import usePrompt from "@/hooks/usePrompt";
+import ReadonlyForm from "@/components/ReadonlyForm";
 
 export default function Survey() {
   const { id } = useParams();
@@ -123,6 +123,15 @@ export default function Survey() {
     },
   });
 
+  const readonlyFormFields = readonly
+    ? [
+        {
+          label: t("surveyName"),
+          value: module.name,
+        },
+      ]
+    : [];
+
   if (!questions) return null;
 
   return (
@@ -180,7 +189,7 @@ export default function Survey() {
 
           <Card title={t("surveyInformation")}>
             {readonly ? (
-              <ReadonlyForm value={module} />
+              <ReadonlyForm fields={readonlyFormFields} />
             ) : (
               <Form
                 data-testid="basic-form"
@@ -205,15 +214,6 @@ export default function Survey() {
         </>
       )}
     </Formik>
-  );
-}
-
-function ReadonlyForm({ value }) {
-  const { t } = useTranslation("survey");
-  return (
-    <div data-testid="readonly-form">
-      <StaticField label={t("surveyName")}>{value.name}</StaticField>
-    </div>
   );
 }
 
