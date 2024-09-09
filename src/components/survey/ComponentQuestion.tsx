@@ -8,35 +8,44 @@ type ComponentQuestionProps = {
   name: string;
   component: SurveyComponentType;
   index: number;
-  onMoveDown: () => void;
+  readonly: boolean;
+  focus: boolean;
+  onRemove: VoidFunction;
+  onMoveUp: VoidFunction;
+  onMoveDown: VoidFunction;
+  onFocus: VoidFunction;
 };
 
-const ComponentQuestion: React.FC<ComponentQuestionProps> = ({ name, component, index, onMoveDown, ...props }) => {
-  let As;
-  switch (component.type) {
-    case "Text":
-      As = QuestionText;
-      break;
-    case "Radio":
-      As = QuestionRadio;
-      break;
-    case "Checkbox":
-      As = QuestionRadio;
-      break;
-  }
+const ComponentMap: { [key: string]: React.ElementType } = {
+  Text: QuestionText,
+  Radio: QuestionRadio,
+  Checkbox: QuestionRadio,
+};
+
+const ComponentQuestion: React.FC<ComponentQuestionProps> = (props) => {
+  const { name, component, index, readonly, focus, onRemove, onMoveUp, onMoveDown, onFocus } = props;
+
+  const As = ComponentMap[component.type];
+
+  const handleMoveDown = () => {
+    onMoveDown();
+    setTimeout(() => {
+      document.getElementById(`${name}.${index + 1}`)?.scrollIntoView();
+    }, 200);
+  };
 
   return (
     <div id={`${name}.${index}`}>
       <Field
         name={`${name}.${index}.value`}
         index={index}
-        onMoveDown={() => {
-          onMoveDown();
-          setTimeout(() => {
-            document.getElementById(`${name}.${index + 1}`)?.scrollIntoView();
-          }, 200);
-        }}
-        {...props}
+        readonly={readonly}
+        component={component}
+        focus={focus}
+        onFocus={onFocus}
+        onRemove={onRemove}
+        onMoveUp={onMoveUp}
+        onMoveDown={handleMoveDown}
         as={As}
       />
     </div>

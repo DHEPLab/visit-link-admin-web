@@ -10,8 +10,16 @@ import Card from "../Card";
 import { useTranslation } from "react-i18next";
 import ComponentQuestion from "./ComponentQuestion";
 import { handleMoveDown, handleMoveUp, handleRemove, insertComponent } from "@/components/utils/fieldArrayUtils";
+import isPropValid from "@emotion/is-prop-valid";
+import { SurveyComponentType } from "@/models/res/Survey";
 
-export default function SurveyComponents({ value, readonly, stickyTop }) {
+type SurveyComponentsProps = {
+  questions: SurveyComponentType[];
+  readonly: boolean;
+  stickyTop: number;
+};
+
+const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions, readonly, stickyTop }) => {
   const [focus, setFocus] = useState(-1);
   const { t } = useTranslation("surveyComponents");
 
@@ -21,15 +29,18 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
         return (
           <FieldArrayContainer>
             <ComponentForm>
-              {value &&
-                value.map((component, index) => (
+              {questions &&
+                questions.map((question, index) => (
                   <ComponentQuestion
-                    key={component.key}
-                    {...{ index, readonly, component, focus: focus === index }}
+                    key={question.key}
+                    index={index}
+                    readonly={readonly}
+                    component={question}
+                    focus={focus === index}
                     name="questions"
                     onRemove={() => handleRemove(helpers, index, focus, setFocus)}
                     onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
-                    onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, value.length)}
+                    onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, questions.length)}
                     onFocus={() => setFocus(index)}
                   />
                 ))}
@@ -48,7 +59,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                             SurveyFactory.createQuestionText(),
                             focus,
                             setFocus,
-                            value.length,
+                            questions.length,
                             t("maxQuestions"),
                           )
                         }
@@ -63,7 +74,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                             SurveyFactory.createQuestionRadio(),
                             focus,
                             setFocus,
-                            value.length,
+                            questions.length,
                             t("maxQuestions"),
                           )
                         }
@@ -78,7 +89,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                             SurveyFactory.createQuestionCheckbox(),
                             focus,
                             setFocus,
-                            value.length,
+                            questions.length,
                             t("maxQuestions"),
                           )
                         }
@@ -95,7 +106,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
       }}
     </FieldArray>
   );
-}
+};
 
 const FieldArrayContainer = styled.div`
   display: flex;
@@ -107,12 +118,16 @@ const ComponentForm = styled.div`
 
 const ComponentToolBar = styled.div``;
 
-const StickyContainer = styled.div`
+const StickyContainer = styled("div").withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "top",
+})<{ top: number }>`
   position: relative;
   top: ${({ top }) => top}px;
   height: 360px;
   margin-left: 40px;
-  box-shadow: 0px 4px 12px 0px rgba(255, 148, 114, 0.3);
+  box-shadow: 0 4px 12px 0 rgba(255, 148, 114, 0.3);
   border-radius: 8px;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
+
+export default SurveyComponents;
