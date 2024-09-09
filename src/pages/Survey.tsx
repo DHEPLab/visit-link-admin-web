@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { Formik } from "formik";
-import { Button, Form, Input, message, Space } from "antd";
+import { Formik, FormikHandlers, FormikHelpers } from "formik";
+import { Button, Form, FormProps, Input, message, Space } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,26 +15,36 @@ import Rules from "../constants/rules";
 import usePrompt from "@/hooks/usePrompt";
 import ReadonlyForm from "@/components/ReadonlyForm";
 import { stickyScrollListener } from "@/utils/domUtils";
+import { SurveyComponentType } from "@/models/res/Survey";
+import { Questionnaire } from "@/models/res/Questionnaire";
+
+interface BasicFromValue {
+  name: string;
+}
+
+interface QuestionsFromValue {
+  questions: SurveyComponentType[];
+}
 
 export default function Survey() {
   const { id } = useParams();
   const { pathname } = useLocation();
   const { t, i18n } = useTranslation("survey");
 
-  const [isPrompt, setIsPrompt] = useState(true);
-  const [readonly, setReadonly] = useState();
+  const [isPrompt, setIsPrompt] = useState<boolean>(true);
+  const [readonly, setReadonly] = useState<boolean>(true);
   const [title, setTitle] = useState(t("createNewSurvey"));
-  const [submitURL, setSubmitURL] = useState();
+  const [submitURL, setSubmitURL] = useState<string>("");
 
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const [module, setModule] = useState({});
-  const [questions, setQuestions] = useState();
+  const [module, setModule] = useState<Questionnaire>({} as Questionnaire);
+  const [questions, setQuestions] = useState<SurveyComponentType[]>();
   const [stickyTop, setStickyTop] = useState(0);
 
-  const [draftId, setDraftId] = useState();
-  const [draftDate, setDraftDate] = useState();
+  const [draftId, setDraftId] = useState<string>("");
+  const [draftDate, setDraftDate] = useState<string>("");
 
   useEffect(() => {
     setReadonly(!pathname.includes("/surveys/edit") && !pathname.includes("/surveys/create"));
@@ -46,7 +56,7 @@ export default function Survey() {
     if (!id) {
       setQuestions([SurveyFactory.createQuestionText()]);
     } else {
-      axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
+      axios.get<Questionnaire>(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);
         setModule(data);
         setTitle(data.name);
@@ -62,37 +72,43 @@ export default function Survey() {
     }
   }, [id, form, readonly, i18n]);
 
-  function onSubmitFormik(values) {
+  function onSubmitFormik(values: QuestionsFromValue) {
     setQuestions(values.questions);
     form.submit();
   }
 
-  function submitDraft(submit, validateForm) {
-    validateForm().then((r) => {
-      const validateresult = r.questions || [];
-      if (validateresult.length > 0) {
+  function submitDraft(
+    handleSubmit: FormikHandlers["handleSubmit"],
+    validateForm: FormikHelpers<QuestionsFromValue>["validateForm"],
+  ) {
+    validateForm().then((result) => {
+      const validQuestions = result.questions || [];
+      if (validQuestions.length > 0) {
         message.warning(t("questionOrChoiceCannotBeEmpty"));
       }
     });
     setSubmitURL("/admin/questionnaires/draft");
-    submit();
+    handleSubmit();
     setIsPrompt(false);
   }
 
-  function submitPublish(submit, validateForm) {
-    validateForm().then((r) => {
-      const validateresult = r.questions || [];
-      if (validateresult.length > 0) {
+  function submitPublish(
+    handleSubmit: FormikHandlers["handleSubmit"],
+    validateForm: FormikHelpers<QuestionsFromValue>["validateForm"],
+  ) {
+    validateForm().then((result) => {
+      const validQuestions = result.questions || [];
+      if (validQuestions.length > 0) {
         message.warning(t("questionOrChoiceCannotBeEmpty"));
       }
     });
     setSubmitURL("/admin/questionnaires");
-    submit();
+    handleSubmit();
     setIsPrompt(false);
   }
 
-  function onSubmit(values) {
-    if (questions.length === 0) return message.warning(t("atLeastOneQuestion"));
+  function onSubmit(values: BasicFromValue) {
+    if (questions?.length === 0) return message.warning(t("atLeastOneQuestion"));
 
     axios
       .post(submitURL, {
@@ -103,7 +119,7 @@ export default function Survey() {
       .then(() => navigate(-1));
   }
 
-  function handleDelteDraft() {
+  function handleDeleteDraft() {
     axios.delete(`/admin/questionnaires/${draftId}`).then(() => {
       setDraftId("");
     });
@@ -182,7 +198,7 @@ export default function Survey() {
             <DraftBar
               title={t("unpublishedDraft")}
               lastModifiedDraftAt={draftDate}
-              onRemove={handleDelteDraft}
+              onRemove={handleDeleteDraft}
               onClick={() => navigate(`/surveys/edit/${draftId}`)}
             />
           )}
@@ -195,7 +211,12 @@ export default function Survey() {
                 data-testid="basic-form"
                 form={form}
                 onFinish={onSubmit}
-                validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+                validateMessages={
+                  t("validateMessages", {
+                    ns: "common",
+                    returnObjects: true,
+                  }) as FormProps["validateMessages"]
+                }
               >
                 <Form.Item
                   label={t("surveyName")}
