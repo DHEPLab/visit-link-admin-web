@@ -2,52 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { FieldArray } from "formik";
-import { Space, Button, message } from "antd";
+import { Space, Button } from "antd";
 
 import SurveyFactory from "./surveyFactory";
 import Iconfont from "../Iconfont";
 import Card from "../Card";
 import { useTranslation } from "react-i18next";
 import ComponentQuestion from "./ComponentQuestion";
-
-export function handleMoveUp(helpers, index, focus, setFocus) {
-  if (index === 0) return;
-  helpers.move(index, index - 1);
-  if (focus === index) {
-    setFocus(index - 1);
-  }
-}
-
-export function handleMoveDown(helpers, index, focus, setFocus, componentSize) {
-  if (index === componentSize - 1) return;
-  helpers.move(index, index + 1);
-  if (focus === index) {
-    setFocus(index + 1);
-  }
-}
-
-export function handleRemove(helpers, index, focus, setFocus) {
-  helpers.remove(index);
-  if (focus === index) {
-    setFocus(-1);
-  }
-  if (focus > index) {
-    setFocus(focus - 1);
-  }
-}
-
-export function insertComponent(length, helpers, component, focus, setFocus, warningText) {
-  if (length > 20) {
-    message.warning(warningText);
-    return;
-  }
-  if (focus === -1) {
-    helpers.push(component);
-  } else {
-    helpers.insert(focus + 1, component);
-    setFocus(focus + 1);
-  }
-}
+import { handleMoveDown, handleMoveUp, handleRemove, insertComponent } from "@/components/utils/fieldArrayUtils";
 
 export default function SurveyComponents({ value, readonly, stickyTop }) {
   const [focus, setFocus] = useState(-1);
@@ -82,11 +44,11 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                         type="primary"
                         onClick={() =>
                           insertComponent(
-                            value.length,
                             helpers,
                             SurveyFactory.createQuestionText(),
                             focus,
                             setFocus,
+                            value.length,
                             t("maxQuestions"),
                           )
                         }
@@ -97,11 +59,11 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                         type="primary"
                         onClick={() =>
                           insertComponent(
-                            value.length,
                             helpers,
                             SurveyFactory.createQuestionRadio(),
                             focus,
                             setFocus,
+                            value.length,
                             t("maxQuestions"),
                           )
                         }
@@ -112,11 +74,11 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                         type="primary"
                         onClick={() =>
                           insertComponent(
-                            value.length,
                             helpers,
                             SurveyFactory.createQuestionCheckbox(),
                             focus,
                             setFocus,
+                            value.length,
                             t("maxQuestions"),
                           )
                         }

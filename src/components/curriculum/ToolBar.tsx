@@ -4,7 +4,7 @@ import { debounce } from "radash";
 import styled from "styled-components";
 import Iconfont from "../Iconfont";
 import { Button, Card, Space } from "antd";
-import { insertComponent } from "./utils/moduleComponentsUtils";
+import { insertComponent } from "@/components/utils/fieldArrayUtils";
 import CurriculumFactory from "@/components/curriculum/curriculumFactory";
 import isPropValid from "@emotion/is-prop-valid";
 import { ArrayHelpers } from "formik/dist/FieldArray";

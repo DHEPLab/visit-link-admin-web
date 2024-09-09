@@ -1,10 +1,10 @@
-import { ModuleComponentType } from "@/models/res/Moduel";
 import { ArrayHelpers } from "formik/dist/FieldArray";
+import { message } from "antd";
 
 type SetFocus = (focus: number) => void;
 
-export function handleMoveUp(
-  fieldArrayHelper: ArrayHelpers<ModuleComponentType[]>,
+export function handleMoveUp<T>(
+  fieldArrayHelper: ArrayHelpers<T[]>,
   index: number,
   focus?: number,
   setFocus?: SetFocus,
@@ -16,8 +16,8 @@ export function handleMoveUp(
   }
 }
 
-export function handleMoveDown(
-  fieldArrayHelper: ArrayHelpers<ModuleComponentType[]>,
+export function handleMoveDown<T>(
+  fieldArrayHelper: ArrayHelpers<T[]>,
   index: number,
   focus: number | null,
   setFocus: SetFocus | null,
@@ -30,8 +30,8 @@ export function handleMoveDown(
   }
 }
 
-export function handleRemove(
-  fieldArrayHelper: ArrayHelpers<ModuleComponentType[]>,
+export function handleRemove<T>(
+  fieldArrayHelper: ArrayHelpers<T[]>,
   index: number,
   focus: number,
   setFocus: SetFocus,
@@ -44,12 +44,19 @@ export function handleRemove(
   }
 }
 
-export function insertComponent(
-  fieldArrayHelper: ArrayHelpers<ModuleComponentType[]>,
-  component: ModuleComponentType,
+export function insertComponent<T>(
+  fieldArrayHelper: ArrayHelpers<T[]>,
+  component: T,
   focus: number,
   setFocus: SetFocus,
+  length?: number,
+  warningText?: string,
 ): void {
+  if (length && length > 20) {
+    message.warning(warningText);
+    return;
+  }
+
   if (focus === -1) {
     fieldArrayHelper.push(component);
   } else {

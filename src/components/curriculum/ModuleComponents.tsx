@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { FieldArray } from "formik";
 import ComponentField from "./ComponentField";
-import { handleMoveDown, handleMoveUp, handleRemove } from "./utils/moduleComponentsUtils";
+import { handleMoveDown, handleMoveUp, handleRemove } from "@/components/utils/fieldArrayUtils";
 import ToolBar from "./ToolBar";
 import { ModuleComponentType } from "@/models/res/Moduel";
 
