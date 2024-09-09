@@ -1,24 +1,23 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Modal, Radio } from "antd";
 import { useTranslation } from "react-i18next";
 
-import i18next from "../i18n";
-import Rules from "../constants/rules";
+import Rules from "@/constants/rules";
 import useBoolState from "@/hooks/useBoolState";
-import { Role } from "../constants/enums";
+import { Role } from "@/constants/enums";
 import CardTabs from "@/components/CardTabs";
 import ContentHeader from "@/components/ContentHeader";
 import ModalForm from "@/components/ModalForm";
-import SearchInput from "@/components/SearchInput";
 import WithPage from "@/components/WithPage";
 import ZebraTable from "@/components/ZebraTable";
 import ImportUserExcel from "@/components/ImportUserExcel";
 import ChwTagSelector from "@/components/ChwTagSelector";
 import useQueryParam from "@/hooks/useQueryParam";
 import { useUserStore } from "@/store/user";
+import CHWTab from "./CHWTab";
+import { realName, phone, username } from "./tableColumnConfig";
 
 export default function Users() {
   const { t } = useTranslation(["users", "common"]);
@@ -47,7 +46,7 @@ export default function Users() {
     {
       key: "chw",
       label: t("chw"),
-      children: <PageCHW tab={tab} navigate={navigate} />,
+      children: <CHWTab tab={tab} />,
     },
   ];
 
@@ -142,92 +141,8 @@ export default function Users() {
   );
 }
 
-const PageCHW = WithPage(CHW, "/admin/users/chw", {}, false);
 const PageSupervisor = WithPage(Supervisor, "/admin/users/supervisor", {}, false);
 const PageAdmin = WithPage(Admin, "/admin/users/admin?sort=id,desc", {}, false);
-
-function CHW({ historyPageState, tab, navigate, loadData, onChangeSearch, ...props }) {
-  const { t } = useTranslation(["users", "common"]);
-  useEffect(() => {
-    if (tab === "chw") {
-      loadData();
-    }
-  }, [tab, loadData]);
-
-  return (
-    <div>
-      <ChwBar>
-        <SearchInput
-          defaultValue={historyPageState?.search}
-          style={{ width: "420px" }}
-          onChange={(e) => onChangeSearch("search", e.target.value)}
-          placeholder={t("searchChwPlaceholder")}
-        />
-        {/* <Button ghost type="primary">
-          批量创建社区工作者
-        </Button> */}
-      </ChwBar>
-      <ZebraTable
-        {...props}
-        className="clickable"
-        scroll={{ x: true }}
-        rowKey={(record) => record.user.id}
-        onRow={(record) => onRow(navigate, record.user.id)}
-        columns={[
-          realName,
-          {
-            title: t("id"),
-            width: 150,
-            dataIndex: ["user", "chw", "identity"],
-          },
-          {
-            title: t("area"),
-            width: 350,
-            dataIndex: ["user", "chw", "tags"],
-            render: (tags) => tags && tags.join(", "),
-          },
-          phone,
-          {
-            title: t("supervisor"),
-            width: 120,
-            dataIndex: ["user", "chw", "supervisor", "realName"],
-          },
-          {
-            title: t("babyCount"),
-            width: 100,
-            dataIndex: "babyCount",
-            render: (h) => `${h} ${t("unit.person", { ns: "common" })}`,
-          },
-          username,
-          {
-            title: t("completion"),
-            width: 120,
-            dataIndex: "hasFinish",
-            render: (hasFinish, v) => `${hasFinish} / ${v.shouldFinish}`,
-          },
-          {
-            title: t("completionRate"),
-            width: 100,
-            dataIndex: "shouldFinish",
-            render: (shouldFinish, v) =>
-              `${shouldFinish === 0 ? 0 : Number((v.hasFinish / shouldFinish) * 100).toFixed(2) * 1}%`,
-          },
-        ]}
-      />
-    </div>
-  );
-}
-
-const ChwBar = styled.div`
-  height: 76px;
-  padding-left: 30px;
-  padding-right: 20px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #ffc3a0;
-`;
 
 function Supervisor({ tab, navigate, loadData, ...props }) {
   const { t } = useTranslation(["users", "common"]);
@@ -285,25 +200,6 @@ function Admin({ tab, navigate, loadData, ...props }) {
     </div>
   );
 }
-
-const realName = {
-  title: i18next.t("name", { ns: "users" }),
-  align: "center",
-  width: 100,
-  dataIndex: ["user", "realName"],
-};
-
-const phone = {
-  title: i18next.t("phone", { ns: "users" }),
-  width: 200,
-  dataIndex: ["user", "phone"],
-};
-
-const username = {
-  title: i18next.t("username", { ns: "users" }),
-  dataIndex: ["user", "username"],
-  width: 200,
-};
 
 const onRow = (navigate, id) => {
   return {

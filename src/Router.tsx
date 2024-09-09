@@ -11,7 +11,7 @@ const Modules = React.lazy(() => import("@/pages/Modules"));
 const Module = React.lazy(() => import("@/pages/Module/Module"));
 const Babies = React.lazy(() => import("@/pages/Babies/Babies"));
 const Baby = React.lazy(() => import("@/pages/Baby/Baby"));
-const Users = React.lazy(() => import("@/pages/Users"));
+const Users = React.lazy(() => import("@/pages/Users/Users"));
 const User = React.lazy(() => import("@/pages/User/User"));
 const Surveys = React.lazy(() => import("@/pages/Surveys"));
 const Survey = React.lazy(() => import("@/pages/Survey"));
