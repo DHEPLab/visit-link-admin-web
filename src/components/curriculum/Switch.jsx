@@ -4,9 +4,9 @@ import { FieldArray } from "formik";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
-import Factory from "./factory";
+import CurriculumFactory from "./curriculumFactory";
 import Text from "./Text";
-import Container from "./Container";
+import Container from "@/components/Container";
 import Case from "./Case";
 
 export default function Switch({ name, value, onChange, ...props }) {
@@ -48,7 +48,7 @@ export default function Switch({ name, value, onChange, ...props }) {
             ))}
             {!props.readonly && (
               <ButtonContainer>
-                <Button size="mini" type="link" onClick={() => helpers.push(Factory.createCase())}>
+                <Button size="mini" type="link" onClick={() => helpers.push(CurriculumFactory.createCase())}>
                   {t("addOption")}
                 </Button>
               </ButtonContainer>

@@ -5,7 +5,7 @@ import "quill/dist/quill.snow.css";
 import { debounce } from "radash";
 import { useTranslation, UseTranslationResponse } from "react-i18next";
 
-import Container, { ContainerProps } from "./Container";
+import Container, { ContainerProps } from "@/components/Container";
 import isPropValid from "@emotion/is-prop-valid";
 import { Range } from "quill/core/selection";
 

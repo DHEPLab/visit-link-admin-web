@@ -4,7 +4,7 @@ import { useFormikContext, Field } from "formik";
 import { Input } from "antd";
 import { useTranslation } from "react-i18next";
 
-import Container from "./Container";
+import Container from "@/components/Container";
 
 const colors = {
   text: "#3490de",

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Button, Space } from "antd";
-import Iconfont from "../Iconfont";
+import Iconfont from "./Iconfont";
 import { useTranslation } from "react-i18next";
 import isPropValid from "@emotion/is-prop-valid";
 

@@ -5,7 +5,7 @@ import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import Factory from "@/components/curriculum/factory";
+import CurriculumFactory from "@/components/curriculum/curriculumFactory";
 import ModuleComponents from "@/components/curriculum/ModuleComponents";
 import Rules from "@/constants/rules";
 import { ModuleTopic, QrType } from "@/constants/enums";
@@ -78,7 +78,7 @@ export default function Module() {
     if (readonly == null) return;
 
     if (!id) {
-      setComponents([Factory.createText()]);
+      setComponents([CurriculumFactory.createText()]);
     } else {
       axios.get<ModuleResponse>(`/admin/modules/${id}`).then(({ data, headers }) => {
         const formValue = pathname.includes("/modules/edit")

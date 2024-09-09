@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Iconfont from "../Iconfont";
 import { Button, Card, Space } from "antd";
 import { insertComponent } from "./utils/moduleComponentsUtils";
-import Factory from "@/components/curriculum/factory";
+import CurriculumFactory from "@/components/curriculum/curriculumFactory";
 import isPropValid from "@emotion/is-prop-valid";
 import { ArrayHelpers } from "formik/dist/FieldArray";
 
@@ -49,18 +49,27 @@ const ToolBar: React.FC<ToolBarProps> = ({ readonly, helpers, focus, setFocus })
       <StickyContainer top={stickyTop}>
         <Card title={t("addComponent")}>
           <Space direction="vertical" size="large">
-            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createText(), focus, setFocus)}>
+            <Button
+              type="primary"
+              onClick={() => insertComponent(helpers, CurriculumFactory.createText(), focus, setFocus)}
+            >
               <Iconfont type="icontext" /> {t("addTextComponent")}
             </Button>
-            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createMedia(), focus, setFocus)}>
+            <Button
+              type="primary"
+              onClick={() => insertComponent(helpers, CurriculumFactory.createMedia(), focus, setFocus)}
+            >
               <Iconfont type="iconmedia" /> {t("addMediaComponent")}
             </Button>
-            <Button type="primary" onClick={() => insertComponent(helpers, Factory.createSwitch(), focus, setFocus)}>
+            <Button
+              type="primary"
+              onClick={() => insertComponent(helpers, CurriculumFactory.createSwitch(), focus, setFocus)}
+            >
               <Iconfont type="iconswitch" /> {t("addChoiceComponent")}
             </Button>
             <PageButton
               type="primary"
-              onClick={() => insertComponent(helpers, Factory.createPageFooter(), focus, setFocus)}
+              onClick={() => insertComponent(helpers, CurriculumFactory.createPageFooter(), focus, setFocus)}
             >
               {t("addPageBreakComponent")}
             </PageButton>

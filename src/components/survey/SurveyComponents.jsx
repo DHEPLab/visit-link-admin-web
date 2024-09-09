@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FieldArray } from "formik";
 import { Space, Button, message } from "antd";
 
-import Factory from "./factory";
+import SurveyFactory from "./surveyFactory";
 import Iconfont from "../Iconfont";
 import Card from "../Card";
 import { useTranslation } from "react-i18next";
@@ -84,7 +84,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                           insertComponent(
                             value.length,
                             helpers,
-                            Factory.createQuestionText(),
+                            SurveyFactory.createQuestionText(),
                             focus,
                             setFocus,
                             t("maxQuestions"),
@@ -99,7 +99,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                           insertComponent(
                             value.length,
                             helpers,
-                            Factory.createQuestionRadio(),
+                            SurveyFactory.createQuestionRadio(),
                             focus,
                             setFocus,
                             t("maxQuestions"),
@@ -114,7 +114,7 @@ export default function SurveyComponents({ value, readonly, stickyTop }) {
                           insertComponent(
                             value.length,
                             helpers,
-                            Factory.createQuestionCheckbox(),
+                            SurveyFactory.createQuestionCheckbox(),
                             focus,
                             setFocus,
                             t("maxQuestions"),

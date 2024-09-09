@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Upload } from "antd";
 import { useTranslation } from "react-i18next";
 
-import Container from "./Container";
+import Container from "@/components/Container";
 import GhostInput from "../GhostInput";
 import UploadButton from "../UploadButton";
 import MediaPreview from "./MediaPreview";

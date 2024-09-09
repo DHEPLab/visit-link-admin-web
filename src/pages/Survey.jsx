@@ -5,8 +5,8 @@ import { Button, Form, Input, message, Space } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import Factory from "@/components/curriculum/factory";
-import SurveyComponents from "@/components/curriculum/SurveyComponents";
+import SurveyFactory from "@/components/survey/surveyFactory";
+import SurveyComponents from "@/components/survey/SurveyComponents";
 import DraftBar from "@/components/DraftBar";
 import Card from "@/components/Card";
 import DetailHeader from "@/components/DetailHeader";
@@ -44,7 +44,7 @@ export default function Survey() {
     if (readonly == null) return;
 
     if (!id) {
-      setQuestions([Factory.createText()]);
+      setQuestions([SurveyFactory.createQuestionText()]);
     } else {
       axios.get(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
         if (!readonly) form.setFieldsValue(data);

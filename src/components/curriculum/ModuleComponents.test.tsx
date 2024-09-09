@@ -1,12 +1,12 @@
 import { render } from "@testing-library/react";
 import { Formik } from "formik";
 
-import factory from "./factory";
+import CurriculumFactory from "./curriculumFactory";
 import ModuleComponents from "./ModuleComponents";
 
 describe("<ModuleComponents />", () => {
   it("should render", () => {
-    const components = [factory.createText()];
+    const components = [CurriculumFactory.createText()];
     const { queryByTestId } = render(
       <Formik initialValues={{ components }} onSubmit={vi.fn()}>
         {({ values }) => <ModuleComponents value={values.components} readonly={true} />}

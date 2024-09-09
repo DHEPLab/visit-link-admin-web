@@ -2,8 +2,16 @@ import React from "react";
 import { Field } from "formik";
 import QuestionText from "./QuestionText";
 import QuestionRadio from "./QuestionRadio";
+import { SurveyComponentType } from "@/models/res/Survey";
 
-export default function ComponentQuestion({ name, component, index, onMoveDown, ...props }) {
+type ComponentQuestionProps = {
+  name: string;
+  component: SurveyComponentType;
+  index: number;
+  onMoveDown: () => void;
+};
+
+const ComponentQuestion: React.FC<ComponentQuestionProps> = ({ name, component, index, onMoveDown, ...props }) => {
   let As;
   switch (component.type) {
     case "Text":
@@ -15,8 +23,6 @@ export default function ComponentQuestion({ name, component, index, onMoveDown, 
     case "Checkbox":
       As = QuestionRadio;
       break;
-    default:
-      As = <div>{component.type}</div>;
   }
 
   return (
@@ -35,4 +41,6 @@ export default function ComponentQuestion({ name, component, index, onMoveDown, 
       />
     </div>
   );
-}
+};
+
+export default ComponentQuestion;

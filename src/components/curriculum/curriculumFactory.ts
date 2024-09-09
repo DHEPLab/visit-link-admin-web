@@ -93,7 +93,7 @@ function createCase() {
   };
 }
 
-const Factory = {
+const CurriculumFactory = {
   createText,
   createMedia,
   createSwitch,
@@ -104,4 +104,4 @@ const Factory = {
   createPageFooter,
 };
 
-export default Factory;
+export default CurriculumFactory;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Container, { ContainerProps } from "./Container";
+import Container, { ContainerProps } from "@/components/Container";
 import PageFooterTitle from "./PageFooterTitle";
 
 type PageFooterProps = ContainerProps;

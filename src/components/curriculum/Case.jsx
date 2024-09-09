@@ -4,9 +4,9 @@ import { Button, Cascader, message } from "antd";
 import { FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
 
-import Factory from "./factory";
+import CurriculumFactory from "./curriculumFactory";
 import ComponentField from "./ComponentField";
-import Container from "./Container";
+import Container from "@/components/Container";
 import GhostInput from "../GhostInput";
 import { useModuleStore } from "@/store/module";
 
@@ -70,7 +70,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
               message.warning(t("maxNestedLevels"));
               return;
             }
-            helpers.push(Factory.createSwitch());
+            helpers.push(CurriculumFactory.createSwitch());
           }
 
           return (
@@ -89,10 +89,10 @@ export default function Case({ name, value, index, onChange, ...props }) {
               ))}
               {!props.readonly && (
                 <div>
-                  <Button type="link" onClick={() => helpers.push(Factory.createText())}>
+                  <Button type="link" onClick={() => helpers.push(CurriculumFactory.createText())}>
                     {t("addText")}
                   </Button>
-                  <Button type="link" onClick={() => helpers.push(Factory.createMedia())}>
+                  <Button type="link" onClick={() => helpers.push(CurriculumFactory.createMedia())}>
                     {t("addMedia")}
                   </Button>
                   <Button type="link" onClick={handleAddSwitch}>
