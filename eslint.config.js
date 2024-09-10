@@ -4,6 +4,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
+import eslintPluginStorybook from "eslint-plugin-storybook";
 
 export default tseslint.config(
   { ignores: ["dist"] },
@@ -28,5 +29,6 @@ export default tseslint.config(
       "@typescript-eslint/no-this-alias": ["error", { allowedNames: ["self"] }],
     },
   },
+  ...eslintPluginStorybook.configs["flat/recommended"],
   eslintConfigPrettier,
 );

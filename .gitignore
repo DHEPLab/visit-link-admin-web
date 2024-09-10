@@ -32,3 +32,5 @@ service.conf
 .idea
 
 *.xlsx
+
+*storybook.log

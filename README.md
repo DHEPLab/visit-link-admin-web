@@ -21,6 +21,9 @@ You can also use the `serve` script to running as production preview mode:
 $ BACKEND_PROXY_TARGET=<url> yarn serve
 ```
 
+### Storybook Preview
+We customized the antd theme to match our visual design, start storybook preview with `yarn storybook`
+
 ## External Dependencies
 
 The visit-link-backend service, with reverse proxy configuration in vite.config.ts
