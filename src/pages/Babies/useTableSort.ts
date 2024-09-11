@@ -1,13 +1,13 @@
+import { usePaginationResult } from "@/hooks/usePagination";
 import { useState } from "react";
-import type { WithPageProps } from "@/components/WithPage";
 import { ZebraTableProps } from "@/components/ZebraTable";
 
-interface useTableSortOptions {
-  onChangePage: WithPageProps["onChange"];
-  onChangeSearch: WithPageProps["onChangeSearch"];
+interface useTableSortOptions<T> {
+  onChangePage: usePaginationResult<T>["onChange"];
+  onChangeSearch: usePaginationResult<T>["onChangeSearch"];
 }
 
-const useTableSort = <T>({ onChangePage, onChangeSearch }: useTableSortOptions) => {
+const useTableSort = <T>({ onChangePage, onChangeSearch }: useTableSortOptions<T>) => {
   const [sortField, setSortField] = useState<string | null>(null);
 
   const sorterFun: ZebraTableProps<T>["onChange"] = (pagination, _filters, sorter) => {

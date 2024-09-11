@@ -19,6 +19,19 @@ interface SearchValues {
   search?: string;
 }
 
+export type usePaginationResult<T> = {
+  loading: boolean;
+  loadData: (signal?: AbortSignal) => void;
+  historyPageState: SearchValues;
+  pagination: TablePaginationConfig;
+  dataSource: T[];
+  resetSearch: VoidFunction;
+  onChangeLoadURL: (url: string) => void;
+  onChangeSearch: (key: string, value: string | null) => void;
+  onChangePage: (pagination: { current?: number }) => void;
+  onChange: (pagination: { current?: number }) => void;
+};
+
 const defaultSearchValues = { page: 0, size: 10 } satisfies SearchValues;
 
 export const usePagination = <T>(options: usePaginationOptions) => {

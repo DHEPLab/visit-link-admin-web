@@ -1,12 +1,12 @@
+import { usePaginationResult } from "@/hooks/usePagination";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Modal, Space, Table, TableProps } from "antd";
 import { useTranslation } from "react-i18next";
 
 import SearchInput from "./SearchInput";
-import { WithPageProps } from "@/components/WithPage";
 
-export type AssignModalTableProps<T> = Partial<WithPageProps> &
+export type AssignModalTableProps<T> = Partial<usePaginationResult<T>> &
   Omit<TableProps<T>, "title"> & {
     title: string;
     columns: TableProps<T>["columns"];
