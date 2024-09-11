@@ -1,3 +1,4 @@
+import { TablePaginationConfig } from "antd/es/table/interface";
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { debounce } from "radash";
@@ -9,18 +10,10 @@ interface SearchValues {
   search?: string;
 }
 
-interface Pagination {
-  showSizeChanger: boolean;
-  pageSize: number;
-  current: number;
-  total: number;
-  showTotal: (total: number) => string;
-}
-
 export interface WithPageProps {
   loading: boolean;
   historyPageState?: SearchValues;
-  pagination: Pagination;
+  pagination: TablePaginationConfig;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataSource: any[];
   loadData: VoidFunction;

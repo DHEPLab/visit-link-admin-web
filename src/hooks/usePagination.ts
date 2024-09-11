@@ -38,7 +38,7 @@ export const usePagination = <T>(options: usePaginationOptions) => {
   };
 
   const loadData = useCallback(
-    (signal: AbortSignal) => {
+    (signal?: AbortSignal) => {
       if (!requestURL) return;
       const newParams = {
         ...apiRequestParams,
@@ -104,15 +104,21 @@ export const usePagination = <T>(options: usePaginationOptions) => {
     });
   });
 
-  function handleChangePage({ current }: { current: number }) {
-    setSearch((s) => ({
-      ...s,
-      page: current - 1,
-    }));
+  function handleChangePage({ current }: TablePaginationConfig) {
+    if (current) {
+      setSearch((s) => ({
+        ...s,
+        page: current - 1,
+      }));
+    }
   }
 
   function handleChangeLoadURL(url: string) {
     setRequestURL(url);
+    setSearch(defaultSearchValues);
+  }
+
+  function resetSearch() {
     setSearch(defaultSearchValues);
   }
 
@@ -122,6 +128,7 @@ export const usePagination = <T>(options: usePaginationOptions) => {
     historyPageState,
     pagination: pagination(),
     dataSource: content,
+    resetSearch,
     onChangeLoadURL: handleChangeLoadURL,
     onChangeSearch: debounceChangeSearch,
     onChangePage: handleChangePage,

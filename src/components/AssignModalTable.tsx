@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import SearchInput from "./SearchInput";
 import { WithPageProps } from "@/components/WithPage";
 
-type AssignModalTableProps<T> = Partial<WithPageProps> &
+export type AssignModalTableProps<T> = Partial<WithPageProps> &
   Omit<TableProps<T>, "title"> & {
     title: string;
     columns: TableProps<T>["columns"];
@@ -14,7 +14,7 @@ type AssignModalTableProps<T> = Partial<WithPageProps> &
     width?: number;
     onCancel: () => void;
     onFinish: (selectedRowKeys: React.Key[]) => void;
-    onChangeSearch: (field: string, value: string) => void;
+    onChangeSearch?: (field: string, value: string) => void;
     rowSelectionType?: "checkbox" | "radio";
     refreshOnVisible?: boolean;
   };
@@ -37,7 +37,7 @@ const AssignModalTable = <T,>({
   useEffect(() => {
     if (visible) {
       setSelectedRowKeys([]);
-      if (refreshOnVisible) onChangeSearch("search", "");
+      if (refreshOnVisible) onChangeSearch?.("search", "");
     }
     // eslint-disable-next-line
   }, [visible]);
@@ -66,7 +66,7 @@ const AssignModalTable = <T,>({
       <SearchBar>
         <SearchInput
           style={{ width: "100%" }}
-          onChange={(e) => onChangeSearch("search", e.target.value)}
+          onChange={(e) => onChangeSearch?.("search", e.target.value)}
           placeholder={t("searchInputByNameIDAreaPlaceholder")}
         />
       </SearchBar>

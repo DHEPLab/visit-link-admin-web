@@ -15,7 +15,7 @@ const Users = React.lazy(() => import("@/pages/Users/Users"));
 const User = React.lazy(() => import("@/pages/User/User"));
 const Surveys = React.lazy(() => import("@/pages/Surveys"));
 const Survey = React.lazy(() => import("@/pages/Survey"));
-const Curriculums = React.lazy(() => import("@/pages/Curriculums"));
+const Curriculums = React.lazy(() => import("@/pages/Curriculums/Curriculums"));
 const Curriculum = React.lazy(() => import("@/pages/Curriculum/Curriculum"));
 const Profiles = React.lazy(() => import("@/pages/Profiles"));
 
