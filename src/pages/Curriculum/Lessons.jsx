@@ -68,7 +68,9 @@ function Lessons({
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
 
   useEffect(() => {
-    loadQuestionnairesOptions();
+    const abortController = new AbortController();
+    loadQuestionnairesOptions(abortController.signal);
+    return () => abortController.abort();
   }, [openEditModal, setQuestionnairesOptions]);
 
   function onFinish(formValues) {
@@ -97,16 +99,22 @@ function Lessons({
       });
   }
 
-  function loadQuestionnairesOptions() {
+  function loadQuestionnairesOptions(signal) {
     axios
       .get("/admin/questionnaires", {
         params: {
           size: 1000,
           published: true,
         },
+        signal,
       })
       .then(({ data }) => {
         setQuestionnairesOptions(data?.content?.map(({ name, id }) => ({ label: name, value: id })));
+      })
+      .catch((error) => {
+        if (!axios.isCancel(error)) {
+          throw error;
+        }
       });
   }
 
