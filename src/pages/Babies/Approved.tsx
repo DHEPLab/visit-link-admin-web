@@ -1,37 +1,38 @@
-import { useTranslation } from "react-i18next";
-import React, { useEffect } from "react";
-import { Space } from "antd";
 import SearchInput from "@/components/SearchInput";
+import StatusTag from "@/components/StatusTag";
 import type { ZebraTableProps } from "@/components/ZebraTable";
 import ZebraTable from "@/components/ZebraTable";
-import StatusTag from "@/components/StatusTag";
-import SearchBar from "./SearchBar";
 import { Gender } from "@/constants/enums";
+import { usePagination } from "@/hooks/usePagination";
+import { ApprovedOrReviewedBaby } from "@/models/res/Baby";
+import { Space } from "antd";
 import dayjs from "dayjs";
-import WithPage, { WithPageProps } from "@/components/WithPage";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "./SearchBar";
 import useTableSort from "./useTableSort";
 
-type ApprovedProps = ZebraTableProps &
-  WithPageProps & {
-    refreshKey: number;
-  };
+type ApprovedProps = ZebraTableProps & {
+  refreshKey: number;
+};
 
-const Approved: React.FC<ApprovedProps> = ({
-  historyPageState,
-  refreshKey,
-  loadData,
-  onChangeSearch,
-  onChangePage,
-  ...props
-}) => {
+const Approved: React.FC<ApprovedProps> = ({ refreshKey }) => {
   const { t } = useTranslation("babies");
   const navigate = useNavigate();
+  const { historyPageState, loading, dataSource, pagination, loadData, onChangePage, onChangeSearch } =
+    usePagination<ApprovedOrReviewedBaby>({
+      apiRequestUrl: "/admin/babies/approved",
+      loadOnMount: false,
+    });
+
   useEffect(() => {
-    loadData();
+    const abortController = new AbortController();
+    loadData(abortController.signal);
+    return () => abortController.abort();
   }, [refreshKey, loadData]);
 
-  const { sorterFun } = useTableSort({ onChangePage, onChangeSearch });
+  const { sorterFun } = useTableSort<ApprovedOrReviewedBaby>({ onChangePage, onChangeSearch });
 
   return (
     <>
@@ -46,7 +47,9 @@ const Approved: React.FC<ApprovedProps> = ({
         </Space>
       </SearchBar>
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
         rowKey="id"
         className="clickable"
         onRow={(record) => ({
@@ -118,5 +121,4 @@ const Approved: React.FC<ApprovedProps> = ({
   );
 };
 
-const PageApproved = WithPage(Approved, "/admin/babies/approved", {}, false);
-export default PageApproved;
+export default Approved;

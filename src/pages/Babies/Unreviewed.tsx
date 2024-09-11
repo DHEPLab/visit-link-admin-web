@@ -1,37 +1,36 @@
-import { useTranslation } from "react-i18next";
-import React, { useEffect } from "react";
-import { Space } from "antd";
 import SearchInput from "@/components/SearchInput";
 import ZebraTable, { type ZebraTableProps } from "@/components/ZebraTable";
 import { ActionFromApp, Gender } from "@/constants/enums";
-import WithPage, { WithPageProps } from "@/components/WithPage";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import SearchBar from "./SearchBar";
-import dayjs from "dayjs";
-import useTableSort from "./useTableSort";
+import { usePagination } from "@/hooks/usePagination";
+import { ApprovedOrReviewedBaby } from "@/models/res/Baby";
 import isPropValid from "@emotion/is-prop-valid";
+import { Space } from "antd";
+import dayjs from "dayjs";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import SearchBar from "./SearchBar";
+import useTableSort from "./useTableSort";
 
-type ApprovedProps = ZebraTableProps &
-  WithPageProps & {
-    refreshKey: number;
-  };
+type ApprovedProps = ZebraTableProps & {
+  refreshKey: number;
+};
 
-const Unreviewed: React.FC<ApprovedProps> = ({
-  historyPageState,
-  onChangeSearch,
-  onChangePage,
-  refreshKey,
-  loadData,
-  ...props
-}) => {
+const Unreviewed: React.FC<ApprovedProps> = ({ refreshKey }) => {
   const { t } = useTranslation("babies");
   const navigate = useNavigate();
+  const { historyPageState, loading, dataSource, pagination, loadData, onChangePage, onChangeSearch } =
+    usePagination<ApprovedOrReviewedBaby>({
+      apiRequestUrl: "/admin/babies/unreviewed",
+      loadOnMount: false,
+    });
+
   useEffect(() => {
     loadData();
   }, [refreshKey, loadData]);
 
-  const { sorterFun } = useTableSort({ onChangePage, onChangeSearch });
+  const { sorterFun } = useTableSort<ApprovedOrReviewedBaby>({ onChangePage, onChangeSearch });
 
   return (
     <>
@@ -47,7 +46,9 @@ const Unreviewed: React.FC<ApprovedProps> = ({
       </SearchBar>
 
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
         rowKey="id"
         className="clickable"
         onRow={(record) => ({
@@ -126,7 +127,7 @@ const Unreviewed: React.FC<ApprovedProps> = ({
 
 const Tag = styled.span.withConfig({
   shouldForwardProp: (prop) => isPropValid(prop) && prop !== "actionFromApp",
-})<{ actionFromApp: "CREATE" | "MODIFY" }>`
+})<{ actionFromApp: string | null }>`
   ${(props) => {
     switch (props.actionFromApp) {
       case "CREATE":
@@ -144,5 +145,4 @@ const Tag = styled.span.withConfig({
   display: inline-block;
 `;
 
-const PageUnreviewed = WithPage(Unreviewed, "/admin/babies/unreviewed", {}, false);
-export default PageUnreviewed;
+export default Unreviewed;

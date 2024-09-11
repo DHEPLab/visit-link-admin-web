@@ -32,3 +32,21 @@ export interface BabyResponse {
   days: number;
   canCreate: boolean;
 }
+
+export interface ApprovedOrReviewedBaby {
+  actionFromApp: string | null;
+  area: string;
+  chw: string;
+  createdAt: string;
+  currentLessonName: string | null;
+  deleted: boolean;
+  gender: string;
+  id: number;
+  identity: string;
+  lastModifiedAt: string;
+  latitude: number | null;
+  longitude: number | null;
+  name: string;
+  showLocation: null;
+  visitCount: number;
+}

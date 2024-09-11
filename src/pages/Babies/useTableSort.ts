@@ -7,10 +7,10 @@ interface useTableSortOptions {
   onChangeSearch: WithPageProps["onChangeSearch"];
 }
 
-const useTableSort = ({ onChangePage, onChangeSearch }: useTableSortOptions) => {
+const useTableSort = <T>({ onChangePage, onChangeSearch }: useTableSortOptions) => {
   const [sortField, setSortField] = useState<string | null>(null);
 
-  const sorterFun: ZebraTableProps["onChange"] = (pagination, _filters, sorter) => {
+  const sorterFun: ZebraTableProps<T>["onChange"] = (pagination, _filters, sorter) => {
     const { order, field } = Array.isArray(sorter) ? sorter[0] || {} : sorter;
     const newSortField = order ? `${field},${order === "ascend" ? "asc" : "desc"}` : null;
     setSortField(newSortField);
