@@ -1,21 +1,23 @@
-import React from "react";
-import { Button, Space } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
-import { ModuleTopic } from "@/constants/enums";
-import WithPage, { WithPageProps } from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";
-import ZebraTable from "@/components/ZebraTable";
 import SearchInput from "@/components/SearchInput";
 import StatusTag from "@/components/StatusTag";
+import ZebraTable from "@/components/ZebraTable";
 
-type ModulesContentProps = WithPageProps;
+import { ModuleTopic } from "@/constants/enums";
+import { usePagination } from "@/hooks/usePagination";
+import { Curriculum } from "@/models/res/Curriculum";
+import { Button, Space } from "antd";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ModulesContent: React.FC<ModulesContentProps> = ({ historyPageState, loadData, onChangeSearch, ...props }) => {
+const Modules: React.FC = () => {
   const { t } = useTranslation("modules");
   const navigate = useNavigate();
+
+  const { historyPageState, loading, pagination, dataSource, onChange, onChangeSearch } = usePagination<Curriculum>({
+    apiRequestUrl: "/admin/modules",
+  });
 
   return (
     <>
@@ -34,7 +36,10 @@ const ModulesContent: React.FC<ModulesContentProps> = ({ historyPageState, loadD
       </ContentHeader>
 
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
+        onChange={onChange}
         rowKey="id"
         className="clickable"
         onRow={(record) => {
@@ -72,5 +77,4 @@ const ModulesContent: React.FC<ModulesContentProps> = ({ historyPageState, loadD
   );
 };
 
-const Modules = WithPage(ModulesContent, "/admin/modules");
 export default Modules;
