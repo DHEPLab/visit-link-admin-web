@@ -32,6 +32,11 @@ export const usePagination = <T>(options: usePaginationOptions) => {
   const [content, setContent] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const resetDataToEmpty = () => {
+    setTotalElements(0);
+    setContent([]);
+  };
+
   const loadData = useCallback(
     (signal: AbortSignal) => {
       if (!requestURL) return;
@@ -59,6 +64,11 @@ export const usePagination = <T>(options: usePaginationOptions) => {
               },
             },
           });
+        })
+        .catch((error) => {
+          if (axios.isCancel(error)) {
+            resetDataToEmpty();
+          }
         })
         .finally(() => setLoading(false));
     },
