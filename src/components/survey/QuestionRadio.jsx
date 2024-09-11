@@ -104,30 +104,25 @@ export default function QuestionRadio({ name, onBlur, onChange, value, index, ..
                       <Text span={4}>
                         {t("option")} {String.fromCharCode(i + 65)}.{" "}
                       </Text>
-                      <Col span={12}>
+                      <OptionInput>
                         <Field
                           name={`${name}.options.${i}.label`}
                           validate={(value) => (value && `${value}`.trim() ? "" : t("required"))}
                           defaultValue={e.label}
                           placeholder={t("pleaseEnterContent")}
-                          style={{ width: 360 }}
                           as={Input}
                         />
-                      </Col>
-                      <Col span={3}>
-                        <AddTextCheckbox
-                          name={`${name}.options.${i}.needEnter`}
-                          defaultChecked={e.needEnter}
-                          onChange={(e) => handlerRadioChange(`${name}.options.${i}.needEnter`, e.target.checked)}
-                        >
-                          {t("addTextBox")}
-                        </AddTextCheckbox>
-                      </Col>
-                      <Col span={3}>
-                        <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
-                          <Iconfont type="icontrash-orange" size={14} /> {t("remove")}
-                        </Button>
-                      </Col>
+                      </OptionInput>
+                      <AddTextCheckbox
+                        name={`${name}.options.${i}.needEnter`}
+                        defaultChecked={e.needEnter}
+                        onChange={(e) => handlerRadioChange(`${name}.options.${i}.needEnter`, e.target.checked)}
+                      >
+                        {t("addTextBox")}
+                      </AddTextCheckbox>
+                      <Button size="small" type="link" onClick={() => handlerRemove(arrayHelper, i)}>
+                        <Iconfont type="icontrash-orange" size={14} /> {t("remove")}
+                      </Button>
                     </RowLine>
                   </div>
                 ))}
@@ -151,7 +146,8 @@ const TextType = styled.div`
 `;
 
 const RowLine = styled(Row)`
-  margin: 10px auto;
+  display: flex;
+  margin: 10px 16px;
 `;
 
 const ReadOnlyLine = styled(Row)`
@@ -160,7 +156,7 @@ const ReadOnlyLine = styled(Row)`
 `;
 
 const TitleInput = styled(Input)`
-  width: 35vw !important;
+  width: 100% !important;
 `;
 
 const TextTitle = styled.div`
@@ -177,7 +173,21 @@ const Text = styled(Col)`
   font-weight: 500;
 `;
 
+const OptionInput = styled.div`
+  flex: 1;
+  width: 100%;
+  padding-right: 24px;
+
+  .ant-input {
+    width: 100%;
+  }
+`;
+
 const AddTextCheckbox = styled(Checkbox)`
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
   color: #ff7c53;
   font-weight: 600;
+  margin-bottom: 8px;
 `;
