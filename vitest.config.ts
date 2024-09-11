@@ -15,6 +15,7 @@ export default mergeConfig(
           "src/models/**",
           "src/tests",
           "**/__mocks__/**",
+          "**/*.stories.{ts,tsx}",
           ...coverageConfigDefaults.exclude,
         ],
       },
