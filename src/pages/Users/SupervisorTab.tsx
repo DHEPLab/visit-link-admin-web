@@ -1,26 +1,37 @@
-import WithPage, { WithPageProps } from "@/components/WithPage";
-import { useTranslation } from "react-i18next";
-import React, { useEffect } from "react";
 import ZebraTable from "@/components/ZebraTable";
-import { phone, realName, username } from "./tableColumnConfig";
+import { usePagination } from "@/hooks/usePagination";
+import { Supervisor } from "@/models/res/User";
+import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { phone, realName, username } from "./tableColumnConfig";
 
-type SupervisorProps = WithPageProps & {
+type SupervisorProps = {
   refreshKey: number;
 };
 
-const Supervisor: React.FC<SupervisorProps> = ({ refreshKey, loadData, ...props }) => {
+const SupervisorTab: React.FC<SupervisorProps> = ({ refreshKey }) => {
   const { t } = useTranslation(["users", "common"]);
   const navigate = useNavigate();
 
+  const { loading, dataSource, pagination, loadData, onChange } = usePagination<Supervisor>({
+    apiRequestUrl: "/admin/users/supervisor",
+    loadOnMount: false,
+  });
+
   useEffect(() => {
-    loadData();
+    const abortController = new AbortController();
+    loadData(abortController.signal);
+    return () => abortController.abort();
   }, [refreshKey, loadData]);
 
   return (
     <div>
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
+        onChange={onChange}
         scroll={{ x: true }}
         className="clickable"
         rowKey={(record) => record.user.id}
@@ -45,5 +56,4 @@ const Supervisor: React.FC<SupervisorProps> = ({ refreshKey, loadData, ...props 
   );
 };
 
-const SupervisorTab = WithPage(Supervisor, "/admin/users/supervisor", {}, false);
 export default SupervisorTab;

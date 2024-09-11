@@ -1,4 +1,5 @@
-import WithPage, { WithPageProps } from "@/components/WithPage";
+import { usePagination } from "@/hooks/usePagination";
+import { ChwUser } from "@/models/res/User";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
 import SearchInput from "@/components/SearchInput";
@@ -7,15 +8,23 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { phone, realName, username } from "./tableColumnConfig";
 
-type CHWProps = WithPageProps & {
+type CHWProps = {
   refreshKey: number;
 };
 
-const CHW: React.FC<CHWProps> = ({ historyPageState, refreshKey, loadData, onChangeSearch, ...props }) => {
+const CHWTab: React.FC<CHWProps> = ({ refreshKey }) => {
   const { t } = useTranslation(["users", "common"]);
   const navigate = useNavigate();
+  const { historyPageState, loading, dataSource, pagination, loadData, onChange, onChangeSearch } =
+    usePagination<ChwUser>({
+      apiRequestUrl: "/admin/users/chw",
+      loadOnMount: false,
+    });
+
   useEffect(() => {
-    loadData();
+    const abortController = new AbortController();
+    loadData(abortController.signal);
+    return () => abortController.abort();
   }, [refreshKey, loadData]);
 
   return (
@@ -29,7 +38,10 @@ const CHW: React.FC<CHWProps> = ({ historyPageState, refreshKey, loadData, onCha
         />
       </ChwBar>
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
+        onChange={onChange}
         className="clickable"
         scroll={{ x: true }}
         rowKey={(record) => record.user.id}
@@ -96,5 +108,4 @@ const ChwBar = styled.div`
   border-bottom: 1px solid #ffc3a0;
 `;
 
-const CHWTab = WithPage(CHW, "/admin/users/chw", {}, false);
 export default CHWTab;

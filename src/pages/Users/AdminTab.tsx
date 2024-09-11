@@ -1,23 +1,38 @@
-import WithPage, { WithPageProps } from "@/components/WithPage";
-import React, { useEffect } from "react";
 import ZebraTable from "@/components/ZebraTable";
-import { phone, realName, username } from "./tableColumnConfig";
+import { usePagination } from "@/hooks/usePagination";
+import { User } from "@/models/res/User";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { phone, realName, username } from "./tableColumnConfig";
 
-type AdminProps = WithPageProps & {
+type AdminProps = {
   refreshKey: number;
 };
 
-const Admin: React.FC<AdminProps> = ({ refreshKey, loadData, ...props }) => {
+const AdminTab: React.FC<AdminProps> = ({ refreshKey }) => {
   const navigate = useNavigate();
+  const { loading, dataSource, pagination, loadData, onChange } = usePagination<User>({
+    apiRequestUrl: "/admin/users/admin",
+    apiRequestParams: {
+      sort: "id,desc",
+    },
+    loadOnMount: false,
+  });
+
   useEffect(() => {
-    loadData();
+    const abortController = new AbortController();
+    loadData(abortController.signal);
+
+    return () => abortController.abort();
   }, [refreshKey, loadData]);
 
   return (
     <div>
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
+        onChange={onChange}
         scroll={{ x: true }}
         rowKey="id"
         className="clickable"
@@ -36,5 +51,4 @@ const Admin: React.FC<AdminProps> = ({ refreshKey, loadData, ...props }) => {
   );
 };
 
-const AdminTab = WithPage(Admin, "/admin/users/admin?sort=id,desc", {}, false);
 export default AdminTab;

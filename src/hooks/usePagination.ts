@@ -1,4 +1,5 @@
 import { Page } from "@/models/res/Page";
+import { useNetworkStore } from "@/store/network";
 import { TablePaginationConfig } from "antd/es/table/interface";
 import axios from "axios";
 import { debounce } from "radash";
@@ -21,7 +22,7 @@ interface SearchValues {
 const defaultSearchValues = { page: 0, size: 10 } satisfies SearchValues;
 
 export const usePagination = <T>(options: usePaginationOptions) => {
-  const { apiRequestUrl, apiRequestParams, loadOnMount = true } = options;
+  const { apiRequestUrl, apiRequestParams = {}, loadOnMount = true } = options;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,7 +31,8 @@ export const usePagination = <T>(options: usePaginationOptions) => {
   const [requestURL, setRequestURL] = useState(apiRequestUrl);
   const [totalElements, setTotalElements] = useState(0);
   const [content, setContent] = useState<T[]>([]);
-  const [loading, setLoading] = useState(false);
+  const requests = useNetworkStore((state) => state.requests);
+  const loading = requests[apiRequestUrl] >= 1;
 
   const resetDataToEmpty = () => {
     setTotalElements(0);
@@ -44,7 +46,6 @@ export const usePagination = <T>(options: usePaginationOptions) => {
         ...apiRequestParams,
         ...search,
       };
-      setLoading(true);
       axios
         .get<Page<T>>(requestURL, {
           params: newParams,
@@ -69,8 +70,7 @@ export const usePagination = <T>(options: usePaginationOptions) => {
           if (axios.isCancel(error)) {
             resetDataToEmpty();
           }
-        })
-        .finally(() => setLoading(false));
+        });
     },
     [search, requestURL],
   );

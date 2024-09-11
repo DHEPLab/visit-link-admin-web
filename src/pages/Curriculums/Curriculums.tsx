@@ -14,8 +14,11 @@ const Curriculums: React.FC = () => {
   const navigate = useNavigate();
   const [curriculumId, setCurriculumId] = useState<number>(-1);
   const { t } = useTranslation("curriculums");
-  const { onChangeSearch, historyPageState, pagination, dataSource } = usePagination<Curriculum>({
-    apiRequestUrl: "/admin/curriculums?sort=id,desc",
+  const { historyPageState, loading, pagination, dataSource, onChange, onChangeSearch } = usePagination<Curriculum>({
+    apiRequestUrl: "/admin/curriculums",
+    apiRequestParams: {
+      sort: "id,desc",
+    },
   });
 
   function startAssignBaby(id: number) {
@@ -39,10 +42,12 @@ const Curriculums: React.FC = () => {
       </ContentHeader>
 
       <ZebraTable
+        loading={loading}
         pagination={pagination}
         dataSource={dataSource}
         rowKey="id"
         className="clickable"
+        onChange={onChange}
         onRow={(record) => {
           return {
             onClick: (event) => {

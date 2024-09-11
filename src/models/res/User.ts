@@ -1,4 +1,4 @@
-interface Supervisor {
+export interface Supervisor {
   createdAt: string;
   lastModifiedAt: string;
   createdBy: string;

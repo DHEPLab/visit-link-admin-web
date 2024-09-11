@@ -27,7 +27,11 @@ const Layout = () => {
         .then((r) => {
           loadProfileSuccess(r.data);
         })
-        .catch(() => navigate("/sign_in"));
+        .catch((error) => {
+          if (!axios.isCancel(error)) {
+            navigate("/sign_in");
+          }
+        });
     },
     [navigate],
   );
