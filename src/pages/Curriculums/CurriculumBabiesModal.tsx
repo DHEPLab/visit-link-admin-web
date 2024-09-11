@@ -63,7 +63,8 @@ const CurriculumBabiesModal: React.FC<CurriculumBabiesModalProps> = ({ curriculu
           {
             title: t("babyName"),
             dataIndex: "name",
-            width: 100,
+            width: 200,
+            ellipsis: true,
           },
           {
             title: t("ID"),
@@ -79,12 +80,13 @@ const CurriculumBabiesModal: React.FC<CurriculumBabiesModalProps> = ({ curriculu
           {
             title: t("area"),
             dataIndex: "area",
-            width: 300,
+            width: 200,
           },
           {
             title: t("primaryCaregiver"),
             dataIndex: "masterCarerName",
-            width: 120,
+            width: 200,
+            ellipsis: true,
           },
           {
             title: t("contactPhone"),
