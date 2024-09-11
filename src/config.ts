@@ -1,9 +1,9 @@
-import axios from "axios";
-import { message } from "antd";
-import { clearToken } from "./utils/token";
 import Message from "@/components/Message";
-import i18n from "./i18n";
 import { useNetworkStore } from "@/store/network";
+import { message } from "antd";
+import axios, { AxiosError } from "axios";
+import i18n from "./i18n";
+import { clearToken } from "./utils/token";
 
 const urlInfo = {
   get: [],
@@ -147,6 +147,14 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (axios.isCancel(error)) {
+      const config = (error as AxiosError).config;
+      if (config?.url) {
+        httpRequestEnd(config.url);
+        return Promise.reject(error);
+      }
+    }
+
     const { response } = error;
     if (!response) return Promise.reject(error);
     httpRequestEnd(response.config.url);

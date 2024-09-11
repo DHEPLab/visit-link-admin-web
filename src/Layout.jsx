@@ -20,16 +20,26 @@ const Layout = () => {
     loadProfileSuccess: state.loadProfileSuccess,
   }));
 
-  const loadProfile = useCallback(() => {
-    axios
-      .get("/api/account/profile")
-      .then((r) => {
-        loadProfileSuccess(r.data);
-      })
-      .catch(() => navigate("/sign_in"));
-  }, [navigate]);
+  const loadProfile = useCallback(
+    (signal) => {
+      axios
+        .get("/api/account/profile", { signal })
+        .then((r) => {
+          loadProfileSuccess(r.data);
+        })
+        .catch(() => navigate("/sign_in"));
+    },
+    [navigate],
+  );
 
-  useEffect(loadProfile, [loadProfile]);
+  useEffect(() => {
+    const abortController = new AbortController();
+    loadProfile(abortController.signal);
+
+    return () => {
+      abortController.abort();
+    };
+  }, [loadProfile]);
 
   function handleLogout() {
     clearToken();
