@@ -1,3 +1,4 @@
+import PageAssignChwModalTable from "@/pages/Baby/PageAssignChwModalTable";
 import React from "react";
 import dayjs from "dayjs";
 import axios from "axios";
@@ -12,8 +13,6 @@ import BabyModalForm, { BabyModalFormValues } from "@/components/BabyModalForm";
 import StaticField from "@/components/StaticField";
 import DetailHeader from "@/components/DetailHeader";
 import BabyReviewBar from "@/components/BabyReviewBar";
-import AssignModalTable from "@/components/AssignModalTable";
-import WithPage from "@/components/WithPage";
 import Carers from "./Carers";
 import ReactiveBabyModal from "./ReactiveBabyModal";
 import ArchiveBabyModal, { ArchiveBabyFormValues } from "./ArchiveBabyModal";
@@ -30,8 +29,6 @@ import { omit } from "radash";
 import { ChwUser } from "@/models/res/User";
 
 const { confirm } = Modal;
-
-const PageAssignChwModalTable = WithPage(AssignModalTable<ChwUser>, "/admin/users/chw");
 
 export default function Baby() {
   const { t, i18n } = useTranslation(["baby", "common"]);
