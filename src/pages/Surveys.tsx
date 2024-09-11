@@ -1,29 +1,28 @@
-import React from "react";
-import { Button, Space } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
-import WithPage, { WithPageProps } from "@/components/WithPage";
 import ContentHeader from "@/components/ContentHeader";
-import ZebraTable from "@/components/ZebraTable";
 import StatusTag from "@/components/StatusTag";
+import ZebraTable from "@/components/ZebraTable";
+import { usePagination } from "@/hooks/usePagination";
+import { Curriculum } from "@/models/res/Curriculum";
+import { Button, Space } from "antd";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-type SurveysContentProps = WithPageProps;
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SurveysContent: React.FC<SurveysContentProps> = ({ loadData, onChangeSearch, ...props }) => {
+const Surveys: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation("surveys");
+
+  const { loading, pagination, dataSource, onChange } = usePagination<Curriculum>({
+    apiRequestUrl: "/admin/questionnaires",
+    apiRequestParams: {
+      sort: "id,desc",
+    },
+  });
 
   return (
     <>
       <ContentHeader title={t("surveyManagement")}>
         <Space size="large">
-          {/* <SearchInput
-            onChange={(e) => onChangeSearch("search", e.target.value)}
-            className="master"
-            placeholder={t("searchSurveyPlaceholder")}
-          /> */}
           <Button type="primary" onClick={() => navigate("/surveys/create")}>
             {t("createNewSurvey")}
           </Button>
@@ -31,7 +30,10 @@ const SurveysContent: React.FC<SurveysContentProps> = ({ loadData, onChangeSearc
       </ContentHeader>
 
       <ZebraTable
-        {...props}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={pagination}
+        onChange={onChange}
         rowKey="id"
         className="clickable"
         onRow={(record) => {
@@ -59,5 +61,4 @@ const SurveysContent: React.FC<SurveysContentProps> = ({ loadData, onChangeSearc
   );
 };
 
-const Surveys = WithPage(SurveysContent, "/admin/questionnaires?sort=id,desc");
 export default Surveys;
