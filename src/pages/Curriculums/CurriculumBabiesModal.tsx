@@ -6,7 +6,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { Button, Modal, Tooltip } from "antd";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import CurriculumBabiesAssignTableModal from "./CurriculumBabiesAssignTableModal";
@@ -20,20 +20,27 @@ type CurriculumBabiesModalProps = {
 const CurriculumBabiesModal: React.FC<CurriculumBabiesModalProps> = ({ curriculumId, visible, onCancel }) => {
   const { t } = useTranslation("curriculums");
   const [assign, openModal, closeModal] = useBoolState();
+  const [uploadingOrDeleting, setUploadingOrDeleting] = useState(false);
 
-  const { dataSource, pagination, loadData } = usePagination({
+  const { loading, dataSource, pagination, loadData } = usePagination({
     apiRequestUrl: `/admin/curriculums/${curriculumId}/babies`,
   });
 
   function handleAssign(babyIds: React.Key[]) {
+    setUploadingOrDeleting(true);
+    closeModal();
     axios.post(`/admin/curriculums/${curriculumId}/babies`, babyIds).then(() => {
+      setUploadingOrDeleting(false);
       loadData();
-      closeModal();
     });
   }
 
   function handleReleaseBaby(id: number) {
-    axios.delete(`/admin/babies/${id}/curriculum`).then(() => loadData());
+    setUploadingOrDeleting(true);
+    axios.delete(`/admin/babies/${id}/curriculum`).then(() => {
+      setUploadingOrDeleting(false);
+      loadData();
+    });
   }
 
   return (
@@ -56,6 +63,7 @@ const CurriculumBabiesModal: React.FC<CurriculumBabiesModalProps> = ({ curriculu
         <ShadeButton onClick={openModal}>{t("addNewBaby")}</ShadeButton>
       </ModalHeader>
       <ZebraTable
+        loading={loading || uploadingOrDeleting}
         dataSource={dataSource}
         pagination={pagination}
         rowKey="id"
