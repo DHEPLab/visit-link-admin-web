@@ -19,7 +19,7 @@ const CurriculumBabiesAssignTableModal = <T,>({
 
   useEffect(() => {
     resetSearch();
-  }, [resetSearch]);
+  }, [visible]);
 
   return (
     <AssignModalTable
