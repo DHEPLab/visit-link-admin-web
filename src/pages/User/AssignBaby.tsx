@@ -10,7 +10,6 @@ import ZebraTable from "@/components/ZebraTable";
 import { Gender } from "@/constants/enums";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ShadeButton from "@/components/ShadeButton";
-import WithPage from "@/components/WithPage";
 import NotAssignedBabyModal from "@/pages/User/NotAssignedBabyModal";
 import { AssignBaby as AssignBabyModel } from "@/models/res/User";
 
@@ -18,8 +17,6 @@ interface AssignBabyProps {
   id?: string;
   onChange: (dataSource: AssignBabyModel[]) => void;
 }
-
-const PageNotAssignedBabyModal = WithPage(NotAssignedBabyModal, "/admin/users/chw/not_assigned/babies");
 
 const AssignBaby: React.FC<AssignBabyProps> = ({ id, onChange }) => {
   const { t } = useTranslation(["user", "common"]);
@@ -97,7 +94,7 @@ const AssignBaby: React.FC<AssignBabyProps> = ({ id, onChange }) => {
           },
         ]}
       />
-      <PageNotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
+      <NotAssignedBabyModal id={id} onFinish={refresh} visible={visible} onCancel={closeModal} />
     </Card>
   );
 };

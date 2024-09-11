@@ -1,10 +1,10 @@
+import { usePagination } from "@/hooks/usePagination";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import AssignModalTable from "@/components/AssignModalTable";
-import { WithPageProps } from "@/components/WithPage";
 
-type NotAssignedBabyModalProps = WithPageProps & {
+type NotAssignedBabyModalProps = {
   id?: string;
   visible: boolean;
   onFinish: VoidFunction;
@@ -12,19 +12,17 @@ type NotAssignedBabyModalProps = WithPageProps & {
 };
 
 // open a new modal, assign chw to supervisor
-const NotAssignedBabyModal: React.FC<NotAssignedBabyModalProps> = ({
-  id,
-  onFinish,
-  onCancel,
-  visible,
-  loadData,
-  ...props
-}) => {
+const NotAssignedBabyModal: React.FC<NotAssignedBabyModalProps> = ({ id, onFinish, onCancel, visible }) => {
   const { t } = useTranslation(["user", "common"]);
+  const { loading, dataSource, pagination, loadData, onChange } = usePagination({
+    apiRequestUrl: "/admin/users/chw/not_assigned/babies",
+  });
+
   useEffect(() => {
-    if (visible) loadData?.();
-    // eslint-disable-next-line
-  }, [visible]);
+    const abortController = new AbortController();
+    if (visible) loadData?.(abortController.signal);
+    return () => abortController.abort();
+  }, [visible, loadData]);
 
   async function handleAssign(babyIds: React.Key[]) {
     await axios.post(`/admin/users/chw/${id}/babies`, babyIds);
@@ -35,7 +33,10 @@ const NotAssignedBabyModal: React.FC<NotAssignedBabyModalProps> = ({
 
   return (
     <AssignModalTable
-      {...props}
+      loading={loading}
+      dataSource={dataSource}
+      pagination={pagination}
+      onChange={onChange}
       title={t("assignBaby")}
       visible={visible}
       onCancel={onCancel}
