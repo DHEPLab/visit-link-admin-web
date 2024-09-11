@@ -196,13 +196,15 @@ function CurriculumBabiesModal({
         title={t("addNewBaby")}
         curriculumId={curriculumId}
         visible={assign}
+        width={900}
         onCancel={closeModal}
         onFinish={handleAssign}
         columns={[
           {
             title: t("babyName"),
             dataIndex: "name",
-            width: 120,
+            width: 500,
+            ellipsis: true,
           },
           {
             title: "ID",
@@ -212,7 +214,7 @@ function CurriculumBabiesModal({
           {
             title: t("area"),
             dataIndex: "area",
-            width: 300,
+            width: 200,
           },
         ]}
       />

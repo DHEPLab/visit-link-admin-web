@@ -227,6 +227,7 @@ export default function Baby() {
       <PageAssignChwModalTable
         id={chw?.id.toString()} // CHW id is number, unknown why give this value to Table id
         visible={changeChwVisible}
+        width={900}
         onCancel={closeChangeChwModal}
         onFinish={handleChangeChw}
         refreshOnVisible
@@ -237,7 +238,8 @@ export default function Baby() {
           {
             title: t("name"),
             dataIndex: ["user", "realName"],
-            width: 120,
+            width: 500,
+            ellipsis: true,
           },
           {
             title: "ID",
@@ -248,7 +250,7 @@ export default function Baby() {
             title: t("area"),
             dataIndex: ["user", "chw", "tags"],
             render: (tags) => tags && tags.join(", "),
-            width: 300,
+            width: 200,
           },
         ]}
       />

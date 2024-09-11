@@ -11,6 +11,7 @@ type AssignModalTableProps<T> = Partial<WithPageProps> &
     title: string;
     columns: TableProps<T>["columns"];
     visible: boolean;
+    width?: number;
     onCancel: () => void;
     onFinish: (selectedRowKeys: React.Key[]) => void;
     onChangeSearch: (field: string, value: string) => void;
@@ -21,6 +22,7 @@ type AssignModalTableProps<T> = Partial<WithPageProps> &
 const AssignModalTable = <T,>({
   title,
   columns,
+  width = 600,
   visible,
   onCancel,
   onFinish,
@@ -45,7 +47,7 @@ const AssignModalTable = <T,>({
       title={title}
       open={visible}
       style={{ top: 20 }}
-      width={600}
+      width={width}
       footer={
         <Space size="large" style={{ marginTop: "30px" }}>
           <Button ghost type="primary" size="large" onClick={onCancel}>
