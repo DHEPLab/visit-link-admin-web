@@ -8,17 +8,15 @@ import styled from "styled-components";
 import { phone, realName, username } from "./tableColumnConfig";
 
 type CHWProps = WithPageProps & {
-  tab: string;
+  refreshKey: number;
 };
 
-const CHW: React.FC<CHWProps> = ({ historyPageState, tab, loadData, onChangeSearch, ...props }) => {
+const CHW: React.FC<CHWProps> = ({ historyPageState, refreshKey, loadData, onChangeSearch, ...props }) => {
   const { t } = useTranslation(["users", "common"]);
   const navigate = useNavigate();
   useEffect(() => {
-    if (tab === "chw") {
-      loadData();
-    }
-  }, [tab, loadData]);
+    loadData();
+  }, [refreshKey, loadData]);
 
   return (
     <div>

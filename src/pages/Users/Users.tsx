@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import { Button, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import useBoolState from "@/hooks/useBoolState";
@@ -12,19 +13,24 @@ import SupervisorTab from "./SupervisorTab";
 import AdminTab from "./AdminTab";
 import CreateNewUserModalForm, { CreateNewUserFormValues } from "./CreateNewUserModalForm";
 
+type UsersTab = "chw" | "supervisor" | "admin";
+
 export default function Users() {
   const { t } = useTranslation(["users", "common"]);
-  const [tab, setTab] = useQueryParam("tab", "chw");
+  const [tab, setTab] = useQueryParam<UsersTab>("tab", "chw");
   const [newUserModal, openNewUserModal, closeNewUserModal] = useBoolState();
   const [importModal, openImportModal, closeImportModal] = useBoolState(false);
   const user = useUserStore((state) => state.user);
   const isAdmin = user?.role === "ROLE_ADMIN";
+  const [refreshKey, setRefreshKey] = useState({ chw: 0, supervisor: 0, admin: 0 });
 
   // change tab to refresh table
   function refresh() {
-    const origin = tab;
-    setTab("");
-    setTab(origin);
+    const newRefreshKey = {
+      ...refreshKey,
+    };
+    newRefreshKey[tab as UsersTab] += 1;
+    setRefreshKey(newRefreshKey);
   }
 
   function handleCreateUser(value: CreateNewUserFormValues) {
@@ -38,7 +44,7 @@ export default function Users() {
     {
       key: "chw",
       label: t("chw"),
-      children: <CHWTab tab={tab} />,
+      children: <CHWTab refreshKey={refreshKey.chw} />,
     },
   ];
 
@@ -46,12 +52,12 @@ export default function Users() {
     tabItems.push({
       key: "supervisor",
       label: t("supervisor"),
-      children: <SupervisorTab tab={tab} />,
+      children: <SupervisorTab refreshKey={refreshKey.supervisor} />,
     });
     tabItems.push({
       key: "admin",
       label: t("admin"),
-      children: <AdminTab tab={tab} />,
+      children: <AdminTab refreshKey={refreshKey.admin} />,
     });
   }
 

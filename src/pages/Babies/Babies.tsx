@@ -15,9 +15,11 @@ import PageUnreviewed from "./Unreviewed";
 import { useState } from "react";
 import { toNewBabyRequest } from "./schema/BabyForm";
 
+type BabiesTab = "approved" | "unreviewed";
+
 export default function Babies() {
   const { t, i18n } = useTranslation("babies");
-  const [tab, setTab] = useQueryParam("tab", "approved");
+  const [tab, setTab] = useQueryParam<BabiesTab>("tab", "approved");
   const [showNewBabyModal, openNewBabyModal, closeNewBabyModal] = useBoolState(false);
   const [showImportModal, openImportModal, closeImportModal] = useBoolState(false);
   const [refreshKey, setRefreshKey] = useState({ approved: 0, unreviewed: 0 });
@@ -33,7 +35,7 @@ export default function Babies() {
     const newRefreshKey = {
       ...refreshKey,
     };
-    newRefreshKey[(tab as "approved") || "unreviewed"] += 1;
+    newRefreshKey[tab as BabiesTab] += 1;
     setRefreshKey(newRefreshKey);
   }
 

@@ -6,18 +6,16 @@ import { phone, realName, username } from "./tableColumnConfig";
 import { useNavigate } from "react-router-dom";
 
 type SupervisorProps = WithPageProps & {
-  tab: string;
+  refreshKey: number;
 };
 
-const Supervisor: React.FC<SupervisorProps> = ({ tab, loadData, ...props }) => {
+const Supervisor: React.FC<SupervisorProps> = ({ refreshKey, loadData, ...props }) => {
   const { t } = useTranslation(["users", "common"]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (tab === "supervisor") {
-      loadData();
-    }
-  }, [tab, loadData]);
+    loadData();
+  }, [refreshKey, loadData]);
 
   return (
     <div>

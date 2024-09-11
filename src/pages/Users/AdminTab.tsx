@@ -5,16 +5,14 @@ import { phone, realName, username } from "./tableColumnConfig";
 import { useNavigate } from "react-router-dom";
 
 type AdminProps = WithPageProps & {
-  tab: string;
+  refreshKey: number;
 };
 
-const Admin: React.FC<AdminProps> = ({ tab, loadData, ...props }) => {
+const Admin: React.FC<AdminProps> = ({ refreshKey, loadData, ...props }) => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (tab === "admin") {
-      loadData();
-    }
-  }, [tab, loadData]);
+    loadData();
+  }, [refreshKey, loadData]);
 
   return (
     <div>
