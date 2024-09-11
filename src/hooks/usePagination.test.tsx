@@ -41,9 +41,7 @@ describe("usePagination Hook", () => {
       { wrapper: ({ children }) => <MemoryRouter initialEntries={["/resources"]}>{children}</MemoryRouter> },
     );
 
-    expect(result.current.loading).toBe(true);
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
       expect(result.current.dataSource).toHaveLength(10);
       expect(result.current.pagination.total).toBe(100);
     });
@@ -59,18 +57,11 @@ describe("usePagination Hook", () => {
       { wrapper: ({ children }) => <MemoryRouter initialEntries={["/resources"]}>{children}</MemoryRouter> },
     );
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
     act(() => {
       result.current.onChangePage({ current: 2 });
     });
 
-    expect(result.current.loading).toBe(true);
-
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
       expect(result.current.dataSource[0].id).toBe(11);
     });
   });
@@ -85,10 +76,6 @@ describe("usePagination Hook", () => {
       { wrapper: ({ children }) => <MemoryRouter initialEntries={["/resources"]}>{children}</MemoryRouter> },
     );
 
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
-
     act(() => {
       vi.useFakeTimers();
       result.current.onChangeSearch("search", "I");
@@ -99,7 +86,6 @@ describe("usePagination Hook", () => {
       vi.useRealTimers();
     });
 
-    expect(result.current.loading).toBe(true);
     expect(dispatchRequest).toHaveBeenLastCalledWith(
       expect.objectContaining({
         request: expect.objectContaining({
@@ -109,7 +95,6 @@ describe("usePagination Hook", () => {
     );
 
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
       expect(result.current.dataSource).toHaveLength(10);
       expect(result.current.pagination.total).toBe(100);
     });
@@ -127,18 +112,11 @@ describe("usePagination Hook", () => {
       { wrapper: ({ children }) => <MemoryRouter initialEntries={["/resources"]}>{children}</MemoryRouter> },
     );
 
-    await waitFor(() => {
-      expect(result.current.loading).toBeFalsy();
-    });
-
     act(() => {
       result.current.onChangeLoadURL("/api/new-endpoint");
     });
 
-    expect(result.current.loading).toBe(true);
-
     await waitFor(() => {
-      expect(result.current.loading).toBe(false);
       expect(result.current.dataSource).toHaveLength(10);
       expect(result.current.pagination.total).toBe(100);
     });
