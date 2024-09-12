@@ -46,7 +46,7 @@ test("should render readonly page", async () => {
     data: {
       name: "Curriculum-Name From API",
       description: "Curriculum Description",
-      lessons: [],
+      sessions: [],
       schedules: [],
     },
     headers: {},
@@ -70,7 +70,7 @@ test("should render readonly page and has draft", async () => {
     data: {
       name: "Curriculum Name",
       description: "Curriculum Description",
-      lessons: [],
+      sessions: [],
       schedules: [],
     },
     headers: {
