@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import React, { Suspense, useCallback, useEffect } from "react";
 import axios from "axios";
@@ -13,6 +13,7 @@ import { Flex, Spin } from "antd";
 
 const Layout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation("app");
 
   const { user, loadProfileSuccess } = useUserStore((state) => ({
@@ -26,6 +27,11 @@ const Layout = () => {
         .get("/api/account/profile", { signal })
         .then((r) => {
           loadProfileSuccess(r.data);
+        })
+        .then(() => {
+          if (location.pathname === "/sign_in") {
+            navigate("/");
+          }
         })
         .catch((error) => {
           if (!axios.isCancel(error)) {
