@@ -67,6 +67,7 @@ describe("usePagination Hook", () => {
   });
 
   it("should debounce search and update data", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     const { result } = renderHook(
       () =>
         usePagination<{ id: number; name: string }>({
@@ -77,13 +78,11 @@ describe("usePagination Hook", () => {
     );
 
     act(() => {
-      vi.useFakeTimers();
       result.current.onChangeSearch("search", "I");
       result.current.onChangeSearch("search", "It");
       result.current.onChangeSearch("search", "Ite");
       result.current.onChangeSearch("search", "Item");
       vi.advanceTimersByTime(400);
-      vi.useRealTimers();
     });
 
     expect(dispatchRequest).toHaveBeenLastCalledWith(
@@ -98,6 +97,9 @@ describe("usePagination Hook", () => {
       expect(result.current.dataSource).toHaveLength(10);
       expect(result.current.pagination.total).toBe(100);
     });
+
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 
   it("should reset to default search values when load URL is changed", async () => {

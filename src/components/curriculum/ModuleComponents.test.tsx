@@ -2,7 +2,6 @@ import { ModuleComponentType } from "@/models/res/Moduel";
 import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Formik } from "formik";
-import { sleep } from "radash";
 
 import CurriculumFactory from "./curriculumFactory";
 import ModuleComponents from "./ModuleComponents";
@@ -23,10 +22,11 @@ describe("<ModuleComponents />", () => {
   });
 
   it("should submit the correct value when user switch the component order", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     const components: ModuleComponentType[] = [CurriculumFactory.createText()];
-    await sleep(10);
+    vi.advanceTimersByTime(10);
     components.push(CurriculumFactory.createSwitch());
-    await sleep(10);
+    vi.advanceTimersByTime(10);
     components.push(CurriculumFactory.createPageFooter());
     const onSubmitFn = vi.fn();
 
@@ -49,11 +49,13 @@ describe("<ModuleComponents />", () => {
 
     const quills = container.querySelectorAll(".ql-editor");
     await user.type(quills[quills.length - 1], "Hello, World!");
-    await act(async () => sleep(1001)); // Text onChange debounce 1s
+    await act(() => vi.advanceTimersByTime(1001)); // Text onChange debounce 1s
     await user.click(await findByTestId("submit-button"));
 
     const fnCall = onSubmitFn.mock.calls[0];
     const lastSwitchOptionText = fnCall[0].components[2].value.cases[0].components[0].value.html;
     expect(lastSwitchOptionText).toEqual("<p><br></p><p>Hello, World!</p>");
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
   });
 });
