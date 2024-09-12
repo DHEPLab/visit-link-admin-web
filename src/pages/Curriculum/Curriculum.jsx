@@ -47,6 +47,7 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
+      //todo rename all lesson into session
       setLessons(data.sessions.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
       setSchedules(data.schedules);
       setCurriculum({ ...data, sessions: [], schedules: [] });
@@ -93,7 +94,7 @@ export default function Curriculum() {
       .post(submitURL, {
         id,
         ...values,
-        sessions: lessonResult,
+        lessons: lessonResult,
         schedules,
       })
       .then(() => navigate(-1));
