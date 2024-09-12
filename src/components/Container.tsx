@@ -50,8 +50,8 @@ const Container: React.FC<ContainerProps> = (props) => {
       {!readonly && !hideMove && (
         <MoveContainer data-testid="move">
           <Space direction="vertical">
-            <IconfontButton type="iconup" size={24} onClick={onMoveUp} />
-            <IconfontButton type="icondown" size={24} onClick={onMoveDown} />
+            <IconfontButton data-testid="component-move-up" type="iconup" size={24} onClick={onMoveUp} />
+            <IconfontButton data-testid="component-move-down" type="icondown" size={24} onClick={onMoveDown} />
           </Space>
         </MoveContainer>
       )}

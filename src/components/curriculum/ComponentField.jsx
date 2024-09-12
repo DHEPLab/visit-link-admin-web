@@ -30,6 +30,7 @@ export default function ComponentField({ name, component, index, onMoveDown, ...
     <div id={`${name}.${index}`}>
       <Field
         name={`${name}.${index}.value`}
+        key={`${name}.${index}.value`}
         onMoveDown={() => {
           onMoveDown();
           // Scroll to follow when moving components down.

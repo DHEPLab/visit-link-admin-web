@@ -38,6 +38,7 @@ const ComponentQuestion: React.FC<ComponentQuestionProps> = (props) => {
     <div id={`${name}.${index}`}>
       <Field
         name={`${name}.${index}.value`}
+        key={`${name}.${index}.value`}
         index={index}
         readonly={readonly}
         focus={focus}
