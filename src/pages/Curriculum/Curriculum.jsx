@@ -47,9 +47,9 @@ export default function Curriculum() {
       setTitle(data.name);
       setDraftId(headers["x-draft-id"]);
       setDraftDate(headers["x-draft-date"]);
-      setLessons(data.lessons.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
+      setLessons(data.sessions.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
       setSchedules(data.schedules);
-      setCurriculum({ ...data, lessons: [], schedules: [] });
+      setCurriculum({ ...data, sessions: [], schedules: [] });
     });
   }, [id, form, readonly]);
 
@@ -93,7 +93,7 @@ export default function Curriculum() {
       .post(submitURL, {
         id,
         ...values,
-        lessons: lessonResult,
+        sessions: lessonResult,
         schedules,
       })
       .then(() => navigate(-1));
