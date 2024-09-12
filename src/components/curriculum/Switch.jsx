@@ -9,7 +9,8 @@ import Text from "./Text";
 import Container from "@/components/Container";
 import Case from "./Case";
 
-export default function Switch({ name, value, onChange, ...props }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function Switch({ name, value, onBlur, onChange, ...props }) {
   const { t } = useTranslation("switch");
 
   const Name = {

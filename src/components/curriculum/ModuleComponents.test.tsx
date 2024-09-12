@@ -1,5 +1,5 @@
 import { ModuleComponentType } from "@/models/res/Moduel";
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Formik } from "formik";
 import { sleep } from "radash";
@@ -36,7 +36,7 @@ describe("<ModuleComponents />", () => {
           return (
             <>
               <ModuleComponents value={values.components} readonly={false} />
-              <button data-testid="submit-button" onClick={() => handleSubmit()}>
+              <button data-testid="submit-button" type="submit" onClick={() => handleSubmit()}>
                 Submit
               </button>
             </>
@@ -49,7 +49,7 @@ describe("<ModuleComponents />", () => {
 
     const quills = container.querySelectorAll(".ql-editor");
     await user.type(quills[quills.length - 1], "Hello, World!");
-    await sleep(1001);
+    await act(async () => sleep(1001)); // Text onChange debounce 1s
     await user.click(await findByTestId("submit-button"));
 
     const fnCall = onSubmitFn.mock.calls[0];
