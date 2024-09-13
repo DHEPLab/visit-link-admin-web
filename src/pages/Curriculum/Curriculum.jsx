@@ -94,7 +94,7 @@ export default function Curriculum() {
       .post(submitURL, {
         id,
         ...values,
-        lessons: lessonResult,
+        sessions: lessonResult,
         schedules,
       })
       .then(() => navigate(-1));
