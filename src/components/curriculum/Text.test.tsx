@@ -5,7 +5,12 @@ import Text from "./Text";
 
 test("should render Text value", () => {
   const { getByText } = render(
-    <Text name="component.0.value" value={{ html: "Hello World", type: "script" }} onChange={() => vi.fn()} />,
+    <Text
+      name="component.0.value"
+      value={{ html: "Hello World", type: "script" }}
+      onChange={() => vi.fn()}
+      onBlur={() => vi.fn()}
+    />,
   );
   expect(getByText("Hello World")).toBeInTheDocument();
 });
@@ -17,6 +22,7 @@ test("should render readonly Text", () => {
       readonly
       value={{ html: "Hello World", type: "instruction" }}
       onChange={() => vi.fn()}
+      onBlur={() => vi.fn()}
     />,
   );
 

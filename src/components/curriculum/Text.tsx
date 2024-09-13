@@ -1,3 +1,5 @@
+import { ModuleTextValue } from "@/models/res/Moduel";
+import { FieldInputProps } from "formik/dist/types";
 import React from "react";
 import styled from "@emotion/styled";
 import { useQuill } from "@/hooks/useQuill";
@@ -23,12 +25,9 @@ const colors = {
 type TextType = "script" | "instruction" | "reference";
 
 type TextProps = {
-  name: string;
-  onBlur?: (value: string) => void;
-  onChange: (name: string) => (value: string) => void;
-  value: { html: string; type: string };
   readonly?: boolean;
-} & ContainerProps;
+} & FieldInputProps<ModuleTextValue> &
+  ContainerProps;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Text: React.FC<TextProps> = ({ name, onBlur, onChange, value, ...props }) => {

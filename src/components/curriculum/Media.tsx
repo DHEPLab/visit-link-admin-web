@@ -1,3 +1,4 @@
+import { FieldInputProps } from "formik/dist/types";
 import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
@@ -12,11 +13,8 @@ import { RcFile } from "antd/es/upload/interface";
 import { ModuleMediaValue } from "@/models/res/Moduel";
 
 type MediaProps = {
-  name: string;
-  value: ModuleMediaValue;
-  onChange: (name: string) => (value: string) => void;
   readonly?: boolean;
-};
+} & FieldInputProps<ModuleMediaValue>;
 
 const Media: React.FC<MediaProps> = ({ name, value, onChange, ...props }) => {
   const [text, setText] = useState(value.text);

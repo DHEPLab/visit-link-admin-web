@@ -1,12 +1,14 @@
 import { ModuleTopic } from "@/constants/enums";
 
+export interface ModuleTextValue {
+  type: "script" | "instruction" | "reference";
+  html: string;
+}
+
 export interface ModuleTextComponent {
   type: "Text";
   key: number;
-  value: {
-    type: "script" | "instruction" | "reference";
-    html: string;
-  };
+  value: ModuleTextValue;
 }
 
 export interface ModuleMediaValue {

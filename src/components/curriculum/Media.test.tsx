@@ -9,6 +9,7 @@ it("should render readonly Media", () => {
       name="component.0.value"
       value={{ type: "IMAGE", file: "/api/filename.jpg", text: "" }}
       onChange={() => vi.fn()}
+      onBlur={() => vi.fn()}
       readonly
     />,
   );
@@ -24,6 +25,7 @@ it("should render Media with exist file", () => {
       name="component.0.value"
       value={{ type: "IMAGE", file: "/api/filename.jpg", text: "" }}
       onChange={() => vi.fn()}
+      onBlur={() => vi.fn()}
     />,
   );
 
@@ -33,7 +35,12 @@ it("should render Media with exist file", () => {
 
 it("should render Media without file", () => {
   const { queryByText } = render(
-    <Media name="component.0.value" value={{ type: "IMAGE", file: "", text: "" }} onChange={() => vi.fn()} />,
+    <Media
+      name="component.0.value"
+      value={{ type: "IMAGE", file: "", text: "" }}
+      onChange={() => vi.fn()}
+      onBlur={() => vi.fn()}
+    />,
   );
 
   expect(queryByText("Click to Upload Picture")).toBeInTheDocument();
