@@ -13,13 +13,13 @@ export interface Questionnaire {
 
 type Question = TextQuestion | RadioQuestion | CheckboxQuestion;
 
-interface TextQuestion {
+export interface TextQuestionValue {
+  title: string;
+}
+
+export interface TextQuestion {
   type: "Text";
-  value: {
-    html: string;
-    type: string;
-    title: string;
-  };
+  value: TextQuestionValue;
 }
 
 interface RadioQuestion {
