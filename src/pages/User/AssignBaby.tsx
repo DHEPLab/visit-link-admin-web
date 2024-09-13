@@ -52,8 +52,9 @@ const AssignBaby: React.FC<AssignBabyProps> = ({ id, onChange }) => {
           {
             title: t("babyName"),
             dataIndex: "name",
-            width: 140,
+            width: 350,
             align: "center",
+            ellipsis: true,
           },
           {
             title: t("id"),
@@ -63,10 +64,13 @@ const AssignBaby: React.FC<AssignBabyProps> = ({ id, onChange }) => {
             title: t("gender"),
             dataIndex: "gender",
             render: (h) => Gender[h as keyof typeof Gender],
+            width: 100,
           },
           {
             title: t("master"),
             dataIndex: "masterCarerName",
+            width: 350,
+            ellipsis: true,
           },
           {
             title: t("phone"),
