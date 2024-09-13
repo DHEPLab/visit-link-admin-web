@@ -5,10 +5,11 @@ import { FieldArray } from "formik";
 import { useTranslation } from "react-i18next";
 
 import CurriculumFactory from "./curriculumFactory";
-import ComponentField from "./ComponentField";
+import FieldArrayComponent from "@/components/FieldArrayComponent";
 import Container from "@/components/Container";
 import GhostInput from "../GhostInput";
 import { useModuleStore } from "@/store/module";
+import { ModuleComponentMap } from "./constants";
 
 export default function Case({ name, value, index, onChange, ...props }) {
   const [text, setText] = useState(value.text);
@@ -76,7 +77,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
           return (
             <>
               {value.components.map((component, index) => (
-                <ComponentField
+                <FieldArrayComponent
                   {...props}
                   index={index}
                   key={component.key}
@@ -85,6 +86,7 @@ export default function Case({ name, value, index, onChange, ...props }) {
                   onRemove={() => helpers.remove(index)}
                   onMoveUp={() => handleMoveUp(index)}
                   onMoveDown={() => handleMoveDown(index)}
+                  componentMap={ModuleComponentMap}
                 />
               ))}
               {!props.readonly && (

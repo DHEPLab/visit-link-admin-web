@@ -1,12 +1,9 @@
-import React from "react";
 import { Field } from "formik";
-import QuestionText from "./QuestionText";
-import QuestionRadio from "./QuestionRadio";
-import { SurveyComponentType } from "@/models/res/Survey";
+import React from "react";
 
-type ComponentQuestionProps = {
+type FieldArrayComponentProps<T> = {
   name: string;
-  component: SurveyComponentType;
+  component: T;
   index: number;
   readonly: boolean;
   focus: boolean;
@@ -14,18 +11,12 @@ type ComponentQuestionProps = {
   onMoveUp: VoidFunction;
   onMoveDown: VoidFunction;
   onFocus: VoidFunction;
+  componentMap: { [key: string]: React.ElementType };
 };
 
-const ComponentMap: { [key: string]: React.ElementType } = {
-  Text: QuestionText,
-  Radio: QuestionRadio,
-  Checkbox: QuestionRadio,
-};
-
-const ComponentQuestion: React.FC<ComponentQuestionProps> = (props) => {
-  const { name, component, index, readonly, focus, onRemove, onMoveUp, onMoveDown, onFocus } = props;
-
-  const As = ComponentMap[component.type];
+const FieldArrayComponent = <T extends { type: string }>(props: FieldArrayComponentProps<T>) => {
+  const { name, component, index, readonly, focus, onRemove, onMoveUp, onMoveDown, onFocus, componentMap } = props;
+  const As = componentMap[component.type];
 
   const handleMoveDown = () => {
     onMoveDown();
@@ -52,4 +43,4 @@ const ComponentQuestion: React.FC<ComponentQuestionProps> = (props) => {
   );
 };
 
-export default ComponentQuestion;
+export default FieldArrayComponent;

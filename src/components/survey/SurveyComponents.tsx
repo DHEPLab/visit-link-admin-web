@@ -1,20 +1,28 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-
-import { FieldArray } from "formik";
-
-import SurveyFactory from "./surveyFactory";
-import { useTranslation } from "react-i18next";
-import ComponentQuestion from "./ComponentQuestion";
+import FieldArrayComponent from "@/components/FieldArrayComponent";
+import QuestionOperationBar from "./QuestionOperationBar";
+import QuestionRadio from "./QuestionRadio";
+import QuestionText from "./QuestionText";
 import { handleMoveDown, handleMoveUp, handleRemove, insertComponent } from "@/components/utils/fieldArrayUtils";
 import { SurveyComponentType } from "@/models/res/Survey";
-import QuestionOperationBar from "@/components/survey/QuestionOperationBar";
+
+import { FieldArray } from "formik";
 import { ArrayHelpers } from "formik/dist/FieldArray";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import styled from "styled-components";
+
+import SurveyFactory from "./surveyFactory";
 
 type SurveyComponentsProps = {
   questions: SurveyComponentType[];
   readonly: boolean;
   stickyTop: number;
+};
+
+const ComponentMap: { [key: string]: React.ElementType } = {
+  Text: QuestionText,
+  Radio: QuestionRadio,
+  Checkbox: QuestionRadio,
 };
 
 const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions = [], readonly, stickyTop }) => {
@@ -32,7 +40,7 @@ const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions = [], rea
           <FieldArrayContainer>
             <ComponentForm>
               {questions.map((question, index) => (
-                <ComponentQuestion
+                <FieldArrayComponent
                   key={question.key}
                   index={index}
                   readonly={readonly}
@@ -43,6 +51,7 @@ const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions = [], rea
                   onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
                   onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, questions.length)}
                   onFocus={() => setFocus(index)}
+                  componentMap={ComponentMap}
                 />
               ))}
             </ComponentForm>

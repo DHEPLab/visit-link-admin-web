@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import { ModuleComponentMap } from "./constants";
+import FieldArrayComponent from "@/components/FieldArrayComponent";
+import { handleMoveDown, handleMoveUp, handleRemove } from "@/components/utils/fieldArrayUtils";
+import { ModuleComponentType } from "@/models/res/Moduel";
 
 import { FieldArray } from "formik";
-import ComponentField from "./ComponentField";
-import { handleMoveDown, handleMoveUp, handleRemove } from "@/components/utils/fieldArrayUtils";
+import React, { useState } from "react";
+import styled from "styled-components";
 import ToolBar from "./ToolBar";
-import { ModuleComponentType } from "@/models/res/Moduel";
 
 type ModuleComponentsProps = {
   value: ModuleComponentType[];
@@ -22,7 +23,7 @@ const ModuleComponents: React.FC<ModuleComponentsProps> = ({ value, readonly }) 
           <FieldArrayContainer>
             <ComponentForm>
               {value.map((component, index) => (
-                <ComponentField
+                <FieldArrayComponent
                   name="components"
                   key={component.key}
                   index={index}
@@ -33,6 +34,7 @@ const ModuleComponents: React.FC<ModuleComponentsProps> = ({ value, readonly }) 
                   onMoveUp={() => handleMoveUp(helpers, index, focus, setFocus)}
                   onMoveDown={() => handleMoveDown(helpers, index, focus, setFocus, value.length)}
                   onFocus={() => setFocus(index)}
+                  componentMap={ModuleComponentMap}
                 />
               ))}
             </ComponentForm>
