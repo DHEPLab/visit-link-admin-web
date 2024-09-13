@@ -1,6 +1,6 @@
 import FieldArrayComponent from "@/components/FieldArrayComponent";
 import QuestionOperationBar from "./QuestionOperationBar";
-import QuestionRadio from "./QuestionRadio";
+import { QuestionMultipleChoice, QuestionSingleChoice } from "./QuestionChoice";
 import QuestionText from "./QuestionText";
 import { handleMoveDown, handleMoveUp, handleRemove, insertComponent } from "@/components/utils/fieldArrayUtils";
 import { SurveyComponentType } from "@/models/res/Survey";
@@ -21,8 +21,8 @@ type SurveyComponentsProps = {
 
 const ComponentMap: { [key: string]: React.ElementType } = {
   Text: QuestionText,
-  Radio: QuestionRadio,
-  Checkbox: QuestionRadio,
+  Radio: QuestionSingleChoice,
+  Checkbox: QuestionMultipleChoice,
 };
 
 const SurveyComponents: React.FC<SurveyComponentsProps> = ({ questions = [], readonly, stickyTop }) => {

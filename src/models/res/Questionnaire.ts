@@ -22,23 +22,22 @@ export interface TextQuestion {
   value: TextQuestionValue;
 }
 
+export interface ChoiceQuestionValue {
+  title: string;
+  options: ChoiceQuestionOption[];
+}
+
 interface RadioQuestion {
   type: "Radio";
-  value: {
-    title: string;
-    options: Option[];
-  };
+  value: ChoiceQuestionValue;
 }
 
 interface CheckboxQuestion {
   type: "Checkbox";
-  value: {
-    title: string;
-    options: Option[];
-  };
+  value: ChoiceQuestionValue;
 }
 
-interface Option {
+export interface ChoiceQuestionOption {
   label: string;
   needEnter: boolean;
 }
