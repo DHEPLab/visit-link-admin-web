@@ -6,7 +6,7 @@ import React from "react";
 type PageAssignChwModalTableProps = AssignModalTableProps<ChwUser>;
 
 const PageAssignChwModalTable: React.FC<PageAssignChwModalTableProps> = (props) => {
-  const { loading, dataSource, pagination, onChange } = usePagination<ChwUser>({
+  const { loading, dataSource, pagination, onChange, onChangeSearch } = usePagination<ChwUser>({
     apiRequestUrl: "/admin/users/chw",
   });
   return (
@@ -15,6 +15,7 @@ const PageAssignChwModalTable: React.FC<PageAssignChwModalTableProps> = (props) 
       dataSource={dataSource}
       pagination={pagination}
       onChange={onChange}
+      onChangeSearch={onChangeSearch}
       {...props}
     />
   );
