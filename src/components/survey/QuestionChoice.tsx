@@ -164,5 +164,9 @@ const AddTextCheckbox = styled(Checkbox)`
 `;
 
 export default QuestionChoice;
-export const QuestionSingleChoice = (props: QuestionRadioProps) => <QuestionChoice multiple={false} {...props} />;
-export const QuestionMultipleChoice = (props: QuestionRadioProps) => <QuestionChoice multiple {...props} />;
+export const QuestionSingleChoice = (props: Omit<QuestionRadioProps, "multiple">) => (
+  <QuestionChoice multiple={false} {...props} />
+);
+export const QuestionMultipleChoice = (props: Omit<QuestionRadioProps, "multiple">) => (
+  <QuestionChoice multiple {...props} />
+);
