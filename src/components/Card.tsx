@@ -1,3 +1,4 @@
+import type { RenderFunction } from "antd/es/_util/getRenderPropValue";
 import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
@@ -6,7 +7,7 @@ import isPropValid from "@emotion/is-prop-valid";
 
 type CardProps = {
   title: string;
-  tooltip?: string;
+  tooltip?: React.ReactNode | RenderFunction;
   extra?: React.ReactNode;
   noPadding?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;

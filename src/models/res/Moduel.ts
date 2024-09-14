@@ -68,3 +68,12 @@ export interface ModuleResponse {
   published: boolean;
   topic: keyof typeof ModuleTopic;
 }
+
+export interface ModuleListItem {
+  id: number;
+  branch: string;
+  name: string;
+  number: string;
+  topic: string;
+  published: boolean;
+}

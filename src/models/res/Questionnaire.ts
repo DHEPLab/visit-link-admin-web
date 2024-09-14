@@ -11,6 +11,13 @@ export interface Questionnaire {
   published: boolean;
 }
 
+export interface QuestionnaireListItem {
+  id: number;
+  branch: string;
+  name: string;
+  published: boolean;
+}
+
 type Question = TextQuestion | RadioQuestion | CheckboxQuestion;
 
 export interface TextQuestionValue {

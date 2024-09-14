@@ -1,9 +1,16 @@
+import ShadeButton from "@/components/ShadeButton";
+import { ModuleListItem } from "@/models/res/Moduel";
+import { Page } from "@/models/res/Page";
+import { QuestionnaireListItem } from "@/models/res/Questionnaire";
+import { LessonFormValue, LessonModule } from "@/pages/Curriculum/schema/Lesson";
 import { useNetworkStore } from "@/store/network";
-import { useTranslation } from "react-i18next";
+import { ColumnType } from "antd/es/table/interface";
+import { DefaultOptionType } from "rc-select/lib/Select";
+import { useTranslation, UseTranslationResponse } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "@/components/Card";
-import { Button, Form, Input, Select, Space, Tooltip } from "antd";
+import { Button, Form, FormProps, Input, Select, Space, Tooltip } from "antd";
 import ModalForm from "@/components/ModalForm";
 import Rules from "@/constants/rules";
 import { validateLessonNumber } from "./utils";
@@ -15,23 +22,26 @@ import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ApplicableDays from "./ApplicableDays";
 import useEdit from "./hooks/useEdit";
 
-const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
-  if (disabled) return {};
+const lessonOperation = (
+  readonly: boolean,
+  handleDelete: (index: number) => void,
+  openEditModal: (value: LessonFormValue, index: number) => void,
+  t: UseTranslationResponse<"curriculum", undefined>["t"],
+): ColumnType<LessonFormValue> => {
+  if (readonly) return {};
   return {
     title: (
       <>
         {t("operation")} &nbsp;
-        {!disabled && (
-          <Tooltip title={t("lessonOperationWarn")} placement="left">
-            <InfoCircleFilled style={{ color: "#000" }} />
-          </Tooltip>
-        )}
+        <Tooltip title={t("lessonOperationWarn")} placement="left">
+          <InfoCircleFilled style={{ color: "#000" }} />
+        </Tooltip>
       </>
     ),
     width: 200,
     align: "center",
-    render(_, record, index) {
-      if (disabled) return null;
+    render(_value, record, index: number) {
+      if (readonly) return null;
       return (
         <Space size="large">
           <DeleteConfirmModal onConfirm={() => handleDelete(index)}>
@@ -45,40 +55,48 @@ const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
         </Space>
       );
     },
-  };
+  } satisfies ColumnType<LessonFormValue>;
 };
 
-function Lessons({ disabled, value, onChange }) {
+type LessonsProps = {
+  readonly: boolean;
+  lessons: LessonFormValue[];
+  onChange: (lessons: LessonFormValue[]) => void;
+};
+
+const EmptySession = { stage: "EDC" } as LessonFormValue;
+
+const Lessons: React.FC<LessonsProps> = ({ readonly, lessons, onChange }) => {
   const requests = useNetworkStore((state) => state.requests);
   const { t } = useTranslation("curriculum");
   const { visible, pullAt, replace, currentEditIndex, currentEditValue, openEditModal, openCreateModal, closeModal } =
-    useEdit();
+    useEdit<LessonFormValue>();
 
-  const [moduleOptions, setModuleOptions] = useState([]);
-  const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
+  const [moduleOptions, setModuleOptions] = useState<DefaultOptionType[]>([]);
+  const [questionnairesOptions, setQuestionnairesOptions] = useState<DefaultOptionType[]>([]);
 
   useEffect(() => {
     const abortController = new AbortController();
     loadQuestionnairesOptions(abortController.signal);
     return () => abortController.abort();
-  }, [openEditModal, setQuestionnairesOptions]);
+  }, []);
 
-  function onFinish(formValues) {
+  function onFinish(formValues: LessonFormValue) {
     if (currentEditIndex === -1) {
-      onChange(value.concat(formValues));
+      onChange(lessons.concat(formValues));
     } else {
-      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
+      onChange(replace(lessons, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
     }
     closeModal();
   }
 
-  function handleDelete(index) {
-    onChange(pullAt(value, index));
+  function handleDelete(index: number) {
+    onChange(pullAt(lessons, index));
   }
 
   function loadModuleOptions() {
     axios
-      .get("/admin/modules", {
+      .get<Page<ModuleListItem>>("/admin/modules", {
         params: {
           size: 1000,
           published: true,
@@ -89,9 +107,9 @@ function Lessons({ disabled, value, onChange }) {
       });
   }
 
-  function loadQuestionnairesOptions(signal) {
+  function loadQuestionnairesOptions(signal?: AbortSignal) {
     axios
-      .get("/admin/questionnaires", {
+      .get<Page<QuestionnaireListItem>>("/admin/questionnaires", {
         params: {
           size: 1000,
           published: true,
@@ -113,7 +131,7 @@ function Lessons({ disabled, value, onChange }) {
       noPadding
       title={t("sessions")}
       tooltip={
-        !disabled && (
+        !readonly && (
           <>
             <p>{t("pleaseNote")}</p>
             <p>{t("sessionApplicabilityWarning")}</p>
@@ -121,13 +139,7 @@ function Lessons({ disabled, value, onChange }) {
           </>
         )
       }
-      extra={
-        !disabled && (
-          <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
-            {t("addNewSession")}
-          </Button>
-        )
-      }
+      extra={!readonly && <ShadeButton onClick={() => openCreateModal(EmptySession)}>{t("addNewSession")}</ShadeButton>}
     >
       <ModalForm
         width={800}
@@ -137,7 +149,7 @@ function Lessons({ disabled, value, onChange }) {
         initialValues={currentEditValue}
         onCancel={closeModal}
         onFinish={onFinish}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       >
         <Form.Item
           label={t("sessionNumber")}
@@ -148,7 +160,11 @@ function Lessons({ disabled, value, onChange }) {
               validator(_, number) {
                 if (
                   !number ||
-                  validateLessonNumber(value, number, currentEditIndex === -1 ? null : value[currentEditIndex].number)
+                  validateLessonNumber(
+                    lessons,
+                    number,
+                    currentEditIndex === -1 ? null : lessons[currentEditIndex].number,
+                  )
                 ) {
                   return Promise.resolve();
                 }
@@ -168,7 +184,7 @@ function Lessons({ disabled, value, onChange }) {
         <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
-        <ApplicableDays value={value} currentEditValue={currentEditValue} />
+        <ApplicableDays value={lessons} currentEditValue={currentEditValue} />
         <Form.Item label={t("modulesIncluded")} name="modules" rules={Rules.Required}>
           <Select
             mode="multiple"
@@ -182,7 +198,7 @@ function Lessons({ disabled, value, onChange }) {
           <Select
             suffixIcon={null}
             options={questionnairesOptions}
-            onFocus={loadQuestionnairesOptions}
+            onFocus={() => loadQuestionnairesOptions()}
             loading={!!requests["/admin/findAllQuestionnaires"]}
           />
         </Form.Item>
@@ -191,10 +207,10 @@ function Lessons({ disabled, value, onChange }) {
         </Form.Item>
       </ModalForm>
 
-      <ZebraTable
+      <ZebraTable<LessonFormValue>
         rowKey="number"
         pagination={false}
-        dataSource={value}
+        dataSource={lessons}
         columns={[
           {
             title: t("sessionNumber"),
@@ -206,7 +222,7 @@ function Lessons({ disabled, value, onChange }) {
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
+              return `${t(CurriculumBabyStage[record.stage as keyof typeof CurriculumBabyStage])} ${record.startOfApplicableDays}${t(
                 "common:unit:day",
               )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
             },
@@ -214,13 +230,13 @@ function Lessons({ disabled, value, onChange }) {
           {
             title: t("modulesIncluded"),
             dataIndex: "modules",
-            render: (h) => h.map((v) => v.label).join("、"),
+            render: (value: LessonModule[]) => value.map((module) => module.label).join("、"),
           },
-          lessonOperation(disabled, handleDelete, openEditModal, t),
+          lessonOperation(readonly, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
   );
-}
+};
 
 export default Lessons;

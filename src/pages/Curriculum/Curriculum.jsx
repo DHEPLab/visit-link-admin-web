@@ -221,7 +221,7 @@ export default function Curriculum() {
         )}
       </Card>
 
-      <Lessons disabled={readonly} value={lessons} onChange={onChangeLessons} />
+      <Lessons readonly={readonly} lessons={lessons} onChange={onChangeLessons} />
       <Schedules disabled={readonly} value={schedules} lessonOptions={lessons} onChange={setSchedules} />
     </>
   );
