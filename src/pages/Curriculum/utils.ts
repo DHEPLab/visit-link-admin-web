@@ -20,7 +20,10 @@ type ValidateLessonDateRangeLesson = {
   endOfApplicableDays: number;
 };
 
-export function validateLessonDateRange(lessons: LessonFormValue[], lesson: ValidateLessonDateRangeLesson) {
+export function validateLessonDateRange<T extends LessonFormValue | ScheduleFormValue>(
+  lessons: T[],
+  lesson: ValidateLessonDateRangeLesson,
+) {
   return !lessons
     .filter((item) => {
       const isAdd = item.id === undefined && lesson.id === undefined;

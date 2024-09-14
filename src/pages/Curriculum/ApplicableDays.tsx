@@ -1,10 +1,19 @@
+import { LessonFormValue } from "@/pages/Curriculum/schema/Lesson";
+import { ScheduleFormValue } from "@/pages/Curriculum/schema/Schedule";
 import { useTranslation } from "react-i18next";
 import { Form, InputNumber } from "antd";
 import { validateLessonDateRange } from "./utils";
 import styled from "styled-components";
-import React from "react";
 
-export default function ApplicableDays({ value, currentEditValue }) {
+type ApplicableDaysProps<T> = {
+  value: T[];
+  currentEditValue: T;
+};
+
+const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
+  value,
+  currentEditValue,
+}: ApplicableDaysProps<T>) => {
   const { t } = useTranslation("curriculum");
 
   const startDateRequiredRule = {
@@ -20,8 +29,7 @@ export default function ApplicableDays({ value, currentEditValue }) {
   return (
     <ApplicableDaysContainer>
       <Form.Item noStyle labelCol={{ offset: 7 }} shouldUpdate={(pre, cur) => pre.stage !== cur.stage}>
-        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {({ getFieldValue }) => {
+        {() => {
           return (
             <>
               <Form.Item
@@ -51,12 +59,12 @@ export default function ApplicableDays({ value, currentEditValue }) {
                   }),
                 ]}
               >
-                <InputNumber
+                <InputNumber<number>
                   min={1}
                   max={9999}
                   precision={0}
                   formatter={(value) => `${value}${t("common:unit.day")}`}
-                  parser={(value) => value.replace(t("common:unit.day"), "")}
+                  parser={(value) => Number(value?.replace(t("common:unit.day"), ""))}
                 />
               </Form.Item>
               <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
@@ -98,12 +106,12 @@ export default function ApplicableDays({ value, currentEditValue }) {
                   }),
                 ]}
               >
-                <InputNumber
+                <InputNumber<number>
                   min={1}
                   max={9999}
                   precision={0}
                   formatter={(value) => `${value}${t("common:unit.day")}`}
-                  parser={(value) => value.replace(t("common:unit.day"), "")}
+                  parser={(value) => Number(value?.replace(t("common:unit.day"), ""))}
                 />
               </EndOfApplicableDaysFormItem>
             </>
@@ -112,7 +120,7 @@ export default function ApplicableDays({ value, currentEditValue }) {
       </Form.Item>
     </ApplicableDaysContainer>
   );
-}
+};
 
 const EndOfApplicableDaysFormItem = styled(Form.Item)`
   .ant-form-item-explain,
@@ -127,6 +135,7 @@ const ApplicableDaysContainer = styled.div`
 `;
 
 const ApplicableDaysConnector = styled.div`
-  margin: 0 14px;
-  margin-top: 8px;
+  margin: 8px 14px 0;
 `;
+
+export default ApplicableDays;
