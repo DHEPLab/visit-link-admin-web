@@ -1,8 +1,11 @@
+import { CurriculumResponse } from "@/models/res/Curriculum";
+import { LessonFormValue } from "@/pages/Curriculum/schema/Lesson";
+import { ScheduleFormValue } from "@/pages/Curriculum/schema/Schedule";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button, Form, Input, message, Space } from "antd";
+import { Button, Form, FormProps, Input, message, Space } from "antd";
 
 import Rules from "@/constants/rules";
 import { cleanInvalidLessons } from "./utils";
@@ -16,7 +19,12 @@ import Schedules from "./Schedules";
 import Lessons from "./Lessons";
 import ReadonlyForm from "@/components/ReadonlyForm";
 
-export default function Curriculum() {
+type CurriculumBasicInfoFormValues = {
+  name: string;
+  description: string;
+};
+
+const Curriculum: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -24,17 +32,17 @@ export default function Curriculum() {
   const { t } = useTranslation("curriculum");
 
   const [isPrompt, setIsPrompt] = useState(true);
-  const [readonly, setReadonly] = useState();
+  const [readonly, setReadonly] = useState(true);
   const [title, setTitle] = useState(t("createNewCurriculum"));
-  const [submitURL, setSubmitURL] = useState();
+  const [submitURL, setSubmitURL] = useState("");
 
   const [form] = Form.useForm();
-  const [curriculum, setCurriculum] = useState({});
-  const [lessons, setLessons] = useState([]);
-  const [schedules, setSchedules] = useState([]);
+  const [curriculum, setCurriculum] = useState<CurriculumResponse>({} as CurriculumResponse);
+  const [lessons, setLessons] = useState<LessonFormValue[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleFormValue[]>([]);
 
-  const [draftId, setDraftId] = useState();
-  const [draftDate, setDraftDate] = useState();
+  const [draftId, setDraftId] = useState("");
+  const [draftDate, setDraftDate] = useState("");
 
   useEffect(() => {
     setReadonly(!pathname.includes("/curriculums/edit") && !pathname.includes("/curriculums/create"));
@@ -42,17 +50,27 @@ export default function Curriculum() {
 
   useEffect(() => {
     if (readonly == null || !id) return;
-    axios.get(`/admin/curriculums/${id}`).then(({ data, headers }) => {
-      if (!readonly) form.setFieldsValue(data);
-      setTitle(data.name);
-      setDraftId(headers["x-draft-id"]);
-      setDraftDate(headers["x-draft-date"]);
-      //todo rename all lesson into session
-      setLessons(data.sessions.map((n) => ({ ...n, questionnaire: n.questionnaire?.id })));
-      setSchedules(data.schedules);
-      setCurriculum({ ...data, sessions: [], schedules: [] });
-    });
-  }, [id, form, readonly]);
+    const abortController = new AbortController();
+    axios
+      .get<CurriculumResponse>(`/admin/curriculums/${id}`, { signal: abortController.signal })
+      .then(({ data, headers }) => {
+        if (!readonly) form.setFieldsValue(data);
+        setTitle(data.name);
+        setDraftId(headers["x-draft-id"]);
+        setDraftDate(headers["x-draft-date"]);
+        //todo rename all lesson into session
+        setLessons(data.sessions.map((n) => ({ ...n, questionnaire: n.questionnaire?.id }) satisfies LessonFormValue));
+        setSchedules(data.schedules);
+        setCurriculum({ ...data, sessions: [], schedules: [] });
+      })
+      .catch((error) => {
+        if (!axios.isCancel(error)) {
+          throw error;
+        }
+      });
+
+    return () => abortController.abort();
+  }, []);
 
   function submitDraft() {
     setSubmitURL("/admin/curriculums/draft");
@@ -84,7 +102,7 @@ export default function Curriculum() {
     return true;
   }
 
-  function onFinish(values) {
+  function onFinish(values: CurriculumBasicInfoFormValues) {
     if (!validate()) return;
     const lessonResult = lessons.map((n) => ({
       ...n,
@@ -100,7 +118,7 @@ export default function Curriculum() {
       .then(() => navigate(-1));
   }
 
-  function handleDelteDraft() {
+  function handleDeleteDraft() {
     axios.delete(`/admin/curriculums/${draftId}`).then(() => {
       setDraftId("");
     });
@@ -112,9 +130,9 @@ export default function Curriculum() {
     });
   }
 
-  function onChangeLessons(_lessons) {
-    setLessons(_lessons);
-    setSchedules(cleanInvalidLessons(schedules, _lessons));
+  function onChangeLessons(lessonFormValues: LessonFormValue[]) {
+    setLessons(lessonFormValues);
+    setSchedules(cleanInvalidLessons(schedules, lessonFormValues));
   }
 
   usePrompt({
@@ -187,7 +205,7 @@ export default function Curriculum() {
         <DraftBar
           title={t("unpublishedDraft")}
           lastModifiedDraftAt={draftDate}
-          onRemove={handleDelteDraft}
+          onRemove={handleDeleteDraft}
           onClick={() => navigate(`/curriculums/edit/${draftId}`)}
         />
       )}
@@ -201,7 +219,12 @@ export default function Curriculum() {
             form={form}
             labelCol={{ span: 5 }}
             onFinish={onFinish}
-            validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+            validateMessages={
+              t("validateMessages", {
+                ns: "common",
+                returnObjects: true,
+              }) as FormProps["validateMessages"]
+            }
           >
             <Form.Item
               label={t("curriculumName")}
@@ -225,4 +248,6 @@ export default function Curriculum() {
       <Schedules readonly={readonly} schedules={schedules} lessons={lessons} onChange={setSchedules} />
     </>
   );
-}
+};
+
+export default Curriculum;

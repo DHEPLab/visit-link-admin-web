@@ -1,4 +1,3 @@
-import React from "react";
 import { waitFor } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 
@@ -81,7 +80,7 @@ test("should render readonly page and has draft", async () => {
         },
         {
           headers: {
-            "x-draft-id": 3,
+            "x-draft-id": "3",
             "x-draft-date": "2020-07-13T19:55:37",
           },
         },

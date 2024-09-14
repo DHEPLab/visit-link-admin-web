@@ -7,8 +7,8 @@ import Iconfont from "@/components/Iconfont";
 interface DetailHeaderProps {
   icon: string;
   menu: string;
-  title: string;
-  role?: string;
+  title: React.ReactNode;
+  role?: React.ReactNode;
   extra?: React.ReactNode;
 }
 

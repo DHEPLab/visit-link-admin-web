@@ -11,7 +11,7 @@ export interface Lesson {
   number: string;
   name: string;
   description: string;
-  stage: string;
+  stage: "BIRTH" | "EDC";
   startOfApplicableDays: number;
   endOfApplicableDays: number;
   modules: {

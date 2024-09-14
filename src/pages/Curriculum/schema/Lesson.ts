@@ -2,8 +2,8 @@ import { STAGE_TYPE } from "./common";
 
 export type LessonModule = {
   label: string;
-  value: number;
-  key: number;
+  value: string;
+  key?: number;
 };
 
 export interface LessonFormValue {
@@ -16,5 +16,5 @@ export interface LessonFormValue {
   endOfApplicableDays: number;
   modules: LessonModule[];
   questionnaire: number;
-  smsQuestionnaireAddress: string;
+  smsQuestionnaireAddress: string | null;
 }
