@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { useUserStore } from "@/store/user";
 import { Flex, Spin } from "antd";
 
-const Layout = () => {
+const Layout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation("app");
@@ -22,7 +22,7 @@ const Layout = () => {
   }));
 
   const loadProfile = useCallback(
-    (signal) => {
+    (signal: AbortSignal) => {
       axios
         .get("/api/account/profile", { signal })
         .then((r) => {
@@ -59,7 +59,12 @@ const Layout = () => {
 
   return (
     <>
-      <Header username={user.realName} role={Role[user.role]} onNavigate={navigate} onLogout={handleLogout} />
+      <Header
+        username={user.realName}
+        role={Role[user.role as keyof typeof Role]}
+        onNavigate={navigate}
+        onLogout={handleLogout}
+      />
       <RouteContainer>
         <Menu />
         <Suspense

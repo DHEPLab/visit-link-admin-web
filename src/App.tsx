@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import type { Locale } from "antd/lib/locale";
+import { useContext } from "react";
 import isPropValid from "@emotion/is-prop-valid";
 import styled, { StyleSheetManager } from "styled-components";
 
@@ -6,6 +7,7 @@ import { ConfigProvider, theme } from "antd";
 import "./dayjsInit";
 
 import { I18nextProvider } from "react-i18next";
+import { ShouldForwardProp } from "styled-components/dist/types";
 import { applyToken, getToken } from "./utils/token";
 
 import "./config";
@@ -15,6 +17,13 @@ import { RouterProvider } from "react-router-dom";
 import router from "./Router";
 
 applyToken(getToken());
+
+const shouldForwardProp: ShouldForwardProp<"web"> = (propName, target) => {
+  if (typeof target === "string") {
+    return isPropValid(propName);
+  }
+  return true;
+};
 
 export default function App() {
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
@@ -26,7 +35,7 @@ export default function App() {
     <I18nextProvider i18n={i18n}>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <ConfigProvider
-          locale={i18n.t("local", { ns: "antd", returnObjects: true })}
+          locale={i18n.t("local", { ns: "antd", returnObjects: true }) as Locale}
           theme={visitLinkTheme(themeToken.token)}
           {...component}
         >
@@ -37,15 +46,6 @@ export default function App() {
       </StyleSheetManager>
     </I18nextProvider>
   );
-}
-
-function shouldForwardProp(propName, target) {
-  if (typeof target === "string") {
-    // For HTML elements, forward the prop if it is a valid HTML attribute
-    return isPropValid(propName);
-  }
-  // For other elements, forward all props
-  return true;
 }
 
 const AppContainer = styled.div`
