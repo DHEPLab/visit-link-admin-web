@@ -1,25 +1,33 @@
-import { useTranslation } from "react-i18next";
 import Card from "@/components/Card";
-import { Button, Form, Input, Select, Space } from "antd";
+import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ModalForm from "@/components/ModalForm";
-import Rules from "@/constants/rules";
 import RadioEnum from "@/components/RadioEnum";
-import { filterLessons } from "./utils";
+import ShadeButton from "@/components/ShadeButton";
 import ZebraTable from "@/components/ZebraTable";
 import { CurriculumBabyStage } from "@/constants/enums";
+import Rules from "@/constants/rules";
+import { LessonFormValue } from "@/pages/Curriculum/schema/Lesson";
+import { ScheduleFormValue, ScheduleLesson } from "@/pages/Curriculum/schema/Schedule";
+import { Button, Form, FormProps, Input, Select, Space } from "antd";
+import { ColumnType } from "antd/es/table/interface";
 import React from "react";
-import DeleteConfirmModal from "@/components/DeleteConfirmModal";
+import { useTranslation, UseTranslationResponse } from "react-i18next";
 import ApplicableDays from "./ApplicableDays";
 import useEdit from "./hooks/useEdit";
+import { filterLessons } from "./utils";
 
-const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
-  if (disabled) return {};
+const scheduleOperation = (
+  readonly: boolean,
+  handleDelete: (index: number) => void,
+  openEditModal: (value: ScheduleFormValue, index: number) => void,
+  t: UseTranslationResponse<"curriculum", undefined>["t"],
+): ColumnType<ScheduleFormValue> => {
+  if (readonly) return {};
   return {
     title: t("operation"),
     width: 200,
     align: "center",
-    render(_, record, index) {
-      if (disabled) return null;
+    render(_value, record, index) {
       return (
         <Space size="large">
           <DeleteConfirmModal
@@ -37,42 +45,45 @@ const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
         </Space>
       );
     },
-  };
+  } satisfies ColumnType<ScheduleFormValue>;
 };
 
-function Schedules({ disabled, value, onChange, lessonOptions }) {
+type SchedulesProps = {
+  readonly: boolean;
+  schedules: ScheduleFormValue[];
+  lessons: LessonFormValue[];
+  onChange: (schedules: ScheduleFormValue[]) => void;
+};
+
+const EmptySchedule = { stage: "EDC" } as ScheduleFormValue;
+
+const Schedules: React.FC<SchedulesProps> = ({ readonly, schedules, lessons, onChange }) => {
   const { t } = useTranslation("curriculum");
   const { visible, pullAt, replace, currentEditIndex, currentEditValue, openEditModal, openCreateModal, closeModal } =
-    useEdit();
+    useEdit<ScheduleFormValue>();
 
-  function onFinish(formValues) {
+  function onFinish(formValues: ScheduleFormValue) {
     if (currentEditIndex === -1) {
       onChange(
-        value.concat({
+        schedules.concat({
           ...formValues,
           lessons: formValues.lessons.map((lesson) => ({ label: lesson.label })),
         }),
       );
     } else {
-      onChange(replace(value, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
+      onChange(replace(schedules, currentEditIndex, { ...formValues, id: currentEditValue?.id }));
     }
     closeModal();
   }
 
-  function handleDelete(index) {
-    onChange(pullAt(value, index));
+  function handleDelete(index: number) {
+    onChange(pullAt(schedules, index));
   }
 
   return (
     <Card
       title={t("curriculumRangeMatchingRule")}
-      extra={
-        !disabled && (
-          <Button type="shade" onClick={() => openCreateModal({ stage: "EDC" })}>
-            {t("addRule")}
-          </Button>
-        )
-      }
+      extra={!readonly && <ShadeButton onClick={() => openCreateModal(EmptySchedule)}>{t("addRule")}</ShadeButton>}
       noPadding
     >
       <ModalForm
@@ -83,7 +94,7 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
         visible={visible}
         onCancel={closeModal}
         onFinish={onFinish}
-        validateMessages={t("validateMessages", { ns: "common", returnObjects: true })}
+        validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       >
         <Form.Item label={t("ruleName")} name="name" rules={[...Rules.Required]}>
           <Input />
@@ -91,7 +102,7 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
         <Form.Item label={t("applicableBaby")} name="stage" rules={Rules.Required}>
           <RadioEnum name="CurriculumBabyStage" />
         </Form.Item>
-        <ApplicableDays value={value} currentEditValue={currentEditValue} />
+        <ApplicableDays value={schedules} currentEditValue={currentEditValue} />
         <Form.Item
           noStyle
           shouldUpdate={(pre, cur) =>
@@ -104,7 +115,7 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
             const stage = getFieldValue("stage");
             const startMonths = getFieldValue("startOfApplicableDays");
             const endMonths = getFieldValue("endOfApplicableDays");
-            const lessonsOptions = filterLessons(lessonOptions, stage, startMonths, endMonths).map((lesson) => ({
+            const lessonsOptions = filterLessons(lessons, stage, startMonths, endMonths).map((lesson) => ({
               label: lesson.number,
               value: lesson.number,
             }));
@@ -124,7 +135,7 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
       <ZebraTable
         rowKey="name"
         pagination={false}
-        dataSource={value}
+        dataSource={schedules}
         columns={[
           {
             title: t("rule"),
@@ -144,13 +155,13 @@ function Schedules({ disabled, value, onChange, lessonOptions }) {
           {
             title: t("sessionsIncluded"),
             dataIndex: "lessons",
-            render: (h) => h.map((v) => v.label).join("、"),
+            render: (lessons: ScheduleLesson[]) => lessons.map((lesson) => lesson.label).join("、"),
           },
-          scheduleOperation(disabled, handleDelete, openEditModal, t),
+          scheduleOperation(readonly, handleDelete, openEditModal, t),
         ]}
       />
     </Card>
   );
-}
+};
 
 export default Schedules;
