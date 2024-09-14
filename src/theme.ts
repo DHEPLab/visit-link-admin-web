@@ -1,13 +1,15 @@
 import { css } from "@emotion/css";
 import { GlobalToken } from "antd";
 import {
-  ButtonConfig, CascaderConfig,
+  ButtonConfig,
+  CascaderConfig,
   DatePickerConfig,
   InputConfig,
   ModalConfig,
   RangePickerConfig,
   SelectConfig,
-  TableConfig, TextAreaConfig
+  TableConfig,
+  TextAreaConfig,
 } from "antd/es/config-provider/context";
 
 const ColorPalette = {
@@ -109,64 +111,44 @@ export const componentConfig = (rootPrefixCls: string) => {
       min-width: 200px;
     }
 
-    &.${rootPrefixCls}-btn-shade:not([disabled]) {
-      background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
-      border: none;
-      color: #fff;
-
-      &:hover {
-        background: linear-gradient(90deg, rgba(255, 148, 114, 1) 0%, rgba(242, 112, 156, 1) 100%);
-        color: #fff;
-        opacity: 0.8;
-      }
-    }
-
-    &.${rootPrefixCls}-btn-shade[disabled] {
-      opacity: 0.5;
-
-      &:hover {
-        opacity: 0.5;
-      }
-    }
-
     &.${rootPrefixCls}-btn-background-ghost {
       border-width: 2px;
     }
   `;
 
   const inputCss = css`
-      &.${rootPrefixCls}-input.master,
+    &.${rootPrefixCls}-input.master,
       &.${rootPrefixCls}-input-password.master,
       &.${rootPrefixCls}-input-affix-wrapper.master,
       &.${rootPrefixCls}-input-affix-wrapper.master
       .${rootPrefixCls}-input,
       &.${rootPrefixCls}-input-password.master
       .${rootPrefixCls}-input {
-          &::placeholder {
-              color: #ffc3a0;
-          }
-
-          &:hover {
-              border-color: #ff9c78;
-          }
-
-          color: #4a4a4a;
-          background: #fff9f5;
-          border-color: #ffc3a0;
+      &::placeholder {
+        color: #ffc3a0;
       }
 
-      &.${rootPrefixCls}-input,
+      &:hover {
+        border-color: #ff9c78;
+      }
+
+      color: #4a4a4a;
+      background: #fff9f5;
+      border-color: #ffc3a0;
+    }
+
+    &.${rootPrefixCls}-input,
       &.${rootPrefixCls}-picker,
       &.${rootPrefixCls}-input-password,
       &.${rootPrefixCls}-input-affix-wrapper {
-          width: 400px;
-      }
+      width: 400px;
+    }
   `;
 
   const textAreaCss = css`
-      &.${rootPrefixCls}-input {
-          border-radius: 16px;
-      }
+    &.${rootPrefixCls}-input {
+      border-radius: 16px;
+    }
   `;
 
   const modalCss = css`
@@ -238,10 +220,10 @@ export const componentConfig = (rootPrefixCls: string) => {
   `;
 
   const cascaderCss = css`
-      &.${rootPrefixCls}-cascader {
-          width: 400px;
-          font-weight: 400;
-      }
+    &.${rootPrefixCls}-cascader {
+      width: 400px;
+      font-weight: 400;
+    }
   `;
 
   const dataPickerCss = css`
