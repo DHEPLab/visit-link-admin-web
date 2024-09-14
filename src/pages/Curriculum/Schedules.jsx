@@ -8,9 +8,9 @@ import { filterLessons } from "./utils";
 import ZebraTable from "@/components/ZebraTable";
 import { CurriculumBabyStage } from "@/constants/enums";
 import React from "react";
-import withEdit from "./withEdit";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ApplicableDays from "./ApplicableDays";
+import useEdit from "./hooks/useEdit";
 
 const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
@@ -40,21 +40,10 @@ const scheduleOperation = (disabled, handleDelete, openEditModal, t) => {
   };
 };
 
-function Schedules({
-  disabled,
-  value,
-  onChange,
-  lessonOptions,
-  pullAt,
-  replace,
-  currentEditIndex,
-  currentEditValue,
-  openEditModal,
-  openCreateModal,
-  closeModal,
-  visible,
-}) {
+function Schedules({ disabled, value, onChange, lessonOptions }) {
   const { t } = useTranslation("curriculum");
+  const { visible, pullAt, replace, currentEditIndex, currentEditValue, openEditModal, openCreateModal, closeModal } =
+    useEdit();
 
   function onFinish(formValues) {
     if (currentEditIndex === -1) {
@@ -164,5 +153,4 @@ function Schedules({
   );
 }
 
-const EnhancedSchedules = withEdit(Schedules);
-export default EnhancedSchedules;
+export default Schedules;

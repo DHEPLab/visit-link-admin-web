@@ -10,10 +10,10 @@ import { validateLessonNumber } from "./utils";
 import RadioEnum from "@/components/RadioEnum";
 import ZebraTable from "@/components/ZebraTable";
 import { CurriculumBabyStage } from "@/constants/enums";
-import withEdit from "./withEdit";
 import { InfoCircleFilled } from "@ant-design/icons";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
 import ApplicableDays from "./ApplicableDays";
+import useEdit from "./hooks/useEdit";
 
 const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
   if (disabled) return {};
@@ -48,21 +48,11 @@ const lessonOperation = (disabled, handleDelete, openEditModal, t) => {
   };
 };
 
-function Lessons({
-  disabled,
-  value,
-  onChange,
-  pullAt,
-  replace,
-  currentEditIndex,
-  currentEditValue,
-  openEditModal,
-  openCreateModal,
-  closeModal,
-  visible,
-}) {
+function Lessons({ disabled, value, onChange }) {
   const requests = useNetworkStore((state) => state.requests);
   const { t } = useTranslation("curriculum");
+  const { visible, pullAt, replace, currentEditIndex, currentEditValue, openEditModal, openCreateModal, closeModal } =
+    useEdit();
 
   const [moduleOptions, setModuleOptions] = useState([]);
   const [questionnairesOptions, setQuestionnairesOptions] = useState([]);
@@ -233,5 +223,4 @@ function Lessons({
   );
 }
 
-const EnhancedLessons = withEdit(Lessons);
-export default EnhancedLessons;
+export default Lessons;
