@@ -52,24 +52,35 @@ export default function Survey() {
 
   useEffect(() => {
     if (readonly == null) return;
+    let abortController: AbortController;
 
     if (!id) {
       setQuestions([SurveyFactory.createQuestionText()]);
     } else {
-      axios.get<Questionnaire>(`/admin/questionnaires/${id}`).then(({ data, headers }) => {
-        if (!readonly) form.setFieldsValue(data);
-        setModule(data);
-        setTitle(data.name);
-        setQuestions(data.questions.map((n, i) => ({ ...n, key: i })));
-        setDraftId(headers["x-draft-id"]);
-        setDraftDate(headers["x-draft-date"]);
-      });
+      abortController = new AbortController();
+      axios
+        .get<Questionnaire>(`/admin/questionnaires/${id}`, { signal: abortController.signal })
+        .then(({ data, headers }) => {
+          if (!readonly) form.setFieldsValue(data);
+          setModule(data);
+          setTitle(data.name);
+          setQuestions(data.questions.map((n, i) => ({ ...n, key: i })));
+          setDraftId(headers["x-draft-id"]);
+          setDraftDate(headers["x-draft-date"]);
+        })
+        .catch((error) => {
+          if (!axios.isCancel(error)) {
+            throw error;
+          }
+        });
     }
 
     if (!readonly) {
       // A fixed value 687px that module component body offset top, can also use ref.current.offsetTop get this value
       return stickyScrollListener(422, setStickyTop);
     }
+
+    return () => abortController?.abort();
   }, [id, form, readonly, i18n]);
 
   function onSubmitFormik(values: QuestionsFromValue) {

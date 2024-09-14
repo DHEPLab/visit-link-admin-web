@@ -77,25 +77,33 @@ export default function Module() {
   useEffect(() => {
     if (readonly == null) return;
 
+    const abortController = new AbortController();
     if (!id) {
       setComponents([CurriculumFactory.createText()]);
     } else {
-      axios.get<ModuleResponse>(`/admin/modules/${id}`).then(({ data, headers }) => {
-        const formValue = pathname.includes("/modules/edit")
-          ? data
-          : {
-              ...data,
-              id: null,
-              name: `${data.name}（1）`,
-              number: `${data.number}-1`,
-            };
-        if (!readonly) form.setFieldsValue(formValue);
-        setModule(data);
-        setTitle(data.name);
-        setComponents(data.components);
-        setDraftId(headers["x-draft-id"]);
-        setDraftDate(headers["x-draft-date"]);
-      });
+      axios
+        .get<ModuleResponse>(`/admin/modules/${id}`, { signal: abortController.signal })
+        .then(({ data, headers }) => {
+          const formValue = pathname.includes("/modules/edit")
+            ? data
+            : {
+                ...data,
+                id: null,
+                name: `${data.name}（1）`,
+                number: `${data.number}-1`,
+              };
+          if (!readonly) form.setFieldsValue(formValue);
+          setModule(data);
+          setTitle(data.name);
+          setComponents(data.components);
+          setDraftId(headers["x-draft-id"]);
+          setDraftDate(headers["x-draft-date"]);
+        })
+        .catch((error) => {
+          if (!axios.isCancel(error)) {
+            throw error;
+          }
+        });
     }
 
     axios
@@ -104,8 +112,16 @@ export default function Module() {
           size: 1000,
           published: true,
         },
+        signal: abortController.signal,
       })
-      .then((response) => moduleFinishActionOptions(response.data));
+      .then((response) => moduleFinishActionOptions(response.data))
+      .catch((error) => {
+        if (!axios.isCancel(error)) {
+          throw error;
+        }
+      });
+
+    return () => abortController.abort();
   }, [id, form, readonly, pathname, moduleFinishActionOptions]);
 
   function onSubmitFormik(values: { components: ModuleComponentType[] }) {
