@@ -17,9 +17,9 @@ const StatusTag: React.FC<StatusTagProps> = ({ value, trueText, falseText }) => 
   return <FalseContainer>{falseText ?? t("draft")}</FalseContainer>;
 };
 
-const TrueContainer = styled.div`
+const TrueContainer = styled.span`
   display: inline-block;
-  width: 56px;
+  width: 66px;
   height: 20px;
   line-height: 20px;
   background: #d7f3de;
