@@ -1,6 +1,7 @@
+import DayInput from "@/components/DayInput";
 import { LessonFormValue } from "@/pages/Curriculum/schema/Lesson";
 import { ScheduleFormValue } from "@/pages/Curriculum/schema/Schedule";
-import { Form, InputNumber } from "antd";
+import { Form } from "antd";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { validateLessonDateRange } from "./utils";
@@ -54,7 +55,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
             }),
           ]}
         >
-          <DayInput min={1} max={9999} precision={0} suffix={t("common:unit.day")} />
+          <DayInput style={{ width: "100%" }} />
         </DayInputItem>
         <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
         <DayInputItem
@@ -93,7 +94,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
             }),
           ]}
         >
-          <DayInput min={1} max={9999} precision={0} suffix={t("common:unit.day")} />
+          <DayInput style={{ width: "100%" }} />
         </DayInputItem>
       </FieldsContainer>
     </Form.Item>
@@ -110,19 +111,9 @@ const DayInputItem = styled(Form.Item)`
   flex: 1;
 `;
 
-const DayInput = styled(InputNumber)`
-  width: 100%;
-`;
-
 const FieldsContainer = styled.div`
   width: 400px;
   display: flex;
-
-  // This is workaround for cursor display when input number set the suffix
-
-  .ant-input-number-input {
-    border-radius: 0;
-  }
 `;
 
 export default ApplicableDays;

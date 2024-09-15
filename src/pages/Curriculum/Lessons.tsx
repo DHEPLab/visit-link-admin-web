@@ -222,9 +222,9 @@ const Lessons: React.FC<LessonsProps> = ({ readonly, lessons, onChange }) => {
             dataIndex: "stage",
             width: 400,
             render: (_, record) => {
-              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays}${t(
-                "common:unit:day",
-              )} - ${record.endOfApplicableDays}${t("common:unit:day")}`;
+              return `${t(CurriculumBabyStage[record.stage])} ${record.startOfApplicableDays} ${t("common:unit.day", {
+                count: record.startOfApplicableDays,
+              })} - ${record.endOfApplicableDays} ${t("common:unit.day", { count: record.endOfApplicableDays })}`;
             },
           },
           {

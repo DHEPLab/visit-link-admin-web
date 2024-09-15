@@ -280,6 +280,8 @@ export default {
     enter: "Please Enter ",
     unit: {
       day: "day(s)",
+      day_one: "day",
+      day_other: "days",
       person: "person",
       item: "item(s)",
     },

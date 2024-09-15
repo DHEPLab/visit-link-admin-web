@@ -276,7 +276,7 @@ export default function Baby() {
           {Gender[baby.gender]}
         </StaticField>
         <StaticField label={t("growthStage")}>
-          {BabyStage[baby.stage]} {baby.days} {t("unit.day", { ns: "common" })}
+          {BabyStage[baby.stage]} {baby.days} {t("unit.day", { ns: "common", count: baby.days })}
         </StaticField>
 
         {baby.stage === "EDC" ? (
