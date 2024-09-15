@@ -1,4 +1,4 @@
-import { filterLessons, validateLessonNumber, validateLessonDateRange, cleanInvalidLessons } from "./utils";
+import { filterLessons, validateLessonNumber, validateDateRange, cleanInvalidLessons } from "./utils";
 import { LessonFormValue } from "./schema/Lesson";
 import { ScheduleFormValue } from "./schema/Schedule";
 
@@ -42,35 +42,35 @@ it("should validate lesson date range cannot overlap", () => {
     },
   ] as LessonFormValue[];
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 20,
       endOfApplicableDays: 30,
     }),
   ).toBeFalsy();
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
     }),
   ).toBeFalsy();
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 1,
       endOfApplicableDays: 30,
     }),
   ).toBeFalsy();
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       stage: "BIRTH",
       startOfApplicableDays: 1,
       endOfApplicableDays: 10,
     }),
   ).toBeTruthy();
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       id: 1,
       stage: "EDC",
       startOfApplicableDays: 1,
@@ -78,7 +78,7 @@ it("should validate lesson date range cannot overlap", () => {
     }),
   ).toBeTruthy();
   expect(
-    validateLessonDateRange(lessons, {
+    validateDateRange(lessons, {
       stage: "EDC",
       startOfApplicableDays: 21,
       endOfApplicableDays: 30,

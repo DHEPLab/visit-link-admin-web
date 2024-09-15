@@ -4,7 +4,7 @@ import { ScheduleFormValue } from "@/pages/Curriculum/schema/Schedule";
 import { Form } from "antd";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { validateLessonDateRange } from "./utils";
+import { validateDateRange } from "./utils";
 
 type ApplicableDaysProps<T> = {
   value: T[];
@@ -43,7 +43,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
                 startOfApplicableDays = Number(startOfApplicableDays);
                 if (
                   !startOfApplicableDays ||
-                  validateLessonDateRange(value, {
+                  validateDateRange(value, {
                     id: currentEditValue.id,
                     stage,
                     endOfApplicableDays,
@@ -84,7 +84,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
                 endOfApplicableDays = Number(endOfApplicableDays);
                 if (
                   !endOfApplicableDays ||
-                  validateLessonDateRange(value, {
+                  validateDateRange(value, {
                     id: currentEditValue.id,
                     stage,
                     startOfApplicableDays,

@@ -1,6 +1,6 @@
+import { STAGE_TYPE } from "./schema/common";
 import { LessonFormValue } from "./schema/Lesson";
 import { ScheduleFormValue } from "./schema/Schedule";
-import { STAGE_TYPE } from "./schema/common";
 
 export function filterLessons(lessons: LessonFormValue[], stage: STAGE_TYPE, startDays?: number, endDays?: number) {
   if (!stage || !startDays || !endDays) return [];
@@ -13,31 +13,36 @@ export function validateLessonNumber(lessons: LessonFormValue[], number: string,
   return !lessons.filter((item) => item.number !== exclude).find((item) => item.number === number);
 }
 
-type ValidateLessonDateRangeLesson = {
+type DaysFormValues = {
   id?: number;
   stage: STAGE_TYPE;
-  startOfApplicableDays: number;
-  endOfApplicableDays: number;
+  startOfApplicableDays: number | null;
+  endOfApplicableDays: number | null;
 };
 
-export function validateLessonDateRange<T extends LessonFormValue | ScheduleFormValue>(
-  lessons: T[],
-  lesson: ValidateLessonDateRangeLesson,
+export function validateDateRange<T extends LessonFormValue | ScheduleFormValue>(
+  items: T[],
+  currentItem: DaysFormValues,
 ) {
-  return !lessons
-    .filter((item) => {
-      const isAdd = item.id === undefined && lesson.id === undefined;
-      return (item.id !== lesson.id || isAdd) && item.stage === lesson.stage;
-    })
-    .find(
-      (item) =>
-        (item.startOfApplicableDays <= lesson.startOfApplicableDays &&
-          item.endOfApplicableDays >= lesson.startOfApplicableDays) ||
-        (item.startOfApplicableDays <= lesson.endOfApplicableDays &&
-          item.endOfApplicableDays >= lesson.endOfApplicableDays) ||
-        (lesson.startOfApplicableDays <= item.startOfApplicableDays &&
-          lesson.endOfApplicableDays >= item.endOfApplicableDays),
+  const { startOfApplicableDays, endOfApplicableDays, stage, id } = currentItem;
+
+  if (startOfApplicableDays === null || endOfApplicableDays === null) {
+    return true;
+  }
+
+  const isOverlap = (item: T) => {
+    return (
+      Math.max(item.startOfApplicableDays, startOfApplicableDays) <=
+      Math.min(item.endOfApplicableDays, endOfApplicableDays)
     );
+  };
+
+  const isSameItem = (item: T) => {
+    const bothHaveNoId = id === undefined && item.id === undefined;
+    return item.id === id && !bothHaveNoId;
+  };
+
+  return items.filter((item) => !isSameItem(item) && item.stage === stage).every((item) => !isOverlap(item));
 }
 
 export function cleanInvalidLessons(schedules: ScheduleFormValue[], lessons: LessonFormValue[]) {
