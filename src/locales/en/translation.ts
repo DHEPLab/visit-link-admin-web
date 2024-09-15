@@ -449,7 +449,9 @@ export default {
     unsavedChangesWarning:
       "The current page has unsaved or unsubmitted content. If you leave, you will lose the edited content. Are you sure you want to leave?",
     applicableDays: "Applicable Days",
+    startOfApplicableDays: "Start Applicable Days",
     to: "to",
+    endOfApplicableDays: "End Applicable Days",
     applicableDaysOverlap: "Applicable days cannot overlap",
     rule: "Rule",
     applicableBabyGrowthPeriod: "Applicable Baby Growth Period Range",

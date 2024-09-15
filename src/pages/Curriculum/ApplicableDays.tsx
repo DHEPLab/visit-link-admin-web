@@ -32,6 +32,8 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
       <FieldsContainer>
         <DayInputItem
           name="startOfApplicableDays"
+          label={t("startOfApplicableDays")}
+          labelCol={{ span: 0 }}
           rules={[
             startDateRequiredRule,
             ({ getFieldValue }) => ({
@@ -60,6 +62,8 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
         <ApplicableDaysConnector>{t("to")}</ApplicableDaysConnector>
         <DayInputItem
           name="endOfApplicableDays"
+          label={t("endOfApplicableDays")}
+          labelCol={{ span: 0 }}
           rules={[
             endDateRequiredRule,
             ({ getFieldValue }) => ({
