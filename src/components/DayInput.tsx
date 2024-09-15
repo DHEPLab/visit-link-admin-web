@@ -4,12 +4,22 @@ import { InputNumberProps } from "antd/es/input-number";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 
-type DayInputProps = React.PropsWithChildren<Omit<InputNumberProps, "suffix">> & React.RefAttributes<HTMLInputElement>;
+type DayInputProps = React.PropsWithChildren<Omit<InputNumberProps, "min" | "max" | "precision" | "suffix">> &
+  React.RefAttributes<HTMLInputElement>;
 
 const DayInput: React.FC<DayInputProps> = ({ value, ...rest }) => {
   const { t } = useTranslation("common");
 
-  return <InputNumber suffix={t("unit.day", { count: value ? Number(value) : undefined })} value={value} {...rest} />;
+  return (
+    <InputNumber
+      min={1}
+      max={9999}
+      precision={0}
+      suffix={t("unit.day", { count: value ? Number(value) : undefined })}
+      value={value}
+      {...rest}
+    />
+  );
 };
 
 const InputNumber = styled(AntdInputNumber)`
