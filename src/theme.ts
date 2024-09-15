@@ -33,8 +33,8 @@ export const visitLinkTheme = (token: GlobalToken) => {
       Input: {
         paddingBlock: 6,
         paddingBlockLG: 10,
-        paddingInline: 30,
-        paddingInlineLG: 30,
+        paddingInline: 16,
+        paddingInlineLG: 16,
         borderRadius: 26,
         borderRadiusLG: 26,
         colorText: token.colorTextSecondary,
@@ -79,10 +79,11 @@ export const visitLinkTheme = (token: GlobalToken) => {
       },
       DatePicker: {
         borderRadius: 26,
-        paddingInline: 30,
+        paddingInline: 16,
       },
       InputNumber: {
         borderRadius: 26,
+        paddingInline: 16,
         colorText: token.colorTextSecondary,
       },
       Steps: {
@@ -214,7 +215,7 @@ export const componentConfig = (rootPrefixCls: string) => {
 
       .${rootPrefixCls}-select-selector {
         width: 400px;
-        padding-left: 30px;
+        padding-left: 16px;
       }
     }
   `;
