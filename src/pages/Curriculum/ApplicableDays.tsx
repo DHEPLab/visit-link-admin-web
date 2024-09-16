@@ -1,10 +1,10 @@
 import DayInput from "@/components/DayInput";
 import { LessonFormValue } from "@/pages/Curriculum/schema/Lesson";
 import { ScheduleFormValue } from "@/pages/Curriculum/schema/Schedule";
+import { validateEndDate, validateEndDateRange, validateStartDateRange } from "@/pages/Curriculum/schema/validator";
 import { Form } from "antd";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { validateDateRange } from "./utils";
 
 type ApplicableDaysProps<T> = {
   value: T[];
@@ -34,28 +34,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
           name="startOfApplicableDays"
           label={t("startOfApplicableDays")}
           labelCol={{ span: 0 }}
-          rules={[
-            startDateRequiredRule,
-            ({ getFieldValue }) => ({
-              validator(_, startOfApplicableDays) {
-                const stage = getFieldValue("stage");
-                const endOfApplicableDays = Number(getFieldValue("endOfApplicableDays"));
-                startOfApplicableDays = Number(startOfApplicableDays);
-                if (
-                  !startOfApplicableDays ||
-                  validateDateRange(value, {
-                    id: currentEditValue.id,
-                    stage,
-                    endOfApplicableDays,
-                    startOfApplicableDays,
-                  })
-                ) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(t("applicableDaysOverlap"));
-              },
-            }),
-          ]}
+          rules={[startDateRequiredRule, validateStartDateRange(value, currentEditValue.id)]}
         >
           <DayInput style={{ width: "100%" }} />
         </DayInputItem>
@@ -64,39 +43,7 @@ const ApplicableDays = <T extends LessonFormValue | ScheduleFormValue>({
           name="endOfApplicableDays"
           label={t("endOfApplicableDays")}
           labelCol={{ span: 0 }}
-          rules={[
-            endDateRequiredRule,
-            ({ getFieldValue }) => ({
-              validator(_, endOfApplicableDays) {
-                if (
-                  !endOfApplicableDays ||
-                  Number(endOfApplicableDays) > Number(getFieldValue("startOfApplicableDays"))
-                ) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(t("endDayGreaterThanStart"));
-              },
-            }),
-            ({ getFieldValue }) => ({
-              validator(_, endOfApplicableDays) {
-                const stage = getFieldValue("stage");
-                const startOfApplicableDays = Number(getFieldValue("startOfApplicableDays"));
-                endOfApplicableDays = Number(endOfApplicableDays);
-                if (
-                  !endOfApplicableDays ||
-                  validateDateRange(value, {
-                    id: currentEditValue.id,
-                    stage,
-                    startOfApplicableDays,
-                    endOfApplicableDays,
-                  })
-                ) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(t("applicableDaysOverlap"));
-              },
-            }),
-          ]}
+          rules={[endDateRequiredRule, validateEndDate, validateEndDateRange(value, currentEditValue.id)]}
         >
           <DayInput style={{ width: "100%" }} />
         </DayInputItem>

@@ -1,4 +1,4 @@
-import { filterLessons, validateLessonNumber, validateDateRange, cleanInvalidLessons } from "./utils";
+import { filterLessons, validateLessonNumber, cleanInvalidLessons } from "./utils";
 import { LessonFormValue } from "./schema/Lesson";
 import { ScheduleFormValue } from "./schema/Schedule";
 
@@ -30,60 +30,6 @@ it("should validate lesson number to keep unique", () => {
   expect(validateLessonNumber(lessons, "L1", null)).toBeFalsy();
   expect(validateLessonNumber(lessons, "L2", null)).toBeTruthy();
   expect(validateLessonNumber(lessons, "L1", "L1")).toBeTruthy();
-});
-
-it("should validate lesson date range cannot overlap", () => {
-  const lessons = [
-    {
-      id: 1,
-      startOfApplicableDays: 10,
-      endOfApplicableDays: 20,
-      stage: "EDC",
-    },
-  ] as LessonFormValue[];
-  expect(
-    validateDateRange(lessons, {
-      stage: "EDC",
-      startOfApplicableDays: 20,
-      endOfApplicableDays: 30,
-    }),
-  ).toBeFalsy();
-  expect(
-    validateDateRange(lessons, {
-      stage: "EDC",
-      startOfApplicableDays: 1,
-      endOfApplicableDays: 10,
-    }),
-  ).toBeFalsy();
-  expect(
-    validateDateRange(lessons, {
-      stage: "EDC",
-      startOfApplicableDays: 1,
-      endOfApplicableDays: 30,
-    }),
-  ).toBeFalsy();
-  expect(
-    validateDateRange(lessons, {
-      stage: "BIRTH",
-      startOfApplicableDays: 1,
-      endOfApplicableDays: 10,
-    }),
-  ).toBeTruthy();
-  expect(
-    validateDateRange(lessons, {
-      id: 1,
-      stage: "EDC",
-      startOfApplicableDays: 1,
-      endOfApplicableDays: 10,
-    }),
-  ).toBeTruthy();
-  expect(
-    validateDateRange(lessons, {
-      stage: "EDC",
-      startOfApplicableDays: 21,
-      endOfApplicableDays: 30,
-    }),
-  ).toBeTruthy();
 });
 
 it("should clean invalid lessons from schedule", () => {
