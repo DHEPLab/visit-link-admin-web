@@ -543,7 +543,7 @@ export default {
   },
   case: {
     option: "Option {{index}}",
-    selectOptionEndJump: "Please select where to jump after this option",
+    selectOptionEndJump: "Please select where to jump after selecting this option",
     enterOptionText: "Please enter option text, up to 20 characters",
     maxNestedLevels: "Option components can be nested up to 3 levels",
     addText: "Add Text",
@@ -617,7 +617,7 @@ export default {
     remove: "Remove",
   },
   action: {
-    continueCurrentLevel: "Continue with the current level's content",
+    continueCurrentLevel: "Continue with the content of the current level",
     jumpToAnotherModuleAndEnd: "Jump to another module and end the current module",
     jumpToAnotherModuleAndContinue: "Jump to another module and return to continue with the current level's content",
   },
