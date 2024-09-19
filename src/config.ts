@@ -134,6 +134,7 @@ axios.interceptors.request.use((config) => {
   }
 
   config.headers["Accept-Language"] = i18n.resolvedLanguage;
+  config.headers["X-Timezone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return config;
 });
 
