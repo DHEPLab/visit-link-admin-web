@@ -1,3 +1,4 @@
+import { NAME_REGEX, PHONE_REGEX } from "@/constants/rules";
 import dayjs from "dayjs";
 import i18n from "@/i18n";
 import * as Enums from "@/constants/enums";
@@ -158,8 +159,8 @@ export const checkBabies = (babies: Record<string, string>[]) => {
       return;
     }
 
-    if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(element.name)) {
-      errors.push({ number: element.number, name: element.name, matters: "姓名必须为2-10个汉字" });
+    if (!NAME_REGEX.test(element.name)) {
+      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.nameInvalid") });
       return;
     }
 
@@ -171,8 +172,8 @@ export const checkBabies = (babies: Record<string, string>[]) => {
     if (element.cares.length > 0) {
       const result = element.cares.every((ele) => {
         if (!ele.phone || !ele.familyTies) return false;
-        if (isLanguageZH && !new RegExp(/^[\u4e00-\u9fa5]{2,10}$/).test(ele.name)) return false;
-        if (isLanguageZH && !new RegExp(/^1[0-9]{10}$/).test(ele.phone)) return false;
+        if (!NAME_REGEX.test(ele.name)) return false;
+        if (!PHONE_REGEX.test(ele.phone)) return false;
         return true;
       });
       if (!result) {

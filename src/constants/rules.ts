@@ -1,8 +1,8 @@
 import { Rule } from "antd/es/form";
 import i18n from "@/i18n";
 
-const NAME_REGEX = /^[\p{L}\p{M}\p{Zs}’'·-]{1,50}$/u;
-const PHONE_REGEX = /^\+?\d{5,19}$|^\d{5,20}$/;
+export const NAME_REGEX = /^[\p{L}\p{M}\p{Zs}’'·-]{1,50}$/u;
+export const PHONE_REGEX = /^\+?\d{5,19}$|^\d{5,20}$/;
 
 const t = i18n.getFixedT(null, "form");
 

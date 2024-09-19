@@ -313,6 +313,8 @@ export default {
         emptyBirthDay: "Birthday is empty",
         invalidFormatBirthDay: "Birthday format error",
         invalidBirthDay: "Birth day should be before the current date",
+        nameInvalid: "Name only allow 1-50 characters without special characters",
+        phoneInvalid: "Phone only allow 5-20 numbers",
       },
     },
     confirm: "Comfirm",

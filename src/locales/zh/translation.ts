@@ -304,6 +304,8 @@ export default {
         emptyBirthDay: "生日为空",
         invalidFormatBirthDay: "生日格式错误",
         invalidBirthDay: "生日不能大于当前时间",
+        nameInvalid: "只允许1-50个字符，不包含特殊字符",
+        phoneInvalid: "只允许5-20数字号码",
       },
     },
     confirm: "确定",

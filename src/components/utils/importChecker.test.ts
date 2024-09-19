@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 import { checkBabies } from "./importChecker";
 import Chance from "chance";
 import dayjs from "dayjs";
@@ -19,6 +20,37 @@ const ValidEDCBabyItem = {
   Address: "123 Street",
   Comments: "",
   "CHW ID": "CHW001",
+  Caregiver_Main_name: chance.name(),
+  Caregiver_Main_relationship: "Mother",
+  Caregiver_Main_phone: "13800138000",
+  Caregiver_Main_Wechat: "wechat001",
+  Caregiver_II_name: chance.name(),
+  Caregiver_II_relationship: "Father",
+  Caregiver_II_phone: "13800138001",
+  Caregiver_II_Wechat: "wechat002",
+  Caregiver_III_name: "",
+  Caregiver_III_relationship: "",
+  Caregiver_III_phone: "",
+  Caregiver_III_Wechat: "",
+  Caregiver_IV_name: "",
+  Caregiver_IV_relationship: "",
+  Caregiver_IV_phone: "",
+  Caregiver_IV_Wechat: "",
+};
+
+const ValidEDCChineseBabyItem = {
+  宝宝ID: "1",
+  成长阶段: "EDC",
+  宝宝姓名: chance.name(),
+  宝宝性别: "Male",
+  预产期: EDCDate,
+  出生日期: "",
+  辅食: "",
+  喂养方式: "",
+  所在区域: "四川省/成都市/高新区/桂溪街道",
+  详细地址: "123 Street",
+  备注信息: "",
+  社区工作者ID: "CHW001",
   Caregiver_Main_name: chance.name(),
   Caregiver_Main_relationship: "Mother",
   Caregiver_Main_phone: "13800138000",
@@ -69,6 +101,26 @@ const ValidBirthBabyItem = {
 };
 
 describe("checkBabies", () => {
+  afterEach(() => {
+    i18n.changeLanguage("en");
+  });
+
+  it("should passing the validation when baby and caregiver name Chinese name length between 1 to 50", () => {
+    i18n.changeLanguage("zh");
+    const babies = [
+      {
+        ...ValidEDCChineseBabyItem,
+        宝宝姓名: "名".repeat(50),
+        Caregiver_Main_name: "字".repeat(50),
+        Caregiver_Main_phone: "13800138000138000",
+      },
+    ];
+
+    const { errors } = checkBabies(babies);
+
+    expect(errors.length).toBe(0);
+  });
+
   it("should validate babies correctly", () => {
     const babies = [ValidEDCBabyItem, ValidBirthBabyItem];
 
