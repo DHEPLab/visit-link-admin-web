@@ -368,7 +368,6 @@ export default function Baby() {
         onCancel={closeModal}
         onFinish={handleChangeBaby}
         initialValues={initialValues()}
-        // 一旦进入婴幼期则不可修改回待产期
         disableStage={baby.stage === "BIRTH"}
         validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       />

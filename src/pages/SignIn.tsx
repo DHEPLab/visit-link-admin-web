@@ -5,7 +5,7 @@ import { Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { applyToken } from "../utils/token";
+import { applyToken } from "@/utils/token";
 import SignInBg from "../assets/signin-bg.png";
 import Message from "@/components/Message";
 import LogoImage from "../assets/logo.png";
@@ -70,11 +70,6 @@ export default function SignIn() {
             />
           </Form.Item>
         </Form>
-        <ForgetPassword>
-          {/* <Button size="small" type="link">
-            忘记密码？
-          </Button> */}
-        </ForgetPassword>
         {error && <ErrorMessage>{t("errorMessage")}</ErrorMessage>}
         <ShadeButton
           size="large"
@@ -88,13 +83,6 @@ export default function SignIn() {
   );
 }
 
-const ForgetPassword = styled.div`
-  width: 400px;
-  text-align: right;
-  margin-top: -12px;
-  margin-bottom: 26px;
-`;
-
 const AbsoluteContainer = styled.div`
   position: absolute;
   width: 100vw;
@@ -102,8 +90,7 @@ const AbsoluteContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 100;
-  background: url(${SignInBg}) no-repeat left bottom;
-  background-color: #fff;
+  background: #fff url(${SignInBg}) no-repeat left bottom;
 `;
 
 const ErrorMessage = styled.div`

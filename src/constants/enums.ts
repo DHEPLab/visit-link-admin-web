@@ -75,6 +75,6 @@ export const ProjectStatus = {
 };
 
 export const QrType = {
-  MODULE_DATA: "MODULE_DATA", // module原始数据
-  MODULE_ID: "MODULE_ID", // module的id
+  MODULE_DATA: "MODULE_DATA",
+  MODULE_ID: "MODULE_ID",
 };
