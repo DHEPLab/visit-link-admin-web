@@ -1,7 +1,7 @@
 import { Form, FormProps, Input, Radio } from "antd";
 import Rules from "@/constants/rules";
 import { Role } from "@/constants/enums";
-import ChwTagSelector from "@/components/ChwTagSelector";
+import TagSelect from "@/components/TagSelect";
 import ModalForm from "@/components/ModalForm";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -75,7 +75,7 @@ const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) =>
                   <Input />
                 </Form.Item>
                 <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
-                  <ChwTagSelector />
+                  <TagSelect />
                 </Form.Item>
               </>
             )}
