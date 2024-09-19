@@ -1,3 +1,4 @@
+import TagSelect from "@/components/TagSelect";
 import axios from "axios";
 import { useState } from "react";
 import { Button, Form, FormProps, Input } from "antd";
@@ -12,7 +13,6 @@ import Card from "@/components/Card";
 import ModalForm from "@/components/ModalForm";
 import StaticField from "@/components/StaticField";
 import DetailHeader from "@/components/DetailHeader";
-import ChwTagSelector from "@/components/ChwTagSelector";
 import CloseSupervisorAccountModal from "./CloseSupervisorAccountModal";
 import CloseChwAccountModal from "./CloseChwAccountModal";
 import ChangePasswordModal from "./ChangePasswordModal";
@@ -139,7 +139,7 @@ export default function User() {
               <Input />
             </Form.Item>
             <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
-              <ChwTagSelector />
+              <TagSelect />
             </Form.Item>
           </>
         )}
