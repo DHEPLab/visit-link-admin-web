@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 export type AreaInputProps<ValueType = string[]> = {
   enablePlaceSearch?: boolean;
+  maxTagCount?: number;
 } & SelectProps<ValueType>;
 
 const AreaInput = <ValueType extends string[]>({ enablePlaceSearch = false, ...props }: AreaInputProps<ValueType>) => {
@@ -25,6 +26,7 @@ const AreaInput = <ValueType extends string[]>({ enablePlaceSearch = false, ...p
       onSearch={handleSearch}
       dropdownStyle={enablePlaceSearch ? {} : { display: "none" }}
       showSearch={enablePlaceSearch}
+      suffixIcon={null}
       allowClear
       placeholder={t("areaPlaceholder")}
       {...props}
@@ -33,10 +35,6 @@ const AreaInput = <ValueType extends string[]>({ enablePlaceSearch = false, ...p
 };
 
 const Select = styled(AntdSelect)<SelectProps>`
-  .ant-select-arrow {
-    display: none;
-  }
-
   .ant-select-selection-placeholder {
     inset-inline-start: 24px;
   }

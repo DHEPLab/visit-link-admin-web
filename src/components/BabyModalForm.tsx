@@ -1,12 +1,11 @@
+import AreaInput from "@/components/AreaInput";
 import dayjs from "dayjs";
-import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
+import { Select, Form, Input, Radio, DatePicker, Row, Col, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 
 import ModalForm, { ModalFormProps } from "@/components/ModalForm";
-import Pcas from "@/constants/pcas-code.json";
 import Rules from "@/constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
-import i18n from "@/i18n";
 import { disabledDateForEDC } from "./utils/dateLogic";
 import { enumKeysIterator } from "@/utils/enumUtils";
 
@@ -95,15 +94,9 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
           }
         }}
       </Form.Item>
-      {i18n.resolvedLanguage === "zh" ? (
-        <Form.Item label={t("area")} name="area" rules={Rules.Required}>
-          <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
-        </Form.Item>
-      ) : (
-        <Form.Item label={t("area")} name="area" rules={Rules.Required}>
-          <Input />
-        </Form.Item>
-      )}
+      <Form.Item label={t("area")} name="area" rules={Rules.Required}>
+        <AreaInput maxCount={1} />
+      </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
