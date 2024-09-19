@@ -27,7 +27,7 @@ export default {
     timeRange: "时间范围",
     completeVisits: "完成家访（已完成、已过期）",
     incompleteVisits: "未完成家访（待开始、未完成、已取消）",
-    chw: "chw",
+    chw: "社区工作者",
     baby: "宝宝",
   },
   app: {
