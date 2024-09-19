@@ -1,12 +1,10 @@
 import dayjs from "dayjs";
-import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber, AutoComplete } from "antd";
+import { Select, Form, Input, Radio, DatePicker, Row, Col, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 
 import ModalForm, { ModalFormProps, ModalFormRef } from "@/components/ModalForm";
-import Pcas from "@/constants/pcas-code.json";
 import Rules from "@/constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
-import i18n from "@/i18n";
 import { disabledDateForEDC } from "./utils/dateLogic";
 import { enumKeysIterator } from "@/utils/enumUtils";
 import { Ref, useEffect, useRef, useState } from "react";
@@ -140,20 +138,14 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
           }
         }}
       </Form.Item>
-      {i18n.resolvedLanguage === "zh" ? (
-        <Form.Item label={t("area")} name="area" rules={Rules.Required}>
-          <Cascader options={Pcas} fieldNames={{ label: "name", value: "name", children: "children" }} />
-        </Form.Item>
-      ) : (
-        <Form.Item label={t("area")} name="area" rules={Rules.Required}>
+      <Form.Item label={t("area")} name="area" rules={Rules.Required}>
           <AutoComplete
             onSearch={debounce({ delay: 200 }, handleSearchArea)}
             onSelect={handleSelectArea}
             placeholder="input here"
             options={options}
           />
-        </Form.Item>
-      )}
+      </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
