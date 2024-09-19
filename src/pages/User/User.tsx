@@ -1,4 +1,4 @@
-import TagSelect from "@/components/TagSelect";
+import AreaInput from "@/components/AreaInput";
 import axios from "axios";
 import { useState } from "react";
 import { Button, Form, FormProps, Input } from "antd";
@@ -139,7 +139,7 @@ export default function User() {
               <Input />
             </Form.Item>
             <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
-              <TagSelect />
+              <AreaInput />
             </Form.Item>
           </>
         )}

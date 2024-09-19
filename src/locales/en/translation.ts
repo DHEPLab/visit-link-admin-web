@@ -664,6 +664,7 @@ export default {
   form: {
     nameInvalid: "Only allow 1-50 characters without special characters",
     phoneInvalid: "Only allow 5-20 numbers",
+    areaPlaceholder: "Please enter state, city, district and street name",
   },
   antd: {
     local: enUs,

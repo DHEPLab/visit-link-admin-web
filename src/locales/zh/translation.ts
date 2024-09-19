@@ -671,6 +671,7 @@ export default {
   form: {
     nameInvalid: "只允许1-50个字符，不包含特殊字符",
     phoneInvalid: "只允许5-20个数字",
+    areaPlaceholder: "请输入省份，城市，区域和街道名",
   },
   antd: {
     local: zhCN,
