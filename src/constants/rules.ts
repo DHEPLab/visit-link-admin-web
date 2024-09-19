@@ -29,7 +29,7 @@ const Rules: { [key: string]: Rule[] } = {
         if (!tags || tags.length <= 3) {
           return Promise.resolve();
         }
-        return Promise.reject("最多只能添加3个区域");
+        return Promise.reject(t("areasSizeInvalid"));
       },
     }),
     () => ({
@@ -37,7 +37,7 @@ const Rules: { [key: string]: Rule[] } = {
         if (!tags) return;
         for (const tag of tags) {
           if (tag && tag.length > 50) {
-            return Promise.reject("自定义标签不能超过50个字");
+            return Promise.reject(t("areaLengthInvalid"));
           }
         }
         return Promise.resolve();
