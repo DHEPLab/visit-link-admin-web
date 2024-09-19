@@ -1,8 +1,9 @@
+import LanguageSelect from "@/components/LanguageSelect";
 import React, { useState } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import styled from "styled-components";
-import { Button, DatePicker, Form, Select } from "antd";
+import { Button, DatePicker, Form, Select, Space } from "antd";
 import { useTranslation } from "react-i18next";
 import { DownloadOutlined } from "@ant-design/icons";
 
@@ -75,6 +76,7 @@ const Header: React.FC<HeaderProps> = ({ username, role, onNavigate, onLogout })
         <Welcome>
           <b>{username}</b>
           <Role>{t(`${role}`)}</Role>
+          <LanguageSelect />
         </Welcome>
         {user?.role === "ROLE_ADMIN" && (
           <StyledButton type="link" onClick={openExportModal}>
@@ -124,12 +126,11 @@ const SplitLine = styled.div`
 `;
 
 const Role = styled.span`
-  margin-left: 14px;
   color: #8e8e93;
   font-weight: 400;
 `;
 
-const Welcome = styled.div`
+const Welcome = styled(Space)`
   font-size: 16px;
   font-weight: 500;
   margin-right: 30px;
