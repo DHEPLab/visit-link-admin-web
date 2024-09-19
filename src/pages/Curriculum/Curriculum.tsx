@@ -70,7 +70,7 @@ const Curriculum: React.FC = () => {
       });
 
     return () => abortController.abort();
-  }, []);
+  }, [readonly]);
 
   function submitDraft() {
     setSubmitURL("/admin/curriculums/draft");
