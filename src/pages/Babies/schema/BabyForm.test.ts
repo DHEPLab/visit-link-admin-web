@@ -31,7 +31,7 @@ describe("toNewBabyRequest", () => {
       area: "Area",
     };
 
-    const result = toNewBabyRequest(newFormValues, "zh");
+    const result = toNewBabyRequest(newFormValues);
 
     expect(result).toEqual({
       name: "Han Meimei",

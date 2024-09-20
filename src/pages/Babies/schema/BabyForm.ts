@@ -2,10 +2,10 @@ import { BabyModalFormValues } from "@/components/BabyModalForm";
 import { omit } from "radash";
 import { NewBabyRequest } from "@/models/req/Baby";
 
-export const toNewBabyRequest = (values: BabyModalFormValues, lang: string = "en"): NewBabyRequest => {
+export const toNewBabyRequest = (values: BabyModalFormValues): NewBabyRequest => {
   const request: NewBabyRequest = {
     ...omit(values, ["area", "birthday", "edc"]),
-    area: lang === "zh" && Array.isArray(values.area) ? values.area.join("/") : (values.area as string),
+    area: values.area[0],
   };
 
   if (values.birthday) {
