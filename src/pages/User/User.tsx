@@ -1,7 +1,7 @@
 import AreaInput from "@/components/AreaInput";
 import axios from "axios";
 import { useState } from "react";
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input, Tag } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -92,7 +92,11 @@ export default function User() {
       <Card title={t("generalInformation")} extra={<ShadeButton onClick={openChangeProfile}>{t("edit")}</ShadeButton>}>
         <StaticField label={t("name")}>{user.realName}</StaticField>
         <StaticField label={t("phone")}>{user.phone}</StaticField>
-        {roleChw && <StaticField label={t("area")}>{user.chw?.tags && user.chw.tags.join(", ")}</StaticField>}
+        {roleChw && (
+          <StaticField label={t("area")}>
+            {user.chw?.tags && user.chw.tags.map((tag: string, index: number) => <Tag key={index}>{tag}</Tag>)}
+          </StaticField>
+        )}
       </Card>
       <Card
         title={t("accountInformation")}
