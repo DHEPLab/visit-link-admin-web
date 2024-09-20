@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 export type AreaInputProps<ValueType = string[]> = {
   enablePlaceSearch?: boolean;
-  maxTagCount?: number;
 } & SelectProps<ValueType>;
 
 const AreaInput = <ValueType extends string[]>({ enablePlaceSearch = false, ...props }: AreaInputProps<ValueType>) => {
