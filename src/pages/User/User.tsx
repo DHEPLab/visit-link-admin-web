@@ -143,7 +143,7 @@ export default function User() {
               <Input />
             </Form.Item>
             <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
-              <AreaInput />
+              <AreaInput maxCount={3} />
             </Form.Item>
           </>
         )}

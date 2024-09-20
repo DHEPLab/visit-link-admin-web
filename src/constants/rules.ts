@@ -26,14 +26,6 @@ const Rules: { [key: string]: Rule[] } = {
     { required: true },
     () => ({
       validator(_rule, tags) {
-        if (!tags || tags.length <= 3) {
-          return Promise.resolve();
-        }
-        return Promise.reject(t("areasSizeInvalid"));
-      },
-    }),
-    () => ({
-      validator(_rule, tags) {
         if (!tags) return;
         for (const tag of tags) {
           if (tag && tag.length > 100) {
