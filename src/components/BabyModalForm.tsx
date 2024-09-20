@@ -76,6 +76,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   };
 
   //TODO: wrap overflow areas options
+  //TODO: uncomment google sdk in index.html and use real key
   return (
     <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef as Ref<ModalFormRef>}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
