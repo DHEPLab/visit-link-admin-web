@@ -36,7 +36,7 @@ describe("Module store", () => {
     const state = useModuleStore.getState();
     expect(state.options).toStrictEqual([
       {
-        label: "Continue with the current level's content",
+        label: "Continue with the content of the current level",
         value: "Continue",
       },
       {

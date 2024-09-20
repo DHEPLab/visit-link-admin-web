@@ -9,7 +9,7 @@ const BirthDate = dayjs().subtract(100, "days").format("YYYY-MM-DD");
 
 const ValidEDCBabyItem = {
   "Baby ID": "1",
-  "Growth Stage": "EDC",
+  "Growth Stage": "Unborn",
   "Baby Name": chance.name(),
   Gender: "Male",
   "Due Date": EDCDate,
@@ -40,7 +40,7 @@ const ValidEDCBabyItem = {
 
 const ValidEDCChineseBabyItem = {
   宝宝ID: "1",
-  成长阶段: "EDC",
+  成长阶段: "Unborn",
   宝宝姓名: chance.name(),
   宝宝性别: "Male",
   预产期: EDCDate,
@@ -71,13 +71,13 @@ const ValidEDCChineseBabyItem = {
 
 const ValidBirthBabyItem = {
   "Baby ID": "2",
-  "Growth Stage": "Birth",
+  "Growth Stage": "Born",
   "Baby Name": chance.name(),
   Gender: "Female",
   "Due Date": "",
   "Birth Day": BirthDate,
   "Infant Supplementary Food": "Add",
-  "Feeding Methods": "Breast Milk",
+  "Feeding Methods": "Exclusive Breastfeeding",
   Area: "US/Arizona/Litchfield Park",
   Address: "123 Street",
   Comments: "",
