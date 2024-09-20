@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({ username, role, onNavigate, onLogout })
         <Welcome>
           <b>{username}</b>
           <Role>{t(`${role}`)}</Role>
-          <LanguageSelect />
+          {!import.meta.env.PROD && <LanguageSelect />}
         </Welcome>
         {user?.role === "ROLE_ADMIN" && (
           <StyledButton type="link" onClick={openExportModal}>
