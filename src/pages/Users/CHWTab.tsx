@@ -1,5 +1,6 @@
 import { usePagination } from "@/hooks/usePagination";
 import { ChwUser } from "@/models/res/User";
+import { Tag } from "antd";
 import { useTranslation } from "react-i18next";
 import React, { useEffect } from "react";
 import SearchInput from "@/components/SearchInput";
@@ -61,7 +62,13 @@ const CHWTab: React.FC<CHWProps> = ({ refreshKey }) => {
             title: t("area"),
             width: 350,
             dataIndex: ["user", "chw", "tags"],
-            render: (tags) => tags && tags.join(", "),
+            render: (tags) => (
+              <>
+                {tags.map((tag: string, index: number) => (
+                  <Tag key={index}>{tag}</Tag>
+                ))}
+              </>
+            ),
           },
           phone,
           {
