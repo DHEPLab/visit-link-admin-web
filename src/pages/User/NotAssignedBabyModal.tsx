@@ -33,6 +33,7 @@ const NotAssignedBabyModal: React.FC<NotAssignedBabyModalProps> = ({ id, onFinis
 
   return (
     <AssignModalTable
+      width={800}
       loading={loading}
       dataSource={dataSource}
       pagination={pagination}
@@ -45,7 +46,8 @@ const NotAssignedBabyModal: React.FC<NotAssignedBabyModalProps> = ({ id, onFinis
         {
           title: t("babyName"),
           dataIndex: "name",
-          width: 100,
+          width: 300,
+          ellipsis: true,
         },
         {
           title: t("id"),
