@@ -2,14 +2,14 @@ import dayjs from "dayjs";
 import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber, AutoComplete } from "antd";
 import { useTranslation } from "react-i18next";
 
-import ModalForm, { ModalFormProps } from "@/components/ModalForm";
+import ModalForm, { ModalFormProps, ModalFormRef } from "@/components/ModalForm";
 import Pcas from "@/constants/pcas-code.json";
 import Rules from "@/constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
 import i18n from "@/i18n";
 import { disabledDateForEDC } from "./utils/dateLogic";
 import { enumKeysIterator } from "@/utils/enumUtils";
-import { useEffect, useRef, useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import { debounce } from "radash";
 
 export interface BabyModalFormValues {
@@ -37,10 +37,10 @@ export type BabyModalFormProps = ModalFormProps<BabyModalFormValues> & { disable
 
 const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   const { t } = useTranslation("baby");
-  const formRef = useRef(null);
-  const autocompleteService = useRef(null);
-  const placesService = useRef(null);
-  const mapRef = useRef(null);
+  const formRef = useRef<ModalFormRef>();
+  const autocompleteService = useRef<google.maps.places.AutocompleteService>();
+  const placesService = useRef<google.maps.places.PlacesService>();
+  const mapRef = useRef<google.maps.Map>();
   const [options, setOptions] = useState<AreaOption[]>([]);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   };
 
   const handleSearchArea = (value: string): void => {
-    autocompleteService.current.getPlacePredictions({ input: value }, (predictions, status) => {
+    autocompleteService.current?.getPlacePredictions({ input: value }, (predictions, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
         const newOptions = predictions.map((prediction) => ({
           value: prediction.description,
@@ -66,19 +66,18 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
       }
     });
   };
-  const handleSelectArea = (value: string, option: AreaOption) => {
-    placesService.current.getDetails({ placeId: option.placeId }, (place, status) => {
+  const handleSelectArea = (_: string, option: AreaOption) => {
+    placesService.current?.getDetails({ placeId: option.placeId }, (place, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        const { geometry } = place;
-        const latitude = geometry.location.lat();
-        const longitude = geometry.location.lng();
-        formRef.current.form.setFieldsValue({ latitude, longitude });
+        const latitude = place?.geometry?.location?.lat();
+        const longitude = place?.geometry?.location?.lng();
+        formRef.current?.form?.setFieldsValue({ latitude, longitude });
       }
     });
   };
 
   return (
-    <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef}>
+    <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef as Ref<ModalFormRef>}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>

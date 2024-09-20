@@ -28,7 +28,7 @@ describe("toNewBabyRequest", () => {
   it("should join area as string when language is zh", () => {
     const newFormValues: BabyModalFormValues = {
       ...formValues,
-      area: ["Area1", "Area2", "Area3"],
+      area: "Area",
     };
 
     const result = toNewBabyRequest(newFormValues, "zh");
@@ -39,7 +39,7 @@ describe("toNewBabyRequest", () => {
       gender: "FEMALE",
       stage: "EDC",
       edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
-      area: "Area1/Area2/Area3",
+      area: "Area",
       location: "Some Location",
     });
   });

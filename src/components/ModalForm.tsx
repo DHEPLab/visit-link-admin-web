@@ -12,7 +12,7 @@ export interface ModalFormProps<T> extends PropsWithChildren {
   initialValues?: T;
   validateMessages?: FormProps["validateMessages"];
 }
-interface ModalFormRef {
+export interface ModalFormRef {
   form: FormInstance;
 }
 
