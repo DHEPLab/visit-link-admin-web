@@ -9,7 +9,7 @@ describe("toNewBabyRequest", () => {
     gender: "FEMALE",
     stage: "EDC",
     edc: dayjs().add(2, "days"),
-    area: "Some Area",
+    area: ["Some Area"],
     location: "Some Location",
   } as BabyModalFormValues;
 
@@ -28,10 +28,10 @@ describe("toNewBabyRequest", () => {
   it("should join area as string when language is zh", () => {
     const newFormValues: BabyModalFormValues = {
       ...formValues,
-      area: ["Area1", "Area2", "Area3"],
+      area: ["Area1"],
     };
 
-    const result = toNewBabyRequest(newFormValues, "zh");
+    const result = toNewBabyRequest(newFormValues);
 
     expect(result).toEqual({
       name: "Han Meimei",
@@ -39,7 +39,7 @@ describe("toNewBabyRequest", () => {
       gender: "FEMALE",
       stage: "EDC",
       edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
-      area: "Area1/Area2/Area3",
+      area: "Area1",
       location: "Some Location",
     });
   });

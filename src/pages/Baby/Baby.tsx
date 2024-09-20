@@ -64,7 +64,7 @@ export default function Baby() {
   const initialValues = () => {
     const formValues: BabyModalFormValues = {
       ...baby,
-      area: (baby.area && baby.area.split("/")) || [],
+      area: [baby.area],
       edc: baby.edc ? dayjs(baby.edc) : undefined,
       birthday: baby.birthday ? dayjs(baby.birthday) : undefined,
       feedingPattern: baby.feedingPattern ? baby.feedingPattern : undefined,
@@ -73,7 +73,11 @@ export default function Baby() {
   };
 
   function handleChangeBaby(values: BabyModalFormValues) {
-    const requestValues: BabyModalFormValues = { ...omit(baby, ["edc", "birthday", "feedingPattern"]), ...values };
+    const requestValues: BabyModalFormValues = {
+      ...omit(baby, ["edc", "birthday", "feedingPattern"]),
+      ...values,
+      area: values.area[0],
+    };
     axios.put(`/admin/babies/${id}`, toNewBabyRequest(requestValues, i18n.resolvedLanguage)).then(() => {
       refresh();
       closeModal();

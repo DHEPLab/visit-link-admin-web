@@ -18,14 +18,14 @@ import { toNewBabyRequest } from "./schema/BabyForm";
 type BabiesTab = "approved" | "unreviewed";
 
 export default function Babies() {
-  const { t, i18n } = useTranslation("babies");
+  const { t } = useTranslation("babies");
   const [tab, setTab] = useQueryParam<BabiesTab>("tab", "approved");
   const [showNewBabyModal, openNewBabyModal, closeNewBabyModal] = useBoolState(false);
   const [showImportModal, openImportModal, closeImportModal] = useBoolState(false);
   const [refreshKey, setRefreshKey] = useState({ approved: 0, unreviewed: 0 });
 
   function handleCreateBaby(values: BabyModalFormValues) {
-    axios.post("/admin/babies", toNewBabyRequest(values, i18n.resolvedLanguage)).then(() => {
+    axios.post("/admin/babies", toNewBabyRequest(values)).then(() => {
       refresh();
       closeNewBabyModal();
     });

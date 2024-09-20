@@ -18,7 +18,7 @@ export interface BabyModalFormValues {
   birthday?: dayjs.Dayjs;
   assistedFood?: boolean;
   feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
-  area: string | string[];
+  area: string[];
   location: string;
   longitude: number | null;
   latitude: number | null;
