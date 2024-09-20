@@ -31,7 +31,7 @@ import { ChwUser } from "@/models/res/User";
 const { confirm } = Modal;
 
 export default function Baby() {
-  const { t, i18n } = useTranslation(["baby", "common"]);
+  const { t } = useTranslation(["baby", "common"]);
   const { id } = useParams();
   const navigate = useNavigate();
   const [baby, refresh] = useFetch<BabyResponse>(`/admin/babies/${id}`);
@@ -76,9 +76,8 @@ export default function Baby() {
     const requestValues: BabyModalFormValues = {
       ...omit(baby, ["edc", "birthday", "feedingPattern"]),
       ...values,
-      area: values.area[0],
     };
-    axios.put(`/admin/babies/${id}`, toNewBabyRequest(requestValues, i18n.resolvedLanguage)).then(() => {
+    axios.put(`/admin/babies/${id}`, toNewBabyRequest(requestValues)).then(() => {
       refresh();
       closeModal();
       refreshBabyModifyRecords();
