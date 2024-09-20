@@ -351,8 +351,8 @@ export default {
       UNKNOWN: "Unknown",
     },
     BabyStage: {
-      EDC: "",
-      BIRTH: "Birth",
+      EDC: "Unborn",
+      BIRTH: "Born",
     },
     AssistedFood: {
       TRUE: "Add",
