@@ -98,7 +98,7 @@ describe("Babies Page", () => {
     setup(<Babies />);
 
     expect(screen.getByText("Approved")).toBeInTheDocument();
-    expect(screen.getByText("Unreviewed")).toBeInTheDocument();
+    expect(screen.getByText("Awaiting Review")).toBeInTheDocument();
 
     const approvedTab = screen.getByRole("tab", { name: "Approved" }).closest("div.ant-tabs-tab");
     expect(approvedTab).toHaveClass("ant-tabs-tab-active");
@@ -159,9 +159,9 @@ describe("Babies Page", () => {
 
   test("switches between tabs and refreshes the content", async () => {
     setup(<Babies />);
-    await user.click(screen.getByRole("tab", { name: "Unreviewed" }));
+    await user.click(screen.getByRole("tab", { name: "Awaiting Review" }));
 
-    const approvedTab = screen.getByRole("tab", { name: "Unreviewed" }).closest("div.ant-tabs-tab");
+    const approvedTab = screen.getByRole("tab", { name: "Awaiting Review" }).closest("div.ant-tabs-tab");
     expect(approvedTab).toHaveClass("ant-tabs-tab-active");
   });
 
