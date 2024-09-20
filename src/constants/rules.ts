@@ -36,7 +36,7 @@ const Rules: { [key: string]: Rule[] } = {
       validator(_rule, tags) {
         if (!tags) return;
         for (const tag of tags) {
-          if (tag && tag.length > 50) {
+          if (tag && tag.length > 100) {
             return Promise.reject(t("areaLengthInvalid"));
           }
         }
