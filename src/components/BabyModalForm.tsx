@@ -54,6 +54,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   };
 
   const handleSearchArea = (value: string): void => {
+    //TODO: use uuid for session token
     autocompleteService.current?.getPlacePredictions({ input: value }, (predictions, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
         const newOptions = predictions.map((prediction) => ({
@@ -64,16 +65,17 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
       }
     });
   };
-  const handleSelectArea = (_: string, option: AreaOption) => {
+  const handleSelectArea = (area: string, option: AreaOption) => {
     placesService.current?.getDetails({ placeId: option.placeId }, (place, status) => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         const latitude = place?.geometry?.location?.lat();
         const longitude = place?.geometry?.location?.lng();
-        formRef.current?.form?.setFieldsValue({ latitude, longitude });
+        formRef.current?.form?.setFieldsValue({ latitude, longitude, area });
       }
     });
   };
 
+  //TODO: wrap overflow areas options
   return (
     <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef as Ref<ModalFormRef>}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
@@ -139,12 +141,12 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
         }}
       </Form.Item>
       <Form.Item label={t("area")} name="area" rules={Rules.Required}>
-          <AutoComplete
-            onSearch={debounce({ delay: 200 }, handleSearchArea)}
-            onSelect={handleSelectArea}
-            placeholder="input here"
-            options={options}
-          />
+        <AutoComplete
+          onSearch={debounce({ delay: 200 }, handleSearchArea)}
+          onSelect={handleSelectArea}
+          placeholder="England, London, Argyle Street 10, ABC Building"
+          options={options}
+        />
       </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
         <Input />

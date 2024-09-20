@@ -4,8 +4,7 @@ import { NewBabyRequest } from "@/models/req/Baby";
 
 export const toNewBabyRequest = (values: BabyModalFormValues): NewBabyRequest => {
   const request: NewBabyRequest = {
-    ...omit(values, ["area", "birthday", "edc"]),
-    area: values.area[0],
+    ...omit(values, ["birthday", "edc"]),
   };
 
   if (values.birthday) {
