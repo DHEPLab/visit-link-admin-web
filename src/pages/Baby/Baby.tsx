@@ -64,7 +64,7 @@ export default function Baby() {
   const initialValues = () => {
     const formValues: BabyModalFormValues = {
       ...baby,
-      area: (baby.area && baby.area.split("/")) || [],
+      area: baby.area,
       edc: baby.edc ? dayjs(baby.edc) : undefined,
       birthday: baby.birthday ? dayjs(baby.birthday) : undefined,
       feedingPattern: baby.feedingPattern ? baby.feedingPattern : undefined,

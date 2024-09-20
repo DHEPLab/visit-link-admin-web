@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber } from "antd";
+import { Select, Form, Input, Radio, DatePicker, Cascader, Row, Col, InputNumber, AutoComplete } from "antd";
 import { useTranslation } from "react-i18next";
 
 import ModalForm, { ModalFormProps } from "@/components/ModalForm";
@@ -9,6 +9,8 @@ import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
 import i18n from "@/i18n";
 import { disabledDateForEDC } from "./utils/dateLogic";
 import { enumKeysIterator } from "@/utils/enumUtils";
+import { useEffect, useRef, useState } from "react";
+import { debounce } from "radash";
 
 export interface BabyModalFormValues {
   name: string;
@@ -19,20 +21,64 @@ export interface BabyModalFormValues {
   birthday?: dayjs.Dayjs;
   assistedFood?: boolean;
   feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
-  area: string | string[];
+  area: string;
   location: string;
   longitude: number | null;
   latitude: number | null;
   remark: string | null;
 }
 
+interface AreaOption {
+  value: string;
+  placeId: string;
+}
+
 export type BabyModalFormProps = ModalFormProps<BabyModalFormValues> & { disableStage?: boolean };
 
 const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   const { t } = useTranslation("baby");
+  const formRef = useRef(null);
+  const autocompleteService = useRef(null);
+  const placesService = useRef(null);
+  const mapRef = useRef(null);
+  const [options, setOptions] = useState<AreaOption[]>([]);
+
+  useEffect(() => {
+    if (!autocompleteService.current && window.google) {
+      initMapServices();
+    }
+  }, []);
+
+  const initMapServices = () => {
+    mapRef.current = new window.google.maps.Map(document.createElement("div"));
+    autocompleteService.current = new window.google.maps.places.AutocompleteService();
+    placesService.current = new window.google.maps.places.PlacesService(mapRef.current);
+  };
+
+  const handleSearchArea = (value: string): void => {
+    autocompleteService.current.getPlacePredictions({ input: value }, (predictions, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+        const newOptions = predictions.map((prediction) => ({
+          value: prediction.description,
+          placeId: prediction.place_id, // Store place_id for fetching details
+        }));
+        setOptions(newOptions);
+      }
+    });
+  };
+  const handleSelectArea = (value: string, option: AreaOption) => {
+    placesService.current.getDetails({ placeId: option.placeId }, (place, status) => {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        const { geometry } = place;
+        const latitude = geometry.location.lat();
+        const longitude = geometry.location.lng();
+        formRef.current.form.setFieldsValue({ latitude, longitude });
+      }
+    });
+  };
 
   return (
-    <ModalForm {...props} labelCol={{ span: 7 }} width={800}>
+    <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>
@@ -101,7 +147,12 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
         </Form.Item>
       ) : (
         <Form.Item label={t("area")} name="area" rules={Rules.Required}>
-          <Input />
+          <AutoComplete
+            onSearch={debounce({ delay: 200 }, handleSearchArea)}
+            onSelect={handleSelectArea}
+            placeholder="input here"
+            options={options}
+          />
         </Form.Item>
       )}
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
