@@ -55,7 +55,7 @@ type SchedulesProps = {
   onChange: (schedules: ScheduleFormValue[]) => void;
 };
 
-const EmptySchedule = { stage: "EDC" } as ScheduleFormValue;
+const EmptySchedule = { stage: "UNBORN" } as ScheduleFormValue;
 
 const Schedules: React.FC<SchedulesProps> = ({ readonly, schedules, lessons, onChange }) => {
   const { t } = useTranslation("curriculum");

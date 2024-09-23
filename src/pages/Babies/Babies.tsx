@@ -66,7 +66,7 @@ export default function Babies() {
         visible={showNewBabyModal}
         onFinish={handleCreateBaby}
         onCancel={closeNewBabyModal}
-        initialValues={{ stage: "EDC", gender: "UNKNOWN" } as BabyModalFormValues}
+        initialValues={{ stage: "UNBORN", gender: "UNKNOWN" } as BabyModalFormValues}
         validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       />
       <Modal

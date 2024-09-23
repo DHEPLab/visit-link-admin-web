@@ -64,7 +64,7 @@ type LessonsProps = {
   onChange: (lessons: LessonFormValue[]) => void;
 };
 
-const EmptySession = { stage: "EDC" } as LessonFormValue;
+const EmptySession = { stage: "UNBORN" } as LessonFormValue;
 
 const Lessons: React.FC<LessonsProps> = ({ readonly, lessons, onChange }) => {
   const requests = useNetworkStore((state) => state.requests);

@@ -7,13 +7,13 @@ import ApplicableDays from "./ApplicableDays";
 const lessons = [
   {
     id: 1,
-    stage: "EDC",
+    stage: "UNBORN",
     startOfApplicableDays: 10,
     endOfApplicableDays: 20,
   },
   {
     id: 2,
-    stage: "EDC",
+    stage: "UNBORN",
     startOfApplicableDays: 21,
     endOfApplicableDays: 40,
   },
@@ -23,7 +23,7 @@ const user = userEvent.setup();
 
 const setup = () => {
   return testSetup(
-    <Form initialValues={{ stage: "EDC" }}>
+    <Form initialValues={{ stage: "UNBORN" }}>
       <ApplicableDays value={lessons} currentEditValue={{} as LessonFormValue} />
       <Button type="primary" htmlType="submit">
         Submit

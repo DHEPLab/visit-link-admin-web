@@ -14,20 +14,20 @@ export const Gender = {
 };
 
 export const BabyStage = {
-  EDC: i18n.t("BabyStage.EDC", { ns: "enum" }),
-  BIRTH: i18n.t("BabyStage.BIRTH", { ns: "enum" }),
+  UNBORN: i18n.t("BabyStage.EDC", { ns: "enum" }),
+  BORN: i18n.t("BabyStage.BIRTH", { ns: "enum" }),
 };
 
 export const CurriculumBabyStage = {
-  EDC: i18n.t("CurriculumBabyStage.EDC", { ns: "enum" }),
-  BIRTH: i18n.t("CurriculumBabyStage.BIRTH", { ns: "enum" }),
+  UNBORN: i18n.t("CurriculumBabyStage.EDC", { ns: "enum" }),
+  BORN: i18n.t("CurriculumBabyStage.BIRTH", { ns: "enum" }),
 };
 
 export const FeedingPattern = {
-  BREAST_MILK: i18n.t("FeedingPattern.BREAST_MILK", { ns: "enum" }),
-  MILK_POWDER: i18n.t("FeedingPattern.MILK_POWDER", { ns: "enum" }),
-  MIXED: i18n.t("FeedingPattern.MIXED", { ns: "enum" }),
-  TERMINATED: i18n.t("FeedingPattern.TERMINATED", { ns: "enum" }),
+  EXCLUSIVE_BREASTFEEDING: i18n.t("FeedingPattern.BREAST_MILK", { ns: "enum" }),
+  FORMULA_FEEDING: i18n.t("FeedingPattern.MILK_POWDER", { ns: "enum" }),
+  MIXED_BREAST_FORMULA_FEEDING: i18n.t("FeedingPattern.MIXED", { ns: "enum" }),
+  NO_BREAST_FORMULA_FEEDING: i18n.t("FeedingPattern.TERMINATED", { ns: "enum" }),
 };
 
 export const FamilyTies = {

@@ -282,7 +282,7 @@ export default function Baby() {
           {BabyStage[baby.stage]} {baby.days} {t("unit.day", { ns: "common", count: baby.days })}
         </StaticField>
 
-        {baby.stage === "EDC" ? (
+        {baby.stage === "UNBORN" ? (
           <StaticField label={t("dueDay")} history={oldValue["edc"]}>
             {dayjs(baby.edc).format("YYYY-MM-DD")}
           </StaticField>
@@ -371,7 +371,7 @@ export default function Baby() {
         onCancel={closeModal}
         onFinish={handleChangeBaby}
         initialValues={initialValues()}
-        disableStage={baby.stage === "BIRTH"}
+        disableStage={baby.stage === "BORN"}
         validateMessages={t("validateMessages", { ns: "common", returnObjects: true }) as FormProps["validateMessages"]}
       />
     </>

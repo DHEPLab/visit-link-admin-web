@@ -1,7 +1,7 @@
 export interface Schedule {
   id: number;
   name: string;
-  stage: "EDC" | "BIRTH";
+  stage: "UNBORN" | "BORN";
   startOfApplicableDays: number;
   endOfApplicableDays: number;
   lessons: { value: string; label: string }[];

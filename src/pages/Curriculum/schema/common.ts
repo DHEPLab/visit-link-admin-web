@@ -1,1 +1,1 @@
-export type STAGE_TYPE = "BIRTH" | "EDC";
+export type STAGE_TYPE = "BORN" | "UNBORN";

@@ -13,11 +13,15 @@ export interface BabyModalFormValues {
   name: string;
   identity: string;
   gender: string;
-  stage: "EDC" | "BIRTH";
+  stage: "UNBORN" | "BORN";
   edc?: dayjs.Dayjs;
   birthday?: dayjs.Dayjs;
   assistedFood?: boolean;
-  feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
+  feedingPattern?:
+    | "EXCLUSIVE_BREASTFEEDING"
+    | "FORMULA_FEEDING"
+    | "MIXED_BREAST_FORMULA_FEEDING"
+    | "NO_BREAST_FORMULA_FEEDING";
   area: string[];
   location: string;
   longitude: number | null;
@@ -59,7 +63,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
       <Form.Item noStyle shouldUpdate={(old, curr) => old.stage !== curr.stage}>
         {({ getFieldValue }) => {
           const stage = getFieldValue("stage");
-          if (stage === "EDC") {
+          if (stage === "UNBORN") {
             return (
               <Form.Item label={t("dueDay")} name="edc" rules={Rules.Required}>
                 <DatePicker disabledDate={(current) => disabledDateForEDC(current, dayjs())} />

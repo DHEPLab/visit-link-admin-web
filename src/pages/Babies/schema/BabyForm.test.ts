@@ -7,7 +7,7 @@ describe("toNewBabyRequest", () => {
     name: "Han Meimei",
     identity: "123456789",
     gender: "FEMALE",
-    stage: "EDC",
+    stage: "UNBORN",
     edc: dayjs().add(2, "days"),
     area: ["Some Area"],
     location: "Some Location",
@@ -18,7 +18,7 @@ describe("toNewBabyRequest", () => {
       name: "Han Meimei",
       identity: "123456789",
       gender: "FEMALE",
-      stage: "EDC",
+      stage: "UNBORN",
       edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
       area: "Some Area",
       location: "Some Location",
@@ -37,7 +37,7 @@ describe("toNewBabyRequest", () => {
       name: "Han Meimei",
       identity: "123456789",
       gender: "FEMALE",
-      stage: "EDC",
+      stage: "UNBORN",
       edc: dayjs().add(2, "days").format("YYYY-MM-DD"),
       area: "Area1",
       location: "Some Location",
@@ -47,11 +47,11 @@ describe("toNewBabyRequest", () => {
   it("should handle BIRTH stage request", () => {
     const newFormValues: BabyModalFormValues = {
       ...formValues,
-      stage: "BIRTH",
+      stage: "BORN",
       edc: undefined,
       birthday: dayjs().add(2, "days"),
       assistedFood: true,
-      feedingPattern: "BREAST_MILK",
+      feedingPattern: "EXCLUSIVE_BREASTFEEDING",
     };
 
     const result = toNewBabyRequest(newFormValues);
@@ -60,10 +60,10 @@ describe("toNewBabyRequest", () => {
       name: "Han Meimei",
       identity: "123456789",
       gender: "FEMALE",
-      stage: "BIRTH",
+      stage: "BORN",
       birthday: dayjs().add(2, "days").format("YYYY-MM-DD"),
       assistedFood: true,
-      feedingPattern: "BREAST_MILK",
+      feedingPattern: "EXCLUSIVE_BREASTFEEDING",
       area: "Some Area",
       location: "Some Location",
     });

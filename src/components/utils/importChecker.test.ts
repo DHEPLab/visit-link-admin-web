@@ -130,16 +130,16 @@ describe("checkBabies", () => {
     expect(validBabies.length).toBe(2);
     expect(validBabies[0].identity).toBe("1");
     expect(validBabies[0].gender).toBe("MALE");
-    expect(validBabies[0].stage).toBe("EDC");
+    expect(validBabies[0].stage).toBe("UNBORN");
     expect(validBabies[0].edc).toBe(EDCDate);
 
     expect(validBabies[1].identity).toBe("2");
     expect(validBabies[1].gender).toBe("FEMALE");
-    expect(validBabies[1].stage).toBe("BIRTH");
+    expect(validBabies[1].stage).toBe("BORN");
     expect(validBabies[1].birthday).toBe(BirthDate);
     // TODO: need check this logic
     // expect(validBabies[0].assistedFood).toBeTruthy();
-    expect(validBabies[1].feedingPattern).toBe("BREAST_MILK");
+    expect(validBabies[1].feedingPattern).toBe("EXCLUSIVE_BREASTFEEDING");
   });
 
   it("should return an error for duplicate Baby ID", () => {

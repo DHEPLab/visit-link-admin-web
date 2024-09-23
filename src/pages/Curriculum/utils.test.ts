@@ -5,19 +5,19 @@ import { ScheduleFormValue } from "./schema/Schedule";
 it("should filter lesson by stage, start months, end months", () => {
   const lessons = [
     {
-      stage: "EDC",
+      stage: "UNBORN",
       startOfApplicableDays: 1,
       endOfApplicableDays: 20,
     },
     {
-      stage: "BIRTH",
+      stage: "BORN",
       startOfApplicableDays: 1,
       endOfApplicableDays: 30,
     },
   ] as LessonFormValue[];
-  expect(filterLessons(lessons, "EDC", 1, 10).length).toBe(0);
-  expect(filterLessons(lessons, "EDC", 1, 40).length).toBe(1);
-  expect(filterLessons(lessons, "BIRTH", 1, 30).length).toBe(1);
+  expect(filterLessons(lessons, "UNBORN", 1, 10).length).toBe(0);
+  expect(filterLessons(lessons, "UNBORN", 1, 40).length).toBe(1);
+  expect(filterLessons(lessons, "BORN", 1, 30).length).toBe(1);
 });
 
 it("should validate lesson number to keep unique", () => {
@@ -35,7 +35,7 @@ it("should validate lesson number to keep unique", () => {
 it("should clean invalid lessons from schedule", () => {
   const schedules = [
     {
-      stage: "EDC",
+      stage: "UNBORN",
       startOfApplicableDays: 11,
       endOfApplicableDays: 90,
       lessons: [
@@ -47,7 +47,7 @@ it("should clean invalid lessons from schedule", () => {
   ] as ScheduleFormValue[];
   const cleaned = [
     {
-      stage: "EDC",
+      stage: "UNBORN",
       startOfApplicableDays: 11,
       endOfApplicableDays: 90,
       lessons: [],
@@ -57,7 +57,7 @@ it("should clean invalid lessons from schedule", () => {
     cleanInvalidLessons(schedules, [
       {
         number: "L1",
-        stage: "EDC",
+        stage: "UNBORN",
         startOfApplicableDays: 9,
         endOfApplicableDays: 100,
       },
@@ -67,7 +67,7 @@ it("should clean invalid lessons from schedule", () => {
     cleanInvalidLessons(schedules, [
       {
         number: "L1",
-        stage: "EDC",
+        stage: "UNBORN",
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },
@@ -77,7 +77,7 @@ it("should clean invalid lessons from schedule", () => {
     cleanInvalidLessons(schedules, [
       {
         number: "L2",
-        stage: "EDC",
+        stage: "UNBORN",
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },
@@ -87,7 +87,7 @@ it("should clean invalid lessons from schedule", () => {
     cleanInvalidLessons(schedules, [
       {
         number: "L1",
-        stage: "BIRTH",
+        stage: "BORN",
         startOfApplicableDays: 21,
         endOfApplicableDays: 30,
       },

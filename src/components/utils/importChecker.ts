@@ -186,7 +186,7 @@ export const checkBabies = (babies: Record<string, string>[]) => {
       }
     }
 
-    if (element.stage === "EDC") {
+    if (element.stage === "UNBORN") {
       if (!element.edc) {
         errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyEDC") });
         return;

@@ -2,11 +2,15 @@ export interface NewBabyRequest {
   name: string;
   identity: string;
   gender: string;
-  stage: "EDC" | "BIRTH";
+  stage: "UNBORN" | "BORN";
   edc?: string;
   birthday?: string;
   assistedFood?: boolean;
-  feedingPattern?: "BREAST_MILK" | "MILK_POWDER" | "MIXED" | "TERMINATED";
+  feedingPattern?:
+    | "EXCLUSIVE_BREASTFEEDING"
+    | "FORMULA_FEEDING"
+    | "MIXED_BREAST_FORMULA_FEEDING"
+    | "NO_BREAST_FORMULA_FEEDING";
   area: string;
   location: string;
   longitude: number | null;
