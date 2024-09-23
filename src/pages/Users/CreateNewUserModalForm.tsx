@@ -1,10 +1,12 @@
-import { Form, FormProps, Input, Radio } from "antd";
+import { Form, FormProps, Input, Radio, Tooltip } from "antd";
 import Rules from "@/constants/rules";
 import { Role } from "@/constants/enums";
 import AreaInput from "@/components/AreaInput";
 import ModalForm from "@/components/ModalForm";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import QuestionCircleOutlined from "@ant-design/icons/lib/icons/QuestionCircleOutlined";
+import styled from "styled-components";
 
 export interface CreateNewUserFormValues {
   role: string;
@@ -35,7 +37,7 @@ const formInitialValues: CreateNewUserFormValues = {
 
 const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) => {
   const { visible, onCancel, loginUserRole, onFinish } = props;
-  const { t } = useTranslation(["users", "common"]);
+  const { t } = useTranslation(["users", "common", "user"]);
   const isAdmin = loginUserRole === "ROLE_ADMIN";
 
   return (
@@ -74,7 +76,20 @@ const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) =>
                 <Form.Item label={t("chwID")} name={["chw", "identity"]} rules={Rules.Required}>
                   <Input />
                 </Form.Item>
-                <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
+                <Form.Item
+                  name={["chw", "tags"]}
+                  rules={Rules.Area}
+                  label={
+                    <>
+                      {t("area")}
+                      <Tooltip title={t("maxArea", { ns: "user" })}>
+                        <Icon>
+                          <QuestionCircleOutlined />
+                        </Icon>
+                      </Tooltip>
+                    </>
+                  }
+                >
                   <AreaInput maxCount={3} />
                 </Form.Item>
               </>
@@ -97,3 +112,7 @@ const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) =>
 };
 
 export default CreateNewUserModalForm;
+
+const Icon = styled.span`
+  padding-left: 8px;
+`;

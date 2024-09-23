@@ -239,6 +239,7 @@ export default {
     name: "Name",
     phone: "Phone",
     area: "Area",
+    maxArea: "Area should be no more than 3",
     generalInformation: "General Information",
     edit: "Edit",
     resetPassword: "Reset Password",

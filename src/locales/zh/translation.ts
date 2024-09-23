@@ -235,6 +235,7 @@ export default {
     name: "真实姓名",
     phone: "联系电话",
     area: "所在区域",
+    maxArea: "所在区域不可超过3个",
     generalInformation: "用户信息",
     edit: "编辑资料",
     resetPassword: "修改密码",

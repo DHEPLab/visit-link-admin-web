@@ -1,7 +1,7 @@
 import AreaInput from "@/components/AreaInput";
 import axios from "axios";
 import { useState } from "react";
-import { Button, Form, FormProps, Input, Space, Tag } from "antd";
+import { Button, Form, FormProps, Input, Space, Tag, Tooltip } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +21,8 @@ import AssignChw from "./AssignChw";
 import { User as UserModel } from "@/models/res/User";
 import ShadeButton from "@/components/ShadeButton";
 import { UpdateUserRequest } from "@/models/req/User";
+import QuestionCircleOutlined from "@ant-design/icons/lib/icons/QuestionCircleOutlined";
+import styled from "styled-components";
 
 export default function User() {
   const { t } = useTranslation(["user", "common"]);
@@ -144,7 +146,20 @@ export default function User() {
             <Form.Item label={t("id")} name={["chw", "identity"]} rules={Rules.Required}>
               <Input />
             </Form.Item>
-            <Form.Item label={t("area")} name={["chw", "tags"]} rules={Rules.Area}>
+            <Form.Item
+              label={
+                <>
+                  {t("area")}
+                  <Tooltip title={t("maxArea")}>
+                    <Icon>
+                      <QuestionCircleOutlined />
+                    </Icon>
+                  </Tooltip>
+                </>
+              }
+              name={["chw", "tags"]}
+              rules={Rules.Area}
+            >
               <AreaInput maxCount={3} />
             </Form.Item>
           </>
@@ -153,3 +168,7 @@ export default function User() {
     </>
   );
 }
+
+const Icon = styled.span`
+  padding-left: 8px;
+`;
