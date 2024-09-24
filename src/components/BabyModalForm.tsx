@@ -104,15 +104,15 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
         <Input />
       </Form.Item>
-      <Row>
-        <Col span={9} offset={4}>
-          <Form.Item label={t("longitude")} labelCol={{ span: 8 }} name="longitude">
-            <InputNumber style={{ width: 160 }} />
+      <Row gutter={16}>
+        <Col span={12}>
+          <Form.Item label={t("longitude")} labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} name="longitude">
+            <InputNumber style={{ width: "100%" }} />
           </Form.Item>
         </Col>
-        <Col span={9} style={{ paddingLeft: 6 }}>
-          <Form.Item label={t("latitude")} labelCol={{ span: 4 }} name="latitude">
-            <InputNumber style={{ width: 160 }} />
+        <Col span={12}>
+          <Form.Item label={t("latitude")} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} name="latitude">
+            <InputNumber style={{ width: "100%" }} />
           </Form.Item>
         </Col>
       </Row>
