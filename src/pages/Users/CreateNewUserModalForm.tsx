@@ -1,12 +1,10 @@
-import { Form, FormProps, Input, Radio, Tooltip } from "antd";
+import { Form, FormProps, Input, Radio } from "antd";
 import Rules from "@/constants/rules";
 import { Role } from "@/constants/enums";
 import AreaInput from "@/components/AreaInput";
 import ModalForm from "@/components/ModalForm";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import QuestionCircleOutlined from "@ant-design/icons/lib/icons/QuestionCircleOutlined";
-import styled from "styled-components";
 
 export interface CreateNewUserFormValues {
   role: string;
@@ -78,17 +76,9 @@ const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) =>
                 </Form.Item>
                 <Form.Item
                   name={["chw", "tags"]}
+                  tooltip={t("maxArea", { ns: "user" })}
                   rules={Rules.Area}
-                  label={
-                    <>
-                      {t("area")}
-                      <Tooltip title={t("maxArea", { ns: "user" })}>
-                        <Icon>
-                          <QuestionCircleOutlined />
-                        </Icon>
-                      </Tooltip>
-                    </>
-                  }
+                  label={t("area")}
                 >
                   <AreaInput maxCount={3} />
                 </Form.Item>
@@ -112,7 +102,3 @@ const CreateNewUserModalForm: React.FC<CreateNewUserModalFormProps> = (props) =>
 };
 
 export default CreateNewUserModalForm;
-
-const Icon = styled.span`
-  padding-left: 8px;
-`;
