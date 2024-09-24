@@ -33,10 +33,10 @@ export const FeedingPattern = {
 export const FamilyTies = {
   MOTHER: i18n.t("RELATIVES.MOTHER", { ns: "enum" }),
   FATHER: i18n.t("RELATIVES.FATHER", { ns: "enum" }),
-  GRANDMOTHER: i18n.t("RELATIVES.GRANDMOTHER", { ns: "enum" }),
-  GRANDMA: i18n.t("RELATIVES.GRANDMA", { ns: "enum" }),
-  GRANDFATHER: i18n.t("RELATIVES.GRANDFATHER", { ns: "enum" }),
-  GRANDPA: i18n.t("RELATIVES.GRANDPA", { ns: "enum" }),
+  PATERNAL_GRANDMOTHER: i18n.t("RELATIVES.GRANDMOTHER", { ns: "enum" }),
+  MATERNAL_GRANDMOTHER: i18n.t("RELATIVES.GRANDMA", { ns: "enum" }),
+  PATERNAL_GRANDFATHER: i18n.t("RELATIVES.GRANDFATHER", { ns: "enum" }),
+  MATERNAL_GRANDFATHER: i18n.t("RELATIVES.GRANDPA", { ns: "enum" }),
   OTHER: i18n.t("RELATIVES.OTHER", { ns: "enum" }),
 };
 
