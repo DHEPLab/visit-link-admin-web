@@ -102,7 +102,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
         <AreaInput maxCount={1} />
       </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
-        <Input />
+        <Input placeholder={t("detailAddressPlaceholder")} />
       </Form.Item>
       <Row>
         <Col span={9} offset={4}>

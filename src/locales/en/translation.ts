@@ -149,8 +149,8 @@ export default {
     add: "Yes",
     noAdd: "No",
     feedingMethods: "Feeding Methods",
-    area: "Area",
-    address: "Address",
+    area: "Building Address",
+    address: "Detailed Address",
     comments: "Comments",
     relatives: "Relation",
     repeatRelatives: "Relatives cannot be selected repeatedly",
@@ -185,6 +185,7 @@ export default {
     reject: "Reject",
     rejectTitle: "Are you sure you want to reject the application?",
     rejectContent: "After rejection, you can continue to apply for baby modification",
+    detailAddressPlaceholder: "Please enter floor, house number, unit number",
   },
   myAccount: {
     myAccount: "My Account",
@@ -665,7 +666,7 @@ export default {
   form: {
     nameInvalid: "Only allow 1-50 characters without special characters",
     phoneInvalid: "Only allow 5-20 numbers",
-    areaPlaceholder: "Please enter state, city, district and street name",
+    areaPlaceholder: "Please enter state, city, district and street/building",
     areasSizeInvalid: "Area should be no more than 3",
     areaLengthInvalid: "Area should be no more than 100 characters",
   },
