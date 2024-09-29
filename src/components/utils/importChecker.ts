@@ -2,32 +2,44 @@ import { NAME_REGEX, PHONE_REGEX } from "@/constants/rules";
 import dayjs from "dayjs";
 import i18n from "@/i18n";
 import * as Enums from "@/constants/enums";
-import { partial } from "radash";
 
 const t = i18n.getFixedT(null, ["common", "enum", "baby"]);
 type EnumType = (typeof Enums)[keyof typeof Enums];
 
-function getEnumValue(enumType: EnumType, enumValue: string): string | null {
-  for (const [key, value] of Object.entries(enumType)) {
-    if (value === enumValue) {
-      return key;
-    }
-  }
-  return null;
+const BabyKeys = {
+  identity: "id",
+  name: "babyName",
+  stage: "growthStage",
+  gender: "gender",
+  edc: "dueDay",
+  birthday: "birthDay",
+  assistedFood: "supplementaryFood",
+  feedingPattern: "feedingMethods",
+  area: "area",
+  location: "address",
+  remark: "comments",
+  chwID: "chwID",
+};
+
+function getBabyField(key: keyof typeof BabyKeys): string {
+  return t(BabyKeys[key], { ns: "baby" });
 }
 
-const getBabyStage = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.BabyStage);
-const getGender = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.Gender);
-const getFeedingPattern = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.FeedingPattern);
-const getFamilyTies = partial<[EnumType, string], [EnumType], string | null>(getEnumValue, Enums.FamilyTies);
+function getEnumValue(enumType: EnumType, enumValue: string): string | null {
+  const key = Object.keys(enumType).find((key) => enumType[key as keyof typeof enumType] === enumValue);
+  return key || null;
+}
+
+const getBabyStage = (value: string) => getEnumValue(Enums.BabyStage, value);
+const getGender = (value: string) => getEnumValue(Enums.Gender, value);
+const getFeedingPattern = (value: string) => getEnumValue(Enums.FeedingPattern, value);
+const getFamilyTies = (value: string) => getEnumValue(Enums.FamilyTies, value);
 
 function getAssistedFood(value: string): boolean | null {
-  const arr = [
-    { key: true, value: t("AssistedFood.TRUE", { ns: "enum" }) },
-    { key: false, value: t("AssistedFood.FALSE", { ns: "enum" }) },
-  ];
-  const find = arr.find((ele) => ele.value === value);
-  if (find) return find.key;
+  const trueValue = t("AssistedFood.TRUE", { ns: "enum" });
+  const falseValue = t("AssistedFood.FALSE", { ns: "enum" });
+  if (value === trueValue) return true;
+  if (value === falseValue) return false;
   return null;
 }
 
@@ -39,13 +51,13 @@ type Care = {
   wechat: string;
 };
 
-function buildCare(baby: Record<string, string>, prefix = "Caregiver_Main", isMaster = true): Care {
+function buildCare(baby: Record<string, string>, prefix: string, isMaster: boolean): Care {
   return {
     master: isMaster,
-    name: baby[`${prefix}_name`],
-    familyTies: getFamilyTies(baby[`${prefix}_relationship`]),
-    phone: baby[`${prefix}_phone`],
-    wechat: baby[`${prefix}_Wechat`],
+    name: baby[`${prefix}_name`] || "",
+    familyTies: getFamilyTies(baby[`${prefix}_relationship`] || ""),
+    phone: baby[`${prefix}_phone`] || "",
+    wechat: baby[`${prefix}_Wechat`] || "",
   };
 }
 
@@ -57,12 +69,9 @@ function getCares(baby: Record<string, string>): Care[] {
     { prefix: "Caregiver_IV", isMaster: false },
   ];
 
-  return caregivers.reduce<Care[]>((cares, { prefix, isMaster }) => {
-    if (baby[`${prefix}_name`]) {
-      cares.push(buildCare(baby, prefix, isMaster));
-    }
-    return cares;
-  }, []);
+  return caregivers
+    .map(({ prefix, isMaster }) => (baby[`${prefix}_name`] ? buildCare(baby, prefix, isMaster) : null))
+    .filter((care): care is Care => care !== null);
 }
 
 export type ImportBabyType = {
@@ -91,150 +100,220 @@ export type ImportBabyError = {
   matters: string;
 };
 
-function toBaby(baby: Record<string, string>) {
+type BabyWithNumber = ImportBabyType & { number: number };
+
+function toBaby(baby: Record<string, string>): ImportBabyType {
   return {
-    identity: baby[t("id", { ns: "baby" })]?.trim(),
-    name: baby[t("babyName", { ns: "baby" })]?.trim(),
-    stage: getBabyStage(baby[t("growthStage", { ns: "baby" })]),
-    gender: getGender(baby[t("gender", { ns: "baby" })]),
-    edc: baby[t("dueDay", { ns: "baby" })],
-    birthday: baby[t("birthDay", { ns: "baby" })],
-    assistedFood: getAssistedFood(baby[t("supplementaryFood", { ns: "baby" })]),
-    feedingPattern: getFeedingPattern(baby[t("feedingMethods", { ns: "baby" })]),
-    area: baby[t("area", { ns: "baby" })],
-    location: baby[t("address", { ns: "baby" })],
-    remark: baby[t("comments", { ns: "baby" })],
-    chw: { chw: { identity: baby[t("chwID", { ns: "baby" })] } },
+    identity: baby[getBabyField("identity")]?.trim(),
+    name: baby[getBabyField("name")]?.trim(),
+    stage: getBabyStage(baby[getBabyField("stage")] || ""),
+    gender: getGender(baby[getBabyField("gender")] || ""),
+    edc: baby[getBabyField("edc")],
+    birthday: baby[getBabyField("birthday")],
+    assistedFood: getAssistedFood(baby[getBabyField("assistedFood")] || ""),
+    feedingPattern: getFeedingPattern(baby[getBabyField("feedingPattern")] || ""),
+    area: baby[getBabyField("area")],
+    location: baby[getBabyField("location")],
+    remark: baby[getBabyField("remark")],
+    chw: { chw: { identity: baby[getBabyField("chwID")] } },
     cares: getCares(baby),
   };
 }
 
-export const checkBabies = (babies: Record<string, string>[]) => {
-  const isLanguageZH = i18n.resolvedLanguage === "zh";
-  const babyObjects = babies.map((baby, index) => ({ ...toBaby(baby), number: index + 1 }));
-  const validBabies: ImportBabyType[] = [];
-  const errors: ImportBabyError[] = [];
-  babyObjects.forEach((element) => {
-    if (validBabies.find((ele) => ele.identity === element.identity)) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.duplicateId") });
-      return;
-    }
+function validateUniqueIdentity(
+  element: BabyWithNumber,
+  validBabies: ImportBabyType[],
+  errors: ImportBabyError[],
+): boolean {
+  if (validBabies.some((ele) => ele.identity === element.identity)) {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: t("excel.importBaby.duplicateId"),
+    });
+    return false;
+  }
+  return true;
+}
 
-    if (!element.identity) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyId") });
-      return;
-    }
+function validateRequiredFields(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  const { number, name, identity, gender, stage, area, location, cares } = element;
 
-    if (!element.name) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyBabyName") });
-      return;
-    }
+  if (!identity) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.emptyId"),
+    });
+    return false;
+  }
+  if (!name) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.emptyBabyName"),
+    });
+    return false;
+  }
+  if (!gender) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.invalidGender"),
+    });
+    return false;
+  }
+  if (!stage) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.invalidGrowthStage"),
+    });
+    return false;
+  }
+  if (!area) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.emptyArea"),
+    });
+    return false;
+  }
+  if (!location) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.emptyLocation"),
+    });
+    return false;
+  }
+  if (!cares || cares.length === 0 || !cares[0].master) {
+    errors.push({
+      number,
+      name: name || "",
+      matters: t("excel.importBaby.emptyCaregiver"),
+    });
+    return false;
+  }
+  return true;
+}
 
-    if (!element.gender) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.invalidGender") });
-      return;
-    }
+function validateName(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  if (element.name && !NAME_REGEX.test(element.name)) {
+    errors.push({
+      number: element.number,
+      name: element.name,
+      matters: t("excel.importBaby.nameInvalid"),
+    });
+    return false;
+  }
+  return true;
+}
 
-    if (!element.stage) {
+function validateArea(element: BabyWithNumber, isLanguageZH: boolean, errors: ImportBabyError[]): boolean {
+  if (isLanguageZH && element.area && element.area.split("/").length !== 4) {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: "所在地区格式错误",
+    });
+    return false;
+  }
+  return true;
+}
+
+function validateCares(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  const isValidCares = element.cares.every((care) => {
+    return care.name && care.phone && care.familyTies && NAME_REGEX.test(care.name) && PHONE_REGEX.test(care.phone);
+  });
+  if (!isValidCares) {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: t("excel.importBaby.invalidCaregiver"),
+    });
+    return false;
+  }
+  return true;
+}
+
+function validateDate(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  if (element.stage === "UNBORN") {
+    const { edc } = element;
+    if (!edc) {
       errors.push({
         number: element.number,
-        name: element.name,
-        matters: t("excel.importBaby.invalidGrowthStage"),
+        name: element.name || "",
+        matters: t("excel.importBaby.emptyEDC"),
       });
-      return;
+      return false;
     }
-
-    if (!element.area) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyArea") });
-      return;
-    }
-
-    if (!element.location) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyLocation") });
-      return;
-    }
-
-    if (!element.cares || element.cares.length === 0 || element.cares[0]?.master === false) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyCaregiver") });
-      return;
-    }
-
-    if (!NAME_REGEX.test(element.name)) {
-      errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.nameInvalid") });
-      return;
-    }
-
-    if (isLanguageZH && element.area.split("/").length !== 4) {
-      errors.push({ number: element.number, name: element.name, matters: "所在地区格式错误" });
-      return;
-    }
-
-    if (element.cares.length > 0) {
-      const result = element.cares.every((ele) => {
-        if (!ele.phone || !ele.familyTies) return false;
-        if (!NAME_REGEX.test(ele.name)) return false;
-        if (!PHONE_REGEX.test(ele.phone)) return false;
-        return true;
+    if (!dayjs(edc, "YYYY-MM-DD", true).isValid()) {
+      errors.push({
+        number: element.number,
+        name: element.name || "",
+        matters: t("excel.importBaby.invalidFormatDueDay"),
       });
-      if (!result) {
-        errors.push({
-          number: element.number,
-          name: element.name,
-          matters: t("excel.importBaby.invalidCaregiver"),
-        });
-        return;
-      }
+      return false;
     }
-
-    if (element.stage === "UNBORN") {
-      if (!element.edc) {
-        errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyEDC") });
-        return;
-      }
-
-      if (element.edc.split("-").length !== 3) {
-        errors.push({
-          number: element.number,
-          name: element.name,
-          matters: t("excel.importBaby.invalidFormatDueDay"),
-        });
-        return;
-      }
-
-      element.edc = dayjs(element.edc).format("YYYY-MM-DD");
-
-      if (dayjs().unix() > dayjs(element.edc).unix()) {
-        errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.invalidDueDay") });
-        return;
-      }
-      validBabies.push(element);
-    } else {
-      if (!element.birthday) {
-        errors.push({ number: element.number, name: element.name, matters: t("excel.importBaby.emptyBirthDay") });
-        return;
-      }
-
-      if (element.birthday.split("-").length !== 3) {
-        errors.push({
-          number: element.number,
-          name: element.name,
-          matters: t("excel.importBaby.invalidFormatBirthDay"),
-        });
-        return;
-      }
-
-      element.birthday = dayjs(element.birthday).format("YYYY-MM-DD");
-
-      if (dayjs().unix() < dayjs(element.birthday).unix()) {
-        errors.push({
-          number: element.number,
-          name: element.name,
-          matters: t("excel.importBaby.invalidBirthDay"),
-        });
-        return;
-      }
-      validBabies.push(element);
+    if (dayjs().isAfter(dayjs(edc))) {
+      errors.push({
+        number: element.number,
+        name: element.name || "",
+        matters: t("excel.importBaby.invalidDueDay"),
+      });
+      return false;
     }
+    element.edc = dayjs(edc).format("YYYY-MM-DD");
+  } else {
+    const { birthday } = element;
+    if (!birthday) {
+      errors.push({
+        number: element.number,
+        name: element.name || "",
+        matters: t("excel.importBaby.emptyBirthDay"),
+      });
+      return false;
+    }
+    if (!dayjs(birthday, "YYYY-MM-DD", true).isValid()) {
+      errors.push({
+        number: element.number,
+        name: element.name || "",
+        matters: t("excel.importBaby.invalidFormatBirthDay"),
+      });
+      return false;
+    }
+    if (dayjs().isBefore(dayjs(birthday))) {
+      errors.push({
+        number: element.number,
+        name: element.name || "",
+        matters: t("excel.importBaby.invalidBirthDay"),
+      });
+      return false;
+    }
+    element.birthday = dayjs(birthday).format("YYYY-MM-DD");
+  }
+  return true;
+}
+
+export const checkBabies = (babies: Record<string, string>[]) => {
+  const isLanguageZH = i18n.resolvedLanguage === "zh";
+  const babyObjects: BabyWithNumber[] = babies.map((baby, index) => ({
+    ...toBaby(baby),
+    number: index + 1,
+  }));
+  const validBabies: ImportBabyType[] = [];
+  const errors: ImportBabyError[] = [];
+
+  babyObjects.forEach((element) => {
+    if (!validateUniqueIdentity(element, validBabies, errors)) return;
+    if (!validateRequiredFields(element, errors)) return;
+    if (!validateName(element, errors)) return;
+    if (!validateArea(element, isLanguageZH, errors)) return;
+    if (!validateCares(element, errors)) return;
+    if (!validateDate(element, errors)) return;
+
+    validBabies.push(element);
   });
 
   return {
