@@ -357,8 +357,8 @@ export default {
       BIRTH: "Born",
     },
     AssistedFood: {
-      TRUE: "Add",
-      FALSE: "No Add",
+      TRUE: "Yes",
+      FALSE: "No",
     },
     RELATIVES: {
       MOTHER: "Mother",
@@ -370,7 +370,7 @@ export default {
       OTHER: "Other",
     },
     CurriculumBabyStage: {
-      EDC: "Pregnant",
+      EDC: "Unborn",
       BIRTH: "Born",
     },
     ModuleTopic: {
