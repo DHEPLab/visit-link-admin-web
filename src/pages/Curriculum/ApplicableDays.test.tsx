@@ -3,6 +3,7 @@ import testSetup from "@/tests/setup";
 import userEvent from "@testing-library/user-event";
 import { Button, Form } from "antd";
 import ApplicableDays from "./ApplicableDays";
+import { waitFor } from "@testing-library/react";
 
 const lessons = [
   {
@@ -38,8 +39,10 @@ describe("ApplicableDays component", () => {
       const { getByRole, getByText } = setup();
       await user.click(getByRole("button", { name: "Submit" }));
 
-      expect(getByText("Start Date is required!")).toBeInTheDocument();
-      expect(getByText("End Date is required!")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(getByText("Start Date is required!")).toBeInTheDocument();
+        expect(getByText("End Date is required!")).toBeInTheDocument();
+      });
     });
 
     it("should display start date required error message when start days is empty", async () => {
@@ -48,8 +51,10 @@ describe("ApplicableDays component", () => {
       await user.type(getByRole("spinbutton", { name: "End Applicable Days" }), "100");
       await user.click(getByRole("button", { name: "Submit" }));
 
-      expect(getByText("Start Date is required!")).toBeInTheDocument();
-      expect(queryByText("End Date is required!")).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(getByText("Start Date is required!")).toBeInTheDocument();
+        expect(queryByText("End Date is required!")).not.toBeInTheDocument();
+      });
     });
 
     it("should display end date required error message when end days is empty", async () => {
@@ -58,8 +63,10 @@ describe("ApplicableDays component", () => {
       await user.type(getByRole("spinbutton", { name: "Start Applicable Days" }), "100");
       await user.click(getByRole("button", { name: "Submit" }));
 
-      expect(queryByText("Start Date is required!")).not.toBeInTheDocument();
-      expect(getByText("End Date is required!")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(queryByText("Start Date is required!")).not.toBeInTheDocument();
+        expect(getByText("End Date is required!")).toBeInTheDocument();
+      });
     });
   });
 
