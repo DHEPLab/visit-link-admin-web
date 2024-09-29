@@ -4,7 +4,6 @@ import i18n from "@/i18n";
 import * as Enums from "@/constants/enums";
 
 const t = i18n.getFixedT(null, ["common", "enum", "baby"]);
-type EnumType = (typeof Enums)[keyof typeof Enums];
 
 const BabyKeys = {
   identity: "id",
@@ -24,16 +23,10 @@ const BabyKeys = {
 function getBabyField(key: keyof typeof BabyKeys): string {
   return t(BabyKeys[key], { ns: "baby" });
 }
-
-function getEnumValue(enumType: EnumType, enumValue: string): string | null {
-  const key = Object.keys(enumType).find((key) => enumType[key as keyof typeof enumType] === enumValue);
-  return key || null;
+function isValidEnumValue(enumType: Record<string, string>, value: string | null): boolean {
+  if (!value) return false;
+  return Object.values(enumType).includes(value);
 }
-
-const getBabyStage = (value: string) => getEnumValue(Enums.BabyStage, value);
-const getGender = (value: string) => getEnumValue(Enums.Gender, value);
-const getFeedingPattern = (value: string) => getEnumValue(Enums.FeedingPattern, value);
-const getFamilyTies = (value: string) => getEnumValue(Enums.FamilyTies, value);
 
 function getAssistedFood(value: string): boolean | null {
   const trueValue = t("AssistedFood.TRUE", { ns: "enum" });
@@ -54,10 +47,10 @@ type Care = {
 function buildCare(baby: Record<string, string>, prefix: string, isMaster: boolean): Care {
   return {
     master: isMaster,
-    name: baby[`${prefix}_name`] || "",
-    familyTies: getFamilyTies(baby[`${prefix}_relationship`] || ""),
-    phone: baby[`${prefix}_phone`] || "",
-    wechat: baby[`${prefix}_Wechat`] || "",
+    name: baby[`${prefix}_name`]?.trim() || "",
+    familyTies: baby[`${prefix}_relationship`]?.trim() || "",
+    phone: baby[`${prefix}_phone`]?.trim() || "",
+    wechat: baby[`${prefix}_Wechat`]?.trim() || "",
   };
 }
 
@@ -106,12 +99,12 @@ function toBaby(baby: Record<string, string>): ImportBabyType {
   return {
     identity: baby[getBabyField("identity")]?.trim(),
     name: baby[getBabyField("name")]?.trim(),
-    stage: getBabyStage(baby[getBabyField("stage")] || ""),
-    gender: getGender(baby[getBabyField("gender")] || ""),
+    stage: baby[getBabyField("stage")]?.trim() || null,
+    gender: baby[getBabyField("gender")]?.trim() || null,
     edc: baby[getBabyField("edc")],
     birthday: baby[getBabyField("birthday")],
     assistedFood: getAssistedFood(baby[getBabyField("assistedFood")] || ""),
-    feedingPattern: getFeedingPattern(baby[getBabyField("feedingPattern")] || ""),
+    feedingPattern: baby[getBabyField("feedingPattern")]?.trim() || null,
     area: baby[getBabyField("area")],
     location: baby[getBabyField("location")],
     remark: baby[getBabyField("remark")],
@@ -155,7 +148,7 @@ function validateRequiredFields(element: BabyWithNumber, errors: ImportBabyError
     });
     return false;
   }
-  if (!gender) {
+  if (!isValidEnumValue(Enums.Gender, gender)) {
     errors.push({
       number,
       name: name || "",
@@ -163,7 +156,7 @@ function validateRequiredFields(element: BabyWithNumber, errors: ImportBabyError
     });
     return false;
   }
-  if (!stage) {
+  if (!isValidEnumValue(Enums.BabyStage, stage)) {
     errors.push({
       number,
       name: name || "",
@@ -224,8 +217,10 @@ function validateArea(element: BabyWithNumber, isLanguageZH: boolean, errors: Im
 
 function validateCares(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
   const isValidCares = element.cares.every((care) => {
-    return care.name && care.phone && care.familyTies && NAME_REGEX.test(care.name) && PHONE_REGEX.test(care.phone);
+    const isValidFamilyTie = isValidEnumValue(Enums.FamilyTies, care.familyTies);
+    return care.name && care.phone && isValidFamilyTie && NAME_REGEX.test(care.name) && PHONE_REGEX.test(care.phone);
   });
+
   if (!isValidCares) {
     errors.push({
       number: element.number,
@@ -237,8 +232,32 @@ function validateCares(element: BabyWithNumber, errors: ImportBabyError[]): bool
   return true;
 }
 
+function validateFeedingPattern(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  if (element.feedingPattern && !isValidEnumValue(Enums.FeedingPattern, element.feedingPattern)) {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: t("excel.importBaby.invalidFeedingPattern"),
+    });
+    return false;
+  }
+  return true;
+}
+
+function validateAssistedFood(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
+  if (element.assistedFood !== null && typeof element.assistedFood !== "boolean") {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: t("excel.importBaby.invalidAssistedFood"),
+    });
+    return false;
+  }
+  return true;
+}
+
 function validateDate(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
-  if (element.stage === "UNBORN") {
+  if (element.stage === Enums.BabyStage.UNBORN) {
     const { edc } = element;
     if (!edc) {
       errors.push({
@@ -265,7 +284,7 @@ function validateDate(element: BabyWithNumber, errors: ImportBabyError[]): boole
       return false;
     }
     element.edc = dayjs(edc).format("YYYY-MM-DD");
-  } else {
+  } else if (element.stage === Enums.BabyStage.BORN) {
     const { birthday } = element;
     if (!birthday) {
       errors.push({
@@ -292,6 +311,13 @@ function validateDate(element: BabyWithNumber, errors: ImportBabyError[]): boole
       return false;
     }
     element.birthday = dayjs(birthday).format("YYYY-MM-DD");
+  } else {
+    errors.push({
+      number: element.number,
+      name: element.name || "",
+      matters: t("excel.importBaby.invalidGrowthStage"),
+    });
+    return false;
   }
   return true;
 }
@@ -311,6 +337,8 @@ export const checkBabies = (babies: Record<string, string>[]) => {
     if (!validateName(element, errors)) return;
     if (!validateArea(element, isLanguageZH, errors)) return;
     if (!validateCares(element, errors)) return;
+    if (!validateFeedingPattern(element, errors)) return;
+    if (!validateAssistedFood(element, errors)) return;
     if (!validateDate(element, errors)) return;
 
     validBabies.push(element);
