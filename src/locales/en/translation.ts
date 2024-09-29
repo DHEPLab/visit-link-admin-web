@@ -363,8 +363,8 @@ export default {
     RELATIVES: {
       MOTHER: "Mother",
       FATHER: "Father",
-      GRANDMOTHER: " Paternal Grandmother",
-      GRANDMA: " Maternal Grandmother",
+      GRANDMOTHER: "Paternal Grandmother",
+      GRANDMA: "Maternal Grandmother",
       GRANDFATHER: "Paternal Grandfather",
       GRANDPA: "Maternal Grandfather",
       OTHER: "Other",
