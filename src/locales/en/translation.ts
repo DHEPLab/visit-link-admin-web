@@ -145,7 +145,7 @@ export default {
     growthStage: "Growth Stage",
     dueDay: "Due Date",
     birthDay: "Birth Day",
-    supplementaryFood: "Added Complementary Foods",
+    supplementaryFood: "Infant Supplementary Food",
     add: "Yes",
     noAdd: "No",
     feedingMethods: "Feeding Methods",

@@ -224,8 +224,6 @@ function validateArea(element: BabyWithNumber, isLanguageZH: boolean, errors: Im
 
 function validateCares(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
   const isValidCares = element.cares.every((care) => {
-    console.log("care", care);
-    console.log("care.familyTies", care.familyTies);
     return care.name && care.phone && care.familyTies && NAME_REGEX.test(care.name) && PHONE_REGEX.test(care.phone);
   });
   if (!isValidCares) {
