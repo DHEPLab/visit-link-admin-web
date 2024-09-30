@@ -210,18 +210,6 @@ function validateName(element: BabyWithNumber, errors: ImportBabyError[]): boole
   return true;
 }
 
-function validateArea(element: BabyWithNumber, isLanguageZH: boolean, errors: ImportBabyError[]): boolean {
-  if (isLanguageZH && element.area && element.area.split("/").length !== 4) {
-    errors.push({
-      number: element.number,
-      name: element.name || "",
-      matters: "所在地区格式错误",
-    });
-    return false;
-  }
-  return true;
-}
-
 function validateCares(element: BabyWithNumber, errors: ImportBabyError[]): boolean {
   const isValidCares = element.cares.every((care) => {
     return care.name && care.phone && care.familyTies && NAME_REGEX.test(care.name) && PHONE_REGEX.test(care.phone);
@@ -297,7 +285,6 @@ function validateDate(element: BabyWithNumber, errors: ImportBabyError[]): boole
 }
 
 export const checkBabies = (babies: Record<string, string>[]) => {
-  const isLanguageZH = i18n.resolvedLanguage === "zh";
   const babyObjects: BabyWithNumber[] = babies.map((baby, index) => ({
     ...toBaby(baby),
     number: index + 1,
@@ -309,7 +296,6 @@ export const checkBabies = (babies: Record<string, string>[]) => {
     if (!validateUniqueIdentity(element, validBabies, errors)) return;
     if (!validateRequiredFields(element, errors)) return;
     if (!validateName(element, errors)) return;
-    if (!validateArea(element, isLanguageZH, errors)) return;
     if (!validateCares(element, errors)) return;
     if (!validateDate(element, errors)) return;
 

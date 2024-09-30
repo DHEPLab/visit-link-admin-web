@@ -98,7 +98,7 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
           }
         }}
       </Form.Item>
-      <Form.Item label={t("area")} name="area" rules={Rules.Required}>
+      <Form.Item label={t("area")} name="area" rules={Rules.Area}>
         <AreaInput maxCount={1} />
       </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
