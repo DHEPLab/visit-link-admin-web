@@ -14,14 +14,14 @@ const ValidEDCBabyItem = {
   Gender: "Male",
   "Due Date": EDCDate,
   "Birth Day": "",
-  "Infant Supplementary Food": "",
+  "Infant Supplementary Food": "Yes",
   "Feeding Methods": "",
   "Building Address": "US/Arizona/Litchfield Park",
   "Detailed Address": "123 Street",
   Comments: "",
   "CHW ID": "CHW001",
   Caregiver_Main_name: chance.name(),
-  Caregiver_Main_relationship: "Mother",
+  Caregiver_Main_relationship: "Paternal Grandfather",
   Caregiver_Main_phone: "13800138000",
   Caregiver_Main_Wechat: "wechat001",
   Caregiver_II_name: chance.name(),
@@ -129,17 +129,17 @@ describe("checkBabies", () => {
     expect(errors.length).toBe(0);
     expect(validBabies.length).toBe(2);
     expect(validBabies[0].identity).toBe("1");
-    expect(validBabies[0].gender).toBe("Male");
-    expect(validBabies[0].stage).toBe("Unborn");
+    expect(validBabies[0].gender).toBe("MALE");
+    expect(validBabies[0].stage).toBe("UNBORN");
     expect(validBabies[0].edc).toBe(EDCDate);
 
     expect(validBabies[1].identity).toBe("2");
-    expect(validBabies[1].gender).toBe("Female");
-    expect(validBabies[1].stage).toBe("Born");
+    expect(validBabies[1].gender).toBe("FEMALE");
+    expect(validBabies[1].stage).toBe("BORN");
     expect(validBabies[1].birthday).toBe(BirthDate);
     // TODO: need check this logic
     // expect(validBabies[0].assistedFood).toBeTruthy();
-    expect(validBabies[1].feedingPattern).toBe("Exclusive Breastfeeding");
+    expect(validBabies[1].feedingPattern).toBe("EXCLUSIVE_BREASTFEEDING");
   });
 
   it("should return an error for duplicate Baby ID", () => {
