@@ -1,13 +1,15 @@
-import AreaInput from "@/components/AreaInput";
 import dayjs from "dayjs";
-import { Select, Form, Input, Radio, DatePicker, Row, Col, InputNumber } from "antd";
+import { Select, Form, Input, Radio, DatePicker, Row, Col, InputNumber, AutoComplete } from "antd";
 import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
+import axios from "axios";
 
-import ModalForm, { ModalFormProps } from "@/components/ModalForm";
+import ModalForm, { ModalFormProps, ModalFormRef } from "@/components/ModalForm";
 import Rules from "@/constants/rules";
 import { Gender, BabyStage, FeedingPattern } from "@/constants/enums";
 import { disabledDateForEDC } from "./utils/dateLogic";
 import { enumKeysIterator } from "@/utils/enumUtils";
+import { BaseSyntheticEvent, Ref, useRef, useState } from "react";
 
 export interface BabyModalFormValues {
   name: string;
@@ -31,11 +33,82 @@ export interface BabyModalFormValues {
 
 export type BabyModalFormProps = ModalFormProps<BabyModalFormValues> & { disableStage?: boolean };
 
+export type PlaceAutocomplete = {
+  predictions: {
+    description: string;
+    place_id: string;
+    structured_formatting: {
+      main_text: string;
+      secondary_text: string;
+    };
+  }[];
+  status: string;
+};
+
+export type GeoLocation = {
+  name: string;
+  lat: number;
+  lng: number;
+};
+
+export type AreaOption = {
+  id: string;
+  value: string;
+};
+
 const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
   const { t } = useTranslation("baby");
 
+  const formRef = useRef<ModalFormRef>();
+  const [options, setOptions] = useState<AreaOption[]>([]);
+
+  const handleSearchArea = (value: string): void => {
+    axios.get<PlaceAutocomplete>(`/admin/babies/place/autocomplete?area=${value}`).then(({ data }) => {
+      if (data.status === "OK") {
+        const options = data.predictions.map((prediction) => ({
+          id: prediction.place_id,
+          value: prediction.description,
+        }));
+        setOptions(options);
+      } else {
+        setOptions([]);
+      }
+    });
+  };
+
+  const handleSelectArea = (_: string, option: AreaOption) => {
+    axios.get<GeoLocation>(`/admin/babies/place/location?placeId=${option.id}`).then(({ data: geo }) => {
+      formRef.current?.form?.setFieldsValue({
+        latitude: geo.lat,
+        longitude: geo.lng,
+      });
+    });
+  };
+
+  const handleFreeTextSearch = (e: BaseSyntheticEvent) => {
+    const area = e.target.value;
+
+    const isSlectedOption = area && options.some((opt) => opt.value === area);
+    if (!isSlectedOption) {
+      axios
+        .get<GeoLocation>(`/admin/babies/place/location?area=${area}`)
+        .then(({ data: geo }) => {
+          formRef.current?.form?.setFieldsValue({
+            latitude: geo.lat,
+            longitude: geo.lng,
+          });
+        })
+        .catch(() => {
+          formRef.current?.form?.setFieldsValue({
+            latitude: undefined,
+            longitude: undefined,
+          });
+        });
+    }
+  };
+
   return (
-    <ModalForm {...props} labelCol={{ span: 7 }} width={800}>
+    <ModalForm {...props} labelCol={{ span: 7 }} width={800} ref={formRef as Ref<ModalFormRef>}>
       <Form.Item label={t("name")} name="name" rules={Rules.RealName}>
         <Input autoFocus />
       </Form.Item>
@@ -98,8 +171,14 @@ const BabyModalForm = ({ disableStage, ...props }: BabyModalFormProps) => {
           }
         }}
       </Form.Item>
-      <Form.Item label={t("area")} name="area" rules={Rules.Area}>
-        <AreaInput maxCount={1} />
+      <Form.Item label={t("area")} name="area" rules={Rules.Required}>
+        <AutoComplete
+          onSearch={debounce(handleSearchArea, 500)}
+          onSelect={handleSelectArea}
+          onBlur={handleFreeTextSearch}
+          placeholder="England, London, Argyle Street 10, ABC Building"
+          options={options}
+        />
       </Form.Item>
       <Form.Item label={t("address")} name="location" rules={Rules.Location}>
         <Input placeholder={t("detailAddressPlaceholder")} />

@@ -80,6 +80,9 @@ const server = setupServer(
   http.post("/admin/babies", () => {
     return HttpResponse.json({});
   }),
+  http.get("/admin/babies/place/autocomplete", () => {
+    return HttpResponse.json({});
+  }),
 );
 const dispatchRequest = vi.fn();
 server.events.on("request:start", dispatchRequest);
