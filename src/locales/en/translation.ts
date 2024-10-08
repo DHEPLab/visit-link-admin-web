@@ -668,7 +668,7 @@ export default {
     phoneInvalid: "Only allow 5-20 numbers",
     areaPlaceholder: "Please enter state, city, district and street/building",
     areasSizeInvalid: "Area should be no more than 3",
-    areaLengthInvalid: "Area should be no more than 100 characters",
+    areaLengthInvalid: "Building Address should be no more than 100 characters",
   },
   antd: {
     local: enUs,
