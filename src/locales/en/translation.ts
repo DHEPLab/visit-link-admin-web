@@ -393,10 +393,10 @@ export default {
       DELETE: "DELETE",
     },
     VisitStatus: {
-      NOT_STARTED: "NOT STARTED",
-      UNDONE: "UNDONE",
-      EXPIRED: "EXPIRED",
-      DONE: "DONE",
+      NOT_STARTED: "Scheduled",
+      UNDONE: "Incomplete",
+      EXPIRED: "Expired",
+      DONE: "Completed",
     },
     ProjectStatus: {
       1: "Active",
