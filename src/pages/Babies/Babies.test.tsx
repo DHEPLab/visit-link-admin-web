@@ -83,6 +83,9 @@ const server = setupServer(
   http.get("/admin/babies/place/autocomplete", () => {
     return HttpResponse.json({});
   }),
+  http.get("/admin/babies/place/location", () => {
+    return HttpResponse.json({});
+  }),
 );
 const dispatchRequest = vi.fn();
 server.events.on("request:start", dispatchRequest);
