@@ -149,7 +149,7 @@ export default {
     add: "Yes",
     noAdd: "No",
     feedingMethods: "Feeding Methods",
-    area: "Building Address",
+    area: "Area",
     address: "Detailed Address",
     comments: "Comments",
     relatives: "Relation",
