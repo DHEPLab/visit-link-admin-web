@@ -5,5 +5,5 @@ export interface CarerFormValues {
   master: boolean;
   familyTies: keyof typeof FamilyTies;
   phone: string;
-  wechat: string | null;
+  otherContact: string | null;
 }

@@ -11,5 +11,5 @@ export interface Carer {
   name: string;
   phone: string;
   projectId: number;
-  wechat: string | null;
+  otherContact: string | null;
 }
