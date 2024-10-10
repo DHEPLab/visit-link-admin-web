@@ -48,7 +48,7 @@ type Care = {
   name: string;
   familyTies: string | null;
   phone: string;
-  wechat: string;
+  otherContact: string;
 };
 
 function buildCare(baby: Record<string, string>, prefix: string, isMaster: boolean): Care {
@@ -57,7 +57,7 @@ function buildCare(baby: Record<string, string>, prefix: string, isMaster: boole
     name: baby[`${prefix}_name`] || "",
     familyTies: getFamilyTies(baby[`${prefix}_relationship`] || ""),
     phone: baby[`${prefix}_phone`] || "",
-    wechat: baby[`${prefix}_Wechat`] || "",
+    otherContact: baby[`${prefix}_Wechat`] || "",
   };
 }
 

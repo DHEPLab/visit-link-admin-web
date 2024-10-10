@@ -52,11 +52,13 @@ const Carers: React.FC<CarersProps> = ({ babyId, deleted, onModify }) => {
   async function submit(values: CarerFormValues) {
     const { id } = carer;
     const method = id ? "put" : "post";
+    const { wechat, ...restValues } = values;
     await axios[method](`/admin/carers${id ? `/${id}` : ""}`, {
       baby: {
         id: babyId,
       },
-      ...values,
+      ...restValues,
+      otherContact: wechat,
     });
     refresh();
     safeCloseCarer();

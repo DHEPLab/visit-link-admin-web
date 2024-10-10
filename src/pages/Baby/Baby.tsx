@@ -359,7 +359,7 @@ export default function Baby() {
           master: t("master"),
           name: t("name"),
           phone: t("phone"),
-          wechat: t("wechat"),
+          otherContact: t("wechat"),
           familyTies: t("relatives"),
         }}
         dataSource={carerModifyRecords.map((modifyRecord, index) => ({ ...modifyRecord, number: index }))}
